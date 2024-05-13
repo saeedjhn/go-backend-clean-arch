@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  ####################### APPLICATION #######################
+  app:
+    container_name: simorgh_app
+    build:
+      context: .
+      dockerfile: Dockerfile-air
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./:/app
+    networks:
+      - simorgh_network
+    depends_on:
+      - psqldb
+      - redis
+
+  ####################### POSTGRES #######################
+  psqldb:
+    container_name: simorgh_psqldb
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: simorgh_db
+    volumes:
+      - psql:/var/lib/psql/data
+    ports:
+      - "5001:5432"
+    networks:
+      - simorgh_network
+    restart: always
+
+  ######################## Mysql ########################
+  #  mysql:
+  #    image: mysql:8.3
+  #    environment:
+  #      MYSQL_ROOT_PASSWORD: root
+  #      MYSQL_DATABASE: simorgh_db
+  #      MYSQL_USER: simorghapp
+  #      MYSQL_PASSWORD: 123456
+  #    ports:
+  #      - "3306:3306"
+  #    volumes:
+  #      - mysql:/var/lib/mysql
+  #    restart: always
+  #    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
+
+  ####################### PGADMIN #######################
+  #  pgadmin:
+  #    image: dpage/pgadmin4
+  #    environment:
+  #      PGADMIN_DEFAULT_EMAIL: ghafbu@gmail.com
+  #      PGADMIN_DEFAULT_PASSWORD: 123456
+  #    volumes:
+  #      - pgadmin:/var/lib/pgadmin/data
+  #    ports:
+  #      - "5002:80"
+  #    networks:
+  #      - simorgh_network
+  #    restart: unless-stopped
+  #    depends_on:
+  #      - psqldb
+
+  ####################### REDIS #######################
+  redis:
+    container_name: simorgh_redis
+    image: redis:latest
+    command: redis-server --loglevel warning --protected-mode no --save "" --appendonly no
+    #    command: [ "redis-server", "/etc/redis/redis.conf" ]
+    volumes:
+      - redis:/var/lib/redis/data
+    ports:
+      - "5003:6379"
+    networks:
+      - simorgh_network
+
+volumes:
+  psql:
+  #  mysql:
+  pgadmin:
+  redis:
+  logs:
+
+
+networks:
+  simorgh_network:
+    driver: bridge
