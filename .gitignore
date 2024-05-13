@@ -18,11 +18,15 @@
 .glide/
 
 # Dependency directories (remove the comment below to include it)
-# vendor/
+vendor/
 
 # Go workspace file
 go.work
 go.work.sum
+
+# Configuration
+development.yaml
+production.yaml
 
 ### GoLand ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
