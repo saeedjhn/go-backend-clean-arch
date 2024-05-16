@@ -1,46 +1,46 @@
-APPLICATION:
-  ENV: development
+application:
+  env: development
 
-HTTPSERVER:
-  PORT: :8000
-  TIMEOUT: 2
+http_server:
+  port: :8000
+  timeout: 2
 
-MYSQL:
-  HOST:
+mysql:
+  host:
   PORT:
-  USERNAME:
-  PASSWORD:
-  DATABASE:
-  SSLMODE: disable
-  MAXIDLECONNS: 15
-  MAXOPENCONNS: 100
-  CONNMAXLIFETIME: 5
+  username:
+  password:
+  database:
+  ssl_mode: disable
+  max_idle_conns: 15
+  max_open_conns: 100
+  conn_max_life_time: 5
 
-POSTGRES:
-  HOST: simorgh_psqldb
-  PORT: 5432
-  USERNAME: admin
-  PASSWORD: 123456
-  DATABASE: simorgh_db
-  SSLMODE: disable
-  MAXIDLECONNS: 15
-  MAXOPENCONNS: 100
-  CONNMAXLIFETIME: 5
+postgresql:
+  host: go-backend-clean-arch_psqldb
+  port: 5432
+  username: admin
+  password: 123456
+  database: go-backend-clean-arch_db
+  ssl_mode: disable
+  max_idle_conns: 15
+  max_open_conns: 100
+  conn_max_life_time: 5
 
-REDIS:
-  HOST:
-  PORT: 6379
-  PASSWORD: 123456
-  DB: 0
-  DIALTIMEOUT: 5
-  READTIMEOUT: 5
-  WRITETIMEOUT: 5
-  POOLSIZE: 10
-  POOLTIMEOUT: 15
-  IDLECHECKFREQUENCY: 500
+redis:
+  host: go-backend-clean-arch_redis
+  port: 6379
+  password: 123456
+  db: 0
+  dial_timeout: 5
+  read_timeout: 5
+  write_timeout: 5
+  pool_size: 10
+  pool_timeout: 15
+  idle_check_frequency: 500
 
-JWT:
-  SECRET: "MYSECRETKEY"
-  REFRESH_SECRET: "MYSECRETKEY"
-  ACCESS_TOKEN_EXPIRE_DURATION: 60
-  REFRESH_TOKEN_EXPIRE_DURATION: 60
+jwt:
+  secret: "MYSECRETKEY"
+  refresh_secret: "MYSECRETKEY"
+  access_token_expire_duration: 60
+  refresh_token_expire_duration: 60
