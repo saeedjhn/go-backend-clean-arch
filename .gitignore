@@ -2,6 +2,7 @@
 .DS_Store
 
 # Binaries for programs and plugins
+build/
 *.exe
 *.exe~
 *.dll
