@@ -3,23 +3,24 @@ version: '3.8'
 services:
   ####################### APPLICATION #######################
   app:
-    container_name: simorgh_app
+    container_name: go-backend-clean-arch_app
     build:
-      context: .
-      dockerfile: Dockerfile-air
+      context: ..
+      dockerfile: ./deployments/Dockerfile
     ports:
-      - "5000:5000"
+      - "8000:8000"
     volumes:
-      - ./:/app
+#      - ./:/app
+      - /opt/lampp/htdocs/Golang/go-backend-clean-arch-according-to-go-standards-project-layout:/app
     networks:
-      - simorgh_network
+      - go-backend-clean-arch_network
     depends_on:
       - psqldb
       - redis
 
   ####################### POSTGRES #######################
   psqldb:
-    container_name: simorgh_psqldb
+    container_name: go-backend-clean-arch_psqldb
     image: postgres:latest
     environment:
       POSTGRES_USER: admin
@@ -30,7 +31,7 @@ services:
     ports:
       - "5001:5432"
     networks:
-      - simorgh_network
+      - go-backend-clean-arch_network
     restart: always
 
   ######################## Mysql ########################
@@ -59,14 +60,14 @@ services:
   #    ports:
   #      - "5002:80"
   #    networks:
-  #      - simorgh_network
+  #      - go-backend-clean-arch_network
   #    restart: unless-stopped
   #    depends_on:
   #      - psqldb
 
   ####################### REDIS #######################
   redis:
-    container_name: simorgh_redis
+    container_name: go-backend-clean-arch_redis
     image: redis:latest
     command: redis-server --loglevel warning --protected-mode no --save "" --appendonly no
     #    command: [ "redis-server", "/etc/redis/redis.conf" ]
@@ -75,7 +76,7 @@ services:
     ports:
       - "5003:6379"
     networks:
-      - simorgh_network
+      - go-backend-clean-arch_network
 
 volumes:
   psql:
@@ -86,5 +87,5 @@ volumes:
 
 
 networks:
-  simorgh_network:
+  go-backend-clean-arch_network:
     driver: bridge

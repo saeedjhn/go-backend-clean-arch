@@ -4,31 +4,26 @@ ENV PROJECT_DIR=/app \
     GO111MODULE=on \
     CGO_ENABLED=0
 
-# Setup folders
-#RUN mkdir /app
+# Copy local code to the container image.
 WORKDIR /app
 
 RUN mkdir /build
 
-#RUN go mod download
-#RUN go install
+# Copy go mod and sum files
+COPY go.mod go.sum ./
 
-# Copy the source from the current directory to the working Directory inside the container
+# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+RUN go mod download
+
+# Copy the source code from the current directory to the Working Directory inside the container
 COPY . .
 
-# Download all the dependencies
-RUN go get -d -v ./...
+# Install air
+RUN go install github.com/cosmtrek/air@latest
 
-# Install the package
-RUN go install -v ./...
+# Expose port 5000 to the outside world
+EXPOSE 8000
 
-#RUN go install
-
-RUN go get github.com/githubnemo/CompileDaemon
-
-RUN go install github.com/githubnemo/CompileDaemon
-
-EXPOSE 5000
-
-ENTRYPOINT CompileDaemon -directory="." -build="go build -o /build/app" -command="/build/app"
-# CMD ["make", "rerun-dev"]
+# Run app
+#CMD ["sleep", "1000"]
+CMD ["air", "-c", ".air.toml"]
