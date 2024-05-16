@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	myMiddleware "go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver/middleware"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver/router"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/bootstrap"
 	"log"
@@ -29,6 +30,8 @@ func (s HTTPServer) Serve() {
 	// Global Middleware Setup
 	s.Router.Use(middleware.Logger())
 	s.Router.Use(middleware.Recover())
+	//s.Router.Use(middleware.RequestID()) // TODO - Set for any xRouter
+	s.Router.Use(myMiddleware.Timeout(s.App.Config.HTTPServer.Timeout))
 
 	// Router Setup
 	router.Setup(s.App, s.Router)

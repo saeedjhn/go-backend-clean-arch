@@ -31,9 +31,18 @@ func New(
 	// Handler
 	userHandler := userhandler.New(app, userUsecase)
 
-	g := e.Group("users")
+	g := e.Group("/users")
+
+	publicRouter := g.Group("/auth")
 	{
-		g.POST("/", userHandler.Register)
-		g.GET("/task-list", userHandler.TaskList)
+		publicRouter.POST("/register", userHandler.Register)
+		publicRouter.POST("/login", userHandler.Login)
+	}
+
+	protectedRouter := publicRouter.Group("")
+
+	//protectedRouter.Use(middleware.Auth())
+	{
+		protectedRouter.GET("/task-list", userHandler.TaskList)
 	}
 }

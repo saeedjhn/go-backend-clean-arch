@@ -10,6 +10,5 @@ func (u *UserHandler) Register(c echo.Context) error {
 	req := userdto.UserRequest{}
 
 	u.userInteractor.Register(req)
-	
 	return c.JSON(http.StatusOK, "UserHandler -> Register - IMPL ME")
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func New(app *bootstrap.Application, e *echo.Echo) {
-	g := e.Group("tasks")
+	g := e.Group("/tasks")
 	{
 		g.GET("/", func(c echo.Context) error {
 			return c.JSON(http.StatusOK, "-- tasks --")
