@@ -2,12 +2,11 @@ package taskrouter
 
 import (
 	"github.com/labstack/echo/v4"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/configs"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/db/mysql"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/bootstrap"
 	"net/http"
 )
 
-func New(cfg *configs.Config, mysqlDB *mysql.MySqlDB, e *echo.Echo) {
+func New(app *bootstrap.Application, e *echo.Echo) {
 	g := e.Group("tasks")
 	{
 		g.GET("/", func(c echo.Context) error {
