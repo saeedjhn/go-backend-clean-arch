@@ -9,7 +9,8 @@ import (
 )
 
 type Application struct {
-	Env string `mapstructure:"env"`
+	Env   string `mapstructure:"env"`
+	Debug bool   `mapstructure:"debug`
 }
 
 type HTTPServer struct {

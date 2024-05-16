@@ -25,7 +25,7 @@ func New(
 }
 
 func (s HTTPServer) Serve() {
-	s.Router.Debug = true
+	s.Router.Debug = s.App.Config.Application.Debug
 
 	// Global Middleware Setup
 	s.Router.Use(middleware.Logger())
