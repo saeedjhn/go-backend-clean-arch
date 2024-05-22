@@ -6,7 +6,7 @@ import (
 )
 
 func (u *UserInteractor) Register(req userdto.UserRequest) {
-	u.userGateway.SaveUserToDB()
+	u.repository.Create()
 
 	log.Print("UserInteractor -> Register - IMPL ME")
 }

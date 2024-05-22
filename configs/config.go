@@ -5,12 +5,13 @@ import (
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/mongo"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/mysql"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/postgresql"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/usecase/authusecase"
 	"time"
 )
 
 type Application struct {
 	Env   string `mapstructure:"env"`
-	Debug bool   `mapstructure:"debug`
+	Debug bool   `mapstructure:"debug"`
 }
 
 type HTTPServer struct {
@@ -20,10 +21,11 @@ type HTTPServer struct {
 }
 
 type Config struct {
-	Application Application       `mapstructure:"application"`
-	HTTPServer  HTTPServer        `mapstructure:"http_server"`
-	Mysql       mysql.Config      `mapstructure:"mysql"`
-	Postgresql  postgresql.Config `mapstructure:"postgresql"`
-	Redis       redis.Config      `mapstructure:"redis"`
-	Mongo       mongo.Config      `mapstructure:"mongo"`
+	Application Application        `mapstructure:"application"`
+	HTTPServer  HTTPServer         `mapstructure:"http_server"`
+	Mysql       mysql.Config       `mapstructure:"mysql"`
+	Postgresql  postgresql.Config  `mapstructure:"postgresql"`
+	Redis       redis.Config       `mapstructure:"redis"`
+	Mongo       mongo.Config       `mapstructure:"mongo"`
+	Auth        authusecase.Config `mapstructure:"auth"`
 }

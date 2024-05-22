@@ -1,14 +1,18 @@
 package userusecase
 
+type Repository interface {
+	Create()
+}
+
 type Gateway interface {
-	SaveUserToDB()
 	TaskList()
 }
 
 type UserInteractor struct {
-	userGateway Gateway
+	repository      Repository
+	taskListGateway Gateway
 }
 
-func New(userGateway Gateway) *UserInteractor {
-	return &UserInteractor{userGateway: userGateway}
+func New(taskListGateway Gateway, repository Repository) *UserInteractor {
+	return &UserInteractor{taskListGateway: taskListGateway, repository: repository}
 }

@@ -5,7 +5,6 @@ import (
 	"go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver/handler/userhandler"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/bootstrap"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/gateway/taskgateway"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/gateway/usergateway"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/taskrepository/postgresqltask"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/userrespository/postgresqluser"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/usecase/taskusecase"
@@ -20,13 +19,14 @@ func New(
 	taskPostgresql := postgresqltask.New(app.PostgresqlDB)
 	userPostgresql := postgresqluser.New(app.PostgresqlDB)
 
-	// Gateway & Usecase
-	taskGateway := taskgateway.New(taskPostgresql)
-	taskUsecase := taskusecase.New(taskGateway)
+	// Repository & Usecase
+	taskUsecase := taskusecase.New(taskPostgresql)
 
-	// Gateway & Usecase
-	userGateway := usergateway.New(userPostgresql, taskUsecase)
-	userUsecase := userusecase.New(userGateway)
+	// Service-oriented - no depends on useCases - ( userusecase -> taskgateway -> taskusecase )
+	taskGateway := taskgateway.New(taskUsecase)
+
+	// Repository & Usecase
+	userUsecase := userusecase.New(taskGateway, userPostgresql)
 
 	// Handler
 	userHandler := userhandler.New(app, userUsecase)
@@ -43,6 +43,6 @@ func New(
 
 	//protectedRouter.Use(middleware.Auth())
 	{
-		protectedRouter.GET("/task-list", userHandler.TaskList)
+		protectedRouter.GET("/taskgateway-list", userHandler.TaskList)
 	}
 }

@@ -1,13 +1,13 @@
 package taskusecase
 
-type Gateway interface {
+type Repository interface {
 	List()
 }
 
 type TaskInteractor struct {
-	taskGateway Gateway
+	repository Repository
 }
 
-func New(taskGateway Gateway) *TaskInteractor {
-	return &TaskInteractor{taskGateway: taskGateway}
+func New(taskGateway Repository) *TaskInteractor {
+	return &TaskInteractor{repository: taskGateway}
 }

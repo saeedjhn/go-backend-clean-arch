@@ -15,6 +15,6 @@ func New(conn mysql.DB) *DB {
 	}
 }
 
-func (r *DB) Find() {
-	log.Print("mysql-task -> Find - IMPL ME")
+func (r *DB) List() {
+	log.Print("mysql-taskgateway -> Find - IMPL ME")
 }
