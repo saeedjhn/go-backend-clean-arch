@@ -16,5 +16,5 @@ func New(conn mysql.DB) *DB {
 }
 
 func (r *DB) Find() {
-	log.Print("mysql-user -> Find - IMPL ME")
+	log.Print("mysql-task -> Find - IMPL ME")
 }

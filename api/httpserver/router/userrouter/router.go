@@ -6,8 +6,8 @@ import (
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/bootstrap"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/gateway/taskgateway"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/gateway/usergateway"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/repository/taskrepository/postgresqltask"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/repository/userrespository/postgresqluser"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/taskrepository/postgresqltask"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/userrespository/postgresqluser"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/usecase/taskusecase"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/usecase/userusecase"
 )

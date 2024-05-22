@@ -16,5 +16,5 @@ func New(conn postgresql.DB) *DB {
 }
 
 func (r *DB) Find() {
-	log.Print("mysql-user -> Find - IMPL ME")
+	log.Print("postgres-task -> Find - IMPL ME")
 }

@@ -16,5 +16,5 @@ func New(conn postgresql.DB) *DB {
 }
 
 func (r *DB) Create() {
-	log.Print("mysql-user -> Create - IMPL ME")
+	log.Print("postgres-user -> Create - IMPL ME")
 }
