@@ -11,18 +11,19 @@ hello:
 
 ## build-dev: compile packages and dependencies on environment dev
 .PHONY: build-dev
-build-dev:
+build-app:
 	go build -o /build/app main.go
 
-## run-dev: compile and run Go program on environment dev
-.PHONY: run-dev
-run-dev:
-	go run main.go
+## httpserver-run-compiled-app: compile and run Go program on environment dev
+.PHONY: httpserver-run-compiled-app
+httpserver-run-compiled-app:
+	/build/app
 
-## rerun-dev: recompile & run Go program on environment dev
-.PHONY: rerun-dev
-rerun-dev:
-	CompileDaemon -build="go build -o /build/app" -command="/build/app"
+## httpserver-recompile-dev: recompile & run Go program on environment dev
+.PHONY: httpserver-recompile-dev
+httpserver-recompile-dev:
+	air -c .air.toml
+#	CompileDaemon -build="go build -o /build/app" -command="/build/app"
 
 # ==================================================================================== #
 # HELPERS
