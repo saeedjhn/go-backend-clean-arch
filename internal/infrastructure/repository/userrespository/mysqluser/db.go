@@ -1,7 +1,7 @@
 package mysqluser
 
 import (
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/db/mysql"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/mysql"
 	"log"
 )
 

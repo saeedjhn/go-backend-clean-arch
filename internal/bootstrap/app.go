@@ -2,9 +2,9 @@ package bootstrap
 
 import (
 	"go-backend-clean-arch-according-to-go-standards-project-layout/configs"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/cache/redis"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/db/mysql"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/db/postgresql"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/cache/redis"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/mysql"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/postgresql"
 )
 
 type Application struct {

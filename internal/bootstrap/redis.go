@@ -1,15 +1,15 @@
 package bootstrap
 
 import (
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/cache/redis"
+	redis2 "go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/cache/redis"
 	"log"
 )
 
-func NewRedisClient(config redis.Config) redis.DB {
-	return redis.New(config)
+func NewRedisClient(config redis2.Config) redis2.DB {
+	return redis2.New(config)
 }
 
-func CloseRedisClient(redisClient redis.DB) {
+func CloseRedisClient(redisClient redis2.DB) {
 	err := redisClient.Client().Close()
 
 	if err != nil {
