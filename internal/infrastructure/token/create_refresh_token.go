@@ -5,18 +5,21 @@ import (
 	"time"
 )
 
-func (a *Token) CreateRefreshToken(id uint) (string, error) {
+// func (a *Token) CreateRefreshToken(id uint) (string, error) {
+func (a *Token) CreateRefreshToken(id uint, secret string, subject string, expire time.Duration) (string, error) {
 	// set our claims
 	claims := Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(a.config.RefreshTokenExpiryTime * time.Second)),
+			Subject: subject,
+			//ExpiresAt: jwt.NewNumericDate(time.Now().Add(a.config.RefreshTokenExpiryTime * time.Second)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expire)),
 		},
 		UserId: id,
 		// any more property for response to user (name, family, role, etc...)
 	}
 
 	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := accessToken.SignedString([]byte(a.config.RefreshTokenSecret))
+	tokenString, err := accessToken.SignedString([]byte(secret))
 	if err != nil {
 		return "", err
 	}
