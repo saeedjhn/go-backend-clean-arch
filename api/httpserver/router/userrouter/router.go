@@ -39,10 +39,10 @@ func New(
 		publicRouter.POST("/login", userHandler.Login)
 	}
 
-	protectedRouter := publicRouter.Group("")
+	protectedRouter := g.Group("")
 
 	//protectedRouter.Use(middleware.Auth())
 	{
-		protectedRouter.GET("/taskgateway-list", userHandler.TaskList)
+		protectedRouter.GET("/task-list", userHandler.TaskList)
 	}
 }
