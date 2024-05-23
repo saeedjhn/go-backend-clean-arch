@@ -8,36 +8,59 @@ import (
 type Config struct {
 	AccessTokenSecret      string        `mapstructure:"secret"`
 	RefreshTokenSecret     string        `mapstructure:"refresh_secret"`
+	AccessTokenSubject     string        `mapstructure:"access_subject"`
+	RefreshTokenSubject    string        `mapstructure:"refresh_subject"`
 	AccessTokenExpiryTime  time.Duration `mapstructure:"access_token_expire_duration"`
 	RefreshTokenExpiryTime time.Duration `mapstructure:"refresh_token_expire_duration"`
 }
 
 type AuthInteractor struct {
-	token token.Token
+	config Config
+	token  *token.Token
 }
 
-func New(token token.Token) *AuthInteractor {
-	return &AuthInteractor{token: token}
+func New(config Config, token *token.Token) *AuthInteractor {
+	return &AuthInteractor{config: config, token: token}
 }
 
 func (a AuthInteractor) CreateAccessToken(id uint) (string, error) {
-	return a.token.CreateAccessToken(id)
+	return a.token.CreateAccessToken(
+		id,
+		a.config.AccessTokenSecret,
+		a.config.AccessTokenSubject,
+		a.config.AccessTokenExpiryTime,
+	)
 }
 
 func (a AuthInteractor) RefreshAccessToken(id uint) (string, error) {
-	return a.token.CreateRefreshToken(id)
+	return a.token.CreateRefreshToken(
+		id,
+		a.config.RefreshTokenSecret,
+		a.config.RefreshTokenSubject,
+		a.config.RefreshTokenExpiryTime,
+	)
 }
 
 func (a AuthInteractor) IsAuthorized(requestToken string, secret string) (bool, error) {
 	return a.token.IsAuthorized(requestToken, secret)
 }
 
-func (a AuthInteractor) ExtractIdFromToken(requestToken string, secret string) (string, error) {
-	return a.token.ExtractIdFromToken(requestToken, secret)
+func (a AuthInteractor) ExtractIdFromAccessToken(requestToken string) (string, error) {
+	return a.token.ExtractIdFromToken(requestToken, a.config.AccessTokenSecret)
 }
 
-func (a AuthInteractor) ParseToken(requestToken string, secret string) (Claims, error) {
-	claims, err := a.token.ParseToken(requestToken, secret)
+func (a AuthInteractor) ExtractIdFromRefreshToken(requestToken string) (string, error) {
+	return a.token.ExtractIdFromToken(requestToken, a.config.RefreshTokenSecret)
+}
+
+func (a AuthInteractor) ParseAccessToken(requestToken string) (Claims, error) {
+	claims, err := a.token.ParseToken(requestToken, a.config.AccessTokenSecret)
+
+	return Claims(*claims), err
+}
+
+func (a AuthInteractor) ParseRefreshToken(requestToken string) (Claims, error) {
+	claims, err := a.token.ParseToken(requestToken, a.config.RefreshTokenSecret)
 
 	return Claims(*claims), err
 }
