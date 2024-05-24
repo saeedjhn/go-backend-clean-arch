@@ -10,19 +10,19 @@ type DB interface {
 }
 
 type RedisDB struct {
-	cfg Config
-	db  *redis.Client
+	config Config
+	db     *redis.Client
 }
 
-func New(cfg Config) *RedisDB {
-	return (&RedisDB{cfg: cfg}).conn()
+func New(config Config) *RedisDB {
+	return (&RedisDB{config: config}).conn()
 }
 
 func (r *RedisDB) conn() *RedisDB {
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%s", r.cfg.Host, r.cfg.Port),
-		Password: r.cfg.Password,
-		DB:       r.cfg.DB,
+		Addr:     fmt.Sprintf("%s:%s", r.config.Host, r.config.Port),
+		Password: r.config.Password,
+		DB:       r.config.DB,
 	})
 	r.db = rdb
 

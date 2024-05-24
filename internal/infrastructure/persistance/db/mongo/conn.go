@@ -9,16 +9,16 @@ import (
 )
 
 type MongoDB struct {
-	cfg    Config
+	config Config
 	client *mongo.Client
 	db     *mongo.Database
 }
 
-func New(cfg Config) *MongoDB {
+func New(config Config) *MongoDB {
 	ctx := context.Background()
 
-	connectionURI := fmt.Sprintf("mongodb://%s:%s/", cfg.Host, cfg.Port) // for local machine
-	//connectionURI := fmt.Sprintf("mongodb://%s:%s@%s:%s", cfg.Username, cfg.Password, cfg.Host, cfg.Port) // for server machine
+	connectionURI := fmt.Sprintf("mongodb://%s:%s/", config.Host, config.Port) // for local machine
+	//connectionURI := fmt.Sprintf("mongodb://%s:%s@%s:%s", config.Username, config.Password, config.Host, config.Port) // for server machine
 
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(connectionURI))
 
@@ -31,7 +31,7 @@ func New(cfg Config) *MongoDB {
 	//	log.Fatal(err)
 	//}
 
-	return &MongoDB{cfg: cfg, client: client}
+	return &MongoDB{config: config, client: client}
 }
 
 func (m *MongoDB) Conn() {

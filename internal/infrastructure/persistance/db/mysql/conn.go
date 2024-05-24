@@ -12,8 +12,8 @@ type DB interface {
 }
 
 type MySqlDB struct {
-	cfg Config
-	db  *sql.DB
+	config Config
+	db     *sql.DB
 }
 
 func New(config Config) *MySqlDB {
@@ -30,7 +30,7 @@ func New(config Config) *MySqlDB {
 	db.SetMaxOpenConns(config.MaxOpenConns)
 	db.SetConnMaxLifetime(config.ConnMaxLiftTime * time.Second)
 
-	return &MySqlDB{cfg: config, db: db}
+	return &MySqlDB{config: config, db: db}
 }
 
 func (m *MySqlDB) Conn() *sql.DB {

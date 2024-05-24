@@ -34,7 +34,6 @@ func main() {
 
 	fmt.Println("received interrupt signal, shutting down gracefully..")
 	// Close all db connection, etc
-	//app.CloseMysqlDB()
 	app.ClosePostgresqlConnection()
 	app.CloseRedisClientConnection()
 
