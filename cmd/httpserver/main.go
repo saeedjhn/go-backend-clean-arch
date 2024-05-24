@@ -6,6 +6,8 @@ import (
 	"go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/configs"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/bootstrap"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/logger"
+	"go.uber.org/zap"
 	"os"
 	"os/signal"
 )
@@ -13,6 +15,9 @@ import (
 func main() {
 	// Bootstrap
 	app := bootstrap.App(configs.Development)
+
+	// Logger
+	logger.Logger.Named("main").Info("config", zap.Any("config", app.Config))
 
 	// Start server
 	server := httpserver.New(app)
