@@ -1,6 +1,7 @@
 package configs
 
 import (
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/logger"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/cache/redis"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/mongo"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/mysql"
@@ -23,6 +24,7 @@ type HTTPServer struct {
 type Config struct {
 	Application Application        `mapstructure:"application"`
 	HTTPServer  HTTPServer         `mapstructure:"http_server"`
+	Logger      logger.Config      `mapstructure:"logger"`
 	Mysql       mysql.Config       `mapstructure:"mysql"`
 	Postgresql  postgresql.Config  `mapstructure:"postgresql"`
 	Redis       redis.Config       `mapstructure:"redis"`

@@ -7,7 +7,6 @@ import (
 	myMiddleware "go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver/middleware"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver/router"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/bootstrap"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/logger"
 	"go.uber.org/zap"
 	"log"
 )
@@ -31,9 +30,10 @@ func (s HTTPServer) Serve() {
 
 	// Global Middleware Setup
 	s.Router.Use(myMiddleware.Timeout(s.App.Config.HTTPServer.Timeout))
-	//s.Router.Use(middleware.Logger())
+	//s.Router.Use(middleware.logger())
 	//s.Router.Use(middleware.Recover())
 	s.Router.Use(middleware.RequestID())
+
 	s.Router.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
 		LogURI:           true,
 		LogStatus:        true,
@@ -52,7 +52,7 @@ func (s HTTPServer) Serve() {
 				errMsg = v.Error.Error()
 			}
 
-			logger.Logger.Named("http-server").Info("request",
+			s.App.Logger.Set().Named("http-server").Info("request",
 				zap.String("request_id", v.RequestID),
 				zap.String("host", v.Host),
 				zap.String("content-length", v.ContentLength),
