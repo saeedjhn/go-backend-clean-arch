@@ -10,8 +10,10 @@ import (
 
 func Setup(
 	app *bootstrap.Application,
-	g *echo.Group,
+	e *echo.Echo,
 ) {
+	g := e.Group("")
+
 	userrouter.New(app, g)
 	taskrouter.New(app, g)
 	healthcheckrouter.New(app, g)

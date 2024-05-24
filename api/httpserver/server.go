@@ -70,11 +70,8 @@ func (s HTTPServer) Serve() {
 		},
 	}))
 
-	// Router Group
-	g := s.Router.Group("")
-
 	// Router Setup
-	router.Setup(s.App, g)
+	router.Setup(s.App, s.Router)
 
 	address := fmt.Sprintf(":%s", s.App.Config.HTTPServer.Port)
 	log.Printf("start echo server on %s\n", address)
