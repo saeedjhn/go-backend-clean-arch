@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func New(app *bootstrap.Application, e *echo.Echo) {
+func New(app *bootstrap.Application, e *echo.Group) {
 	g := e.Group("/tasks")
 	{
 		g.GET("/", func(c echo.Context) error {

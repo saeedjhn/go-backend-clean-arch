@@ -30,11 +30,13 @@ func (s HTTPServer) Serve() {
 	// Global Middleware Setup
 	s.Router.Use(middleware.Logger())
 	s.Router.Use(middleware.Recover())
-	//s.Router.Use(middleware.RequestID()) // TODO - Set for any xRouter
 	s.Router.Use(myMiddleware.Timeout(s.App.Config.HTTPServer.Timeout))
 
+	g := s.Router.Group("")
+	g.Use(middleware.RequestID())
+
 	// Router Setup
-	router.Setup(s.App, s.Router)
+	router.Setup(s.App, g)
 
 	address := fmt.Sprintf(":%s", s.App.Config.HTTPServer.Port)
 	log.Printf("start echo server on %s\n", address)

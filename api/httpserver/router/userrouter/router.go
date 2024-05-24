@@ -13,7 +13,7 @@ import (
 
 func New(
 	app *bootstrap.Application,
-	e *echo.Echo,
+	e *echo.Group,
 ) {
 	// Repository
 	taskPostgresql := postgresqltask.New(app.PostgresqlDB)
