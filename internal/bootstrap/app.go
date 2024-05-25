@@ -19,7 +19,7 @@ type Application struct {
 func App(env configs.Env) *Application {
 	app := &Application{}
 	app.Config = ConfigLoad(env)
-	app.Logger = logger.New(app.Config.Logger)
+	app.Logger = newLogger(app.Config.Logger)
 	//app.MysqlDB = newMysqlConnection(app.Config.Mysql)
 	app.PostgresqlDB = newPostgresqlConnection(app.Config.Postgresql)
 	app.RedisClient = newRedisClient(app.Config.Redis)
