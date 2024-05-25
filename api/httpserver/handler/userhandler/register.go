@@ -39,6 +39,7 @@ func (u *UserHandler) Register(c echo.Context) error {
 
 	// Sanitize
 
+	// UseCase
 	resp, err := u.userInteractor.Register(req)
 	if err != nil {
 		richErr := richerror.Analysis(err)

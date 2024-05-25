@@ -9,6 +9,7 @@ import (
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/userrespository/postgresqluser"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/usecase/taskusecase"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/usecase/userusecase"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/validator/uservalidator"
 )
 
 func New(
@@ -16,20 +17,23 @@ func New(
 	e *echo.Group,
 ) {
 	// Repository
-	taskPostgresql := postgresqltask.New(app.PostgresqlDB)
-	userPostgresql := postgresqluser.New(app.PostgresqlDB)
+	tdb := postgresqltask.New(app.PostgresqlDB)
+	udb := postgresqluser.New(app.PostgresqlDB)
 
 	// Repository & Usecase
-	taskUsecase := taskusecase.New(taskPostgresql)
+	tu := taskusecase.New(tdb)
 
 	// Service-oriented - no depends on useCases - ( userusecase -> taskgateway -> taskusecase )
-	taskGateway := taskgateway.New(taskUsecase)
+	tg := taskgateway.New(tu)
 
 	// Repository & Usecase
-	userUsecase := userusecase.New(taskGateway, userPostgresql)
+	uu := userusecase.New(tg, udb)
+
+	// Validator
+	uv := uservalidator.New()
 
 	// Handler
-	userHandler := userhandler.New(app, userUsecase)
+	userHandler := userhandler.New(app, uv, uu)
 
 	g := e.Group("/users")
 
