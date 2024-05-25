@@ -6,8 +6,8 @@ import (
 )
 
 type Interactor interface {
-	Register(req userdto.UserRequest)
-	TaskList(req userdto.UserRequest)
+	Register(req userdto.RegisterRequest) (userdto.RegisterResponse, error)
+	TaskList(req userdto.TaskListRequest)
 }
 
 type UserHandler struct {
