@@ -48,8 +48,8 @@ func (h Builder) WithMessage(message ...string) Builder {
 	return h
 }
 
-func (h Builder) WithData(data ...interface{}) Builder {
-	h.entity.Data = data
+func (h Builder) WithMeta(meta ...interface{}) Builder {
+	h.entity.Meta = meta
 
 	return h
 }

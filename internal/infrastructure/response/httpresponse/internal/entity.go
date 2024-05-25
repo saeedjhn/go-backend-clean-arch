@@ -7,5 +7,5 @@ type HTTPResponse struct {
 	Path              string        `json:"Path"`
 	ExecutionDuration string        `json:"execution_duration"`
 	Message           []string      `json:"Message"`
-	Data              []interface{} `json:"Data"`
+	Meta              []interface{} `json:"Meta"`
 }
