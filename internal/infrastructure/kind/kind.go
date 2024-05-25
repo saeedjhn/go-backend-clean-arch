@@ -1,0 +1,68 @@
+package kind
+
+type Kind int
+
+const (
+	KindStatusContinue Kind = iota + 1
+	KindStatusSwitchingProtocols
+	KindStatusProcessing
+	KindStatusEarlyHints
+
+	KindStatusOK
+	KindStatusCreated
+	KindStatusAccepted
+	KindStatusNonAuthoritativeInfo
+	KindStatusNoContent
+	KindStatusResetContent
+	KindStatusPartialContent
+	KindStatusMultiStatus
+	KindStatusAlreadyReported
+	KindStatusIMUsed
+
+	KindStatusMultipleChoices
+	KindStatusMovedPermanently
+	KindStatusFound
+	KindStatusSeeOther
+	KindStatusNotModified
+	KindStatusUseProxy
+	Kind_
+	KindStatusTemporaryRedirect
+	KindStatusPermanentRedirect
+
+	KindStatusBadRequest
+	KindStatusUnauthorized
+	KindStatusPaymentRequired
+	KindStatusForbidden
+	KindStatusNotFound
+	KindStatusMethodNotAllowed
+	KindStatusNotAcceptable
+	KindStatusProxyAuthRequired
+	KindStatusRequestTimeout
+	KindStatusConflict
+	KindStatusGone
+	KindStatusRequestedRangeNotSatisfiable
+	KindStatusExpectationFailed
+	KindStatusTeapot
+	KindStatusMisdirectedRequest
+	KindStatusUnprocessableEntity
+	KindStatusLocked
+	KindStatusFailedDependency
+	KindStatusTooEarly
+	KindStatusUpgradeRequired
+	KindStatusPreconditionRequired
+	KindStatusTooManyRequests
+	KindStatusRequestHeaderFieldsTooLarge
+	KindStatusUnavailableForLegalReasons
+
+	KindStatusInternalServerError
+	KindStatusNotImplemented
+	KindStatusBadGateway
+	KindStatusServiceUnavailable
+	KindStatusGatewayTimeout
+	KindStatusHTTPVersionNotSupported
+	KindStatusVariantAlsoNegotiates
+	KindStatusInsufficientStorage
+	KindStatusLoopDetected
+	KindStatusNotExtended
+	KindStatusNetworkAuthenticationRequired
+)
