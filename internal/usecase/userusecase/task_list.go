@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func (u *UserInteractor) TaskList(req userdto.UserRequest) {
+func (u *UserInteractor) TaskList(req userdto.TaskListRequest) {
 	u.taskListGateway.TaskList()
 
 	log.Print("UserInteractor -> TaskList - IMPL ME")
