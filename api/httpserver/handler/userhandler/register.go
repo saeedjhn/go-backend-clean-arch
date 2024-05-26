@@ -41,7 +41,7 @@ func (u *UserHandler) Register(c echo.Context) error {
 					WithMeta(echo.Map{
 						"error": map[string]string{
 							//v.Field: v.Error(), // json: cannot unmarshal number into Go struct field RegisterRequest.name of type string
-							v.Field: fmt.Sprintf("cannot convert %s type for name of type %s", v.Value, v.Type),
+							v.Field: fmt.Sprintf("cannot convert %s for name of type %s", v.Value, v.Type),
 						},
 					}).
 					Build(),
