@@ -1,4 +1,4 @@
-package sanitizepkg
+package sanitize
 
 import (
 	"fmt"
@@ -23,8 +23,8 @@ type ForSanitize struct {
 func TestSanitize(t *testing.T) {
 	s := New().SetPolicy(StrictPolicy)
 
-	var forSanitize = ForSanitize{
-		Foo: "<b>foo</b>",
+	forSanitize := ForSanitize{
+		Foo: "<b>FOO</b>",
 		//barItem: Bar{
 		//	BarInt: 0,
 		//	BarStr: "<a>javascript mo href=\"http://localhost\"</a><a>",
@@ -38,6 +38,15 @@ func TestSanitize(t *testing.T) {
 				BarStr: "<a>javascript mo href=\"http://localhost\"</a><a>",
 			}},
 		}}
+	fmt.Println(forSanitize)
 
-	fmt.Println(s.SanitizeStruct(forSanitize))
+	any, err := s.Any(forSanitize)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("any: ", any)
+
+	s.Struct(&forSanitize)
+
+	fmt.Println(forSanitize)
 }
