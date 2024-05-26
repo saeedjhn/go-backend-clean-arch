@@ -42,14 +42,20 @@ func (h Builder) WithExecutionDuration(execDuration string) Builder {
 	return h
 }
 
-func (h Builder) WithMessage(message ...string) Builder {
+func (h Builder) WithMessage(message string) Builder {
 	h.entity.Message = message
 
 	return h
 }
 
-func (h Builder) WithMeta(meta ...interface{}) Builder {
+func (h Builder) WithMeta(meta interface{}) Builder {
 	h.entity.Meta = meta
+
+	return h
+}
+
+func (h Builder) WithError(err interface{}) Builder {
+	h.entity.Meta = map[string]interface{}{"error": err}
 
 	return h
 }
