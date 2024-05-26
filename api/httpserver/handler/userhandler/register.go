@@ -25,15 +25,6 @@ func (u *UserHandler) Register(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		var v *json.UnmarshalTypeError
 		if errors.As(err, &v) {
-			//m := echo.Map{
-			//	"value":  v.Value,
-			//	"type":   v.Type,
-			//	"field":  v.Field,
-			//	"struct": v.Struct,
-			//	"offset": v.Offset,
-			//	"error":  v.Error(),
-			//}
-
 			return c.JSON(http.StatusInternalServerError,
 				hresp.WithStatus(false).
 					WithStatusCode(http.StatusInternalServerError).
@@ -48,7 +39,12 @@ func (u *UserHandler) Register(c echo.Context) error {
 			)
 		}
 
-		return echo.NewHTTPError(http.StatusInternalServerError)
+		return c.JSON(http.StatusInternalServerError,
+			hresp.WithStatus(false).
+				WithStatusCode(http.StatusInternalServerError).
+				WithMessage("internal server error").
+				Build(),
+		)
 	}
 
 	// Validation
