@@ -6,5 +6,6 @@ type RegisterRequest struct {
 }
 
 type RegisterResponse struct {
-	User UserInfo `json:"user_info"`
+	User  UserInfo `json:"user_info"`
+	Token Token    `json:"token"`
 }

@@ -23,5 +23,9 @@ func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.Register
 			Mobile: "0123456789",
 			Name:   "John Doe",
 		},
+		Token: userdto.Token{
+			AccessToken:  "2947858237508263570238",
+			RefreshToken: "9826580573203570293570297265923709",
+		},
 	}, nil
 }
