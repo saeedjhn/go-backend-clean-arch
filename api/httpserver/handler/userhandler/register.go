@@ -16,10 +16,7 @@ import (
 func (u *UserHandler) Register(c echo.Context) error {
 	// Initial
 	req := userdto.RegisterRequest{}
-	hresp := httpresponse.New().
-		WithRequestID(c.Response().Header().Get(echo.HeaderXRequestID)).
-		WithPath(c.Path()).
-		WithExecutionDuration("123456789")
+	hresp := httpresponse.New()
 
 	// Bind
 	if err := c.Bind(&req); err != nil {
@@ -86,10 +83,10 @@ func (u *UserHandler) Register(c echo.Context) error {
 	}
 
 	return c.JSON(
-		http.StatusOK,
+		http.StatusCreated,
 		hresp.
 			WithStatus(true).
-			WithStatusCode(http.StatusOK).
+			WithStatusCode(http.StatusCreated).
 			WithMessage("User is register successfully").
 			WithMeta(uresp).
 			Build(),

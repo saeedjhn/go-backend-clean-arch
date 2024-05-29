@@ -1,13 +1,11 @@
 package httpresponse
 
-import "go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/response/httpresponse/internal"
-
 type Builder struct {
-	entity internal.HTTPResponse
+	entity HTTPResponse
 }
 
 func New() Builder {
-	e := internal.HTTPResponse{}
+	e := HTTPResponse{}
 
 	return Builder{entity: e}
 }
@@ -24,24 +22,6 @@ func (h Builder) WithStatusCode(statusCode int) Builder {
 	return h
 }
 
-func (h Builder) WithRequestID(requestID string) Builder {
-	h.entity.RequestID = requestID
-
-	return h
-}
-
-func (h Builder) WithPath(path string) Builder {
-	h.entity.Path = path
-
-	return h
-}
-
-func (h Builder) WithExecutionDuration(execDuration string) Builder {
-	h.entity.ExecutionDuration = execDuration
-
-	return h
-}
-
 func (h Builder) WithMessage(message string) Builder {
 	h.entity.Message = message
 
@@ -54,12 +34,30 @@ func (h Builder) WithMeta(meta interface{}) Builder {
 	return h
 }
 
+func (h Builder) WithRequestID(requestID string) Builder {
+	h.entity.RequestID = requestID
+
+	return h
+}
+
+func (h Builder) WithPath(path string) Builder {
+	h.entity.Path = path
+
+	return h
+}
+
+func (h Builder) WithExecutionDuration(execDuration int64) Builder {
+	h.entity.ExecutionDuration = execDuration
+
+	return h
+}
+
 func (h Builder) WithError(err interface{}) Builder {
 	h.entity.Meta = map[string]interface{}{"error": err}
 
 	return h
 }
 
-func (h Builder) Build() internal.HTTPResponse {
+func (h Builder) Build() HTTPResponse {
 	return h.entity
 }
