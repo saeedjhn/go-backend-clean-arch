@@ -10,9 +10,14 @@ import (
 	"time"
 )
 
+const (
+	Development Env = "development"
+	Production  Env = "production"
+)
+
 type Application struct {
-	Env   string `mapstructure:"env"`
-	Debug bool   `mapstructure:"debug"`
+	Env   Env  `mapstructure:"env"`
+	Debug bool `mapstructure:"debug"`
 }
 
 type HTTPServer struct {

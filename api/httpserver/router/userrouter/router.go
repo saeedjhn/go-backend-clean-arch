@@ -38,7 +38,7 @@ func New(
 
 	g := e.Group("/users")
 
-	g.Use(userinterceptor.TransformResponse)
+	g.Use(userinterceptor.TransformResponse(app.Config.Application.Env))
 
 	publicRouter := g.Group("/auth")
 	{

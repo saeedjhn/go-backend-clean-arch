@@ -1,4 +1,4 @@
-package userinterceptor
+package intercaptor
 
 import (
 	"bytes"
@@ -10,16 +10,16 @@ import (
 	"time"
 )
 
-type UserInterceptor struct {
+type GlobalInterceptor struct {
 	http.ResponseWriter
 	body *bytes.Buffer
 }
 
-func (u *UserInterceptor) WriteHeader(statusCode int) {
+func (u *GlobalInterceptor) WriteHeader(statusCode int) {
 	u.ResponseWriter.WriteHeader(statusCode)
 }
 
-func (u *UserInterceptor) Write(b []byte) (int, error) {
+func (u *GlobalInterceptor) Write(b []byte) (int, error) {
 	return u.body.Write(b)
 	//return u.ResponseWriter.Write(b)
 	//return len(b), nil
@@ -43,7 +43,7 @@ func transformOnDevelopment(next echo.HandlerFunc) echo.HandlerFunc {
 		res := c.Response()
 		originalWriter := res.Writer
 
-		res.Writer = &UserInterceptor{
+		res.Writer = &GlobalInterceptor{
 			ResponseWriter: originalWriter,
 			body:           buf,
 		}
@@ -99,7 +99,7 @@ func transformOnProduction(next echo.HandlerFunc) echo.HandlerFunc {
 		res := c.Response()
 		originalWriter := res.Writer
 
-		res.Writer = &UserInterceptor{
+		res.Writer = &GlobalInterceptor{
 			ResponseWriter: originalWriter,
 			body:           buf,
 		}

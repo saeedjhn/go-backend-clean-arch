@@ -16,14 +16,14 @@ import (
 func (u *UserHandler) Register(c echo.Context) error {
 	// Initial
 	req := userdto.RegisterRequest{}
-	hresp := httpresponse.New()
+	httpRes := httpresponse.New()
 
 	// Bind
 	if err := c.Bind(&req); err != nil {
 		var v *json.UnmarshalTypeError
 		if errors.As(err, &v) {
 			return c.JSON(http.StatusInternalServerError,
-				hresp.WithStatus(false).
+				httpRes.WithStatus(false).
 					WithStatusCode(http.StatusInternalServerError).
 					WithMessage("unmarshalling error type").
 					WithMeta(echo.Map{
@@ -37,7 +37,7 @@ func (u *UserHandler) Register(c echo.Context) error {
 		}
 
 		return c.JSON(http.StatusInternalServerError,
-			hresp.WithStatus(false).
+			httpRes.WithStatus(false).
 				WithStatusCode(http.StatusInternalServerError).
 				WithMessage("internal server error").
 				Build(),
@@ -51,7 +51,7 @@ func (u *UserHandler) Register(c echo.Context) error {
 
 		return c.JSON(
 			code,
-			hresp.
+			httpRes.
 				WithStatus(false).
 				WithStatusCode(code).
 				WithMessage(richErr.GetMessage()).
@@ -66,14 +66,14 @@ func (u *UserHandler) Register(c echo.Context) error {
 		Struct(&req)
 
 	// UseCase
-	uresp, err := u.userInteractor.Register(req)
+	uRes, err := u.userInteractor.Register(req)
 	if err != nil {
 		richErr := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.GetKind())
 
 		return c.JSON(
 			code,
-			hresp.
+			httpRes.
 				WithStatus(false).
 				WithStatusCode(code).
 				WithMessage(richErr.GetMessage()).
@@ -84,11 +84,11 @@ func (u *UserHandler) Register(c echo.Context) error {
 
 	return c.JSON(
 		http.StatusCreated,
-		hresp.
+		httpRes.
 			WithStatus(true).
 			WithStatusCode(http.StatusCreated).
 			WithMessage("User is register successfully").
-			WithMeta(uresp).
+			WithMeta(uRes).
 			Build(),
 	)
 }
