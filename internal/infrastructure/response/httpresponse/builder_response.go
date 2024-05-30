@@ -1,63 +1,66 @@
 package httpresponse
 
+import "go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/response/httpresponse/internal"
+
 type Builder struct {
-	entity HTTPResponse
+	internal.HTTPResponse
 }
 
 func New() Builder {
-	e := HTTPResponse{}
-
-	return Builder{entity: e}
+	return Builder{internal.HTTPResponse{}}
 }
 
 func (h Builder) WithStatus(status bool) Builder {
-	h.entity.Status = status
+	h.Status = status
 
 	return h
 }
 
 func (h Builder) WithStatusCode(statusCode int) Builder {
-	h.entity.StatusCode = statusCode
+	h.StatusCode = statusCode
 
 	return h
 }
 
 func (h Builder) WithMessage(message string) Builder {
-	h.entity.Message = message
+	h.Message = message
 
 	return h
 }
 
 func (h Builder) WithMeta(meta interface{}) Builder {
-	h.entity.Meta = meta
-
-	return h
-}
-
-func (h Builder) WithRequestID(requestID string) Builder {
-	h.entity.RequestID = requestID
-
-	return h
-}
-
-func (h Builder) WithPath(path string) Builder {
-	h.entity.Path = path
-
-	return h
-}
-
-func (h Builder) WithExecutionDuration(execDuration int64) Builder {
-	h.entity.ExecutionDuration = execDuration
+	h.Meta = meta
 
 	return h
 }
 
 func (h Builder) WithError(err interface{}) Builder {
-	h.entity.Meta = map[string]interface{}{"error": err}
+	h.Meta = map[string]interface{}{"error": err}
 
 	return h
 }
 
-func (h Builder) Build() HTTPResponse {
-	return h.entity
+func (h Builder) Build() internal.HTTPResponse {
+	return h.HTTPResponse
 }
+
+/*
+
+func (h Builder) WithRequestID(requestID string) Builder {
+	h.RequestID = requestID
+
+	return h
+}
+
+func (h Builder) WithPath(path string) Builder {
+	h.Path = path
+
+	return h
+}
+
+func (h Builder) WithExecutionDuration(execDuration int64) Builder {
+	h.ExecutionDuration = execDuration
+
+	return h
+}
+*/
