@@ -44,10 +44,7 @@ func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[str
 
 		return fieldErrors, richerror.New(op).WithMessage(errmsg.ErrorMsgInvalidInput).
 			WithKind(kind.KindStatusUnprocessableEntity).
-			WithMeta(map[string]interface{}{
-				"error": err,
-				"req":   req,
-			}).WithErr(err)
+			WithMeta(map[string]interface{}{"request": req}).WithErr(err)
 	}
 
 	return nil, nil

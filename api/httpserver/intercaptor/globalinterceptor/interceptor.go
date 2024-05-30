@@ -79,7 +79,7 @@ func transformOnDevelopment(next echo.HandlerFunc) echo.HandlerFunc {
 		// for example CustomResponse["x"] = "X"
 		CustomResponse["request_id"] = res.Header().Get(echo.HeaderXRequestID)
 		CustomResponse["path"] = c.Path()
-		CustomResponse["execution"] = eTime
+		CustomResponse["execution_duration"] = eTime
 
 		return json.NewEncoder(originalWriter).Encode(CustomResponse)
 	}
@@ -130,7 +130,7 @@ func transformOnProduction(next echo.HandlerFunc) echo.HandlerFunc {
 		// for example CustomResponse["x"] = "X"
 		CustomResponse["request_id"] = res.Header().Get(echo.HeaderXRequestID)
 		CustomResponse["path"] = c.Path()
-		CustomResponse["execution"] = eTime
+		CustomResponse["execution_duration"] = eTime
 
 		return json.NewEncoder(originalWriter).Encode(eTime)
 	}
