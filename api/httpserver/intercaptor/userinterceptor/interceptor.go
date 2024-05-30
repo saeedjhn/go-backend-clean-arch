@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"github.com/labstack/echo/v4"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/configs"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/response/httpresponse"
 	"net/http"
-	"time"
 )
+
+var CustomMap map[string]interface{}
 
 type UserInterceptor struct {
 	http.ResponseWriter
@@ -31,14 +31,11 @@ func TransformResponse(env configs.Env) echo.MiddlewareFunc {
 	}
 
 	return transformOnProduction
+
 }
 
 func transformOnDevelopment(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var (
-			sTime time.Time
-			eTime int64
-		)
 		buf := new(bytes.Buffer)
 		res := c.Response()
 		originalWriter := res.Writer
@@ -50,12 +47,10 @@ func transformOnDevelopment(next echo.HandlerFunc) echo.HandlerFunc {
 
 		// Hooks - before
 		res.Before(func() {
-			sTime = time.Now()
 		})
 
 		// Hooks - after
 		res.After(func() {
-			eTime = time.Since(sTime).Milliseconds()
 		})
 
 		if err := next(c); err != nil {
@@ -70,31 +65,19 @@ func transformOnDevelopment(next echo.HandlerFunc) echo.HandlerFunc {
 			}
 		}
 
-		var data httpresponse.HTTPResponse
-		if err := json.Unmarshal(buf.Bytes(), &data); err != nil {
+		if err := json.Unmarshal(buf.Bytes(), &CustomMap); err != nil {
 			return err
 		}
 
-		hRes := httpresponse.HTTPResponse{
-			Status:            data.Status,
-			StatusCode:        data.StatusCode,
-			RequestID:         res.Header().Get(echo.HeaderXRequestID),
-			Path:              c.Path(),
-			ExecutionDuration: eTime,
-			Message:           data.Message,
-			Meta:              data.Meta,
-		}
+		// Key/Value added to CustomResponse
+		// for example CustomResponse["x"] = "X"
 
-		return json.NewEncoder(originalWriter).Encode(hRes)
+		return json.NewEncoder(originalWriter).Encode(CustomMap)
 	}
 }
 
 func transformOnProduction(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var (
-			sTime time.Time
-			eTime int64
-		)
 		buf := new(bytes.Buffer)
 		res := c.Response()
 		originalWriter := res.Writer
@@ -106,12 +89,10 @@ func transformOnProduction(next echo.HandlerFunc) echo.HandlerFunc {
 
 		// Hooks - before
 		res.Before(func() {
-			sTime = time.Now()
 		})
 
 		// Hooks - after
 		res.After(func() {
-			eTime = time.Since(sTime).Milliseconds()
 		})
 
 		if err := next(c); err != nil {
@@ -126,21 +107,13 @@ func transformOnProduction(next echo.HandlerFunc) echo.HandlerFunc {
 			}
 		}
 
-		var data httpresponse.HTTPResponse
-		if err := json.Unmarshal(buf.Bytes(), &data); err != nil {
+		if err := json.Unmarshal(buf.Bytes(), &CustomMap); err != nil {
 			return err
 		}
 
-		cResp := httpresponse.HTTPResponse{
-			Status:     data.Status,
-			StatusCode: data.StatusCode,
-			//RequestID:         res.Header().Get(echo.HeaderXRequestID),
-			//Path:              c.Path(),
-			ExecutionDuration: eTime,
-			Message:           data.Message,
-			Meta:              data.Meta,
-		}
+		// Key/Value added to CustomResponse
+		// for example CustomResponse["x"] = "X"
 
-		return json.NewEncoder(originalWriter).Encode(cResp)
+		return json.NewEncoder(originalWriter).Encode(CustomMap)
 	}
 }

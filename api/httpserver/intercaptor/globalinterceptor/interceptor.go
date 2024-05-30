@@ -1,14 +1,15 @@
-package intercaptor
+package globalinterceptor
 
 import (
 	"bytes"
 	"encoding/json"
 	"github.com/labstack/echo/v4"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/configs"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/response/httpresponse"
 	"net/http"
 	"time"
 )
+
+var CustomResponse map[string]interface{}
 
 type GlobalInterceptor struct {
 	http.ResponseWriter
@@ -70,22 +71,17 @@ func transformOnDevelopment(next echo.HandlerFunc) echo.HandlerFunc {
 			}
 		}
 
-		var data httpresponse.HTTPResponse
-		if err := json.Unmarshal(buf.Bytes(), &data); err != nil {
+		if err := json.Unmarshal(buf.Bytes(), &CustomResponse); err != nil {
 			return err
 		}
 
-		hRes := httpresponse.HTTPResponse{
-			Status:            data.Status,
-			StatusCode:        data.StatusCode,
-			RequestID:         res.Header().Get(echo.HeaderXRequestID),
-			Path:              c.Path(),
-			ExecutionDuration: eTime,
-			Message:           data.Message,
-			Meta:              data.Meta,
-		}
+		// Key/Value added to CustomResponse
+		// for example CustomResponse["x"] = "X"
+		CustomResponse["request_id"] = res.Header().Get(echo.HeaderXRequestID)
+		CustomResponse["path"] = c.Path()
+		CustomResponse["execution"] = eTime
 
-		return json.NewEncoder(originalWriter).Encode(hRes)
+		return json.NewEncoder(originalWriter).Encode(CustomResponse)
 	}
 }
 
@@ -126,21 +122,16 @@ func transformOnProduction(next echo.HandlerFunc) echo.HandlerFunc {
 			}
 		}
 
-		var data httpresponse.HTTPResponse
-		if err := json.Unmarshal(buf.Bytes(), &data); err != nil {
+		if err := json.Unmarshal(buf.Bytes(), &CustomResponse); err != nil {
 			return err
 		}
 
-		cResp := httpresponse.HTTPResponse{
-			Status:     data.Status,
-			StatusCode: data.StatusCode,
-			//RequestID:         res.Header().Get(echo.HeaderXRequestID),
-			//Path:              c.Path(),
-			ExecutionDuration: eTime,
-			Message:           data.Message,
-			Meta:              data.Meta,
-		}
+		// Key/Value added to CustomResponse
+		// for example CustomResponse["x"] = "X"
+		CustomResponse["request_id"] = res.Header().Get(echo.HeaderXRequestID)
+		CustomResponse["path"] = c.Path()
+		CustomResponse["execution"] = eTime
 
-		return json.NewEncoder(originalWriter).Encode(cResp)
+		return json.NewEncoder(originalWriter).Encode(eTime)
 	}
 }
