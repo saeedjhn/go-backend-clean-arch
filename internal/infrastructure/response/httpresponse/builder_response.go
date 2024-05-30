@@ -35,7 +35,13 @@ func (h Builder) WithMeta(meta interface{}) Builder {
 }
 
 func (h Builder) WithError(err interface{}) Builder {
-	h.Meta = map[string]interface{}{"error": err}
+	h.Meta = map[string]interface{}{"errors": err}
+
+	return h
+}
+
+func (h Builder) WithData(data interface{}) Builder {
+	h.Meta = map[string]interface{}{"data": data}
 
 	return h
 }
