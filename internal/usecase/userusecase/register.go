@@ -2,10 +2,11 @@ package userusecase
 
 import (
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/dto/userdto"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/pkg/message"
 )
 
 func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.RegisterResponse, error) {
-	const op = "userInteractor - Register"
+	const op = message.OpUserUsecaseRegister
 
 	u.repository.Create()
 

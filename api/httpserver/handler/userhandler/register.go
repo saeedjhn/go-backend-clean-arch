@@ -21,11 +21,9 @@ func (u *UserHandler) Register(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest,
 			httpRes.
-				WithStatus(false).
 				WithStatusCode(http.StatusBadRequest).
 				WithMessage(message.ErrorMsgBadRequest).
-				WithError(bind.CheckErrFromBind(err)).
-				Build(),
+				WithError(bind.CheckErrFromBind(err)).Build(),
 		)
 	}
 
@@ -37,11 +35,9 @@ func (u *UserHandler) Register(c echo.Context) error {
 		return c.JSON(
 			code,
 			httpRes.
-				WithStatus(false).
 				WithStatusCode(code).
 				WithMessage(richErr.Message()).
-				WithError(fieldsErrs).
-				Build(),
+				WithError(fieldsErrs).Build(),
 		)
 	}
 
@@ -59,11 +55,9 @@ func (u *UserHandler) Register(c echo.Context) error {
 		return c.JSON(
 			code,
 			httpRes.
-				WithStatus(false).
 				WithStatusCode(code).
 				WithMessage(richErr.Message()).
-				WithMeta(richErr.Meta()).
-				Build(),
+				WithMeta(richErr.Meta()).Build(),
 		)
 	}
 
@@ -73,7 +67,6 @@ func (u *UserHandler) Register(c echo.Context) error {
 			WithStatus(true).
 			WithStatusCode(http.StatusCreated).
 			WithMessage(message.MsgUserRegisterSuccessfully).
-			WithMeta(uRes).
-			Build(),
+			WithMeta(uRes).Build(),
 	)
 }

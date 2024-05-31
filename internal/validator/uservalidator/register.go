@@ -10,7 +10,7 @@ import (
 )
 
 func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[string]string, error) {
-	const op = "uservalidator.ValidateRegisterRequest"
+	const op = message.OpValidateRegisterRequest
 
 	if err := validation.ValidateStruct(&req,
 		// TODO - add 3 to config
