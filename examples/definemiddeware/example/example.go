@@ -1,4 +1,4 @@
-package definemiddeware
+package example
 
 import "github.com/labstack/echo/v4"
 

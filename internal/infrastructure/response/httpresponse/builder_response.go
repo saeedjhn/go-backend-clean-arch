@@ -1,6 +1,8 @@
 package httpresponse
 
-import "go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/response/httpresponse/internal"
+import (
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/response/httpresponse/internal"
+)
 
 type Builder struct {
 	internal.HTTPResponse
@@ -35,6 +37,12 @@ func (h Builder) WithMeta(meta interface{}) Builder {
 }
 
 func (h Builder) WithError(err interface{}) Builder {
+	if e, ok := err.(error); ok {
+		h.Meta = map[string]interface{}{"errors": e.Error()}
+
+		return h
+	}
+
 	h.Meta = map[string]interface{}{"errors": err}
 
 	return h

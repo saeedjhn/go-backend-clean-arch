@@ -57,13 +57,13 @@ func transformOnDevelopment(next echo.HandlerFunc) echo.HandlerFunc {
 			c.Error(err)
 		}
 
-		if res.Size == 0 {
-			res.WriteHeader(res.Status)
-			_, err := res.Write(buf.Bytes())
-			if err != nil {
-				return err
-			}
-		}
+		//if res.Size == 0 {
+		//	res.WriteHeader(res.Status)
+		//	_, err := res.Write(buf.Bytes())
+		//	if err != nil {
+		//		return err
+		//	}
+		//}
 
 		if err := json.Unmarshal(buf.Bytes(), &CustomMap); err != nil {
 			return err
@@ -99,13 +99,13 @@ func transformOnProduction(next echo.HandlerFunc) echo.HandlerFunc {
 			c.Error(err)
 		}
 
-		if res.Size == 0 {
-			res.WriteHeader(res.Status)
-			_, err := res.Write(buf.Bytes())
-			if err != nil {
-				return err
-			}
-		}
+		//if res.Size == 0 {
+		//	res.WriteHeader(res.Status)
+		//	_, err := res.Write(buf.Bytes())
+		//	if err != nil {
+		//		return err
+		//	}
+		//}
 
 		if err := json.Unmarshal(buf.Bytes(), &CustomMap); err != nil {
 			return err

@@ -5,7 +5,7 @@ import (
 	"go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver/handler/userhandler"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver/intercaptor/userinterceptor"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/bootstrap"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/gateway/taskgateway"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/gateway/taskinggateway"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/taskrepository/postgresqltask"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/userrespository/postgresqluser"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/usecase/taskusecase"
@@ -25,7 +25,7 @@ func New(
 	tu := taskusecase.New(tdb)
 
 	// Service-oriented - no depends on useCases - ( userusecase -> taskgateway -> taskusecase )
-	tg := taskgateway.New(tu)
+	tg := taskinggateway.New(tu)
 
 	// Repository & Usecase
 	uu := userusecase.New(tg, udb)

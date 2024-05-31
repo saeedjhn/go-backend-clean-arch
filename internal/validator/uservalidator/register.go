@@ -4,9 +4,9 @@ import (
 	"errors"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/dto/userdto"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/errmsg"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/kind"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/richerror"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/pkg/message"
 )
 
 func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[string]string, error) {
@@ -42,7 +42,7 @@ func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[str
 			}
 		}
 
-		return fieldErrors, richerror.New(op).WithMessage(errmsg.ErrorMsgInvalidInput).
+		return fieldErrors, richerror.New(op).WithMessage(message.ErrorMsgInvalidInput).
 			WithKind(kind.KindStatusUnprocessableEntity).
 			WithMeta(map[string]interface{}{"request": req}).WithErr(err)
 	}

@@ -12,7 +12,7 @@ type Config struct {
 /* for example:
 Filename: "./logs/log.json",
 MaxSize:  10, // megabytes
-MaxBackups: 10,
+MaxBackups: 10, // megabytes
 MaxAge:    30, // days
 LocalTime: false,
 Compress:  false,
