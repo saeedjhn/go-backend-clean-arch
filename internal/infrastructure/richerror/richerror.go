@@ -23,6 +23,15 @@ func (e RichErr) WrappedError() error {
 	return e.wrappedError
 }
 
+func (e RichErr) Error() string {
+	var err error
+	if errors.As(e.wrappedError, &err) {
+		return e.wrappedError.Error()
+	}
+
+	return ""
+}
+
 func (e RichErr) Message() string {
 	return e.message
 }
@@ -38,52 +47,52 @@ func (e RichErr) Meta() map[string]interface{} {
 func (e RichErr) Get() map[string]interface{} {
 	return map[string]interface{}{
 		"op":      e.Op(),
-		"error":   e.WrappedError(),
+		"error":   e.Error(),
 		"message": e.Message(),
 		"kind":    e.Kind(),
 		"meta":    e.Meta(),
 	}
 }
 
-type Builder struct {
+type RichErrBuilder struct {
 	RichErr
 }
 
-func New(op Op) Builder {
-	return Builder{RichErr{op: op}}
+func New(op Op) RichErrBuilder {
+	return RichErrBuilder{RichErr{op: op}}
 }
 
-func (r Builder) WithOp(op Op) Builder {
+func (r RichErrBuilder) WithOp(op Op) RichErrBuilder {
 	r.op = op
 
 	return r
 }
 
-func (r Builder) WithErr(err error) Builder {
+func (r RichErrBuilder) WithErr(err error) RichErrBuilder {
 	r.wrappedError = err
 
 	return r
 }
 
-func (r Builder) WithMessage(message string) Builder {
+func (r RichErrBuilder) WithMessage(message string) RichErrBuilder {
 	r.message = message
 
 	return r
 }
 
-func (r Builder) WithKind(kind Kind) Builder {
+func (r RichErrBuilder) WithKind(kind Kind) RichErrBuilder {
 	r.kind = kind
 
 	return r
 }
 
-func (r Builder) WithMeta(meta map[string]interface{}) Builder {
+func (r RichErrBuilder) WithMeta(meta map[string]interface{}) RichErrBuilder {
 	r.meta = meta
 
 	return r
 }
 
-func (r Builder) Error() string {
+func (r RichErrBuilder) Error() string {
 	if r.message == "" && r.wrappedError != nil {
 		return r.wrappedError.Error()
 	}
@@ -91,12 +100,12 @@ func (r Builder) Error() string {
 	return r.message
 }
 
-func (r Builder) Op() Op {
+func (r RichErrBuilder) Op() Op {
 	if r.op != "" {
 		return r.op
 	}
 
-	var re Builder
+	var re RichErrBuilder
 	ok := errors.As(r.wrappedError, &re)
 	if !ok {
 		return ""
@@ -105,12 +114,12 @@ func (r Builder) Op() Op {
 	return re.Op()
 }
 
-func (r Builder) Kind() Kind {
+func (r RichErrBuilder) Kind() Kind {
 	if r.kind != 0 {
 		return r.kind
 	}
 
-	var re Builder
+	var re RichErrBuilder
 	ok := errors.As(r.wrappedError, &re)
 	if !ok {
 		return 0
@@ -119,12 +128,12 @@ func (r Builder) Kind() Kind {
 	return re.Kind()
 }
 
-func (r Builder) WrappedError() error {
+func (r RichErrBuilder) WrappedError() error {
 	if r.wrappedError != nil {
 		return r.wrappedError
 	}
 
-	var re Builder
+	var re RichErrBuilder
 	ok := errors.As(r.wrappedError, &re)
 	if !ok {
 		return nil
@@ -133,12 +142,12 @@ func (r Builder) WrappedError() error {
 	return re.WrappedError()
 }
 
-func (r Builder) Message() string {
+func (r RichErrBuilder) Message() string {
 	if r.message != "" {
 		return r.message
 	}
 
-	var re Builder
+	var re RichErrBuilder
 	ok := errors.As(r.wrappedError, &re)
 	if ok {
 		return re.Message()
@@ -151,12 +160,12 @@ func (r Builder) Message() string {
 	return ""
 }
 
-func (r Builder) Meta() map[string]interface{} {
+func (r RichErrBuilder) Meta() map[string]interface{} {
 	if len(r.meta) != 0 {
 		return r.meta
 	}
 
-	var re Builder
+	var re RichErrBuilder
 	ok := errors.As(r.wrappedError, &re)
 	if !ok {
 		return make(map[string]interface{})
@@ -165,15 +174,15 @@ func (r Builder) Meta() map[string]interface{} {
 	return re.Meta()
 }
 
-func (r Builder) Build() RichErr {
+func (r RichErrBuilder) Build() RichErr {
 	return r.RichErr
 }
 
-func Analysis(err error) RichErr {
-	var richError Builder
+func Analysis(err error) (RichErr, error) {
+	var richError RichErrBuilder
 	switch {
 	case errors.As(err, &richError):
-		var re Builder
+		var re RichErrBuilder
 		errors.As(err, &re)
 
 		return RichErr{
@@ -182,9 +191,9 @@ func Analysis(err error) RichErr {
 			message:      re.Message(),
 			kind:         re.Kind(),
 			meta:         re.Meta(),
-		}
+		}, nil
 
 	default:
-		return RichErr{}
+		return RichErr{}, err
 	}
 }

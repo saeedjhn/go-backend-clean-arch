@@ -29,7 +29,7 @@ func (u *UserHandler) Register(c echo.Context) error {
 
 	// Validation
 	if fieldsErrs, err := u.userValidator.ValidateRegisterRequest(req); err != nil {
-		richErr := richerror.Analysis(err)
+		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
 		return c.JSON(
@@ -49,7 +49,7 @@ func (u *UserHandler) Register(c echo.Context) error {
 	// UseCase
 	uRes, err := u.userInteractor.Register(req)
 	if err != nil {
-		richErr := richerror.Analysis(err)
+		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
 		return c.JSON(
@@ -57,7 +57,7 @@ func (u *UserHandler) Register(c echo.Context) error {
 			httpRes.
 				WithStatusCode(code).
 				WithMessage(richErr.Message()).
-				WithMeta(richErr.Meta()).Build(),
+				WithError(richErr.Error()).Build(),
 		)
 	}
 
