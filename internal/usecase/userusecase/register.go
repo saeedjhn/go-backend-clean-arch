@@ -1,6 +1,7 @@
 package userusecase
 
 import (
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/domain"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/dto/userdto"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/pkg/message"
 )
@@ -8,25 +9,22 @@ import (
 func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.RegisterResponse, error) {
 	const op = message.OpUserUsecaseRegister
 
-	u.repository.Create()
+	user := domain.User{
+		Name:     req.Name,
+		Mobile:   req.Mobile,
+		Password: bcryptPassword(req.Password),
+	}
 
-	//err0 := richerror.New(op).WithErr(errors.New("ERROR")).
-	//	WithKind(kind.KindStatusForbidden).
-	//	WithMeta(map[string]interface{}{"req": req})
+	createdUser, err := u.repository.Register(user)
+	if err != nil {
+		return userdto.RegisterResponse{}, err
+	}
 
-	//err := richerror.New("ANY").WithErr(err0).WithMessage("MSGGG")
-	//WithMeta(map[string]interface{}{"req": req})
-
-	//log.Print("UserInteractor -> Register - IMPL ME")
 	return userdto.RegisterResponse{
 		User: userdto.UserInfo{
-			ID:     0,
-			Mobile: "0123456789",
-			Name:   "John Doe",
-		},
-		Token: userdto.Token{
-			AccessToken:  "2947858237508263570238",
-			RefreshToken: "9826580573203570293570297265923709",
+			ID:     createdUser.ID,
+			Mobile: createdUser.Mobile,
+			Name:   createdUser.Name,
 		},
 	}, nil
 }

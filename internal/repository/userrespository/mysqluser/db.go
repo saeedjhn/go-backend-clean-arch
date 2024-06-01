@@ -15,6 +15,6 @@ func New(conn mysql.DB) *DB {
 	}
 }
 
-func (r *DB) Create() {
-	log.Print("mysql-user -> Create - IMPL ME")
+func (r *DB) Register() {
+	log.Print("mysql-user -> Register - IMPL ME")
 }
