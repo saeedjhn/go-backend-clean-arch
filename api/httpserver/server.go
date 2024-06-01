@@ -31,7 +31,7 @@ func (s HTTPServer) Serve() {
 	// Global Middleware Setup
 	s.Router.Use(myMiddleware.Timeout(s.App.Config.HTTPServer.Timeout))
 	//s.Router.Use(middleware.logger())
-	//s.Router.Use(middleware.Recover())
+	s.Router.Use(middleware.Recover())
 	s.Router.Use(middleware.RequestID())
 
 	s.Router.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
