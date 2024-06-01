@@ -4,39 +4,39 @@ import (
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/response/httpresponse/internal"
 )
 
-type Builder struct {
+type HTTPResponseBuilder struct {
 	internal.HTTPResponse
 }
 
-func New() Builder {
-	return Builder{internal.HTTPResponse{}}
+func New() HTTPResponseBuilder {
+	return HTTPResponseBuilder{internal.HTTPResponse{}}
 }
 
-func (h Builder) WithStatus(status bool) Builder {
+func (h HTTPResponseBuilder) WithStatus(status bool) HTTPResponseBuilder {
 	h.Status = status
 
 	return h
 }
 
-func (h Builder) WithStatusCode(statusCode int) Builder {
+func (h HTTPResponseBuilder) WithStatusCode(statusCode int) HTTPResponseBuilder {
 	h.StatusCode = statusCode
 
 	return h
 }
 
-func (h Builder) WithMessage(message string) Builder {
+func (h HTTPResponseBuilder) WithMessage(message string) HTTPResponseBuilder {
 	h.Message = message
 
 	return h
 }
 
-func (h Builder) WithMeta(meta interface{}) Builder {
+func (h HTTPResponseBuilder) WithMeta(meta interface{}) HTTPResponseBuilder {
 	h.Meta = meta
 
 	return h
 }
 
-func (h Builder) WithError(err interface{}) Builder {
+func (h HTTPResponseBuilder) WithError(err interface{}) HTTPResponseBuilder {
 	if e, ok := err.(error); ok {
 		h.Meta = map[string]interface{}{"errors": e.Error()}
 
@@ -48,31 +48,31 @@ func (h Builder) WithError(err interface{}) Builder {
 	return h
 }
 
-func (h Builder) WithData(data interface{}) Builder {
+func (h HTTPResponseBuilder) WithData(data interface{}) HTTPResponseBuilder {
 	h.Meta = map[string]interface{}{"data": data}
 
 	return h
 }
 
-func (h Builder) Build() internal.HTTPResponse {
+func (h HTTPResponseBuilder) Build() internal.HTTPResponse {
 	return h.HTTPResponse
 }
 
 /*
 
-func (h Builder) WithRequestID(requestID string) Builder {
+func (h HTTPResponseBuilder) WithRequestID(requestID string) HTTPResponseBuilder {
 	h.RequestID = requestID
 
 	return h
 }
 
-func (h Builder) WithPath(path string) Builder {
+func (h HTTPResponseBuilder) WithPath(path string) HTTPResponseBuilder {
 	h.Path = path
 
 	return h
 }
 
-func (h Builder) WithExecutionDuration(execDuration int64) Builder {
+func (h HTTPResponseBuilder) WithExecutionDuration(execDuration int64) HTTPResponseBuilder {
 	h.ExecutionDuration = execDuration
 
 	return h
