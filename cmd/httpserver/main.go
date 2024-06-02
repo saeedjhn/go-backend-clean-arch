@@ -6,6 +6,7 @@ import (
 	"go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/configs"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/bootstrap"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/pq/migratorpq"
 	"go.uber.org/zap"
 	"os"
 	"os/signal"
@@ -14,6 +15,9 @@ import (
 func main() {
 	// Bootstrap
 	app := bootstrap.App(configs.Development)
+
+	// Migrations
+	migrations(app)
 
 	// logger
 	app.Logger.Set().Named("main").Info("config", zap.Any("config", app.Config))
@@ -42,4 +46,20 @@ func main() {
 	app.CloseRedisClientConnection()
 
 	<-ctxWithTimeout.Done()
+}
+
+func migrations(app *bootstrap.Application) {
+	// Postgres
+	pqDir := "./internal/repository/migrations/pqmigration"
+	migratorPq := migratorpq.New(app.PostgresDB, pqDir)
+	migratorPq.Down()
+	migratorPq.Up()
+
+	// Mysql
+	//mysqlDir := "./internal/repository/migrations/mysqlmigration"
+	//migratorMysql := migratormysql.New(app.MysqlDB, mysqlDir)
+	//migratorMysql.Down()
+	//migratorMysql.Up()
+
+	// etc
 }
