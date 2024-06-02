@@ -22,7 +22,7 @@ func (u *UserHandler) Register(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest,
 			httpRes.
 				WithStatusCode(http.StatusBadRequest).
-				WithMessage(message.ErrorMsgBadRequest).
+				WithMessage(message.ErrorMsg400BadRequest).
 				WithError(bind.CheckErrFromBind(err)).Build(),
 		)
 	}
