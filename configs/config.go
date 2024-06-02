@@ -5,7 +5,7 @@ import (
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/cache/redis"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/mongo"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/mysql"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/postgresql"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/pq"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/usecase/authusecase"
 	"time"
 )
@@ -31,7 +31,7 @@ type Config struct {
 	HTTPServer  HTTPServer         `mapstructure:"http_server"`
 	Logger      logger.Config      `mapstructure:"logger"`
 	Mysql       mysql.Config       `mapstructure:"mysql"`
-	Postgresql  postgresql.Config  `mapstructure:"postgresql"`
+	Postgres    pq.Config          `mapstructure:"postgres"`
 	Redis       redis.Config       `mapstructure:"redis"`
 	Mongo       mongo.Config       `mapstructure:"mongo"`
 	Auth        authusecase.Config `mapstructure:"auth"`

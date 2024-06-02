@@ -1,4 +1,4 @@
-package postgresql
+package pq
 
 import (
 	"database/sql"
@@ -8,21 +8,23 @@ import (
 	"time"
 )
 
+const driverName = "postgres"
+
 type DB interface {
 	Conn() *sql.DB
 }
 
-type PostgresqlDB struct {
+type PostgresDB struct {
 	config Config
 	db     *sql.DB
 }
 
-func New(config Config) *PostgresqlDB {
+func New(config Config) *PostgresDB {
 	cnn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s TimeZone=Asia/Tehran",
 		config.Host, config.Port, config.Username, config.Password,
 		config.Database, config.SSLMode)
 
-	db, err := sql.Open("postgres", cnn)
+	db, err := sql.Open(driverName, cnn)
 	if err != nil {
 		log.Fatalf("can`t open postgres connection: %v", err)
 	}
@@ -32,9 +34,9 @@ func New(config Config) *PostgresqlDB {
 	db.SetMaxOpenConns(config.MaxOpenConns)
 	db.SetConnMaxLifetime(config.ConnMaxLiftTime * time.Second)
 
-	return &PostgresqlDB{config: config, db: db}
+	return &PostgresDB{config: config, db: db}
 }
 
-func (m *PostgresqlDB) Conn() *sql.DB {
+func (m *PostgresDB) Conn() *sql.DB {
 	return m.db
 }

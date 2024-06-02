@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+const driverName = "mysql"
+
 type DB interface {
 	Conn() *sql.DB
 }
@@ -20,7 +22,7 @@ func New(config Config) *MySqlDB {
 	conn := fmt.Sprintf("%s:%s@(%s:%s)/%s?parseTime=true",
 		config.Username, config.Password, config.Host, config.Port, config.Database)
 
-	db, err := sql.Open("mysql", conn)
+	db, err := sql.Open(driverName, conn)
 	if err != nil {
 		log.Fatalf("can't open mysql db: %v", err)
 	}

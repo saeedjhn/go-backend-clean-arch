@@ -6,8 +6,8 @@ import (
 	"go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver/intercaptor/userinterceptor"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/bootstrap"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/gateway/taskinggateway"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/taskrepository/postgresqltask"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/userrespository/postgresqluser"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/taskrepository/pqtask"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/userrespository/pquser"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/usecase/taskusecase"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/usecase/userusecase"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/validator/uservalidator"
@@ -17,9 +17,10 @@ func New(
 	app *bootstrap.Application,
 	e *echo.Group,
 ) {
+
 	// Repository
-	tdb := postgresqltask.New(app.PostgresqlDB)
-	udb := postgresqluser.New(app.PostgresqlDB)
+	tdb := pqtask.New(app.PostgresDB)
+	udb := pquser.New(app.PostgresDB)
 
 	// Repository & Usecase
 	tu := taskusecase.New(tdb)

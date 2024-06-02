@@ -1,13 +1,13 @@
 package bootstrap
 
 import (
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/postgresql"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/pq"
 	"log"
 )
 
-func newPostgresqlConnection(config postgresql.Config) postgresql.DB {
-	//func newPostgresqlConnection(config ConfigPostgresqlConnection) postgresql.DB {
-	return postgresql.New(config)
+func newPostgresConnection(config pq.Config) pq.DB {
+	//func newPostgresConnection(config ConfigPostgresqlConnection) postgresql.DB {
+	return pq.New(config)
 	//	uri := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s TimeZone=Asia/Tehran",
 	//		config.Host, config.Port, config.Username, config.Password,
 	//		config.Database, config.SSLMode)
@@ -21,8 +21,8 @@ func newPostgresqlConnection(config postgresql.Config) postgresql.DB {
 	//return db
 }
 
-func closePostgresqlConnection(postgresqlDB postgresql.DB) {
-	err := postgresqlDB.Conn().Close()
+func closePostgresConnection(postgresDB pq.DB) {
+	err := postgresDB.Conn().Close()
 
 	if err != nil {
 		log.Fatalf("don`t close postgresql connection: %s", err.Error())
