@@ -2,6 +2,7 @@ package richerror
 
 import (
 	"errors"
+	"github.com/rotisserie/eris"
 	. "go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/kind"
 )
 
@@ -13,6 +14,7 @@ type RichErr struct {
 	message      string
 	kind         Kind
 	meta         map[string]interface{}
+	stackTrace   map[string]interface{}
 }
 
 func (e RichErr) Op() Op {
@@ -44,13 +46,18 @@ func (e RichErr) Meta() map[string]interface{} {
 	return e.meta
 }
 
+func (e RichErr) StackTrace() map[string]interface{} {
+	return e.stackTrace
+}
+
 func (e RichErr) Get() map[string]interface{} {
 	return map[string]interface{}{
-		"op":      e.Op(),
-		"error":   e.Error(),
-		"message": e.Message(),
-		"kind":    e.Kind(),
-		"meta":    e.Meta(),
+		"op":          e.Op(),
+		"error":       e.Error(),
+		"message":     e.Message(),
+		"kind":        e.Kind(),
+		"meta":        e.Meta(),
+		"stack_trace": e.StackTrace(),
 	}
 }
 
@@ -88,6 +95,13 @@ func (r RichErrBuilder) WithKind(kind Kind) RichErrBuilder {
 
 func (r RichErrBuilder) WithMeta(meta map[string]interface{}) RichErrBuilder {
 	r.meta = meta
+
+	return r
+}
+
+func (r RichErrBuilder) WithStackTrace(message string) RichErrBuilder {
+	e := eris.ToJSON(eris.New(message), true)
+	r.stackTrace = e
 
 	return r
 }
@@ -191,6 +205,7 @@ func Analysis(err error) (RichErr, error) {
 			message:      re.Message(),
 			kind:         re.Kind(),
 			meta:         re.Meta(),
+			stackTrace:   re.StackTrace(),
 		}, nil
 
 	default:
