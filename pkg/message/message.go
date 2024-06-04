@@ -53,14 +53,18 @@ const (
 	ErrorMsg505HTTPVersionNotSupported       = "The server does not support the HTTP protocol version used in the request"
 	ErrorMsg511NetworkAuthenticationRequired = ""
 
+	// General
+	ErrorMsgSomethingWentWrong = "Something went wrong"
+
+	// DB
 	ErrorMsgDBRecordNotFound      = "Record not found"
-	ErrorMsgCantScanQueryResult   = "Can't scan query result"
-	ErrorMsgSomethingWentWrong    = "Something went wrong"
-	ErrorMsgMobileIsNotUnique     = "Mobile is not unique"
-	ErrorMsgInvalidInput          = "Invalid input"
-	ErrorMsgPhoneNumberIsNotValid = "Mobile is not valid"
-	ErrorMsgUserNotAllowed        = "User not allowed"
-	ErrorMsgCategoryIsNotValid    = "Category is not valid"
+	ErrorMsgDBCantScanQueryResult = "Can't scan query result"
+
+	ErrorMsgMobileIsNotUnique  = "Mobile is not unique"
+	ErrorMsgInvalidInput       = "Invalid input"
+	ErrorMsgMobileIsNotValid   = "Mobile is not valid"
+	ErrorMsgUserNotAllowed     = "User not allowed"
+	ErrorMsgCategoryIsNotValid = "Category is not valid"
 
 	MsgUserRegisterSuccessfully = "User is register successfully"
 )
