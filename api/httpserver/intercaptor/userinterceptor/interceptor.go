@@ -56,19 +56,11 @@ func transformOnDevelopment(next echo.HandlerFunc) echo.HandlerFunc {
 			c.Error(err)
 		}
 
-		//if res.Size == 0 {
-		//	res.WriteHeader(res.Status)
-		//	_, err := res.Write(buf.Bytes())
-		//	if err != nil {
-		//		return err
-		//	}
-		//}
-
 		if err := json.Unmarshal(buf.Bytes(), &CustomMap); err != nil {
 			return err
 		}
 
-		// Key/Value added to CustomResponse
+		// Key/Value added to CustomResponse, (don`t repeat key)
 		// for example CustomResponse["x"] = "X"
 
 		return json.NewEncoder(originalWriter).Encode(CustomMap)
@@ -98,14 +90,6 @@ func transformOnProduction(next echo.HandlerFunc) echo.HandlerFunc {
 		if err := next(c); err != nil {
 			c.Error(err)
 		}
-
-		//if res.Size == 0 {
-		//	res.WriteHeader(res.Status)
-		//	_, err := res.Write(buf.Bytes())
-		//	if err != nil {
-		//		return err
-		//	}
-		//}
 
 		if err := json.Unmarshal(buf.Bytes(), &CustomMap); err != nil {
 			return err

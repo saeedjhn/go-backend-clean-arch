@@ -62,19 +62,11 @@ func transformOnDevelopment(next echo.HandlerFunc) echo.HandlerFunc {
 			c.Error(err)
 		}
 
-		//if res.Size == 0 {
-		//	res.WriteHeader(res.Status)
-		//	_, err := res.Write(buf.Bytes())
-		//	if err != nil {
-		//		return err
-		//	}
-		//}
-
 		if err := json.Unmarshal(buf.Bytes(), &CustomResponse); err != nil {
 			return err
 		}
 
-		// Key/Value added to CustomResponse
+		// Key/Value added to CustomResponse, (don`t repeat key)
 		// for example CustomResponse["x"] = "X"
 		CustomResponse["request_id"] = res.Header().Get(echo.HeaderXRequestID)
 		CustomResponse["path"] = c.Path()
@@ -114,19 +106,11 @@ func transformOnProduction(next echo.HandlerFunc) echo.HandlerFunc {
 			c.Error(err)
 		}
 
-		//if res.Size == 0 {
-		//	res.WriteHeader(res.Status)
-		//	_, err := res.Write(buf.Bytes())
-		//	if err != nil {
-		//		return err
-		//	}
-		//}
-
 		if err := json.Unmarshal(buf.Bytes(), &CustomResponse); err != nil {
 			return err
 		}
 
-		// Key/Value added to CustomResponse
+		// Key/Value added to CustomResponse, (don`t repeat key)
 		// for example CustomResponse["x"] = "X"
 		CustomResponse["request_id"] = res.Header().Get(echo.HeaderXRequestID)
 		CustomResponse["path"] = c.Path()
