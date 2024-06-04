@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/rotisserie/eris"
 	. "go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/kind"
+	"strings"
 )
 
 type Op string
@@ -99,9 +100,17 @@ func (r RichErrorBuilder) WithMeta(meta map[string]interface{}) RichErrorBuilder
 	return r
 }
 
-func (r RichErrorBuilder) WithStackTrace(message string) RichErrorBuilder {
-	e := eris.ToJSON(eris.New(message), true)
-	r.stackTrace = e
+func (r RichErrorBuilder) WithStackTrace(message ...string) RichErrorBuilder {
+	var msgForEris string
+
+	if len(message) == 0 {
+		msgForEris = r.message
+	} else {
+		msgForEris = strings.Join(message, " ")
+	}
+
+	stackErr := eris.ToJSON(eris.New(msgForEris), true)
+	r.stackTrace = stackErr
 
 	return r
 }
