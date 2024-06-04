@@ -1,8 +1,11 @@
 package userusecase
 
 import (
+	"errors"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/domain"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/dto/userdto"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/kind"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/richerror"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/security/bcrypt"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/pkg/message"
 )
@@ -10,15 +13,28 @@ import (
 func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.RegisterResponse, error) {
 	const op = message.OpUserUsecaseRegister
 
-	user := domain.User{
+	isUnique, err := u.repository.IsMobileUnique(req.Mobile)
+	if err != nil {
+		return userdto.RegisterResponse{}, err
+	}
+
+	if !isUnique {
+		return userdto.RegisterResponse{},
+			richerror.New(op).
+				WithErr(errors.New(message.ErrorMsgMobileIsNotUnique)).
+				WithMessage(message.ErrorMsgInvalidInput).
+				WithKind(kind.KindStatusBadRequest)
+	}
+
+	createUser := domain.User{
 		Name:   req.Name,
 		Mobile: req.Mobile,
 	}
 
 	encryptPass, err := bcrypt.Generate(req.Password, bcrypt.DefaultCost)
-	user.Password = encryptPass
+	createUser.Password = encryptPass
 
-	createdUser, err := u.repository.Register(user)
+	createdUser, err := u.repository.Register(createUser)
 	if err != nil {
 		return userdto.RegisterResponse{}, err
 	}

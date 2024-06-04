@@ -5,7 +5,6 @@ import (
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/dto/userdto"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/bind"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/httpstatus"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/response/httpresponse"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/richerror"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/sanitize"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/pkg/message"
@@ -15,15 +14,15 @@ import (
 func (u *UserHandler) Register(c echo.Context) error {
 	// Initial
 	req := userdto.RegisterRequest{}
-	httpRes := httpresponse.New()
 
 	// Bind
 	if err := c.Bind(&req); err != nil {
-		return c.JSON(http.StatusBadRequest,
-			httpRes.
-				WithStatusCode(http.StatusBadRequest).
-				WithMessage(message.ErrorMsg400BadRequest).
-				WithError(bind.CheckErrFromBind(err)).Build(),
+		return echo.NewHTTPError(http.StatusBadRequest,
+			echo.Map{
+				"status":  false,
+				"message": message.ErrorMsg400BadRequest,
+				"errors":  bind.CheckErrFromBind(err).Error(),
+			},
 		)
 	}
 
@@ -32,12 +31,13 @@ func (u *UserHandler) Register(c echo.Context) error {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		return c.JSON(
+		return echo.NewHTTPError(
 			code,
-			httpRes.
-				WithStatusCode(code).
-				WithMessage(richErr.Message()).
-				WithError(fieldsErrs).Build(),
+			echo.Map{
+				"status":  false,
+				"message": richErr.Message(),
+				"errors":  fieldsErrs,
+			},
 		)
 	}
 
@@ -46,27 +46,28 @@ func (u *UserHandler) Register(c echo.Context) error {
 		SetPolicy(sanitize.StrictPolicy).
 		Struct(&req)
 
-	// UseCase
-	uRes, err := u.userInteractor.Register(req)
+	// Usage Use-case
+	resp, err := u.userInteractor.Register(req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		return c.JSON(
+		return echo.NewHTTPError(
 			code,
-			httpRes.
-				WithStatusCode(code).
-				WithMessage(richErr.Message()).
-				WithError(richErr.Error()).Build(),
-		)
+			echo.Map{
+				"status":  false,
+				"message": richErr.Message(),
+				"errors":  richErr.Error(),
+			})
+
 	}
 
 	return c.JSON(
 		http.StatusCreated,
-		httpRes.
-			WithStatus(true).
-			WithStatusCode(http.StatusCreated).
-			WithMessage(message.MsgUserRegisterSuccessfully).
-			WithMeta(uRes).Build(),
+		echo.Map{
+			"status":  true,
+			"message": message.MsgUserRegisterSuccessfully,
+			"data":    resp,
+		},
 	)
 }

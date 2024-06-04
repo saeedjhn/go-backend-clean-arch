@@ -10,10 +10,9 @@ import (
 )
 
 func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[string]string, error) {
-	const op = message.OpValidateRegisterRequest
+	const op = message.OpUserValidatorValidateRegisterRequest
 
 	if err := validation.ValidateStruct(&req,
-		// TODO - add 3 to config
 		validation.Field(&req.Name,
 			validation.Required,
 			validation.Length(3, 128)),
@@ -21,14 +20,6 @@ func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[str
 		validation.Field(&req.Mobile,
 			validation.Required,
 			validation.Length(11, 11)),
-		//validation.Field(&req.Password,
-		//	validation.Required,
-		//	validation.Match(regexp.MustCompile(`^[A-Za-z0-9!@#%^&*]{8,}$`))),
-
-		//validation.Field(&req.PhoneNumber,
-		//	validation.Required,
-		//	validation.Match(regexp.MustCompile(phoneNumberRegex)).Error(errmsg.ErrorMsgPhoneNumberIsNotValid),
-		//	validation.By(v.checkPhoneNumberUniqueness)),
 	); err != nil {
 		fieldErrors := make(map[string]string)
 
@@ -42,9 +33,9 @@ func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[str
 			}
 		}
 
-		return fieldErrors, richerror.New(op).WithMessage(message.ErrorMsgInvalidInput).
-			WithKind(kind.KindStatusUnprocessableEntity).
-			WithMeta(map[string]interface{}{"request": req}).WithErr(err)
+		return fieldErrors, richerror.New(op).WithErr(err).
+			WithMessage(message.ErrorMsgInvalidInput).
+			WithKind(kind.KindStatusUnprocessableEntity)
 	}
 
 	return nil, nil

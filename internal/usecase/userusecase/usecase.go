@@ -6,6 +6,7 @@ import (
 
 type Repository interface {
 	Register(u domain.User) (domain.User, error)
+	IsMobileUnique(mobile string) (bool, error)
 }
 
 type Gateway interface {
