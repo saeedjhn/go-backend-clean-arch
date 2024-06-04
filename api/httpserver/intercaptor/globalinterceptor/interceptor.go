@@ -56,7 +56,7 @@ func transformOnDevelopment(next echo.HandlerFunc) echo.HandlerFunc {
 
 		// Hooks - after
 		res.After(func() {
-			eTime = time.Since(sTime).Milliseconds()
+			eTime = time.Since(sTime).Microseconds()
 		})
 
 		if err := next(c); err != nil {
