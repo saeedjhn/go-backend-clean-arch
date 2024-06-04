@@ -48,8 +48,8 @@ func (s Sanitize) SetPolicy(policy Policy) Sanitize {
 		s.policy = bluemonday.UGCPolicy()
 	case StripTagsPolicy:
 		s.policy = bluemonday.StripTagsPolicy()
-	case NewPolicy:
-		s.policy = bluemonday.NewPolicy() // TODO - Implement new policy for sanitize
+	//case NewPolicy:
+	//	s.policy = bluemonday.NewPolicy() // TODO - Implement new policy for sanitize
 
 	default:
 		s.policy = bluemonday.StrictPolicy()
