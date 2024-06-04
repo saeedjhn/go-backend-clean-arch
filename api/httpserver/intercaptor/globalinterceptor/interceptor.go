@@ -9,8 +9,6 @@ import (
 	"time"
 )
 
-var CustomResponse map[string]interface{}
-
 type GlobalInterceptor struct {
 	http.ResponseWriter
 	body *bytes.Buffer
@@ -37,8 +35,9 @@ func TransformResponse(env configs.Env) echo.MiddlewareFunc {
 func transformOnDevelopment(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var (
-			sTime time.Time
-			eTime int64
+			sTime          time.Time
+			eTime          int64
+			CustomResponse map[string]interface{}
 		)
 		buf := new(bytes.Buffer)
 		res := c.Response()
@@ -88,8 +87,9 @@ func transformOnDevelopment(next echo.HandlerFunc) echo.HandlerFunc {
 func transformOnProduction(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var (
-			sTime time.Time
-			eTime int64
+			sTime          time.Time
+			eTime          int64
+			CustomResponse map[string]interface{}
 		)
 		buf := new(bytes.Buffer)
 		res := c.Response()

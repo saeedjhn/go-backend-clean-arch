@@ -8,8 +8,6 @@ import (
 	"net/http"
 )
 
-var CustomMap map[string]interface{}
-
 type UserInterceptor struct {
 	http.ResponseWriter
 	body *bytes.Buffer
@@ -36,6 +34,7 @@ func TransformResponse(env configs.Env) echo.MiddlewareFunc {
 
 func transformOnDevelopment(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		var CustomMap map[string]interface{}
 		buf := new(bytes.Buffer)
 		res := c.Response()
 		originalWriter := res.Writer
@@ -78,6 +77,7 @@ func transformOnDevelopment(next echo.HandlerFunc) echo.HandlerFunc {
 
 func transformOnProduction(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		var CustomMap map[string]interface{}
 		buf := new(bytes.Buffer)
 		res := c.Response()
 		originalWriter := res.Writer
