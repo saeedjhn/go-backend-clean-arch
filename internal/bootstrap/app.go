@@ -20,7 +20,7 @@ func App(env configs.Env) *Application {
 	app := &Application{}
 	app.Config = ConfigLoad(env)
 	app.Logger = newLogger(app.Config.Logger)
-	//app.MysqlDB = newMysqlConnection(app.Config.Mysql)
+	app.MysqlDB = newMysqlConnection(app.Config.Mysql)
 	app.PostgresDB = newPostgresConnection(app.Config.Postgres)
 	app.RedisClient = newRedisClient(app.Config.Redis)
 
