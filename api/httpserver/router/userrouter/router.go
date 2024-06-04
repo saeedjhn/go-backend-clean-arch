@@ -6,8 +6,8 @@ import (
 	"go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver/intercaptor/userinterceptor"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/bootstrap"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/gateway/taskinggateway"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/taskrepository/pqtask"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/userrespository/pquser"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/taskrepository/mysqltask"
+	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/userrespository/mysqluser"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/usecase/taskusecase"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/usecase/userusecase"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/validator/uservalidator"
@@ -19,23 +19,23 @@ func New(
 ) {
 
 	// Repository
-	tdb := pqtask.New(app.PostgresDB)
-	udb := pquser.New(app.PostgresDB)
+	taskMysql := mysqltask.New(app.MysqlDB)
+	userPq := mysqluser.New(app.MysqlDB)
 
 	// Repository & Usecase
-	tu := taskusecase.New(tdb)
+	taskCase := taskusecase.New(taskMysql)
 
 	// Service-oriented - no depends on useCases - ( userusecase -> taskgateway -> taskusecase )
-	tg := taskinggateway.New(tu)
+	taskGate := taskinggateway.New(taskCase)
 
 	// Repository & Usecase
-	uu := userusecase.New(tg, udb)
+	userCase := userusecase.New(taskGate, userPq)
 
 	// Validator
-	uv := uservalidator.New()
+	validator := uservalidator.New()
 
 	// Handler
-	userHandler := userhandler.New(app, uv, uu)
+	handler := userhandler.New(app, validator, userCase)
 
 	g := e.Group("/users")
 
@@ -43,14 +43,14 @@ func New(
 
 	publicRouter := g.Group("/auth")
 	{
-		publicRouter.POST("/register", userHandler.Register)
-		publicRouter.POST("/login", userHandler.Login)
+		publicRouter.POST("/register", handler.Register)
+		publicRouter.POST("/login", handler.Login)
 	}
 
 	protectedRouter := g.Group("")
 
 	//protectedRouter.Use(middleware.Auth())
 	{
-		protectedRouter.GET("/task-list", userHandler.TaskList)
+		protectedRouter.GET("/task-list", handler.TaskList)
 	}
 }
