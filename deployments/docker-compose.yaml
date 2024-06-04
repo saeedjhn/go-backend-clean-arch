@@ -16,7 +16,7 @@ services:
       - go-backend-clean-arch_network
     depends_on:
       - psqldb
-#      - mysqldb
+      - mysqldb
       - redis
 
   ####################### POSTGRES #######################
@@ -27,29 +27,31 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: backend_db
-    volumes:
-      - psql:/var/lib/psql/data
     ports:
       - "5001:5432"
+    volumes:
+      - psql:/var/lib/psql/data
+    restart: always
     networks:
       - go-backend-clean-arch_network
-    restart: always
 
     ######################## Mysql ########################
-#  mysqldb:
-#    container_name: go-backend-clean-arch_mysqldb
-#    image: mysql:8.3
-#    environment:
-#      MYSQL_ROOT_PASSWORD: root
-#      MYSQL_DATABASE: backend_db
-#      MYSQL_USER: backendapp
-#      MYSQL_PASSWORD: 123456
-#    ports:
-#      - "3306:3306"
-#    volumes:
-#      - mysql:/var/lib/mysql
-#    restart: always
-#    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
+  mysqldb:
+    container_name: go-backend-clean-arch_mysqldb
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: backend_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 123456
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql:/var/lib/mysql
+    restart: always
+    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
+    networks:
+      - go-backend-clean-arch_network
 
   ####################### PGADMIN #######################
   #  pgadmin:
@@ -82,7 +84,7 @@ services:
 
 volumes:
   psql:
-  #  mysql:
+  mysql:
   pgadmin:
   redis:
   logs:

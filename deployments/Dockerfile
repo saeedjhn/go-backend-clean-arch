@@ -10,7 +10,7 @@ WORKDIR /app
 RUN mkdir /build
 
 # Install make command
-Run apt-get update && apt-get install make
+#Run apt-get update && apt-get install make
 
 # Copy go mod and sum files
 COPY go.mod go.sum ./
@@ -29,5 +29,5 @@ EXPOSE 8000
 
 # Run app
 #CMD ["sleep", "1000"]
-ENTRYPOINT ["make"]
-#CMD ["air", "-c", ".air.toml"]
+#ENTRYPOINT ["make"]
+CMD ["air", "-c", ".air.toml"]
