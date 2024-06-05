@@ -3,7 +3,6 @@ package userrouter
 import (
 	"github.com/labstack/echo/v4"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver/handler/userhandler"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver/intercaptor/userinterceptor"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/bootstrap"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/gateway/taskinggateway"
 	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/taskrepository/mysqltask"
@@ -38,8 +37,6 @@ func New(
 	handler := userhandler.New(app, validator, userCase)
 
 	g := e.Group("/users")
-
-	g.Use(userinterceptor.TransformResponse(app.Config.Application.Env))
 
 	publicRouter := g.Group("/auth")
 	{
