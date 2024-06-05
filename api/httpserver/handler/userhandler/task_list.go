@@ -2,7 +2,7 @@ package userhandler
 
 import (
 	"github.com/labstack/echo/v4"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/dto/userdto"
+	"go-backend-clean-arch/internal/dto/userdto"
 	"net/http"
 )
 

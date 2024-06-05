@@ -2,12 +2,12 @@ package userhandler
 
 import (
 	"github.com/labstack/echo/v4"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/dto/userdto"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/bind"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/httpstatus"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/richerror"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/sanitize"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/pkg/message"
+	"go-backend-clean-arch/internal/dto/userdto"
+	"go-backend-clean-arch/internal/infrastructure/bind"
+	"go-backend-clean-arch/internal/infrastructure/httpstatus"
+	"go-backend-clean-arch/internal/infrastructure/richerror"
+	"go-backend-clean-arch/internal/infrastructure/sanitize"
+	"go-backend-clean-arch/pkg/message"
 	"net/http"
 )
 
@@ -44,7 +44,7 @@ func (u *UserHandler) Register(c echo.Context) error {
 	// Sanitize
 	sanitize.New().
 		SetPolicy(sanitize.StrictPolicy).
-		Struct(&req)
+		Struct(&req) // nolint:errcheck
 
 	// Usage Use-case
 	resp, err := u.userInteractor.Register(req)
@@ -59,9 +59,7 @@ func (u *UserHandler) Register(c echo.Context) error {
 				"message": richErr.Message(),
 				"errors":  richErr.Error(),
 			})
-
 	}
-
 	return c.JSON(
 		http.StatusCreated,
 		echo.Map{

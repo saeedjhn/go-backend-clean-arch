@@ -1,12 +1,13 @@
 package userusecase
 
 import (
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/domain"
+	"go-backend-clean-arch/internal/domain"
 )
 
 type Repository interface {
-	Register(u domain.User) (domain.User, error)
+	Create(u domain.User) (domain.User, error)
 	IsMobileUnique(mobile string) (bool, error)
+	GetByMobile(mobile string) (domain.User, error)
 }
 
 type Gateway interface {

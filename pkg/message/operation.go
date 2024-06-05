@@ -6,10 +6,11 @@ const (
 	OpUserValidatorValidateRegisterRequest = "uservalidator.ValidateRegisterRequest"
 
 	// UseCase
-	OpUserUsecaseRegister = "userusecase.Register"
+	OpUserUsecaseRegister = "userusecase.Create"
 
 	// Repository
 	OpPqUserRegister          = "pquser.register"
 	OpMysqlUserRegister       = "mysqluser.register"
 	OpMysqlUserIsMobileUnique = "mysqluser.IsMobileUnique"
+	OpMysqlUserGetByMobile    = "mysqluser.GetByMobile"
 )

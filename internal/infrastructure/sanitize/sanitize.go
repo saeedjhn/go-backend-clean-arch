@@ -1,6 +1,7 @@
 package sanitize
 
 import (
+	"errors"
 	"fmt"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/mitchellh/mapstructure"
@@ -15,20 +16,20 @@ const (
 	StrictPolicy    Policy = "strict_policy"
 	UGCPolicy       Policy = "ugc_policy"
 	StripTagsPolicy Policy = "strip_tags_policy"
-	NewPolicy       Policy = "new_policy"
+	//NewPolicy       Policy = "new_policy"
 )
 
 // SanitizeStrictPolicy - bluemonday.StrictPolicy() which can be thought of as equivalent to stripping all HTML elements and their attributes as it has nothing on its allowlist.
 // An example usage scenario would be blog post titles where HTML tags are not expected at all and if they are then the elements and the content of the elements
 // should be stripped. This is a very strict policy.
-//func sanitizeStrictPolicy(ctx fiber.Ctx) error {
+// func sanitizeStrictPolicy(ctx fiber.Ctx) error {
 //	return ctx.Next()
 //}
 
 // SanitizeUGCPolicy -  bluemonday.UGCPolicy() which allows a broad selection of HTML elements and attributes that are safe for user generated content.
 // Note that this policy does not allow iframes, object, embed, styles, script, etc. An example usage scenario would be blog post bodies
 // where a variety of formatting is expected along with the potential for TABLEs and IMGs.
-//func sanitizeUGCPolicy(ctx fiber.Ctx) error {
+// func sanitizeUGCPolicy(ctx fiber.Ctx) error {
 //	return ctx.Next()
 //}
 
@@ -48,7 +49,7 @@ func (s Sanitize) SetPolicy(policy Policy) Sanitize {
 		s.policy = bluemonday.UGCPolicy()
 	case StripTagsPolicy:
 		s.policy = bluemonday.StripTagsPolicy()
-	//case NewPolicy:
+	// case NewPolicy:
 	//	s.policy = bluemonday.NewPolicy() // TODO - Implement new policy for sanitize
 
 	default:
@@ -73,13 +74,13 @@ func (s Sanitize) StructToMap(param interface{}) (map[string]interface{}, error)
 
 func (s Sanitize) Struct(ptr interface{}) error {
 	if !isPointer(ptr) {
-		return fmt.Errorf("please give me the pointer arg")
+		return errors.New("please give me the pointer arg")
 	}
 
 	dataMap, err := s.structure(reflect.ValueOf(ptr).Elem().Interface())
-	//dataMap, err := sanitizeStruct(ptr)
+	// dataMap, err := sanitizeStruct(ptr)
 	if err != nil {
-		return fmt.Errorf("cannot perform the operation")
+		return errors.New("cannot perform the operation")
 	}
 	// Go library for decoding generic map values into native Go structures and vice versa.
 	err = mapstructure.Decode(dataMap, &ptr)
@@ -122,11 +123,11 @@ func (s Sanitize) Map(param interface{}) (map[string]interface{}, error) {
 }
 
 func (s Sanitize) String(param string) string {
-	sanitizedHtmlStr := s.policy.Sanitize(param)
+	sanitizedHTMLStr := s.policy.Sanitize(param)
 
 	regex := regexp.MustCompile(`\bjavascript\b`)
 
-	return regex.ReplaceAllString(sanitizedHtmlStr, "")
+	return regex.ReplaceAllString(sanitizedHTMLStr, "")
 }
 
 func (s Sanitize) recursively(param interface{}) (interface{}, error) {

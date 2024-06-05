@@ -2,14 +2,14 @@ package userrouter
 
 import (
 	"github.com/labstack/echo/v4"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver/handler/userhandler"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/bootstrap"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/gateway/taskinggateway"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/taskrepository/mysqltask"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/repository/userrespository/mysqluser"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/usecase/taskusecase"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/usecase/userusecase"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/validator/uservalidator"
+	"go-backend-clean-arch/api/httpserver/handler/userhandler"
+	"go-backend-clean-arch/internal/bootstrap"
+	"go-backend-clean-arch/internal/gateway/taskinggateway"
+	"go-backend-clean-arch/internal/repository/taskrepository/mysqltask"
+	"go-backend-clean-arch/internal/repository/userrespository/mysqluser"
+	"go-backend-clean-arch/internal/usecase/taskusecase"
+	"go-backend-clean-arch/internal/usecase/userusecase"
+	"go-backend-clean-arch/internal/validator/uservalidator"
 )
 
 func New(

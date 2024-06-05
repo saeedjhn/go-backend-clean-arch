@@ -2,18 +2,23 @@ package userusecase
 
 import (
 	"errors"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/domain"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/dto/userdto"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/kind"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/richerror"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/security/bcrypt"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/pkg/message"
+	"go-backend-clean-arch/internal/domain"
+	"go-backend-clean-arch/internal/dto/userdto"
+	"go-backend-clean-arch/internal/infrastructure/kind"
+	"go-backend-clean-arch/internal/infrastructure/richerror"
+	"go-backend-clean-arch/internal/infrastructure/security/bcrypt"
+	"go-backend-clean-arch/pkg/message"
 )
 
 func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.RegisterResponse, error) {
 	const op = message.OpUserUsecaseRegister
-
-	isUnique, err := u.repository.IsMobileUnique(req.Mobile)
+	var (
+		err           error
+		isUnique      bool
+		encryptedPass string
+		createdUser   domain.User
+	)
+	isUnique, err = u.repository.IsMobileUnique(req.Mobile)
 	if err != nil {
 		return userdto.RegisterResponse{}, err
 	}
@@ -21,7 +26,7 @@ func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.Register
 	if !isUnique {
 		return userdto.RegisterResponse{},
 			richerror.New(op).
-				WithErr(errors.New(message.ErrorMsgMobileIsNotUnique)).
+				WithErr(errors.New(message.ErrorMsgMobileIsNotUnique)). //nolint:err113
 				WithMessage(message.ErrorMsgInvalidInput).
 				WithKind(kind.KindStatusBadRequest)
 	}
@@ -31,10 +36,10 @@ func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.Register
 		Mobile: req.Mobile,
 	}
 
-	encryptPass, err := bcrypt.Generate(req.Password, bcrypt.DefaultCost)
-	createUser.Password = encryptPass
+	encryptedPass, err = bcrypt.Generate(req.Password, bcrypt.DefaultCost)
+	createUser.Password = encryptedPass
 
-	createdUser, err := u.repository.Register(createUser)
+	createdUser, err = u.repository.Create(createUser)
 	if err != nil {
 		return userdto.RegisterResponse{}, err
 	}

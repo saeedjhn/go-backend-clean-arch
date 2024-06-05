@@ -5,7 +5,6 @@ import (
 	"time"
 )
 
-// func (a *Token) CreateRefreshToken(id uint) (string, error) {
 func (a *Token) CreateRefreshToken(id uint, secret string, subject string, expire time.Duration) (string, error) {
 	// set our claims
 	claims := Claims{

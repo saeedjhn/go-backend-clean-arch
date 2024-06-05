@@ -1,9 +1,9 @@
 package main
 
 import (
-	"go-backend-clean-arch-according-to-go-standards-project-layout/configs"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/bootstrap"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/pq/migratorpq"
+	"go-backend-clean-arch/configs"
+	"go-backend-clean-arch/internal/bootstrap"
+	"go-backend-clean-arch/internal/infrastructure/persistance/db/pq/migratorpq"
 )
 
 func main() {

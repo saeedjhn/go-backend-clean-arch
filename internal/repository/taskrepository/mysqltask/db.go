@@ -1,7 +1,7 @@
 package mysqltask
 
 import (
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/mysql"
+	"go-backend-clean-arch/internal/infrastructure/persistance/db/mysql"
 	"log"
 )
 

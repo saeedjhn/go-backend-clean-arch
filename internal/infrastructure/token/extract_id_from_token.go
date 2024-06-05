@@ -1,6 +1,7 @@
 package token
 
 import (
+	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"strconv"
@@ -18,11 +19,10 @@ func (a *Token) ExtractIdFromToken(requestToken string, secret string) (string, 
 		return "", err
 	}
 
-	//claims, fiberok := token.Claims.(jwt.MapClaims)
 	claims, ok := token.Claims.(jwt.MapClaims)
 
 	if !ok && !token.Valid {
-		return "", fmt.Errorf("invalid Token")
+		return "", errors.New("invalid token")
 	}
 
 	return strconv.FormatFloat(claims["id"].(float64), 'f', -1, 64), nil

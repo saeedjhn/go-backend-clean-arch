@@ -13,7 +13,7 @@ type Logger struct {
 
 func New(config Config) *Logger {
 	// TODO - add & check production/development config variable
-	logger, _ := zap.NewProduction()
+	var logger, _ = zap.NewProduction()
 
 	configZap := zap.NewProductionEncoderConfig()
 	configZap.EncodeTime = zapcore.ISO8601TimeEncoder
@@ -44,7 +44,7 @@ func (l *Logger) Set() *zap.Logger {
 	return l.logger
 }
 
-//var Logger *zap.Logger
+// var Logger *zap.Logger
 //var once = sync.Once{}
 //func init() {
 //	once.Do(func() {

@@ -2,7 +2,7 @@ package taskrouter
 
 import (
 	"github.com/labstack/echo/v4"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/bootstrap"
+	"go-backend-clean-arch/internal/bootstrap"
 	"net/http"
 )
 

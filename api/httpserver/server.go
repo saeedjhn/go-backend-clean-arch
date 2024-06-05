@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	myMiddleware "go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver/middleware"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/api/httpserver/router"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/bootstrap"
+	myMiddleware "go-backend-clean-arch/api/httpserver/middleware"
+	"go-backend-clean-arch/api/httpserver/router"
+	"go-backend-clean-arch/internal/bootstrap"
 	"go.uber.org/zap"
 	"log"
 )

@@ -2,7 +2,7 @@ package authusecase
 
 import (
 	"fmt"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/token"
+	"go-backend-clean-arch/internal/infrastructure/token"
 	"testing"
 	"time"
 )
@@ -23,11 +23,11 @@ func TestCreateToken(t *testing.T) {
 
 	at, _ := ai.CreateAccessToken(7)
 	fmt.Println(at)
-	fmt.Println(ai.ExtractIdFromAccessToken(at))
+	fmt.Println(ai.ExtractIDFromAccessToken(at))
 	fmt.Println(ai.ParseAccessToken(at))
 
 	rt, _ := ai.RefreshAccessToken(7)
 	fmt.Println(rt)
-	fmt.Println(ai.ExtractIdFromRefreshToken(rt))
+	fmt.Println(ai.ExtractIDFromRefreshToken(rt))
 	fmt.Println(ai.ParseRefreshToken(rt))
 }

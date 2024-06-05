@@ -5,15 +5,15 @@ import (
 	"fmt"
 )
 
-type JsonUnmarshalTypeErr struct {
+type JSONUnmarshalTypeErr struct {
 	jsonTypeErr *json.UnmarshalTypeError
 }
 
-func NewJsonUnmarshalTypeErr(jsonTypeErr *json.UnmarshalTypeError) *JsonUnmarshalTypeErr {
-	return &JsonUnmarshalTypeErr{jsonTypeErr: jsonTypeErr}
+func NewJSONUnmarshalTypeErr(jsonTypeErr *json.UnmarshalTypeError) *JSONUnmarshalTypeErr {
+	return &JSONUnmarshalTypeErr{jsonTypeErr: jsonTypeErr}
 }
 
-func (c JsonUnmarshalTypeErr) Error() string {
+func (c JSONUnmarshalTypeErr) Error() string {
 	// v.Field: fmt.Sprintf("cannot convert %s for name of type %s", v.Value, v.Type),
 	return fmt.Sprintf(
 		"%s: cannot %s for name of the %s",

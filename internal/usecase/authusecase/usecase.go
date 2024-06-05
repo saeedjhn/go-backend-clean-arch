@@ -1,7 +1,7 @@
 package authusecase
 
 import (
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/token"
+	"go-backend-clean-arch/internal/infrastructure/token"
 	"time"
 )
 
@@ -45,11 +45,11 @@ func (a AuthInteractor) IsAuthorized(requestToken string, secret string) (bool, 
 	return a.token.IsAuthorized(requestToken, secret)
 }
 
-func (a AuthInteractor) ExtractIdFromAccessToken(requestToken string) (string, error) {
+func (a AuthInteractor) ExtractIDFromAccessToken(requestToken string) (string, error) {
 	return a.token.ExtractIdFromToken(requestToken, a.config.AccessTokenSecret)
 }
 
-func (a AuthInteractor) ExtractIdFromRefreshToken(requestToken string) (string, error) {
+func (a AuthInteractor) ExtractIDFromRefreshToken(requestToken string) (string, error) {
 	return a.token.ExtractIdFromToken(requestToken, a.config.RefreshTokenSecret)
 }
 

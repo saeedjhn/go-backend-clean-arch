@@ -1,7 +1,7 @@
 package pqtask
 
 import (
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/pq"
+	"go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
 	"log"
 )
 

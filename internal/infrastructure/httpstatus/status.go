@@ -1,58 +1,58 @@
 package httpstatus
 
 import (
-	. "go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/kind"
+	"go-backend-clean-arch/internal/infrastructure/kind"
 	"net/http"
 )
 
-func FromKind(kind Kind) int {
-	switch kind {
-	case KindStatusContinue:
+func FromKind(k kind.Kind) int {
+	switch k {
+	case kind.KindStatusContinue:
 		return http.StatusContinue
-	case KindStatusSwitchingProtocols:
+	case kind.KindStatusSwitchingProtocols:
 		return http.StatusSwitchingProtocols
-	case KindStatusProcessing:
+	case kind.KindStatusProcessing:
 		return http.StatusProcessing
-	case KindStatusEarlyHints:
+	case kind.KindStatusEarlyHints:
 		return http.StatusEarlyHints
 
-	case KindStatusOK:
+	case kind.KindStatusOK:
 		return http.StatusOK
-	case KindStatusCreated:
+	case kind.KindStatusCreated:
 		return http.StatusCreated
-	case KindStatusAccepted:
+	case kind.KindStatusAccepted:
 		return http.StatusAccepted
-	case KindStatusNonAuthoritativeInfo:
+	case kind.KindStatusNonAuthoritativeInfo:
 		return http.StatusNonAuthoritativeInfo
-	case KindStatusNoContent:
+	case kind.KindStatusNoContent:
 		return http.StatusNoContent
-	case KindStatusResetContent:
+	case kind.KindStatusResetContent:
 		return http.StatusResetContent
-	case KindStatusPartialContent:
+	case kind.KindStatusPartialContent:
 		return http.StatusPartialContent
-	case KindStatusMultiStatus:
+	case kind.KindStatusMultiStatus:
 		return http.StatusMultiStatus
-	case KindStatusAlreadyReported:
+	case kind.KindStatusAlreadyReported:
 		return http.StatusAlreadyReported
-	case KindStatusIMUsed:
+	case kind.KindStatusIMUsed:
 		return http.StatusIMUsed
 
-	case KindStatusBadRequest:
+	case kind.KindStatusBadRequest:
 		return http.StatusBadRequest
-	case KindStatusUnauthorized:
+	case kind.KindStatusUnauthorized:
 		return http.StatusUnauthorized
-	case KindStatusPaymentRequired:
+	case kind.KindStatusPaymentRequired:
 		return http.StatusPaymentRequired
-	case KindStatusForbidden:
+	case kind.KindStatusForbidden:
 		return http.StatusForbidden
-	case KindStatusNotFound:
+	case kind.KindStatusNotFound:
 		return http.StatusNotFound
-	case KindStatusConflict:
+	case kind.KindStatusConflict:
 		return http.StatusConflict
-	case KindStatusUnprocessableEntity:
+	case kind.KindStatusUnprocessableEntity:
 		return http.StatusUnprocessableEntity
 
-	case KindStatusInternalServerError:
+	case kind.KindStatusInternalServerError:
 		return http.StatusInternalServerError
 
 	default:

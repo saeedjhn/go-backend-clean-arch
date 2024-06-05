@@ -3,7 +3,7 @@ package migratormysql
 import (
 	"fmt"
 	migrate "github.com/rubenv/sql-migrate"
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/infrastructure/persistance/db/pq"
+	"go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
 )
 
 const dialect = "mysql"
@@ -29,16 +29,16 @@ func New(conn pq.DB, absolutePath string) Migrator {
 func (m Migrator) Up() {
 	n, err := migrate.Exec(m.conn.Conn(), m.dialect, m.migrations, migrate.Up)
 	if err != nil {
-		panic(fmt.Errorf("can't apply migrations: %v", err))
+		panic(fmt.Errorf("can't apply migrations: %w", err))
 	}
+	//panic(fmt.Errorf("can't apply migrations: %v", err))
 	fmt.Printf("Applied %d migrations!\n", n)
 }
 
 func (m Migrator) Down() {
-
 	n, err := migrate.Exec(m.conn.Conn(), m.dialect, m.migrations, migrate.Down)
 	if err != nil {
-		panic(fmt.Errorf("can't rollback migrations: %v", err))
+		panic(fmt.Errorf("can't rollback migrations: %w", err))
 	}
 	fmt.Printf("Rollbacked %d migrations!\n", n)
 }

@@ -1,7 +1,7 @@
 package bcrypt
 
 import (
-	"fmt"
+	"errors"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -15,7 +15,7 @@ const (
 
 func Generate(str string, cost Cost) (string, error) {
 	if cost > 31 {
-		return "", fmt.Errorf("don`t supported cost")
+		return "", errors.New("don`t supported cost")
 	}
 
 	encryptedPass, _ := bcrypt.GenerateFromPassword(

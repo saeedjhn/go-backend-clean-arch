@@ -5,7 +5,6 @@ import (
 	"time"
 )
 
-// func (a *Token) CreateAccessToken(id uint) (string, error) {
 func (a *Token) CreateAccessToken(id uint, secret string, subject string, expire time.Duration) (string, error) {
 	// set our claims
 	claims := Claims{
@@ -19,7 +18,7 @@ func (a *Token) CreateAccessToken(id uint, secret string, subject string, expire
 	}
 
 	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	//tokenString, err := accessToken.SignedString([]byte(a.config.AccessTokenSecret))
+	// tokenString, err := accessToken.SignedString([]byte(a.config.AccessTokenSecret))
 	tokenString, err := accessToken.SignedString([]byte(secret))
 	if err != nil {
 		return "", err

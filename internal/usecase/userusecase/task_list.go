@@ -1,7 +1,7 @@
 package userusecase
 
 import (
-	"go-backend-clean-arch-according-to-go-standards-project-layout/internal/dto/userdto"
+	"go-backend-clean-arch/internal/dto/userdto"
 	"log"
 )
 

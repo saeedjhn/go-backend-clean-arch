@@ -1,4 +1,4 @@
-module go-backend-clean-arch-according-to-go-standards-project-layout
+module go-backend-clean-arch
 
 go 1.22.2
 
