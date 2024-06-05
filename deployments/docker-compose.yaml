@@ -11,7 +11,7 @@ services:
       - "8000:8000"
     volumes:
       #      - ./:/app
-      - /opt/lampp/htdocs/Golang/go-backend-clean-arch-according-to-go-standards-project-layout:/app
+      - /opt/lampp/htdocs/Golang/go-backend-clean-arch:/app
     networks:
       - go-backend-clean-arch_network
     depends_on:
