@@ -1,4 +1,3 @@
 package domain
 
-type Task struct {
-}
+type Task struct{}

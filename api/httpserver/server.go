@@ -30,7 +30,7 @@ func (s HTTPServer) Serve() {
 
 	// Global Middleware Setup
 	s.Router.Use(myMiddleware.Timeout(s.App.Config.HTTPServer.Timeout))
-	//s.Router.Use(middleware.logger())
+	// s.Router.Use(middleware.logger())
 	s.Router.Use(middleware.Recover())
 	s.Router.Use(middleware.RequestID())
 
@@ -46,24 +46,24 @@ func (s HTTPServer) Serve() {
 		LogLatency:       true,
 		LogError:         true,
 		LogProtocol:      true,
-		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
+		LogValuesFunc: func(_ echo.Context, request middleware.RequestLoggerValues) error {
 			errMsg := ""
-			if v.Error != nil {
-				errMsg = v.Error.Error()
+			if request.Error != nil {
+				errMsg = request.Error.Error()
 			}
 
 			s.App.Logger.Set().Named("http-server").Info("request",
-				zap.String("request_id", v.RequestID),
-				zap.String("host", v.Host),
-				zap.String("content-length", v.ContentLength),
-				zap.String("protocol", v.Protocol),
-				zap.String("method", v.Method),
-				zap.Duration("latency", v.Latency),
+				zap.String("request_id", request.RequestID),
+				zap.String("host", request.Host),
+				zap.String("content-length", request.ContentLength),
+				zap.String("protocol", request.Protocol),
+				zap.String("method", request.Method),
+				zap.Duration("latency", request.Latency),
 				zap.String("error", errMsg),
-				zap.String("remote_ip", v.RemoteIP),
-				zap.Int64("response_size", v.ResponseSize),
-				zap.String("uri", v.URI),
-				zap.Int("status", v.Status),
+				zap.String("remote_ip", request.RemoteIP),
+				zap.Int64("response_size", request.ResponseSize),
+				zap.String("uri", request.URI),
+				zap.Int("status", request.Status),
 			)
 
 			return nil
@@ -73,10 +73,10 @@ func (s HTTPServer) Serve() {
 	// Router Setup
 	router.Setup(s.App, s.Router)
 
-	address := fmt.Sprintf(":%s", s.App.Config.HTTPServer.Port)
+	var address = fmt.Sprintf(":%s", s.App.Config.HTTPServer.Port)
 	log.Printf("start echo server on %s\n", address)
 
 	if err := s.Router.Start(address); err != nil {
-		fmt.Println("router start error", err)
+		fmt.Print("router start error", err)
 	}
 }

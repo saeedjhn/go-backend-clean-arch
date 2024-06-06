@@ -1,9 +1,9 @@
 package bootstrap
 
-func newMongoConnection() {
+func NewMongoConnection() {
 
 }
 
-func closeMongoConnection() {
+func CloseMongoConnection() {
 
 }

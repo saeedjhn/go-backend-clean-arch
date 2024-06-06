@@ -6,10 +6,10 @@ import (
 	"net/http"
 )
 
-func New(app *bootstrap.Application, e *echo.Group) {
-	g := e.Group("/tasks")
+func New(_ *bootstrap.Application, group *echo.Group) {
+	tasksGroup := group.Group("/tasks")
 	{
-		g.GET("/", func(c echo.Context) error {
+		tasksGroup.GET("/", func(c echo.Context) error {
 			return c.JSON(http.StatusOK, "-- tasks --")
 		})
 	}

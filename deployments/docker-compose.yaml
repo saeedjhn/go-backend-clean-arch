@@ -20,20 +20,20 @@ services:
       - redis
 
   ####################### POSTGRES #######################
-  psqldb:
-    container_name: go-backend-clean-arch_psqldb
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: backend_db
-    ports:
-      - "5001:5432"
-    volumes:
-      - psql:/var/lib/psql/data
-    restart: always
-    networks:
-      - go-backend-clean-arch_network
+#  psqldb:
+#    container_name: go-backend-clean-arch_psqldb
+#    image: postgres:latest
+#    environment:
+#      POSTGRES_USER: admin
+#      POSTGRES_PASSWORD: 123456
+#      POSTGRES_DB: backend_db
+#    ports:
+#      - "5001:5432"
+#    volumes:
+#      - psql:/var/lib/psql/data
+#    restart: always
+#    networks:
+#      - go-backend-clean-arch_network
 
     ######################## Mysql ########################
   mysqldb:

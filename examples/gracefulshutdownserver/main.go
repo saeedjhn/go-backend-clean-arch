@@ -14,10 +14,11 @@ import (
 
 func main() {
 	// Setup
-	e := echo.New()
+	var e = echo.New()
 	e.Logger.SetLevel(log.INFO)
+
 	e.GET("/", func(c echo.Context) error {
-		time.Sleep(5 * time.Second)
+
 		return c.JSON(http.StatusOK, "OK")
 	})
 
@@ -37,10 +38,11 @@ func main() {
 	defer cancel()
 
 	if err := e.Shutdown(ctxWithTimeout); err != nil {
-		fmt.Println("http server shutdown error", err)
+		fmt.Print("http server shutdown error", err)
 	}
 
-	fmt.Println("received interrupt signal, shutting down gracefully..")
+	fmt.Print("received interrupt signal, shutting down gracefully..")
 	// Close all db connection, etc
+
 	<-ctxWithTimeout.Done()
 }

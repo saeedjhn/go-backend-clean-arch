@@ -14,7 +14,7 @@ import (
 
 func New(
 	app *bootstrap.Application,
-	e *echo.Group,
+	group *echo.Group,
 ) {
 
 	// Repository
@@ -36,15 +36,15 @@ func New(
 	// Handler
 	handler := userhandler.New(app, validator, userCase)
 
-	g := e.Group("/users")
+	usersGroup := group.Group("/users")
 
-	publicRouter := g.Group("/auth")
+	publicRouter := usersGroup.Group("/auth")
 	{
 		publicRouter.POST("/register", handler.Register)
 		publicRouter.POST("/login", handler.Login)
 	}
 
-	protectedRouter := g.Group("")
+	protectedRouter := usersGroup.Group("")
 
 	//protectedRouter.Use(middleware.Auth())
 	{

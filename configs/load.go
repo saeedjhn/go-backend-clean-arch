@@ -8,11 +8,9 @@ import (
 type Env string
 
 func Load(env Env) *Config {
-	config := Config{}
+	var config = Config{}
 
 	switch env {
-	//case Development:
-	//	viper.SetConfigFile("development.yaml")
 	case Development:
 		viper.SetConfigFile("development.yaml")
 	case Production:

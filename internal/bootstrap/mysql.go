@@ -5,11 +5,11 @@ import (
 	"log"
 )
 
-func newMysqlConnection(config mysql.Config) mysql.DB {
+func NewMysqlConnection(config mysql.Config) mysql.DB {
 	return mysql.New(config)
 }
 
-func closeMysqlConnection(mysqlDB mysql.DB) {
+func CloseMysqlConnection(mysqlDB mysql.DB) {
 	err := mysqlDB.Conn().Close()
 
 	if err != nil {

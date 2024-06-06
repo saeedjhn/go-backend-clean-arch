@@ -19,22 +19,22 @@ type Application struct {
 func App(env configs.Env) *Application {
 	app := &Application{}
 	app.Config = ConfigLoad(env)
-	app.Logger = newLogger(app.Config.Logger)
-	app.MysqlDB = newMysqlConnection(app.Config.Mysql)
-	app.PostgresDB = newPostgresConnection(app.Config.Postgres)
-	app.RedisClient = newRedisClient(app.Config.Redis)
+	app.Logger = NewLogger(app.Config.Logger)
+	app.MysqlDB = NewMysqlConnection(app.Config.Mysql)
+	app.PostgresDB = NewPostgresConnection(app.Config.Postgres)
+	app.RedisClient = NewRedisClient(app.Config.Redis)
 
 	return app
 }
 
 func (a *Application) ClosePostgresqlConnection() {
-	closePostgresConnection(a.PostgresDB)
+	ClosePostgresConnection(a.PostgresDB)
 }
 
 func (a *Application) CloseMysqlConnection() {
-	closeMysqlConnection(a.MysqlDB)
+	CloseMysqlConnection(a.MysqlDB)
 }
 
 func (a *Application) CloseRedisClientConnection() {
-	closeRedisClient(a.RedisClient)
+	CloseRedisClient(a.RedisClient)
 }

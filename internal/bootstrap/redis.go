@@ -5,11 +5,11 @@ import (
 	"log"
 )
 
-func newRedisClient(config redis.Config) redis.DB {
+func NewRedisClient(config redis.Config) redis.DB {
 	return redis.New(config)
 }
 
-func closeRedisClient(redisClient redis.DB) {
+func CloseRedisClient(redisClient redis.DB) {
 	err := redisClient.Client().Close()
 
 	if err != nil {
