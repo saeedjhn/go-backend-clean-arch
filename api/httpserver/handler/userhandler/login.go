@@ -2,13 +2,70 @@ package userhandler
 
 import (
 	"github.com/labstack/echo/v4"
+	"go-backend-clean-arch/internal/dto/userdto"
+	"go-backend-clean-arch/internal/infrastructure/bind"
+	"go-backend-clean-arch/internal/infrastructure/httpstatus"
+	"go-backend-clean-arch/internal/infrastructure/richerror"
+	"go-backend-clean-arch/internal/infrastructure/sanitize"
+	"go-backend-clean-arch/pkg/message"
 	"net/http"
 )
 
 func (u *UserHandler) Login(c echo.Context) error {
-	//req := userdto.UserRequest{}
+	// Initial
+	req := userdto.LoginRequest{}
 
-	// Call usecase
+	// Bind
+	if err := c.Bind(&req); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest,
+			echo.Map{
+				"status":  false,
+				"message": message.ErrorMsg400BadRequest,
+				"errors":  bind.CheckErrFromBind(err).Error(),
+			},
+		)
+	}
 
-	return c.JSON(http.StatusOK, "UserHandler -> Login - IMPL ME")
+	// Validation
+	if fieldsErrs, err := u.userValidator.ValidateLoginRequest(req); err != nil {
+		richErr, _ := richerror.Analysis(err)
+		code := httpstatus.FromKind(richErr.Kind())
+
+		return echo.NewHTTPError(
+			code,
+			echo.Map{
+				"status":  false,
+				"message": richErr.Message(),
+				"errors":  fieldsErrs,
+			},
+		)
+	}
+
+	// Sanitize
+	sanitize.New().
+		SetPolicy(sanitize.StrictPolicy).
+		Struct(&req) // nolint:errcheck
+
+	// Usage Use-case
+	resp, err := u.userInteractor.Login(req)
+	if err != nil {
+		richErr, _ := richerror.Analysis(err)
+		code := httpstatus.FromKind(richErr.Kind())
+
+		return echo.NewHTTPError(
+			code,
+			echo.Map{
+				"status":  false,
+				"message": richErr.Message(),
+				"errors":  richErr.Error(),
+			})
+	}
+	return c.JSON(
+		http.StatusOK,
+		echo.Map{
+			"status":  true,
+			"message": message.MsgUserLoginSuccessfully,
+			"data":    resp,
+		},
+	)
 }

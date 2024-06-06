@@ -4,13 +4,18 @@ package message
 const (
 	// Validation
 	OpUserValidatorValidateRegisterRequest = "uservalidator.ValidateRegisterRequest"
+	OpUserValidatorValidateLoginRequest    = "uservalidator.ValidateLoginRequest"
 
 	// UseCase
-	OpUserUsecaseRegister = "userusecase.Create"
+	OpUserUsecaseRegister = "userusecase.register"
+	OpUserUsecaseLogin    = "userusecase.login"
 
 	// Repository
 	OpPqUserRegister          = "pquser.register"
 	OpMysqlUserRegister       = "mysqluser.register"
 	OpMysqlUserIsMobileUnique = "mysqluser.IsMobileUnique"
 	OpMysqlUserGetByMobile    = "mysqluser.GetByMobile"
+
+	// Compare password
+	InvalidCredentials = "Invalid credentials"
 )

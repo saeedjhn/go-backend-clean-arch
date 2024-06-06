@@ -67,4 +67,5 @@ const (
 	ErrorMsgCategoryIsNotValid = "Category is not valid"
 
 	MsgUserRegisterSuccessfully = "User is register successfully"
+	MsgUserLoginSuccessfully    = "User is login successfully"
 )

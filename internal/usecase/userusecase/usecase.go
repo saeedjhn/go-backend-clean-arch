@@ -1,7 +1,9 @@
 package userusecase
 
 import (
+	"go-backend-clean-arch/configs"
 	"go-backend-clean-arch/internal/domain"
+	"go-backend-clean-arch/internal/infrastructure/token"
 )
 
 type Repository interface {
@@ -15,10 +17,21 @@ type Gateway interface {
 }
 
 type UserInteractor struct {
-	repository      Repository
+	config          *configs.Config
 	taskListGateway Gateway
+	repository      Repository
+	token           *token.Token
 }
 
-func New(taskListGateway Gateway, repository Repository) *UserInteractor {
-	return &UserInteractor{taskListGateway: taskListGateway, repository: repository}
+func New(
+	config *configs.Config,
+	taskListGateway Gateway,
+	repository Repository,
+	token *token.Token) *UserInteractor {
+	return &UserInteractor{
+		config:          config,
+		taskListGateway: taskListGateway,
+		repository:      repository,
+		token:           token,
+	}
 }

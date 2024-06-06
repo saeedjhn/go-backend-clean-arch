@@ -7,7 +7,6 @@ import (
 	"go-backend-clean-arch/configs"
 	"go-backend-clean-arch/internal/bootstrap"
 	"go-backend-clean-arch/internal/infrastructure/persistance/db/mysql/migratormysql"
-	"go-backend-clean-arch/internal/infrastructure/persistance/db/pq/migratorpq"
 	"go.uber.org/zap"
 	"os"
 	"os/signal"
@@ -43,25 +42,25 @@ func main() {
 
 	fmt.Println("received interrupt signal, shutting down gracefully..")
 	// Close all db connection, etc
-	app.ClosePostgresqlConnection()
 	app.CloseMysqlConnection()
+	//app.ClosePostgresqlConnection()
 	app.CloseRedisClientConnection()
 
 	<-ctxWithTimeout.Done()
 }
 
 func migrations(app *bootstrap.Application) {
-	// Postgres
-	pqDir := "./internal/repository/migrations/pqmigration"
-	migratorPq := migratorpq.New(app.PostgresDB, pqDir)
-	//migratorPq.Down()
-	migratorPq.Up()
-
 	// Mysql
 	mysqlDir := "./internal/repository/migrations/mysqlmigration"
 	migratorMysql := migratormysql.New(app.MysqlDB, mysqlDir)
 	//migratorMysql.Down()
 	migratorMysql.Up()
+
+	// Pq
+	// pqDir := "./internal/repository/migrations/pqmigration"
+	// migratorPq := migratorpq.New(app.PostgresDB, pqDir)
+	// migratorPq.Down()
+	// migratorPq.Up()
 
 	// etc
 }

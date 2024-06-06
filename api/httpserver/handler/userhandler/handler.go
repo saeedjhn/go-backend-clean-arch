@@ -7,11 +7,13 @@ import (
 
 type Interactor interface {
 	Register(req userdto.RegisterRequest) (userdto.RegisterResponse, error)
+	Login(req userdto.LoginRequest) (userdto.LoginResponse, error)
 	TaskList(req userdto.TaskListRequest)
 }
 
 type Validator interface {
 	ValidateRegisterRequest(req userdto.RegisterRequest) (map[string]string, error)
+	ValidateLoginRequest(req userdto.LoginRequest) (map[string]string, error)
 }
 
 type UserHandler struct {

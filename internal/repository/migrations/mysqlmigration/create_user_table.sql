@@ -4,9 +4,9 @@
 create TABLE `users` (
                        `id` INT AUTO_INCREMENT,
                        `name` VARCHAR(191),
+                       `mobile` VARCHAR(191) NOT NULL,
                        `email` VARCHAR(191),
                        `password` VARCHAR(191) NOT NULL,
-                       `mobile` VARCHAR(191) NOT NULL,
                        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         PRIMARY KEY (id),

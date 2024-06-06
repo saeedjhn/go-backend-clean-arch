@@ -25,3 +25,7 @@ func Generate(str string, cost Cost) (string, error) {
 
 	return string(encryptedPass), nil
 }
+
+func CompareHashAndSTR(hashed string, str string) error {
+	return bcrypt.CompareHashAndPassword([]byte(hashed), []byte(str))
+}

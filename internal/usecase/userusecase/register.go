@@ -31,12 +31,12 @@ func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.Register
 				WithKind(kind.KindStatusBadRequest)
 	}
 
-	createUser := domain.User{
+	var createUser = domain.User{
 		Name:   req.Name,
 		Mobile: req.Mobile,
 	}
 
-	encryptedPass, err = bcrypt.Generate(req.Password, bcrypt.DefaultCost)
+	encryptedPass, _ = bcrypt.Generate(req.Password, bcrypt.DefaultCost)
 	createUser.Password = encryptedPass
 
 	createdUser, err = u.repository.Create(createUser)
@@ -46,9 +46,12 @@ func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.Register
 
 	return userdto.RegisterResponse{
 		User: userdto.UserInfo{
-			ID:     createdUser.ID,
-			Mobile: createdUser.Mobile,
-			Name:   createdUser.Name,
+			ID:        createdUser.ID,
+			Name:      createdUser.Name,
+			Mobile:    createdUser.Mobile,
+			Email:     createdUser.Email,
+			CreatedAt: createdUser.CreatedAt,
+			UpdatedAt: createdUser.UpdatedAt,
 		},
 	}, nil
 }

@@ -5,6 +5,7 @@ import (
 	"go-backend-clean-arch/api/httpserver/handler/userhandler"
 	"go-backend-clean-arch/internal/bootstrap"
 	"go-backend-clean-arch/internal/gateway/taskinggateway"
+	"go-backend-clean-arch/internal/infrastructure/token"
 	"go-backend-clean-arch/internal/repository/taskrepository/mysqltask"
 	"go-backend-clean-arch/internal/repository/userrespository/mysqluser"
 	"go-backend-clean-arch/internal/usecase/taskusecase"
@@ -16,10 +17,12 @@ func New(
 	app *bootstrap.Application,
 	group *echo.Group,
 ) {
+	// dependencies
+	t := token.New()
 
 	// Repository
 	taskMysql := mysqltask.New(app.MysqlDB)
-	userPq := mysqluser.New(app.MysqlDB)
+	userMysql := mysqluser.New(app.MysqlDB)
 
 	// Repository & Usecase
 	taskCase := taskusecase.New(taskMysql)
@@ -28,7 +31,9 @@ func New(
 	taskGate := taskinggateway.New(taskCase)
 
 	// Repository & Usecase
-	userCase := userusecase.New(taskGate, userPq)
+	userCase := userusecase.New(
+		app.Config, taskGate, userMysql, t,
+	)
 
 	// Validator
 	validator := uservalidator.New()
