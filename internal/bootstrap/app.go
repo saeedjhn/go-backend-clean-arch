@@ -21,7 +21,7 @@ func App(env configs.Env) *Application {
 	app.Config = ConfigLoad(env)
 	app.Logger = NewLogger(app.Config.Logger)
 	app.MysqlDB = NewMysqlConnection(app.Config.Mysql)
-	app.PostgresDB = NewPostgresConnection(app.Config.Postgres)
+	//app.PostgresDB = NewPostgresConnection(app.Config.Postgres)
 	app.RedisClient = NewRedisClient(app.Config.Redis)
 
 	return app

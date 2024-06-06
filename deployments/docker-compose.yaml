@@ -15,8 +15,8 @@ services:
     networks:
       - go-backend-clean-arch_network
     depends_on:
-      - psqldb
       - mysqldb
+#      - psqldb
       - redis
 
   ####################### POSTGRES #######################
@@ -83,7 +83,7 @@ services:
       - go-backend-clean-arch_network
 
 volumes:
-  psql:
+#  psql:
   mysql:
   pgadmin:
   redis:
