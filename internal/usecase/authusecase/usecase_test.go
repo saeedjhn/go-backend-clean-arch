@@ -2,12 +2,11 @@ package authusecase
 
 import (
 	"fmt"
+	"go-backend-clean-arch/internal/domain"
 	"go-backend-clean-arch/internal/infrastructure/token"
 	"testing"
 	"time"
 )
-
-const ID = 7
 
 var config = Config{
 	AccessTokenSecret:      "TOKENSECRET",
@@ -19,14 +18,24 @@ var config = Config{
 }
 
 func TestCreateToken(t *testing.T) {
+	u := domain.User{
+		ID:        7,
+		Name:      "",
+		Mobile:    "",
+		Email:     "",
+		Password:  "",
+		CreatedAt: time.Time{},
+		UpdatedAt: time.Time{},
+	}
+
 	ai := New(config, token.New())
 
-	at, _ := ai.CreateAccessToken(7)
+	at, _ := ai.CreateAccessToken(u)
 	fmt.Println(at)
 	fmt.Println(ai.ExtractIDFromAccessToken(at))
 	fmt.Println(ai.ParseAccessToken(at))
 
-	rt, _ := ai.RefreshAccessToken(7)
+	rt, _ := ai.CreateRefreshToken(u)
 	fmt.Println(rt)
 	fmt.Println(ai.ExtractIDFromRefreshToken(rt))
 	fmt.Println(ai.ParseRefreshToken(rt))

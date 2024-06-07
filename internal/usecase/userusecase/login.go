@@ -23,18 +23,14 @@ func (u *UserInteractor) Login(req userdto.LoginRequest) (userdto.LoginResponse,
 			WithKind(kind.KindStatusBadRequest)
 	}
 
-	accessToken, err := u.token.CreateAccessToken(
-		user.ID, u.config.Auth.AccessTokenSecret, u.config.Auth.AccessTokenSubject, u.config.Auth.AccessTokenExpiryTime,
-	)
+	accessToken, err := u.gate.CreateAccessToken(user)
 	if err != nil {
 		return userdto.LoginResponse{}, richerror.New(op).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).
 			WithKind(kind.KindStatusInternalServerError)
 	}
 
-	refreshToken, err := u.token.CreateRefreshToken(
-		user.ID, u.config.Auth.RefreshTokenSecret, u.config.Auth.RefreshTokenSubject, u.config.Auth.RefreshTokenExpiryTime,
-	)
+	refreshToken, err := u.gate.CreateRefreshToken(user)
 	if err != nil {
 		return userdto.LoginResponse{}, richerror.New(op).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).

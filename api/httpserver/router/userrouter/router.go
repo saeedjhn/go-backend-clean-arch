@@ -3,11 +3,13 @@ package userrouter
 import (
 	"github.com/labstack/echo/v4"
 	"go-backend-clean-arch/api/httpserver/handler/userhandler"
+	"go-backend-clean-arch/api/httpserver/middleware"
 	"go-backend-clean-arch/internal/bootstrap"
-	"go-backend-clean-arch/internal/gateway/taskinggateway"
+	"go-backend-clean-arch/internal/gateway/usergateway"
 	"go-backend-clean-arch/internal/infrastructure/token"
 	"go-backend-clean-arch/internal/repository/taskrepository/mysqltask"
 	"go-backend-clean-arch/internal/repository/userrespository/mysqluser"
+	"go-backend-clean-arch/internal/usecase/authusecase"
 	"go-backend-clean-arch/internal/usecase/taskusecase"
 	"go-backend-clean-arch/internal/usecase/userusecase"
 	"go-backend-clean-arch/internal/validator/uservalidator"
@@ -17,23 +19,19 @@ func New(
 	app *bootstrap.Application,
 	group *echo.Group,
 ) {
-	// dependencies
-	t := token.New()
-
 	// Repository
 	taskMysql := mysqltask.New(app.MysqlDB)
 	userMysql := mysqluser.New(app.MysqlDB)
 
-	// Repository & Usecase
+	// Usecase
 	taskCase := taskusecase.New(taskMysql)
+	authCase := authusecase.New(app.Config.Auth, token.New())
 
-	// Service-oriented - no depends on useCases - ( userusecase -> taskgateway -> taskusecase )
-	taskGate := taskinggateway.New(taskCase)
+	// Service-oriented - no depends on use-cases - ( userusecase -> usergateway -> taskusecase )
+	userGate := usergateway.New(authCase, taskCase)
 
 	// Repository & Usecase
-	userCase := userusecase.New(
-		app.Config, taskGate, userMysql, t,
-	)
+	userCase := userusecase.New(app.Config, userGate, userMysql)
 
 	// Validator
 	validator := uservalidator.New()
@@ -51,8 +49,9 @@ func New(
 
 	protectedRouter := usersGroup.Group("")
 
-	//protectedRouter.Use(middleware.Auth())
+	protectedRouter.Use(middleware.Auth(app.Config.Auth, authCase))
 	{
+		protectedRouter.GET("/profile", handler.Profile)
 		protectedRouter.GET("/task-list", handler.TaskList)
 	}
 }

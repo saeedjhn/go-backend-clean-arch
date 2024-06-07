@@ -66,6 +66,7 @@ const (
 	ErrorMsgUserNotAllowed     = "User not allowed"
 	ErrorMsgCategoryIsNotValid = "Category is not valid"
 
-	MsgUserRegisterSuccessfully = "User is register successfully"
-	MsgUserLoginSuccessfully    = "User is login successfully"
+	MsgUserRegisterSuccessfully   = "User is register successfully"
+	MsgUserLoginSuccessfully      = "User is login successfully"
+	MsgUserSeeProfileSuccessfully = "User see profile successfully"
 )

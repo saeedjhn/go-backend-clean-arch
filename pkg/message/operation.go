@@ -15,6 +15,7 @@ const (
 	OpMysqlUserRegister       = "mysqluser.register"
 	OpMysqlUserIsMobileUnique = "mysqluser.IsMobileUnique"
 	OpMysqlUserGetByMobile    = "mysqluser.GetByMobile"
+	OpMysqlUserGetByID        = "mysqluser.GetByID"
 
 	// Compare password
 	InvalidCredentials = "Invalid credentials"

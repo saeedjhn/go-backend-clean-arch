@@ -81,6 +81,25 @@ func (r *DB) GetByMobile(mobile string) (domain.User, error) {
 	return user, nil
 }
 
+func (r *DB) GetByID(id uint) (domain.User, error) {
+	const op = message.OpMysqlUserGetByID
+
+	query := "SELECT * FROM users WHERE id = ?"
+	row := r.conn.Conn().QueryRow(query, id)
+	user, err := scanUser(row)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return domain.User{}, richerror.New(op).WithErr(err).
+				WithMessage(message.ErrorMsgDBRecordNotFound).WithKind(kind.KindStatusNotFound)
+		}
+
+		return domain.User{}, richerror.New(op).WithErr(err).
+			WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
+	}
+
+	return user, nil
+}
+
 func scanUser(scanner Scanner) (domain.User, error) {
 	var user domain.User
 

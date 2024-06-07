@@ -1,6 +1,7 @@
 package authusecase
 
 import (
+	"go-backend-clean-arch/internal/domain"
 	"go-backend-clean-arch/internal/infrastructure/token"
 	"time"
 )
@@ -23,18 +24,18 @@ func New(config Config, token *token.Token) *AuthInteractor {
 	return &AuthInteractor{config: config, token: token}
 }
 
-func (a AuthInteractor) CreateAccessToken(id uint) (string, error) {
+func (a AuthInteractor) CreateAccessToken(u domain.User) (string, error) {
 	return a.token.CreateAccessToken(
-		id,
+		u.ID,
 		a.config.AccessTokenSecret,
 		a.config.AccessTokenSubject,
 		a.config.AccessTokenExpiryTime,
 	)
 }
 
-func (a AuthInteractor) RefreshAccessToken(id uint) (string, error) {
+func (a AuthInteractor) CreateRefreshToken(u domain.User) (string, error) {
 	return a.token.CreateRefreshToken(
-		id,
+		u.ID,
 		a.config.RefreshTokenSecret,
 		a.config.RefreshTokenSubject,
 		a.config.RefreshTokenExpiryTime,
