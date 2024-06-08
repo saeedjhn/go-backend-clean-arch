@@ -69,4 +69,5 @@ const (
 	MsgUserRegisterSuccessfully   = "User is register successfully"
 	MsgUserLoginSuccessfully      = "User is login successfully"
 	MsgUserSeeProfileSuccessfully = "User see profile successfully"
+	MsgUserGetTasksSuccessfully   = "User get tasks successfully"
 )

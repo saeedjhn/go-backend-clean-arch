@@ -48,10 +48,10 @@ func New(
 	}
 
 	protectedRouter := usersGroup.Group("")
-
 	protectedRouter.Use(middleware.Auth(app.Config.Auth, authCase))
 	{
 		protectedRouter.GET("/profile", handler.Profile)
-		protectedRouter.GET("/task-list", handler.TaskList)
+		//protectedRouter.GET("/tasks", handler.TaskList)
+		protectedRouter.GET("/:id/tasks", handler.Tasks)
 	}
 }

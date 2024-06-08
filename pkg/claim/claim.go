@@ -11,6 +11,4 @@ func GetClaimsFromEchoContext(c echo.Context, key string) authusecase.Claims {
 
 func SetClaimsFromEchoContext(c echo.Context, key string, val interface{}) {
 	c.Set(key, val)
-
-	return
 }

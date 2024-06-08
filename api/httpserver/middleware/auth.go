@@ -11,6 +11,7 @@ import (
 )
 
 func Auth(config authusecase.Config, authInteractor *authusecase.AuthInteractor) echo.MiddlewareFunc {
+
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {
 			authHeader := c.Request().Header.Get("Authorization")

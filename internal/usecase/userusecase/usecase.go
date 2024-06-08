@@ -13,7 +13,7 @@ type Repository interface {
 }
 
 type Gateway interface {
-	TaskList()
+	Tasks(userID uint) ([]domain.Task, error)
 	CreateAccessToken(user domain.User) (string, error)
 	CreateRefreshToken(user domain.User) (string, error)
 }

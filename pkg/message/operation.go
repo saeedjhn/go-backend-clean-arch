@@ -5,6 +5,7 @@ const (
 	// Validation
 	OpUserValidatorValidateRegisterRequest = "uservalidator.ValidateRegisterRequest"
 	OpUserValidatorValidateLoginRequest    = "uservalidator.ValidateLoginRequest"
+	OpTaskValidatorValidateCreateRequest   = "taskvalidator.ValidateCreateRequest"
 
 	// UseCase
 	OpUserUsecaseRegister = "userusecase.register"

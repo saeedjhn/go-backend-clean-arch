@@ -2,7 +2,6 @@ package usergateway
 
 import (
 	"go-backend-clean-arch/internal/domain"
-	"log"
 )
 
 type AuthInteractor interface {
@@ -11,7 +10,7 @@ type AuthInteractor interface {
 }
 
 type TaskInteractor interface {
-	List()
+	TasksForUser(userId uint) ([]domain.Task, error)
 }
 
 type UserGateway struct {
@@ -23,9 +22,8 @@ func New(authInteractor AuthInteractor, taskInteractor TaskInteractor) *UserGate
 	return &UserGateway{authInteractor: authInteractor, taskInteractor: taskInteractor}
 }
 
-func (u *UserGateway) TaskList() {
-	u.taskInteractor.List()
-	log.Print("TaskingGateway -> TaskList - IMPL ME")
+func (u *UserGateway) Tasks(userID uint) ([]domain.Task, error) {
+	return u.taskInteractor.TasksForUser(userID)
 }
 
 func (u *UserGateway) CreateAccessToken(user domain.User) (string, error) {

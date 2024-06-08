@@ -9,7 +9,7 @@ type Interactor interface {
 	Register(req userdto.RegisterRequest) (userdto.RegisterResponse, error)
 	Login(req userdto.LoginRequest) (userdto.LoginResponse, error)
 	Profile(req userdto.ProfileRequest) (userdto.ProfileResponse, error)
-	TaskList(req userdto.TaskListRequest)
+	Tasks(req userdto.TasksRequest) (userdto.TasksResponse, error)
 }
 
 type Validator interface {

@@ -1,6 +1,7 @@
 package mysqltask
 
 import (
+	"go-backend-clean-arch/internal/domain"
 	"go-backend-clean-arch/internal/infrastructure/persistance/db/mysql"
 	"log"
 )
@@ -15,6 +16,10 @@ func New(conn mysql.DB) *DB {
 	}
 }
 
-func (r *DB) List() {
+func (d *DB) Create(t domain.Task) (domain.Task, error) {
+	panic("mysqltask -> create : IMPL ME")
+}
+
+func (d *DB) List() {
 	log.Print("mysql-taskgateway -> Find - IMPL ME")
 }
