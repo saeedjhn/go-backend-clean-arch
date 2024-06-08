@@ -28,9 +28,10 @@ func main() {
 	sch := scheduler.New()
 	for i := 0; i < ThreadUse; i++ {
 		go func() {
-			defer wg.Done()
-
-			sch.Start(done)
+			sch.Start(done, &wg)
+			//sch.SetJob(done, &wg, 5*time.Second, func() {
+			//	log.Println("Job")
+			//})
 		}()
 	}
 
@@ -41,5 +42,6 @@ func main() {
 	log.Println("received interrupt signal, shutting down gracefully..")
 
 	done <- true
+
 	time.Sleep(config.Application.GracefulShutdownTimeout)
 }

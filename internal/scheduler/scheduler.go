@@ -3,6 +3,7 @@ package scheduler
 import (
 	"github.com/go-co-op/gocron/v2"
 	"log"
+	"sync"
 	"time"
 )
 
@@ -22,13 +23,15 @@ func New() Scheduler {
 	}
 }
 
-func (s Scheduler) Start(done <-chan bool) {
+func (s Scheduler) Start(done <-chan bool, wg *sync.WaitGroup) {
+	defer wg.Done()
+
 	job, _ := s.sch.NewJob( // Check err
 		gocron.DurationJob(10*time.Second),
 		gocron.NewTask(func(arg string) {
 			// Do something
 			log.Println(arg)
-		}, "Hello "),
+		}, "Hello"),
 	)
 
 	log.Println("ID for job", job.ID())
@@ -46,3 +49,34 @@ func (s Scheduler) Start(done <-chan bool) {
 		log.Println("shutdown err, ", err.Error())
 	}
 }
+
+//func (s Scheduler) SetJob(
+//	done <-chan bool,
+//	wg *sync.WaitGroup,
+//	time time.Duration,
+//	function func(),
+//) {
+//	defer wg.Done()
+//
+//	job, _ := s.sch.NewJob( // Check err
+//		gocron.DurationJob(time),
+//		gocron.NewTask(func() {
+//			function()
+//		}),
+//	)
+//
+//	log.Println("ID for job", job.ID())
+//
+//	// start the scheduler
+//	s.sch.Start()
+//
+//	<-done
+//	// wait to finish job
+//	log.Println("stop scheduler..")
+//
+//	// when you're done, shut it down
+//	err := s.sch.Shutdown()
+//	if err != nil {
+//		log.Println("shutdown err, ", err.Error())
+//	}
+//}
