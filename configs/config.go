@@ -16,14 +16,14 @@ const (
 )
 
 type Application struct {
-	Env   Env  `mapstructure:"env"`
-	Debug bool `mapstructure:"debug"`
+	Env                     Env           `mapstructure:"env"`
+	Debug                   bool          `mapstructure:"debug"`
+	GracefulShutdownTimeout time.Duration `mapstructure:"graceful_shutdown_timeout"`
 }
 
 type HTTPServer struct {
-	Port                    string        `mapstructure:"port"`
-	Timeout                 time.Duration `mapstructure:"timeout"`
-	GracefulShutdownTimeout time.Duration `mapstructure:"graceful_shutdown_timeout"`
+	Port    string        `mapstructure:"port"`
+	Timeout time.Duration `mapstructure:"timeout"`
 }
 
 type Config struct {
