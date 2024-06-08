@@ -46,28 +46,3 @@ func (s Scheduler) Start(done <-chan bool) {
 		log.Println("shutdown err, ", err.Error())
 	}
 }
-
-func (s Scheduler) Job2(done <-chan bool) {
-	job, _ := s.sch.NewJob( // Check err
-		gocron.DurationJob(10*time.Second),
-		gocron.NewTask(func(arg string) {
-			// Do something
-			log.Println(arg)
-		}, "Hello 2"),
-	)
-
-	log.Println("ID for job", job.ID())
-
-	// start the scheduler
-	s.sch.Start()
-
-	<-done
-	// wait to finish job
-	log.Println("stop scheduler..")
-
-	// when you're done, shut it down
-	err := s.sch.Shutdown()
-	if err != nil {
-		log.Println("shutdown err, ", err.Error())
-	}
-}

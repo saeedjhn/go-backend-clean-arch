@@ -25,11 +25,11 @@ func main() {
 
 	wg.Add(ThreadUse)
 
+	sch := scheduler.New()
 	for i := 0; i < ThreadUse; i++ {
 		go func() {
 			defer wg.Done()
 
-			sch := scheduler.New()
 			sch.Start(done)
 		}()
 	}
