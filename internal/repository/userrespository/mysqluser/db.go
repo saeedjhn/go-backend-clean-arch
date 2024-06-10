@@ -21,9 +21,9 @@ func New(conn mysql.DB) *DB {
 }
 
 func (r *DB) Create(u domain.User) (domain.User, error) {
-	const op = message.OpMysqlUserRegister
+	const op = message.OpMysqlUserCreate
 
-	query := "insert into users(name, mobile, email, password) values(?, ?, ?, ?)"
+	query := "INSERT INTO users (name, mobile, email, password) values(?, ?, ?, ?)"
 
 	res, err := r.conn.Conn().Exec(query, u.Name, u.Mobile, u.Email, u.Password)
 	if err != nil {

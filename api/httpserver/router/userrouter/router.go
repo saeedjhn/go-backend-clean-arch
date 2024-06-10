@@ -51,7 +51,7 @@ func New(
 	protectedRouter.Use(middleware.Auth(app.Config.Auth, authCase))
 	{
 		protectedRouter.GET("/profile", handler.Profile)
-		//protectedRouter.GET("/tasks", handler.TaskList)
+		protectedRouter.POST("/:id/tasks", handler.CreateTask)
 		protectedRouter.GET("/:id/tasks", handler.Tasks)
 	}
 }

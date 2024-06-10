@@ -2,6 +2,7 @@ package userusecase
 
 import (
 	"go-backend-clean-arch/configs"
+	"go-backend-clean-arch/internal/contract"
 	"go-backend-clean-arch/internal/domain"
 )
 
@@ -13,7 +14,8 @@ type Repository interface {
 }
 
 type Gateway interface {
-	Tasks(userID uint) ([]domain.Task, error)
+	Tasks(dto contract.GetTasksRequestDTO) (contract.GetTasksResponseDTO, error)
+	CreateTask(dto contract.CreateTaskRequestDTO) (contract.CreateTaskResponseDTO, error)
 	CreateAccessToken(user domain.User) (string, error)
 	CreateRefreshToken(user domain.User) (string, error)
 }

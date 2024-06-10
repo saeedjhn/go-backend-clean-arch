@@ -6,6 +6,9 @@ import (
 
 type Repository interface {
 	Create(u domain.Task) (domain.Task, error)
+	GetByID(id uint) (domain.Task, error)
+	GetAllByUserID(userID uint) ([]domain.Task, error)
+	IsExistsUser(id uint) (bool, error)
 	// etc
 }
 

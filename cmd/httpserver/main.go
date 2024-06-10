@@ -8,6 +8,7 @@ import (
 	"go-backend-clean-arch/internal/bootstrap"
 	"go-backend-clean-arch/internal/infrastructure/persistance/db/mysql/migratormysql"
 	"go.uber.org/zap"
+	log "log"
 	"os"
 	"os/signal"
 )
@@ -40,7 +41,7 @@ func main() {
 		fmt.Println("http server shutdown error", err)
 	}
 
-	fmt.Println("received interrupt signal, shutting down gracefully..")
+	log.Println("received interrupt signal, shutting down gracefully..")
 	// Close all db connection, etc
 	app.CloseMysqlConnection()
 	//app.ClosePostgresqlConnection()

@@ -10,9 +10,9 @@ import (
 	"net/http"
 )
 
-func (u *UserHandler) Tasks(c echo.Context) error {
+func (u *UserHandler) CreateTask(c echo.Context) error {
 	// Initial
-	req := userdto.TasksRequest{}
+	req := userdto.CreateTaskRequest{}
 
 	// Bind
 	if err := c.Bind(&req); err != nil {
@@ -25,8 +25,28 @@ func (u *UserHandler) Tasks(c echo.Context) error {
 		)
 	}
 
+	// Validation
+	if fieldsErrs, err := u.userValidator.ValidateCreateTaskRequest(req); err != nil {
+		richErr, _ := richerror.Analysis(err)
+		code := httpstatus.FromKind(richErr.Kind())
+
+		return echo.NewHTTPError(
+			code,
+			echo.Map{
+				"status":  false,
+				"message": richErr.Message(),
+				"errors":  fieldsErrs,
+			},
+		)
+	}
+
+	// Sanitize
+	//sanitize.New().
+	//	SetPolicy(sanitize.StrictPolicy).
+	//	Struct(&req) // nolint:errcheck
+
 	// Usage Use-case
-	resp, err := u.userInteractor.Tasks(req)
+	resp, err := u.userInteractor.CreateTask(req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
@@ -38,13 +58,12 @@ func (u *UserHandler) Tasks(c echo.Context) error {
 				"message": richErr.Message(),
 				"errors":  richErr.Error(),
 			})
-
 	}
 	return c.JSON(
 		http.StatusOK,
 		echo.Map{
 			"status":  true,
-			"message": message.MsgUserGetAllTaskSuccessfully,
+			"message": message.MsgUserCreateTaskSuccessfully,
 			"data":    resp,
 		},
 	)

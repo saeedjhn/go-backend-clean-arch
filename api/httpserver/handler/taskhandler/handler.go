@@ -2,11 +2,12 @@ package taskhandler
 
 import (
 	"go-backend-clean-arch/internal/bootstrap"
+	"go-backend-clean-arch/internal/contract"
 	"go-backend-clean-arch/internal/dto/taskdto"
 )
 
 type Interactor interface {
-	Create(req taskdto.CreateRequest) (taskdto.CreateResponse, error)
+	Create(dto contract.CreateTaskRequestDTO) (contract.CreateTaskResponseDTO, error)
 }
 
 type Validator interface {
