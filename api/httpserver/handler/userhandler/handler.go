@@ -10,12 +10,14 @@ type Interactor interface {
 	Login(req userdto.LoginRequest) (userdto.LoginResponse, error)
 	Profile(req userdto.ProfileRequest) (userdto.ProfileResponse, error)
 	Tasks(req userdto.TasksRequest) (userdto.TasksResponse, error)
+	CreateTask(req userdto.CreateTaskRequest) (userdto.CreateTaskResponse, error)
 }
 
 type Validator interface {
 	ValidateRegisterRequest(req userdto.RegisterRequest) (map[string]string, error)
 	ValidateLoginRequest(req userdto.LoginRequest) (map[string]string, error)
 	ValidateProfileRequest(req userdto.ProfileRequest) (map[string]string, error)
+	ValidateCreateTaskRequest(req userdto.CreateTaskRequest) (map[string]string, error)
 }
 
 type UserHandler struct {

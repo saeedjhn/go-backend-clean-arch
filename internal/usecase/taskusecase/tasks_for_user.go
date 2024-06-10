@@ -1,25 +1,26 @@
 package taskusecase
 
 import (
-	"go-backend-clean-arch/internal/domain"
-	"time"
+	"go-backend-clean-arch/internal/contract"
 )
 
-func (t *TaskInteractor) TasksForUser(userID uint) ([]domain.Task, error) {
-	// Fetch from DB
-	return []domain.Task{{
-		ID:          1,
-		UserID:      1,
-		Title:       "T1",
-		Description: "D1",
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
-	}, {
-		ID:          2,
-		UserID:      2,
-		Title:       "T2",
-		Description: "D2",
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
-	}}, nil
+func (t *TaskInteractor) TasksForUser(dto contract.GetTasksRequestDTO) (contract.GetTasksResponseDTO, error) {
+	tasks, err := t.repository.GetAllByUserID(dto.UserID)
+	if err != nil {
+		return contract.GetTasksResponseDTO{}, err
+	}
+
+	var taskRecord []contract.Task
+	for _, task := range tasks {
+		taskRecord = append(taskRecord, contract.Task{
+			ID:          task.ID,
+			Title:       task.Title,
+			Description: task.Description,
+			Status:      task.Status,
+			CreatedAt:   task.CreatedAt,
+			UpdatedAt:   task.UpdatedAt,
+		})
+	}
+
+	return contract.GetTasksResponseDTO{Tasks: taskRecord}, err
 }

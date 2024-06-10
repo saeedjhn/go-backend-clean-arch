@@ -65,9 +65,12 @@ const (
 	ErrorMsgMobileIsNotValid   = "Mobile is not valid"
 	ErrorMsgUserNotAllowed     = "User not allowed"
 	ErrorMsgCategoryIsNotValid = "Category is not valid"
+	ErrorMsgUserNotExists      = "User is not exists"
 
 	MsgUserRegisterSuccessfully   = "User is register successfully"
 	MsgUserLoginSuccessfully      = "User is login successfully"
 	MsgUserSeeProfileSuccessfully = "User see profile successfully"
 	MsgUserGetTasksSuccessfully   = "User get tasks successfully"
+	MsgUserCreateTaskSuccessfully = "User create task successfully"
+	MsgUserGetAllTaskSuccessfully = "User get all tasks successfully"
 )
