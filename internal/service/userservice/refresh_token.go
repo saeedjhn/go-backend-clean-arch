@@ -16,7 +16,7 @@ func (u *UserInteractor) RefreshToken(req userdto.RefreshTokenRequest) (userdto.
 	id, err := u.authInteractor.ExtractIDFromRefreshToken(dto)
 	if err != nil {
 		return userdto.RefreshTokenResponse{}, richerror.New(op).WithErr(err).
-			WithMessage(message.ErrorMsgUserNotFound).
+			WithMessage(message.ErrorMsg403Forbidden).
 			WithKind(kind.KindStatusBadRequest)
 	}
 

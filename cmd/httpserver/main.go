@@ -17,9 +17,6 @@ func main() {
 	app := bootstrap.App(configs.Development)
 	log.Printf("%#v", app)
 
-	// Migrations
-	//migrations(app)
-
 	// Log
 	app.Logger.Set().Named("main").Info("config", zap.Any("config", app.Config))
 
@@ -49,19 +46,3 @@ func main() {
 
 	<-ctxWithTimeout.Done()
 }
-
-//func migrations(app *bootstrap.Application) {
-// Mysql
-//mysqlDir := "./internal/repository/migrations/mysqlmigration"
-//migratorMysql := migratormysql.New(app.MysqlDB, mysqlDir)
-//migratorMysql.Down()
-//migratorMysql.Up()
-
-// Pq
-// pqDir := "./internal/repository/migrations/pqmigration"
-// migratorPq := migratorpq.New(app.PostgresDB, pqDir)
-// migratorPq.Down()
-// migratorPq.Up()
-
-// etc
-//}
