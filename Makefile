@@ -40,9 +40,9 @@ test/cover:
 	go test -v -race -buildvcs -coverprofile=/tmp/coverage.out ./...
 	go tool cover -html=/tmp/coverage.out
 
-## dev-watch: Run given command when code changes. e.g; make watch run="echo 'hey'"
-.PHONY: dev-watch
-dev-watch:
+## run/watch: Run given command when code changes. e.g; make watch run="echo 'hey'"
+.PHONY: run/watch
+run/watch:
 	@echo
 	@echo " > Run given command when code changes"
 	@echo

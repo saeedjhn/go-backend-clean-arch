@@ -1,4 +1,4 @@
-FROM golang:alpine3.19
+FROM golang:latest
 
 ENV PROJECT_DIR=/app \
     GO111MODULE=on \
@@ -8,9 +8,6 @@ ENV PROJECT_DIR=/app \
 WORKDIR /app
 
 RUN mkdir /build
-
-# Install make command
-#Run apt-get update && apt-get install make
 
 # Copy go mod and sum files
 COPY go.mod go.sum ./
@@ -22,11 +19,11 @@ RUN go mod download
 COPY . .
 
 # Install air
-RUN go install github.com/cosmtrek/air@latest
+#RUN go install github.com/cosmtrek/air@latest
+RUN go install github.com/air-verse/air@lates
 
 # Expose port 8000 to the outside world
 EXPOSE 8000
 
-# Run app
-#ENTRYPOINT ["make"]
-CMD ["air", "-c", ".air.toml"]
+# Run
+ENTRYPOINT ["make"]
