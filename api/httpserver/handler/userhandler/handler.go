@@ -2,7 +2,7 @@ package userhandler
 
 import (
 	"go-backend-clean-arch/internal/bootstrap"
-	"go-backend-clean-arch/internal/dto/userdto"
+	"go-backend-clean-arch/internal/domain/dto/userdto"
 )
 
 type Interactor interface {
@@ -11,6 +11,7 @@ type Interactor interface {
 	Profile(req userdto.ProfileRequest) (userdto.ProfileResponse, error)
 	Tasks(req userdto.TasksRequest) (userdto.TasksResponse, error)
 	CreateTask(req userdto.CreateTaskRequest) (userdto.CreateTaskResponse, error)
+	RefreshToken(req userdto.RefreshTokenRequest) (userdto.RefreshTokenResponse, error)
 }
 
 type Validator interface {
@@ -18,6 +19,7 @@ type Validator interface {
 	ValidateLoginRequest(req userdto.LoginRequest) (map[string]string, error)
 	ValidateProfileRequest(req userdto.ProfileRequest) (map[string]string, error)
 	ValidateCreateTaskRequest(req userdto.CreateTaskRequest) (map[string]string, error)
+	ValidateRefreshTokenRequest(req userdto.RefreshTokenRequest) (map[string]string, error)
 }
 
 type UserHandler struct {

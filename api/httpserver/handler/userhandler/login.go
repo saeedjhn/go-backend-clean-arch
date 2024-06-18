@@ -2,7 +2,7 @@ package userhandler
 
 import (
 	"github.com/labstack/echo/v4"
-	"go-backend-clean-arch/internal/dto/userdto"
+	"go-backend-clean-arch/internal/domain/dto/userdto"
 	"go-backend-clean-arch/internal/infrastructure/bind"
 	"go-backend-clean-arch/internal/infrastructure/httpstatus"
 	"go-backend-clean-arch/internal/infrastructure/richerror"
@@ -12,10 +12,8 @@ import (
 )
 
 func (u *UserHandler) Login(c echo.Context) error {
-	// Initial
-	req := userdto.LoginRequest{}
-
 	// Bind
+	var req = userdto.LoginRequest{}
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest,
 			echo.Map{
@@ -31,8 +29,7 @@ func (u *UserHandler) Login(c echo.Context) error {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		return echo.NewHTTPError(
-			code,
+		return echo.NewHTTPError(code,
 			echo.Map{
 				"status":  false,
 				"message": richErr.Message(),
@@ -44,7 +41,7 @@ func (u *UserHandler) Login(c echo.Context) error {
 	// Sanitize
 	sanitize.New().
 		SetPolicy(sanitize.StrictPolicy).
-		Struct(&req) // nolint:errcheck
+		Struct(&req) // Check err
 
 	// Usage Use-case
 	resp, err := u.userInteractor.Login(req)
@@ -52,16 +49,14 @@ func (u *UserHandler) Login(c echo.Context) error {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		return echo.NewHTTPError(
-			code,
+		return echo.NewHTTPError(code,
 			echo.Map{
 				"status":  false,
 				"message": richErr.Message(),
 				"errors":  richErr.Error(),
 			})
 	}
-	return c.JSON(
-		http.StatusOK,
+	return c.JSON(http.StatusOK,
 		echo.Map{
 			"status":  true,
 			"message": message.MsgUserLoginSuccessfully,

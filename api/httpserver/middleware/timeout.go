@@ -10,6 +10,7 @@ import (
 const errorMessage = "custom timeout error message returns to client"
 
 func Timeout(timeout time.Duration) echo.MiddlewareFunc {
+
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		to := middleware.TimeoutWithConfig(middleware.TimeoutConfig{
 			Skipper:      middleware.DefaultSkipper,

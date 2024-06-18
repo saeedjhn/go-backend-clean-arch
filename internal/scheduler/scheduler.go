@@ -50,6 +50,15 @@ func (s Scheduler) Start(done <-chan bool, wg *sync.WaitGroup) {
 	}
 }
 
+//func (s Scheduler) SetJob(time time.Duration, task func()) {
+//	job, _ := s.sch.NewJob( // Check err
+//		gocron.DurationJob(time),
+//		gocron.NewTask(task),
+//	)
+//
+//	log.Println("ID for job", job.ID())
+//}
+
 //func (s Scheduler) SetJob(
 //	done <-chan bool,
 //	wg *sync.WaitGroup,

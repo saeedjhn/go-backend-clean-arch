@@ -22,18 +22,21 @@ func New(config Config) *MongoDB {
 
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(connectionURI))
 
+	db := client.Database(config.Database)
+
 	if err != nil {
 		log.Fatalf("can't open mongo db: %v", err)
 	}
 
-	//err = client.Ping(Ctx, nil)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
+	// err = client.Ping(Ctx, nil) if err != nil { log.Fatal(err) }
 
-	return &MongoDB{config: config, client: client}
+	return &MongoDB{config: config, client: client, db: db}
 }
 
-func (m *MongoDB) Conn() {
+func (m *MongoDB) Client() *mongo.Client {
+	return m.client
+}
 
+func (m *MongoDB) Database() *mongo.Database {
+	return m.db
 }

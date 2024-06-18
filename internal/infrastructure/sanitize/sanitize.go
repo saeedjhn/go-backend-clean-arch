@@ -26,7 +26,7 @@ const (
 //	return ctx.Next()
 //}
 
-// SanitizeUGCPolicy -  bluemonday.UGCPolicy() which allows a broad selection of HTML elements and attributes that are safe for user generated content.
+// SanitizeUGCPolicy -  bluemonday.UGCPolicy() which allows a broad selection of HTML elements and attributes that are safe for userentity generated content.
 // Note that this policy does not allow iframes, object, embed, styles, script, etc. An example usage scenario would be blog post bodies
 // where a variety of formatting is expected along with the potential for TABLEs and IMGs.
 // func sanitizeUGCPolicy(ctx fiber.Ctx) error {
@@ -123,6 +123,9 @@ func (s Sanitize) Map(param interface{}) (map[string]interface{}, error) {
 }
 
 func (s Sanitize) String(param string) string {
+	//sanitizedHTMLStr := s.policy.Sanitize(param)
+	//v := reflect.ValueOf(param)
+
 	sanitizedHTMLStr := s.policy.Sanitize(param)
 
 	regex := regexp.MustCompile(`\bjavascript\b`)
@@ -139,7 +142,8 @@ func (s Sanitize) recursively(param interface{}) (interface{}, error) {
 
 	switch paramValue.Kind() {
 	case reflect.String:
-		return s.String(param.(string)), nil
+		return s.String(reflect.ValueOf(param).String()), nil
+		//return s.String(param.(string)), nil
 
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Float32,
 		reflect.Float64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Bool:

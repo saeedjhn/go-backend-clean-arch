@@ -16,7 +16,7 @@ const (
 	Msg206PartialContent              = "The server is delivering only part of the resource due to a range header sent by the client"
 
 	// 3XX: Redirection
-	Msg300MultipleChoices   = "A link list. The user can select a link and go to that location. Maximum five addresses"
+	Msg300MultipleChoices   = "A link list. The userentity can select a link and go to that location. Maximum five addresses"
 	Msg301MovedPermanently  = "The requested page has moved to a new URL"
 	Msg302Found             = "The requested page has moved temporarily to a new URL"
 	Msg303SeeOther          = "The requested page can be found under a different URL"
@@ -64,13 +64,15 @@ const (
 	ErrorMsgInvalidInput       = "Invalid input"
 	ErrorMsgMobileIsNotValid   = "Mobile is not valid"
 	ErrorMsgUserNotAllowed     = "User not allowed"
+	ErrorMsgUserNotFound       = "User not found"
 	ErrorMsgCategoryIsNotValid = "Category is not valid"
 	ErrorMsgUserNotExists      = "User is not exists"
 
-	MsgUserRegisterSuccessfully   = "User is register successfully"
-	MsgUserLoginSuccessfully      = "User is login successfully"
-	MsgUserSeeProfileSuccessfully = "User see profile successfully"
-	MsgUserGetTasksSuccessfully   = "User get tasks successfully"
-	MsgUserCreateTaskSuccessfully = "User create task successfully"
-	MsgUserGetAllTaskSuccessfully = "User get all tasks successfully"
+	MsgUserRegisterSuccessfully        = "User is register successfully"
+	MsgUserLoginSuccessfully           = "User is login successfully"
+	MsgUserSeeProfileSuccessfully      = "User see profile successfully"
+	MsgUserGetTasksSuccessfully        = "User get tasks successfully"
+	MsgUserCreateTaskSuccessfully      = "User create taskentity successfully"
+	MsgUserGetRefreshTokenSuccessfully = "User get refresh token successfully"
+	MsgUserGetAllTaskSuccessfully      = "User get all tasks successfully"
 )

@@ -3,7 +3,7 @@ package taskvalidator
 import (
 	"errors"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
-	"go-backend-clean-arch/internal/dto/taskdto"
+	"go-backend-clean-arch/internal/domain/dto/taskdto"
 	"go-backend-clean-arch/internal/infrastructure/kind"
 	"go-backend-clean-arch/internal/infrastructure/richerror"
 	"go-backend-clean-arch/pkg/message"
@@ -19,7 +19,7 @@ func (v Validator) ValidateCreateRequest(req taskdto.CreateRequest) (map[string]
 
 		validation.Field(&req.Description,
 			validation.Required,
-			validation.Length(3, 1024)),
+			validation.Length(12, 1024)),
 	); err != nil {
 		fieldErrors := make(map[string]string)
 

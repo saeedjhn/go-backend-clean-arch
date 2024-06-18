@@ -5,48 +5,36 @@ import (
 	"testing"
 )
 
-type Bar struct {
-	BarInt int
-	BarStr string
-}
+type Status string
 
-type BarItem struct {
-	BarSlice []Bar
-}
+const (
+	Pending Status = "Pending"
+)
 
-type ForSanitize struct {
-	Foo     string
-	BarItem BarItem
-	//Bar Bar
+type Post struct {
+	Title       string
+	Description string
+	Status      Status
 }
 
 func TestSanitize(t *testing.T) {
 	s := New().SetPolicy(StrictPolicy)
 
-	forSanitize := ForSanitize{
-		Foo: "<b>FOO</b>",
-		//barItem: Bar{
-		//	BarInt: 0,
-		//	BarStr: "<a>javascript mo href=\"http://localhost\"</a><a>",
-		//},
-		BarItem: BarItem{
-			BarSlice: []Bar{{
-				BarInt: 0,
-				BarStr: "<a>BAR</a>",
-			}, {
-				BarInt: 0,
-				BarStr: "<a>javascript mo href=\"http://localhost\"</a><a>",
-			}},
-		}}
-	fmt.Println(forSanitize)
+	p := Post{
+		Title:       "This is a <a>Title</a>",
+		Description: "<b>Description</b>",
+		Status:      Pending,
+	}
 
-	any, err := s.Any(forSanitize)
+	fmt.Println(p)
+
+	any, err := s.Any(p)
 	if err != nil {
 		fmt.Println(err)
 	}
 	fmt.Println("any: ", any)
 
-	s.Struct(&forSanitize)
+	s.Struct(&p)
 
-	fmt.Println(forSanitize)
+	fmt.Println(p)
 }

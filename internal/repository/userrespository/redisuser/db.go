@@ -14,5 +14,5 @@ func New(conn redis.DB) *DB {
 }
 
 func (d *DB) Set() {
-	log.Print("redis-user - IMPL ME")
+	log.Print("redis-set - IMPL ME")
 }

@@ -3,7 +3,7 @@ package uservalidator
 import (
 	"errors"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
-	"go-backend-clean-arch/internal/dto/userdto"
+	"go-backend-clean-arch/internal/domain/dto/userdto"
 	"go-backend-clean-arch/internal/infrastructure/kind"
 	"go-backend-clean-arch/internal/infrastructure/richerror"
 	"go-backend-clean-arch/pkg/message"
@@ -20,12 +20,6 @@ func (v Validator) ValidateCreateTaskRequest(req userdto.CreateTaskRequest) (map
 		validation.Field(&req.Description,
 			validation.Required,
 			validation.Length(11, 1024)),
-
-		// TODO - check status in (pending, in_progress, completed)
-		//validation.Field(&req.Status,
-		//	validation.Required,
-		//	validation.Length(3, 128)),
-		//validation.In(domain.Pending, domain.InProgress, domain.Completed),
 	); err != nil {
 		fieldErrors := make(map[string]string)
 
@@ -45,5 +39,4 @@ func (v Validator) ValidateCreateTaskRequest(req userdto.CreateTaskRequest) (map
 	}
 
 	return nil, nil
-
 }

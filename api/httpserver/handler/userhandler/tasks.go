@@ -2,19 +2,18 @@ package userhandler
 
 import (
 	"github.com/labstack/echo/v4"
-	"go-backend-clean-arch/internal/dto/userdto"
+	"go-backend-clean-arch/internal/domain/dto/userdto"
 	"go-backend-clean-arch/internal/infrastructure/bind"
 	"go-backend-clean-arch/internal/infrastructure/httpstatus"
 	"go-backend-clean-arch/internal/infrastructure/richerror"
+	"go-backend-clean-arch/internal/infrastructure/sanitize"
 	"go-backend-clean-arch/pkg/message"
 	"net/http"
 )
 
 func (u *UserHandler) Tasks(c echo.Context) error {
-	// Initial
-	req := userdto.TasksRequest{}
-
 	// Bind
+	var req = userdto.TasksRequest{}
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest,
 			echo.Map{
@@ -25,14 +24,18 @@ func (u *UserHandler) Tasks(c echo.Context) error {
 		)
 	}
 
+	// Sanitize
+	sanitize.New().
+		SetPolicy(sanitize.StrictPolicy).
+		Struct(&req) // Check err
+
 	// Usage Use-case
 	resp, err := u.userInteractor.Tasks(req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		return echo.NewHTTPError(
-			code,
+		return echo.NewHTTPError(code,
 			echo.Map{
 				"status":  false,
 				"message": richErr.Message(),
@@ -40,8 +43,7 @@ func (u *UserHandler) Tasks(c echo.Context) error {
 			})
 
 	}
-	return c.JSON(
-		http.StatusOK,
+	return c.JSON(http.StatusOK,
 		echo.Map{
 			"status":  true,
 			"message": message.MsgUserGetAllTaskSuccessfully,

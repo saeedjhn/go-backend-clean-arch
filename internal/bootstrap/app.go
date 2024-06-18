@@ -17,7 +17,7 @@ type Application struct {
 }
 
 func App(env configs.Env) *Application {
-	app := &Application{}
+	var app = &Application{}
 	app.Config = ConfigLoad(env)
 	app.Logger = NewLogger(app.Config.Logger)
 	app.MysqlDB = NewMysqlConnection(app.Config.Mysql)
@@ -27,9 +27,9 @@ func App(env configs.Env) *Application {
 	return app
 }
 
-func (a *Application) ClosePostgresqlConnection() {
-	ClosePostgresConnection(a.PostgresDB)
-}
+//func (a *Application) ClosePostgresqlConnection() {
+//	ClosePostgresConnection(a.PostgresDB)
+//}
 
 func (a *Application) CloseMysqlConnection() {
 	CloseMysqlConnection(a.MysqlDB)

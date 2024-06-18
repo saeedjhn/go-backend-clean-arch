@@ -3,7 +3,7 @@ package mysqluser
 import (
 	"database/sql"
 	"errors"
-	"go-backend-clean-arch/internal/domain"
+	"go-backend-clean-arch/internal/domain/entity"
 	"go-backend-clean-arch/internal/infrastructure/kind"
 	"go-backend-clean-arch/internal/infrastructure/persistance/db/mysql"
 	"go-backend-clean-arch/internal/infrastructure/richerror"
@@ -20,14 +20,14 @@ func New(conn mysql.DB) *DB {
 	}
 }
 
-func (r *DB) Create(u domain.User) (domain.User, error) {
+func (r *DB) Create(u entity.User) (entity.User, error) {
 	const op = message.OpMysqlUserCreate
 
 	query := "INSERT INTO users (name, mobile, email, password) values(?, ?, ?, ?)"
 
 	res, err := r.conn.Conn().Exec(query, u.Name, u.Mobile, u.Email, u.Password)
 	if err != nil {
-		return domain.User{},
+		return entity.User{},
 			richerror.New(op).
 				WithErr(err).
 				WithMessage(message.ErrorMsg500InternalServerError).
@@ -62,7 +62,7 @@ func (r *DB) IsMobileUnique(mobile string) (bool, error) {
 	return false, nil
 }
 
-func (r *DB) GetByMobile(mobile string) (domain.User, error) {
+func (r *DB) GetByMobile(mobile string) (entity.User, error) {
 	const op = message.OpMysqlUserGetByMobile
 
 	query := "SELECT * FROM users WHERE mobile = ?"
@@ -70,18 +70,18 @@ func (r *DB) GetByMobile(mobile string) (domain.User, error) {
 	user, err := scanUser(row)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return domain.User{}, richerror.New(op).WithErr(err).
+			return entity.User{}, richerror.New(op).WithErr(err).
 				WithMessage(message.ErrorMsgDBRecordNotFound).WithKind(kind.KindStatusNotFound)
 		}
 
-		return domain.User{}, richerror.New(op).WithErr(err).
+		return entity.User{}, richerror.New(op).WithErr(err).
 			WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
 	}
 
 	return user, nil
 }
 
-func (r *DB) GetByID(id uint) (domain.User, error) {
+func (r *DB) GetByID(id uint) (entity.User, error) {
 	const op = message.OpMysqlUserGetByID
 
 	query := "SELECT * FROM users WHERE id = ?"
@@ -89,19 +89,19 @@ func (r *DB) GetByID(id uint) (domain.User, error) {
 	user, err := scanUser(row)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return domain.User{}, richerror.New(op).WithErr(err).
+			return entity.User{}, richerror.New(op).WithErr(err).
 				WithMessage(message.ErrorMsgDBRecordNotFound).WithKind(kind.KindStatusNotFound)
 		}
 
-		return domain.User{}, richerror.New(op).WithErr(err).
+		return entity.User{}, richerror.New(op).WithErr(err).
 			WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
 	}
 
 	return user, nil
 }
 
-func scanUser(scanner Scanner) (domain.User, error) {
-	var user domain.User
+func scanUser(scanner Scanner) (entity.User, error) {
+	var user entity.User
 
 	err := scanner.Scan(&user.ID, &user.Name, &user.Mobile, &user.Email, &user.Password, &user.CreatedAt, &user.UpdatedAt)
 

@@ -7,7 +7,7 @@ import (
 
 func (t *TaskHandler) FindAll(c echo.Context) error {
 
-	return c.JSON(http.StatusCreated, echo.Map{
+	return c.JSON(http.StatusOK, echo.Map{
 		"status":  true,
 		"message": "FIND ALL",
 		"data":    "",

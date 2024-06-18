@@ -42,7 +42,7 @@ func main() {
 	}
 
 	fmt.Print("received interrupt signal, shutting down gracefully..")
-	// Close all db connection, etc
+	// Close all services, etc
 
 	<-ctxWithTimeout.Done()
 }

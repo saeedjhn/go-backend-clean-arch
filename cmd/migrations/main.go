@@ -5,12 +5,16 @@ import (
 	"go-backend-clean-arch/internal/bootstrap"
 	"go-backend-clean-arch/internal/infrastructure/persistance/db/mysql/migratormysql"
 	"go-backend-clean-arch/internal/infrastructure/persistance/db/pq/migratorpq"
+	"log"
 )
 
 func main() {
 	app := bootstrap.App(configs.Development)
+	log.Printf("%#v", app)
 
-	// MysQL
+	log.Println("Startup migrations...")
+
+	// Mysql
 	mysqlDir := "./internal/repository/migrations/mysqlmigration"
 	migratorMysql := migratormysql.New(app.MysqlDB, mysqlDir)
 	migratorMysql.Down()
@@ -23,4 +27,6 @@ func main() {
 	migratorPq.Up()
 
 	// etc
+
+	log.Println("finished migrations.")
 }

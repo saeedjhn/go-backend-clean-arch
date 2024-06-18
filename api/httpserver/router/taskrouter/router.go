@@ -7,8 +7,8 @@ import (
 	"go-backend-clean-arch/internal/bootstrap"
 	"go-backend-clean-arch/internal/infrastructure/token"
 	"go-backend-clean-arch/internal/repository/taskrepository/mysqltask"
-	"go-backend-clean-arch/internal/usecase/authusecase"
-	"go-backend-clean-arch/internal/usecase/taskusecase"
+	"go-backend-clean-arch/internal/service/authservice"
+	"go-backend-clean-arch/internal/service/taskservice"
 	"go-backend-clean-arch/internal/validator/taskvalidator"
 )
 
@@ -17,8 +17,8 @@ func New(app *bootstrap.Application, group *echo.Group) {
 	taskMysql := mysqltask.New(app.MysqlDB)
 
 	// Usecase
-	taskCase := taskusecase.New(taskMysql)
-	authCase := authusecase.New(app.Config.Auth, token.New())
+	taskCase := taskservice.New(taskMysql)
+	authCase := authservice.New(app.Config.Auth, token.New())
 
 	// Validator
 	validator := taskvalidator.New()

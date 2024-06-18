@@ -6,7 +6,6 @@ import (
 	"go-backend-clean-arch/api/httpserver"
 	"go-backend-clean-arch/configs"
 	"go-backend-clean-arch/internal/bootstrap"
-	"go-backend-clean-arch/internal/infrastructure/persistance/db/mysql/migratormysql"
 	"go.uber.org/zap"
 	log "log"
 	"os"
@@ -16,11 +15,12 @@ import (
 func main() {
 	// Bootstrap
 	app := bootstrap.App(configs.Development)
+	log.Printf("%#v", app)
 
 	// Migrations
-	migrations(app)
+	//migrations(app)
 
-	// logger
+	// Log
 	app.Logger.Set().Named("main").Info("config", zap.Any("config", app.Config))
 
 	// Start server
@@ -44,24 +44,24 @@ func main() {
 	log.Println("received interrupt signal, shutting down gracefully..")
 	// Close all db connection, etc
 	app.CloseMysqlConnection()
-	//app.ClosePostgresqlConnection()
 	app.CloseRedisClientConnection()
+	//app.ClosePostgresqlConnection() // Or etc..
 
 	<-ctxWithTimeout.Done()
 }
 
-func migrations(app *bootstrap.Application) {
-	// Mysql
-	mysqlDir := "./internal/repository/migrations/mysqlmigration"
-	migratorMysql := migratormysql.New(app.MysqlDB, mysqlDir)
-	//migratorMysql.Down()
-	migratorMysql.Up()
+//func migrations(app *bootstrap.Application) {
+// Mysql
+//mysqlDir := "./internal/repository/migrations/mysqlmigration"
+//migratorMysql := migratormysql.New(app.MysqlDB, mysqlDir)
+//migratorMysql.Down()
+//migratorMysql.Up()
 
-	// Pq
-	// pqDir := "./internal/repository/migrations/pqmigration"
-	// migratorPq := migratorpq.New(app.PostgresDB, pqDir)
-	// migratorPq.Down()
-	// migratorPq.Up()
+// Pq
+// pqDir := "./internal/repository/migrations/pqmigration"
+// migratorPq := migratorpq.New(app.PostgresDB, pqDir)
+// migratorPq.Down()
+// migratorPq.Up()
 
-	// etc
-}
+// etc
+//}

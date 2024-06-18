@@ -3,7 +3,7 @@ package userhandler
 import (
 	"github.com/labstack/echo/v4"
 	"go-backend-clean-arch/configs"
-	"go-backend-clean-arch/internal/dto/userdto"
+	"go-backend-clean-arch/internal/domain/dto/userdto"
 	"go-backend-clean-arch/internal/infrastructure/httpstatus"
 	"go-backend-clean-arch/internal/infrastructure/richerror"
 	"go-backend-clean-arch/pkg/claim"
@@ -23,16 +23,14 @@ func (u *UserHandler) Profile(c echo.Context) error {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		return echo.NewHTTPError(
-			code,
+		return echo.NewHTTPError(code,
 			echo.Map{
 				"status":  false,
 				"message": richErr.Message(),
 				"errors":  richErr.Error(),
 			})
 	}
-	return c.JSON(
-		http.StatusOK,
+	return c.JSON(http.StatusOK,
 		echo.Map{
 			"status":  true,
 			"message": message.MsgUserSeeProfileSuccessfully,

@@ -3,23 +3,25 @@ package message
 // Rule: Op + Package(Pascal-case) + MethodOrFunction(Pascal-case)
 const (
 	// Validation
-	OpUserValidatorValidateRegisterRequest   = "uservalidator.ValidateRegisterRequest"
-	OpUserValidatorValidateLoginRequest      = "uservalidator.ValidateLoginRequest"
-	OpTaskValidatorValidateCreateRequest     = "taskvalidator.ValidateCreateRequest"
-	OpTaskValidatorValidateCreateTaskRequest = "taskvalidator.ValidateCreateTaskRequest"
+	OpUserValidatorValidateRegisterRequest     = "uservalidator.ValidateRegisterRequest"
+	OpUserValidatorValidateLoginRequest        = "uservalidator.ValidateLoginRequest"
+	OpUserValidatorValidateRefreshTokenRequest = "uservalidator.ValidateRefreshTokenRequest"
+	OpTaskValidatorValidateCreateRequest       = "taskvalidator.ValidateCreateRequest"
+	OpTaskValidatorValidateCreateTaskRequest   = "taskvalidator.ValidateCreateTaskRequest"
 
 	// UseCase
-	OpUserUsecaseRegister = "userusecase.register"
-	OpUserUsecaseLogin    = "userusecase.login"
-	OpTaskUsecaseCreate   = "taskusecase.create"
+	OpUserUsecaseRegister     = "userservice.Register"
+	OpUserUsecaseLogin        = "userservice.Login"
+	OpUserUsecaseRefreshToken = "userservice.RefreshToken"
+	OpTaskUsecaseCreate       = "taskservice.Create"
+	OpUserUsecaseCreateTask   = "userservice.CreateTask"
 
 	// Repository
-	OpPqUserCreate            = "pquser.create"
-	OpMysqlUserCreate         = "mysqluser.create"
+	OpMysqlUserCreate         = "mysqluser.Create"
 	OpMysqlUserIsMobileUnique = "mysqluser.IsMobileUnique"
 	OpMysqlUserGetByMobile    = "mysqluser.GetByMobile"
 	OpMysqlUserGetByID        = "mysqluser.GetByID"
-	OpMysqlTaskCreate         = "mysqltask.task"
+	OpMysqlTaskCreate         = "mysqltask.Create"
 	OpMysqlTaskGetByID        = "mysqltask.GetByID"
 	OpMysqlTaskGetAll         = "mysqltask.GetAll"
 	OpMysqlTaskGetAllByUserID = "mysqltask.GetAllByUserID"

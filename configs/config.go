@@ -6,7 +6,7 @@ import (
 	"go-backend-clean-arch/internal/infrastructure/persistance/db/mongo"
 	"go-backend-clean-arch/internal/infrastructure/persistance/db/mysql"
 	"go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
-	"go-backend-clean-arch/internal/usecase/authusecase"
+	"go-backend-clean-arch/internal/service/authservice"
 	"time"
 )
 
@@ -34,5 +34,5 @@ type Config struct {
 	Postgres    pq.Config          `mapstructure:"postgres"`
 	Redis       redis.Config       `mapstructure:"redis"`
 	Mongo       mongo.Config       `mapstructure:"mongo"`
-	Auth        authusecase.Config `mapstructure:"auth"`
+	Auth        authservice.Config `mapstructure:"auth"`
 }
