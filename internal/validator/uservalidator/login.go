@@ -3,7 +3,7 @@ package uservalidator
 import (
 	"errors"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
-	"go-backend-clean-arch/internal/dto/userdto"
+	"go-backend-clean-arch/internal/domain/dto/userdto"
 	"go-backend-clean-arch/internal/infrastructure/kind"
 	"go-backend-clean-arch/internal/infrastructure/richerror"
 	"go-backend-clean-arch/pkg/message"
@@ -39,5 +39,4 @@ func (v Validator) ValidateLoginRequest(req userdto.LoginRequest) (map[string]st
 	}
 
 	return nil, nil
-
 }

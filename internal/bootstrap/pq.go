@@ -13,6 +13,6 @@ func ClosePostgresConnection(postgresDB pq.DB) {
 	err := postgresDB.Conn().Close()
 
 	if err != nil {
-		log.Fatalf("don`t close postgresql connection: %s", err.Error())
+		log.Fatalf("don`t close pq connection: %s", err.Error())
 	}
 }

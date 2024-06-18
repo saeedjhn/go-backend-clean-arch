@@ -3,14 +3,14 @@ package middleware
 import (
 	"github.com/labstack/echo/v4"
 	"go-backend-clean-arch/configs"
-	"go-backend-clean-arch/internal/usecase/authusecase"
+	"go-backend-clean-arch/internal/service/authservice"
 	"go-backend-clean-arch/pkg/claim"
 	"go-backend-clean-arch/pkg/message"
 	"net/http"
 	"strings"
 )
 
-func Auth(config authusecase.Config, authInteractor *authusecase.AuthInteractor) echo.MiddlewareFunc {
+func Auth(config authservice.Config, authInteractor *authservice.AuthInteractor) echo.MiddlewareFunc {
 
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {
