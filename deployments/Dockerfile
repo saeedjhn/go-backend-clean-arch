@@ -24,10 +24,9 @@ COPY . .
 # Install air
 RUN go install github.com/cosmtrek/air@latest
 
-# Expose port 5000 to the outside world
+# Expose port 8000 to the outside world
 EXPOSE 8000
 
 # Run app
-#CMD ["sleep", "1000"]
 #ENTRYPOINT ["make"]
 CMD ["air", "-c", ".air.toml"]

@@ -11,31 +11,17 @@ services:
       - "8000:8000"
     volumes:
       #      - ./:/app
-      - /opt/lampp/htdocs/Golang/go-backend-clean-arch:/app
+      #      - host machine absolutePath:/containerPath(for ex: /opt/htdocs/go-backend-clean-arch:/app)
+      - /opt/lampp/htdocs/Golang/go-backend-clean-arch-v2:/app
     networks:
       - go-backend-clean-arch_network
     depends_on:
       - mysqldb
-#      - psqldb
+      #      - psqldb
+      #      - mongodb
       - redis
 
-  ####################### POSTGRES #######################
-#  psqldb:
-#    container_name: go-backend-clean-arch_psqldb
-#    image: postgres:latest
-#    environment:
-#      POSTGRES_USER: admin
-#      POSTGRES_PASSWORD: 123456
-#      POSTGRES_DB: backend_db
-#    ports:
-#      - "5001:5432"
-#    volumes:
-#      - psql:/var/lib/psql/data
-#    restart: always
-#    networks:
-#      - go-backend-clean-arch_network
-
-    ######################## Mysql ########################
+  ######################## MYSQL ########################
   mysqldb:
     container_name: go-backend-clean-arch_mysqldb
     image: mysql:latest
@@ -52,6 +38,37 @@ services:
     command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
     networks:
       - go-backend-clean-arch_network
+
+    ####################### POSTGRES #######################
+    #  psqldb:
+    #    container_name: go-backend-clean-arch_psqldb
+    #    image: postgres:latest
+    #    environment:
+    #      POSTGRES_USER: admin
+    #      POSTGRES_PASSWORD: 123456
+    #      POSTGRES_DB: backend_db
+    #    ports:
+    #      - "5001:5432"
+    #    volumes:
+    #      - psql:/var/lib/psql/data
+    #    restart: always
+    #    networks:
+    #      - go-backend-clean-arch_network
+
+    ####################### MONOGO #######################
+  #  mongodb:
+  #    container_name: go-backend-clean-arch_mongodb
+  #    image: mongo:latest
+  #    environment:
+  #      MONGO_INITDB_ROOT_USERNAME: admin
+  #      MONGO_INITDB_ROOT_PASSWORD: 123456
+  #    ports:
+  #      - "27017:27017"
+  #    volumes:
+  #      - mongodb-data:/data/db
+  #    restart: unless-stopped
+  #    networks:
+  #      - go-backend-clean-arch_network
 
   ####################### PGADMIN #######################
   #  pgadmin:
@@ -83,8 +100,9 @@ services:
       - go-backend-clean-arch_network
 
 volumes:
-#  psql:
   mysql:
+  #  psql:
+  #  mongodb-data:
   pgadmin:
   redis:
   logs:
