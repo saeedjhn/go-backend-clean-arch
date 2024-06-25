@@ -50,14 +50,15 @@ func (u *UserInteractor) Login(req userdto.LoginRequest) (userdto.LoginResponse,
 	}
 
 	return userdto.LoginResponse{
-		User: userdto.UserInfo{
-			ID:        user.ID,
-			Name:      user.Name,
-			Mobile:    user.Mobile,
-			Email:     user.Email,
-			CreatedAt: user.CreatedAt,
-			UpdatedAt: user.UpdatedAt,
-		},
+		//User: userdto.UserInfo{
+		//	ID:        user.ID,
+		//	Name:      user.Name,
+		//	Mobile:    user.Mobile,
+		//	Email:     user.Email,
+		//	CreatedAt: user.CreatedAt,
+		//	UpdatedAt: user.UpdatedAt,
+		//}, // Or
+		User: user.ToUserInfoDTO(),
 		Token: userdto.Token{
 			AccessToken:  accessToken.Token,
 			RefreshToken: refreshToken.Token,

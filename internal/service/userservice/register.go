@@ -26,7 +26,7 @@ func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.Register
 				WithKind(kind.KindStatusBadRequest)
 	}
 
-	var user = entity.User{
+	user := entity.User{
 		Name:   req.Name,
 		Mobile: req.Mobile,
 	}
@@ -40,13 +40,14 @@ func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.Register
 	}
 
 	return userdto.RegisterResponse{
-		User: userdto.UserInfo{
-			ID:        createdUser.ID,
-			Name:      createdUser.Name,
-			Mobile:    createdUser.Mobile,
-			Email:     createdUser.Email,
-			CreatedAt: createdUser.CreatedAt,
-			UpdatedAt: createdUser.UpdatedAt,
-		},
+		//User: userdto.UserInfo{
+		//	ID:        createdUser.ID,
+		//	Name:      createdUser.Name,
+		//	Mobile:    createdUser.Mobile,
+		//	Email:     createdUser.Email,
+		//	CreatedAt: createdUser.CreatedAt,
+		//	UpdatedAt: createdUser.UpdatedAt,
+		//}, // Or
+		User: createdUser.ToUserInfoDTO(),
 	}, nil
 }
