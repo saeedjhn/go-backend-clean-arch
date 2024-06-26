@@ -1,7 +1,6 @@
 package entity
 
 import (
-	"go-backend-clean-arch/internal/domain/dto/userdto"
 	"time"
 )
 
@@ -15,13 +14,13 @@ type User struct {
 	UpdatedAt time.Time
 }
 
-func (u User) ToUserInfoDTO() userdto.UserInfo {
-	return userdto.UserInfo{
-		ID:        u.ID,
-		Name:      u.Name,
-		Mobile:    u.Mobile,
-		Email:     u.Email,
-		CreatedAt: u.CreatedAt,
-		UpdatedAt: u.UpdatedAt,
-	}
-}
+//func (u User) ToUserInfoDTO() userdto.UserInfo {
+//	return userdto.UserInfo{
+//		ID:        u.ID,
+//		Name:      u.Name,
+//		Mobile:    u.Mobile,
+//		Email:     u.Email,
+//		CreatedAt: u.CreatedAt,
+//		UpdatedAt: u.UpdatedAt,
+//	}
+//}

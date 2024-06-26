@@ -1,7 +1,7 @@
 package userdto
 
 import (
-	"go-backend-clean-arch/internal/domain/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 	"time"
 )
 

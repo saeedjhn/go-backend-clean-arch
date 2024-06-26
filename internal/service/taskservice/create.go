@@ -2,11 +2,11 @@ package taskservice
 
 import (
 	"errors"
-	"go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
-	"go-backend-clean-arch/internal/domain/entity"
-	"go-backend-clean-arch/internal/infrastructure/kind"
-	"go-backend-clean-arch/internal/infrastructure/richerror"
-	"go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
 func (t *TaskInteractor) Create(req usertaskservicedto.CreateTaskRequest) (usertaskservicedto.CreateTaskResponse, error) {

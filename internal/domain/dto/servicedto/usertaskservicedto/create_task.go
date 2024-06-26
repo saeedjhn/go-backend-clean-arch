@@ -1,7 +1,7 @@
 package usertaskservicedto
 
 import (
-	"go-backend-clean-arch/internal/domain/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 )
 
 type CreateTaskRequest struct {

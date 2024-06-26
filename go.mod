@@ -1,4 +1,4 @@
-module go-backend-clean-arch
+module github.com/saeedjhn/go-backend-clean-arch
 
 go 1.22.2
 

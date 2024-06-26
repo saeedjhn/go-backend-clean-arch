@@ -1,8 +1,8 @@
 package main
 
 import (
-	"go-backend-clean-arch/configs"
-	"go-backend-clean-arch/internal/scheduler"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/scheduler"
 	"log"
 	"os"
 	"os/signal"

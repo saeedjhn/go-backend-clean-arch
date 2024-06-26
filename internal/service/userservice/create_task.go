@@ -1,10 +1,10 @@
 package userservice
 
 import (
-	"go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
-	"go-backend-clean-arch/internal/domain/dto/userdto"
-	"go-backend-clean-arch/internal/domain/entity"
-	"go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
 func (u *UserInteractor) CreateTask(req userdto.CreateTaskRequest) (userdto.CreateTaskResponse, error) {

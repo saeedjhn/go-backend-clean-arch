@@ -1,9 +1,9 @@
 package taskhandler
 
 import (
-	"go-backend-clean-arch/internal/bootstrap"
-	"go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
-	"go-backend-clean-arch/internal/domain/dto/taskdto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/taskdto"
 )
 
 type Interactor interface {

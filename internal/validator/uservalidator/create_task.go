@@ -3,10 +3,10 @@ package uservalidator
 import (
 	"errors"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
-	"go-backend-clean-arch/internal/domain/dto/userdto"
-	"go-backend-clean-arch/internal/infrastructure/kind"
-	"go-backend-clean-arch/internal/infrastructure/richerror"
-	"go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
 func (v Validator) ValidateCreateTaskRequest(req userdto.CreateTaskRequest) (map[string]string, error) {

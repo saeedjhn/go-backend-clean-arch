@@ -1,7 +1,7 @@
 package taskservice
 
 import (
-	"go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
 )
 
 func (t *TaskInteractor) TasksUser(req usertaskservicedto.TasksUserRequest) (usertaskservicedto.TasksUserResponse, error) {

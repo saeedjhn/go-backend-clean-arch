@@ -3,11 +3,11 @@ package mysqltask
 import (
 	"database/sql"
 	"errors"
-	"go-backend-clean-arch/internal/domain/entity"
-	"go-backend-clean-arch/internal/infrastructure/kind"
-	"go-backend-clean-arch/internal/infrastructure/persistance/db/mysql"
-	"go-backend-clean-arch/internal/infrastructure/richerror"
-	"go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/mysql"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
 type DB struct {

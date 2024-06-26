@@ -1,11 +1,11 @@
 package userservice
 
 import (
-	"go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
-	"go-backend-clean-arch/internal/domain/dto/userdto"
-	"go-backend-clean-arch/internal/infrastructure/kind"
-	"go-backend-clean-arch/internal/infrastructure/richerror"
-	"go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
 func (u *UserInteractor) RefreshToken(req userdto.RefreshTokenRequest) (userdto.RefreshTokenResponse, error) {

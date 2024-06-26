@@ -2,7 +2,7 @@ package healthcheckrouter
 
 import (
 	"github.com/labstack/echo/v4"
-	"go-backend-clean-arch/internal/bootstrap"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"net/http"
 )
 

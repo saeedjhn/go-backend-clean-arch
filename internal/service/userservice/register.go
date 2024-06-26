@@ -2,12 +2,12 @@ package userservice
 
 import (
 	"errors"
-	"go-backend-clean-arch/internal/domain/dto/userdto"
-	"go-backend-clean-arch/internal/domain/entity"
-	"go-backend-clean-arch/internal/infrastructure/kind"
-	"go-backend-clean-arch/internal/infrastructure/richerror"
-	"go-backend-clean-arch/internal/infrastructure/security/bcrypt"
-	"go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/security/bcrypt"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
 func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.RegisterResponse, error) {
@@ -40,14 +40,14 @@ func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.Register
 	}
 
 	return userdto.RegisterResponse{
-		//User: userdto.UserInfo{
-		//	ID:        createdUser.ID,
-		//	Name:      createdUser.Name,
-		//	Mobile:    createdUser.Mobile,
-		//	Email:     createdUser.Email,
-		//	CreatedAt: createdUser.CreatedAt,
-		//	UpdatedAt: createdUser.UpdatedAt,
-		//}, // Or
-		User: createdUser.ToUserInfoDTO(),
+		User: userdto.UserInfo{
+			ID:        createdUser.ID,
+			Name:      createdUser.Name,
+			Mobile:    createdUser.Mobile,
+			Email:     createdUser.Email,
+			CreatedAt: createdUser.CreatedAt,
+			UpdatedAt: createdUser.UpdatedAt,
+		}, // Or
+		//User: createdUser.ToUserInfoDTO(),
 	}, nil
 }

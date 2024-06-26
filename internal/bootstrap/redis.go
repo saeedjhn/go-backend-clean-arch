@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	"go-backend-clean-arch/internal/infrastructure/persistance/cache/redis"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/cache/redis"
 	"log"
 )
 

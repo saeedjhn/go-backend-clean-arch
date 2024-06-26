@@ -2,14 +2,14 @@ package taskrouter
 
 import (
 	"github.com/labstack/echo/v4"
-	"go-backend-clean-arch/api/httpserver/handler/taskhandler"
-	"go-backend-clean-arch/api/httpserver/middleware"
-	"go-backend-clean-arch/internal/bootstrap"
-	"go-backend-clean-arch/internal/infrastructure/token"
-	"go-backend-clean-arch/internal/repository/taskrepository/mysqltask"
-	"go-backend-clean-arch/internal/service/authservice"
-	"go-backend-clean-arch/internal/service/taskservice"
-	"go-backend-clean-arch/internal/validator/taskvalidator"
+	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver/handler/taskhandler"
+	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver/middleware"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/token"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/taskrepository/mysqltask"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/service/authservice"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/service/taskservice"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/validator/taskvalidator"
 )
 
 func New(app *bootstrap.Application, group *echo.Group) {

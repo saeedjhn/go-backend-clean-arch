@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	"go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
 	"log"
 )
 

@@ -1,11 +1,11 @@
 package bootstrap
 
 import (
-	"go-backend-clean-arch/configs"
-	"go-backend-clean-arch/internal/infrastructure/logger"
-	"go-backend-clean-arch/internal/infrastructure/persistance/cache/redis"
-	"go-backend-clean-arch/internal/infrastructure/persistance/db/mysql"
-	"go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/logger"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/cache/redis"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/mysql"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
 )
 
 type Application struct {

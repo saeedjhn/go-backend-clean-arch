@@ -2,16 +2,16 @@ package userrouter
 
 import (
 	"github.com/labstack/echo/v4"
-	"go-backend-clean-arch/api/httpserver/handler/userhandler"
-	"go-backend-clean-arch/api/httpserver/middleware"
-	"go-backend-clean-arch/internal/bootstrap"
-	"go-backend-clean-arch/internal/infrastructure/token"
-	"go-backend-clean-arch/internal/repository/taskrepository/mysqltask"
-	"go-backend-clean-arch/internal/repository/userrespository/mysqluser"
-	"go-backend-clean-arch/internal/service/authservice"
-	"go-backend-clean-arch/internal/service/taskservice"
-	"go-backend-clean-arch/internal/service/userservice"
-	"go-backend-clean-arch/internal/validator/uservalidator"
+	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver/handler/userhandler"
+	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver/middleware"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/token"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/taskrepository/mysqltask"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/userrespository/mysqluser"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/service/authservice"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/service/taskservice"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/service/userservice"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/validator/uservalidator"
 )
 
 func New(

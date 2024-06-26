@@ -2,10 +2,10 @@ package middleware
 
 import (
 	"github.com/labstack/echo/v4"
-	"go-backend-clean-arch/configs"
-	"go-backend-clean-arch/internal/service/authservice"
-	"go-backend-clean-arch/pkg/claim"
-	"go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/service/authservice"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 	"net/http"
 	"strings"
 )

@@ -1,8 +1,8 @@
 package authservice
 
 import (
-	"go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
-	"go-backend-clean-arch/internal/infrastructure/token"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/token"
 	"strconv"
 	"time"
 )

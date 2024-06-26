@@ -2,8 +2,8 @@ package authservice
 
 import (
 	"fmt"
-	"go-backend-clean-arch/internal/domain/entity"
-	"go-backend-clean-arch/internal/infrastructure/token"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/token"
 	"testing"
 	"time"
 )

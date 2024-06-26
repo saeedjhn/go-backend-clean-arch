@@ -3,7 +3,7 @@ package richerror
 import (
 	"errors"
 	"github.com/rotisserie/eris"
-	"go-backend-clean-arch/internal/infrastructure/kind"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
 	"strings"
 )
 

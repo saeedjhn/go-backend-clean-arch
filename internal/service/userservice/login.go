@@ -1,13 +1,13 @@
 package userservice
 
 import (
-	"go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
-	"go-backend-clean-arch/internal/domain/dto/userdto"
-	"go-backend-clean-arch/internal/domain/entity"
-	"go-backend-clean-arch/internal/infrastructure/kind"
-	"go-backend-clean-arch/internal/infrastructure/richerror"
-	"go-backend-clean-arch/internal/infrastructure/security/bcrypt"
-	"go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/security/bcrypt"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
 func (u *UserInteractor) Login(req userdto.LoginRequest) (userdto.LoginResponse, error) {
@@ -50,15 +50,15 @@ func (u *UserInteractor) Login(req userdto.LoginRequest) (userdto.LoginResponse,
 	}
 
 	return userdto.LoginResponse{
-		//User: userdto.UserInfo{
-		//	ID:        user.ID,
-		//	Name:      user.Name,
-		//	Mobile:    user.Mobile,
-		//	Email:     user.Email,
-		//	CreatedAt: user.CreatedAt,
-		//	UpdatedAt: user.UpdatedAt,
-		//}, // Or
-		User: user.ToUserInfoDTO(),
+		User: userdto.UserInfo{
+			ID:        user.ID,
+			Name:      user.Name,
+			Mobile:    user.Mobile,
+			Email:     user.Email,
+			CreatedAt: user.CreatedAt,
+			UpdatedAt: user.UpdatedAt,
+		}, // Or
+		//User: user.ToUserInfoDTO(),
 		Token: userdto.Token{
 			AccessToken:  accessToken.Token,
 			RefreshToken: refreshToken.Token,

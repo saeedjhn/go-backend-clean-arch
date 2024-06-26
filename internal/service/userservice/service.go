@@ -1,10 +1,10 @@
 package userservice
 
 import (
-	"go-backend-clean-arch/configs"
-	userauthservicedto2 "go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
-	usertaskservicedto2 "go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
-	"go-backend-clean-arch/internal/domain/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	userauthservicedto2 "github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
+	usertaskservicedto2 "github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 )
 
 type TaskGenerator interface {

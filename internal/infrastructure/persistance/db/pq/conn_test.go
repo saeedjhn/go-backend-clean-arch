@@ -11,7 +11,7 @@ func TestConn(t *testing.T) {
 		Port:            "5001",      // usage docker: postName(5342)
 		Username:        "admin",
 		Password:        "123456",
-		Database:        "simorgh_db",
+		Database:        "backend_db",
 		SSLMode:         "disable",
 		MaxIdleConns:    2,
 		MaxOpenConns:    15,

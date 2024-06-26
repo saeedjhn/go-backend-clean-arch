@@ -1,7 +1,7 @@
 package httpstatus
 
 import (
-	"go-backend-clean-arch/internal/infrastructure/kind"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
 	"net/http"
 )
 

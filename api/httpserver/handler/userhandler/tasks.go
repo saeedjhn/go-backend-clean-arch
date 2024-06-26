@@ -2,12 +2,12 @@ package userhandler
 
 import (
 	"github.com/labstack/echo/v4"
-	"go-backend-clean-arch/internal/domain/dto/userdto"
-	"go-backend-clean-arch/internal/infrastructure/bind"
-	"go-backend-clean-arch/internal/infrastructure/httpstatus"
-	"go-backend-clean-arch/internal/infrastructure/richerror"
-	"go-backend-clean-arch/internal/infrastructure/sanitize"
-	"go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/bind"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/httpstatus"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/sanitize"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 	"net/http"
 )
 

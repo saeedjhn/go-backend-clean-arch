@@ -3,7 +3,7 @@ package migratorpq
 import (
 	"fmt"
 	migrate "github.com/rubenv/sql-migrate"
-	"go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
 )
 
 const dialect = "postgres"

@@ -2,7 +2,7 @@ package claim
 
 import (
 	"github.com/labstack/echo/v4"
-	"go-backend-clean-arch/internal/service/authservice"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/service/authservice"
 )
 
 func GetClaimsFromEchoContext(c echo.Context, key string) authservice.Claims {

@@ -1,10 +1,10 @@
 package main
 
 import (
-	"go-backend-clean-arch/configs"
-	"go-backend-clean-arch/internal/bootstrap"
-	"go-backend-clean-arch/internal/infrastructure/persistance/db/mysql/migratormysql"
-	"go-backend-clean-arch/internal/infrastructure/persistance/db/pq/migratorpq"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/mysql/migratormysql"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/pq/migratorpq"
 	"log"
 )
 

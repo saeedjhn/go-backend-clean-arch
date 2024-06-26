@@ -1,8 +1,8 @@
 package userhandler
 
 import (
-	"go-backend-clean-arch/internal/bootstrap"
-	"go-backend-clean-arch/internal/domain/dto/userdto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 )
 
 type Interactor interface {
