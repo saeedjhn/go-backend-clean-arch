@@ -51,8 +51,19 @@ func (a AuthInteractor) IsAuthorized(requestToken string, secret string) (bool, 
 	return a.token.IsAuthorized(requestToken, secret)
 }
 
-func (a AuthInteractor) ExtractIDFromAccessToken(requestToken string) (string, error) {
-	return a.token.ExtractIdFromToken(requestToken, a.config.AccessTokenSecret)
+//func (a AuthInteractor) ExtractIDFromAccessToken(requestToken string) (string, error) {
+//	return a.token.ExtractIdFromToken(requestToken)
+//}
+
+func (a AuthInteractor) ExtractIDFromAccessToken(req userauthservicedto.ExtractIDFromTokenRequest) (userauthservicedto.ExtractIDFromTokenResponse, error) {
+	et, err := a.token.ExtractIdFromToken(req.Token, a.config.AccessTokenSecret)
+
+	// Convert string to uint
+	i, _ := strconv.ParseUint(et, 10, 64) // Check err
+
+	return userauthservicedto.ExtractIDFromTokenResponse{
+		UserID: uint(i),
+	}, err
 }
 
 func (a AuthInteractor) ExtractIDFromRefreshToken(req userauthservicedto.ExtractIDFromTokenRequest) (userauthservicedto.ExtractIDFromTokenResponse, error) {

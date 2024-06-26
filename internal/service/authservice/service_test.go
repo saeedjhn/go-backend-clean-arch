@@ -2,6 +2,7 @@ package authservice
 
 import (
 	"fmt"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/token"
 	"testing"
@@ -30,13 +31,13 @@ func TestCreateToken(t *testing.T) {
 
 	ai := New(config, token.New())
 
-	at, _ := ai.CreateAccessToken(u)
+	at, _ := ai.CreateAccessToken(userauthservicedto.CreateTokenRequest{User: u})
 	fmt.Println(at)
-	fmt.Println(ai.ExtractIDFromAccessToken(at))
-	fmt.Println(ai.ParseAccessToken(at))
+	fmt.Println(ai.ExtractIDFromAccessToken(userauthservicedto.ExtractIDFromTokenRequest{Token: at.Token}))
+	fmt.Println(ai.ParseAccessToken(at.Token))
 
-	rt, _ := ai.CreateRefreshToken(u)
+	rt, _ := ai.CreateRefreshToken(userauthservicedto.CreateTokenRequest{User: u})
 	fmt.Println(rt)
-	fmt.Println(ai.ExtractIDFromRefreshToken(rt))
-	fmt.Println(ai.ParseRefreshToken(rt))
+	fmt.Println(ai.ExtractIDFromRefreshToken(userauthservicedto.ExtractIDFromTokenRequest{Token: rt.Token}))
+	fmt.Println(ai.ParseRefreshToken(rt.Token))
 }
