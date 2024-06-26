@@ -20,10 +20,11 @@ COPY . .
 
 # Install air
 #RUN go install github.com/cosmtrek/air@latest
-RUN go install github.com/air-verse/air@lates
+RUN go install github.com/air-verse/air@latest
 
 # Expose port 8000 to the outside world
 EXPOSE 8000
 
 # Run
-ENTRYPOINT ["make"]
+#ENTRYPOINT ["make"]
+CMD ["air", "-c", ".air.toml"]

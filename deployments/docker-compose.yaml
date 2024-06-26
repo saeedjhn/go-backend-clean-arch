@@ -12,7 +12,7 @@ services:
     volumes:
       #      - ./:/app
       #      - host machine absolutePath:/containerPath(for ex: /opt/htdocs/go-backend-clean-arch:/app)
-      - /opt/lampp/htdocs/Golang/go-backend-clean-arch-v2:/app
+      - /opt/lampp/htdocs/Golang/go-backend-clean-arch:/app
     networks:
       - go-backend-clean-arch_network
     depends_on:
@@ -103,7 +103,7 @@ volumes:
   mysql:
   #  psql:
   #  mongodb-data:
-  pgadmin:
+#  pgadmin:
   redis:
   logs:
 

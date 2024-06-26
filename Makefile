@@ -10,7 +10,7 @@ export GOBASE := $(shell pwd)
 export GOBUILDBASE := $(shell pwd)/build
 export OSTYPE := $(shell uname -s | tr A-Z a-z)
 # export ARCH := $(shell uname -m)
-export ARCH = amd65
+export ARCH = amd64
 export PROJECTNAME := $(shell basename "$(PWD)")
 export GOFILES := $(wildcard *.go)
 
@@ -40,13 +40,28 @@ test/cover:
 	go test -v -race -buildvcs -coverprofile=/tmp/coverage.out ./...
 	go tool cover -html=/tmp/coverage.out
 
-## run/watch: Run given command when code changes. e.g; make watch run="echo 'hey'"
-.PHONY: run/watch
-run/watch:
-	@echo
-	@echo " > Run given command when code changes"
-	@echo
-	air -c .air.toml
+## Startup / Build services from docker-compose and air for live reloading
+.PHONY: up
+up:
+	@docker-compose -f deployments/docker-compose.yaml up
+
+## Build: Build services from docker-compose
+.PHONY: build
+build:
+	docker-compose -f deployments/docker-compose.yaml build
+
+## Down: Stop and remove containers, networks, images, and volumes
+.PHONY: down
+down:
+	@docker-compose -f deployments/docker-compose.yaml down
+
+## watch: Run given command when code changes. e.g; make watch run="echo 'hey'"
+#.PHONY: watch
+#watch:
+#	@echo
+#	@echo " > Run given command when code changes"
+#	@echo
+#	@docker-compose -f deployments/docker-compose.yaml run --rm -p 8000:8000 -v $(CURDIR):/app -w /app app air -c .air.toml
 
 ## run/httpserver: compile and run http server program
 .PHONY: run/httpserver
@@ -70,10 +85,17 @@ build/linux:
 	@echo
 	@echo "  >  compile packages and dependencies"
 	@echo
-	cd ${GOBASE}; \
+	cd ${GOBASE} && GOOS=linux GOARCH=${ARCH} go build ${LDFLAGS} -o ${GOBUILDBASE}/${BINARY}-linux-${ARCH}-${VERSION} . ; \
+	cd - >/dev/null
+
+.PHONY: build/linux/httpserver
+build/linux/httpserver:
+	@echo
+	@echo "  >  compile packages and dependencies"
+	@echo
+	cd ${CMD}; \
 	GOOS=linux GOARCH=${ARCH} \
-	go build ${LDFLAGS} \
-	-o ${GOBUILDBASE}/${BINARY}-linux-${ARCH}-${VERSION} . ; \
+	go build ${LDFLAGS} -o ${GOBUILDBASE}/${BINARY}-linux-${ARCH}-${VERSION} ${HTTPSERVER} ; \
 	cd - >/dev/null
 
 ## build/darwin: compile package and dependencies for darwin/mac-os
@@ -82,7 +104,7 @@ build/darwin:
 	@echo
 	@echo "  >  compile packages and dependencies"
 	@echo
-	cd ${GOBASE}; \
+	cd ${GOBASE} \
 	GOOS=darwin GOARCH=${ARCH} \
 	go build ${LDFLAGS} \
 	-o ${GOBUILDBASE}/${BINARY}-darwin-${ARCH}-${VERSION} . ; \
@@ -94,7 +116,7 @@ build/windows:
 	@echo
 	@echo "  >  compile packages and dependencies"
 	@echo
-	cd ${GOBASE}; \
+	cd ${GOBASE} \
 	GOOS=windows GOARCH=${ARCH} \
 	go build ${LDFLAGS} \
 	-o ${GOBUILDBASE}/${BINARY}-windows-${ARCH}-${VERSION}.exe . ; \
