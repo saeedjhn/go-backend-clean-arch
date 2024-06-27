@@ -6,8 +6,9 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/cmd/migrations"
 	"go.uber.org/zap"
-	log "log"
+	"log"
 	"os"
 	"os/signal"
 )
@@ -19,6 +20,9 @@ func main() {
 
 	// Log
 	app.Logger.Set().Named("main").Info("config", zap.Any("config", app.Config))
+
+	// Migrations
+	migrations.Up(app)
 
 	// Start server
 	server := httpserver.New(app)

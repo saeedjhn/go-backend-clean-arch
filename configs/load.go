@@ -12,9 +12,9 @@ func Load(env Env) *Config {
 
 	switch env {
 	case Development:
-		viper.SetConfigFile("development.yaml")
+		viper.SetConfigFile("config.dev.yaml")
 	case Production:
-		viper.SetConfigFile("production.yaml")
+		viper.SetConfigFile("config.prod.yaml")
 	default:
 		log.Fatal("Don`t support the file .config")
 	}

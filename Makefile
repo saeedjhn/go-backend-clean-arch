@@ -40,7 +40,7 @@ test/cover:
 	go test -v -race -buildvcs -coverprofile=/tmp/coverage.out ./...
 	go tool cover -html=/tmp/coverage.out
 
-## Startup / Build services from docker-compose and air for live reloading
+## up: Startup / Build services from docker-compose and air for live reloading
 .PHONY: up
 up:
 	@docker-compose -f deployments/docker-compose.yaml up
@@ -88,8 +88,8 @@ build/linux:
 	cd ${GOBASE} && GOOS=linux GOARCH=${ARCH} go build ${LDFLAGS} -o ${GOBUILDBASE}/${BINARY}-linux-${ARCH}-${VERSION} . ; \
 	cd - >/dev/null
 
-.PHONY: build/linux/httpserver
-build/linux/httpserver:
+.PHONY: build/linux/app
+build/linux/app:
 	@echo
 	@echo "  >  compile packages and dependencies"
 	@echo
@@ -150,10 +150,20 @@ run/scheduler:
 # DATABASE MIGRATIONS
 # ==================================================================================== #
 
-## run/migrations:
-.PHONY: run/migrations
-run/migrations:
-
+## run/up:
+#.PHONY: run/up
+#run/up:
+#	docker-compose -f deployments/docker-compose.yaml up -d mysqldb
+#	go run $(MIGRATION) $(ARGS)  # make run/up ARGS=--up
+#
+#
+### run/down:
+#.PHONY: run/down
+#run/down:
+#
+### run/rollback:
+#.PHONY: run/rollback
+#run/rollback:
 
 # ==================================================================================== #
 # QUALITY CONTROL
