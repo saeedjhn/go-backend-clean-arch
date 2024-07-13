@@ -8,7 +8,6 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver/router"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"go.uber.org/zap"
-	"log"
 )
 
 type HTTPServer struct {
@@ -74,8 +73,8 @@ func (s HTTPServer) Serve() {
 	router.Setup(s.App, s.Router)
 
 	var address = fmt.Sprintf(":%s", s.App.Config.HTTPServer.Port)
-	log.Printf("start echo server on %s\n", address)
 
+	s.App.Logger.Set().Named("server").Info("start-echo-server", zap.Any("server-config", s.App.Config.HTTPServer))
 	if err := s.Router.Start(address); err != nil {
 		fmt.Print("router start error", err)
 	}
