@@ -8,6 +8,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
+	"go.uber.org/zap"
 	"net/http"
 )
 
@@ -23,6 +24,7 @@ func (u *UserHandler) Profile(c echo.Context) error {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
+		u.app.Logger.Set().Named("users").Error("profile", zap.Any("error", err.Error()))
 		return echo.NewHTTPError(code,
 			echo.Map{
 				"status":  false,
