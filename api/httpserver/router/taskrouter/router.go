@@ -17,19 +17,19 @@ func New(app *bootstrap.Application, group *echo.Group) {
 	taskMysql := mysqltask.New(app.MysqlDB)
 
 	// Usecase
-	taskCase := taskservice.New(taskMysql)
-	authCase := authservice.New(app.Config.Auth, token.New())
+	taskSvc := taskservice.New(taskMysql)
+	authSvc := authservice.New(app.Config.Auth, token.New())
 
 	// Validator
 	validator := taskvalidator.New()
 
 	// Handler
-	handler := taskhandler.New(app, validator, taskCase)
+	handler := taskhandler.New(app, validator, taskSvc)
 
 	tasksGroup := group.Group("/tasks")
 
 	protectedRouter := tasksGroup.Group("")
-	protectedRouter.Use(middleware.Auth(app.Config.Auth, authCase))
+	protectedRouter.Use(middleware.Auth(app.Config.Auth, authSvc))
 	{
 		protectedRouter.POST("/", handler.Create)
 		protectedRouter.GET("/:id", handler.FindOne)

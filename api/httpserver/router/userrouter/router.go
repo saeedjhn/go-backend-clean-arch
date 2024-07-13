@@ -23,20 +23,20 @@ func New(
 	userMysql := mysqluser.New(app.MysqlDB)
 
 	// Usecase
-	taskCase := taskservice.New(taskMysql)
-	authCase := authservice.New(app.Config.Auth, token.New())
+	taskSvc := taskservice.New(taskMysql)
+	authSvc := authservice.New(app.Config.Auth, token.New())
 
 	// Service-oriented - inject service to another service
 	// Repository & Usecase
-	userCase := userservice.New(
-		app.Config, authCase, taskCase, userMysql,
+	userSvc := userservice.New(
+		app.Config, authSvc, taskSvc, userMysql,
 	)
 
 	// Validator
 	validator := uservalidator.New()
 
 	// Handler
-	handler := userhandler.New(app, validator, userCase)
+	handler := userhandler.New(app, validator, userSvc)
 
 	usersGroup := group.Group("/users")
 	{
@@ -52,7 +52,7 @@ func New(
 		}
 
 		protectedRouter := usersGroup.Group("")
-		protectedRouter.Use(middleware.Auth(app.Config.Auth, authCase))
+		protectedRouter.Use(middleware.Auth(app.Config.Auth, authSvc))
 		{
 			protectedRouter.GET("/profile", handler.Profile)
 			protectedRouter.POST("/:id/tasks", handler.CreateTask, middleware.CheckIsValidUserID)
