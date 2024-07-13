@@ -21,6 +21,10 @@ type Application struct {
 	GracefulShutdownTimeout time.Duration `mapstructure:"graceful_shutdown_timeout"`
 }
 
+type Pprof struct {
+	Port string `mapstructure:"port"`
+}
+
 type HTTPServer struct {
 	Port    string        `mapstructure:"port"`
 	Timeout time.Duration `mapstructure:"timeout"`
@@ -28,6 +32,7 @@ type HTTPServer struct {
 
 type Config struct {
 	Application Application        `mapstructure:"application"`
+	Pprof       Pprof              `mapstructure:"pprof"`
 	HTTPServer  HTTPServer         `mapstructure:"http_server"`
 	Logger      logger.Config      `mapstructure:"logger"`
 	Mysql       mysql.Config       `mapstructure:"mysql"`

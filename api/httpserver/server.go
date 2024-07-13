@@ -8,6 +8,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver/router"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"go.uber.org/zap"
+	_ "net/http/pprof"
 )
 
 type HTTPServer struct {

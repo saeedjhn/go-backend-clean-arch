@@ -23,7 +23,7 @@ COPY . .
 RUN go install github.com/air-verse/air@latest
 
 # Expose port 8000 to the outside world
-EXPOSE 8000
+EXPOSE 8000 8001
 
 # Run
 #ENTRYPOINT ["make"]

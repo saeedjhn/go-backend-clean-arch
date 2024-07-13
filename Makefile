@@ -17,8 +17,9 @@ export GOFILES := $(wildcard *.go)
 export BINARY := superdo
 
 export CMD := $(GOBASE)/cmd
-export HTTPSERVER := $(CMD)/httpserver/main.go
 export CLI := $(CMD)/cli/main.go
+export HTTPSERVER := $(CMD)/httpserver/main.go
+export PPROF := $(CMD)/pprof/main.go
 export MIGRATION := $(CMD)/migrations/main.go
 export SCHEDULER := $(CMD)/scheduler/main.go
 
@@ -43,17 +44,34 @@ test/cover:
 ## up: Startup / Build services from docker-compose and air for live reloading
 .PHONY: up
 up:
+	@echo
+	@echo " > Startup / Build services from docker-compose and air for live reloading"
+	@echo
 	@docker-compose -f deployments/docker-compose.yaml up
 
 ## Build: Build services from docker-compose
 .PHONY: build
 build:
-	docker-compose -f deployments/docker-compose.yaml build
+	@echo
+	@echo " > Build services from docker-compose"
+	@echo
+	@docker-compose -f deployments/docker-compose.yaml build
 
 ## Down: Stop and remove containers, networks, images, and volumes
 .PHONY: down
 down:
+	@echo
+	@echo " > Stop and remove containers, networks, images, and volumes"
+	@echo
 	@docker-compose -f deployments/docker-compose.yaml down
+
+## Pprof: Start and Types of profiles available: allocates, block, cmdline, goroutine, heap, mutex, profile, threadcreate, trace
+.PHONY: PPROF
+pprof:
+	@echo
+	@echo " > pprof running"
+	@echo
+	go run ${PPROF}
 
 ## watch: Run given command when code changes. e.g; make watch run="echo 'hey'"
 #.PHONY: watch
@@ -192,6 +210,21 @@ audit:
 .PHONY: push
 push: tidy audit no-dirty
 	git push
+
+# ==================================================================================== #
+# TOOLS
+# ==================================================================================== #
+### tool/pprof
+#.PHONY: tool/pprof
+#tool/pprof:
+#	curl http://localhost:8001/debug/pprof/goroutine --output goroutine.o
+#	go tool pprof -http=:8002 goroutine.o
+
+## tool/pprof
+.PHONY: tool/pprof/goroutine
+tool/pprof/goroutine:
+	curl http://localhost:8001/debug/pprof/goroutine --output goroutine.o
+	go tool pprof -http=:8002 goroutine.o
 
 # ==================================================================================== #
 # HELPERS
