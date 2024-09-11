@@ -1,6 +1,7 @@
 package userservice
 
 import (
+	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver/handler/userhandler"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	userauthservicedto2 "github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 	usertaskservicedto2 "github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
@@ -31,6 +32,8 @@ type UserInteractor struct {
 	taskInteractor TaskGenerator
 	repository     Repository
 }
+
+var _ userhandler.Interactor = (*UserInteractor)(nil)
 
 func New(
 	config *configs.Config,

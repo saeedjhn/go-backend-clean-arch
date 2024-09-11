@@ -1,6 +1,7 @@
 package taskservice
 
 import (
+	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver/handler/taskhandler"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 )
 
@@ -15,6 +16,8 @@ type Repository interface {
 type TaskInteractor struct {
 	repository Repository
 }
+
+var _ taskhandler.Interactor = (*TaskInteractor)(nil)
 
 func New(repository Repository) *TaskInteractor {
 	return &TaskInteractor{repository: repository}

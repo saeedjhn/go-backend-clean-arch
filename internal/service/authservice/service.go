@@ -3,6 +3,7 @@ package authservice
 import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/token"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/service/userservice"
 	"strconv"
 	"time"
 )
@@ -20,6 +21,8 @@ type AuthInteractor struct {
 	config Config
 	token  *token.Token
 }
+
+var _ userservice.AuthGenerator = (*AuthInteractor)(nil)
 
 func New(config Config, token *token.Token) *AuthInteractor {
 	return &AuthInteractor{config: config, token: token}
