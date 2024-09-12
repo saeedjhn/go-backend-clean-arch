@@ -84,18 +84,6 @@ func (r *DB) GetByID(id uint) (entity.Task, error) {
 	return task, nil
 }
 
-func scanTask(scanner Scanner) (entity.Task, error) {
-	var task entity.Task
-	var status string
-
-	//err := scanner.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &task.Status, &task.CreatedAt, &task.UpdatedAt)
-	err := scanner.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &status, &task.CreatedAt, &task.UpdatedAt)
-
-	task.Status = entity.MapToStatusTaskEntity(status)
-
-	return task, err
-}
-
 func (r *DB) GetAllByUserID(userID uint) ([]entity.Task, error) {
 	const op = message.OpMysqlTaskGetAllByUserID
 
@@ -109,21 +97,10 @@ func (r *DB) GetAllByUserID(userID uint) ([]entity.Task, error) {
 			WithKind(kind.KindStatusInternalServerError)
 	}
 
-	var tasks []entity.Task
-	for rows.Next() {
-		var (
-			task   entity.Task
-			status string
-		)
-
-		//err := rows.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &task.Status, &task.CreatedAt, &task.UpdatedAt)
-		err := rows.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &status, &task.CreatedAt, &task.UpdatedAt)
-		task.Status = entity.MapToStatusTaskEntity(status)
-		if err != nil {
-			return []entity.Task{}, richerror.New(op).WithErr(err).
-				WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
-		}
-		tasks = append(tasks, task)
+	tasks, err := scanTasks(rows)
+	if err != nil {
+		return []entity.Task{}, richerror.New(op).WithErr(err).
+			WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
 	}
 
 	return tasks, nil
@@ -131,8 +108,6 @@ func (r *DB) GetAllByUserID(userID uint) ([]entity.Task, error) {
 
 func (r *DB) GetAll() ([]entity.Task, error) {
 	const op = message.OpMysqlTaskGetAll
-
-	var tasks []entity.Task
 
 	rows, err := r.conn.Conn().Query("SELECT * FROM tasks ORDER BY id DESC ")
 	defer rows.Close()
@@ -143,20 +118,45 @@ func (r *DB) GetAll() ([]entity.Task, error) {
 			WithKind(kind.KindStatusInternalServerError)
 	}
 
-	for rows.Next() {
-		var (
-			task entity.Task
+	tasks, err := scanTasks(rows)
+	if err != nil {
+		return []entity.Task{}, richerror.New(op).WithErr(err).
+			WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
+	}
 
-			status string
-		)
+	return tasks, nil
+}
 
+func scanTask(scanner RowScanner) (entity.Task, error) {
+	var (
+		task   entity.Task
+		status string
+	)
+
+	//err := scanner.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &task.Status, &task.CreatedAt, &task.UpdatedAt)
+	err := scanner.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &status, &task.CreatedAt, &task.UpdatedAt)
+
+	task.Status = entity.MapToStatusTaskEntity(status)
+
+	return task, err
+}
+
+func scanTasks(scanner RowsScanner) ([]entity.Task, error) {
+	var (
+		tasks  []entity.Task
+		task   entity.Task
+		status string
+	)
+
+	for scanner.Next() {
 		//err := rows.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &task.Status, &task.CreatedAt, &task.UpdatedAt)
-		err := rows.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &status, &task.CreatedAt, &task.UpdatedAt)
+		err := scanner.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &status, &task.CreatedAt, &task.UpdatedAt)
 		task.Status = entity.MapToStatusTaskEntity(status)
+
 		if err != nil {
-			return []entity.Task{}, richerror.New(op).WithErr(err).
-				WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
+			return nil, nil
 		}
+
 		tasks = append(tasks, task)
 	}
 
