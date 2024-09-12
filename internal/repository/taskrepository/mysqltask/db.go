@@ -86,8 +86,12 @@ func (r *DB) GetByID(id uint) (entity.Task, error) {
 
 func scanTask(scanner Scanner) (entity.Task, error) {
 	var task entity.Task
+	var status string
 
-	err := scanner.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &task.Status, &task.CreatedAt, &task.UpdatedAt)
+	//err := scanner.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &task.Status, &task.CreatedAt, &task.UpdatedAt)
+	err := scanner.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &status, &task.CreatedAt, &task.UpdatedAt)
+
+	task.Status = entity.MapToStatusTaskEntity(status)
 
 	return task, err
 }
@@ -107,8 +111,14 @@ func (r *DB) GetAllByUserID(userID uint) ([]entity.Task, error) {
 
 	var tasks []entity.Task
 	for rows.Next() {
-		var task entity.Task
-		err := rows.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &task.Status, &task.CreatedAt, &task.UpdatedAt)
+		var (
+			task   entity.Task
+			status string
+		)
+
+		//err := rows.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &task.Status, &task.CreatedAt, &task.UpdatedAt)
+		err := rows.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &status, &task.CreatedAt, &task.UpdatedAt)
+		task.Status = entity.MapToStatusTaskEntity(status)
 		if err != nil {
 			return []entity.Task{}, richerror.New(op).WithErr(err).
 				WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
@@ -134,8 +144,15 @@ func (r *DB) GetAll() ([]entity.Task, error) {
 	}
 
 	for rows.Next() {
-		var task entity.Task
-		err := rows.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &task.Status, &task.CreatedAt, &task.UpdatedAt)
+		var (
+			task entity.Task
+
+			status string
+		)
+
+		//err := rows.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &task.Status, &task.CreatedAt, &task.UpdatedAt)
+		err := rows.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &status, &task.CreatedAt, &task.UpdatedAt)
+		task.Status = entity.MapToStatusTaskEntity(status)
 		if err != nil {
 			return []entity.Task{}, richerror.New(op).WithErr(err).
 				WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
