@@ -19,6 +19,8 @@ type MySqlDB struct {
 	db     *sql.DB
 }
 
+var _ DB = (*MySqlDB)(nil)
+
 func New(config Config) *MySqlDB {
 	conn := fmt.Sprintf("%s:%s@(%s:%s)/%s?parseTime=true",
 		config.Username, config.Password, config.Host, config.Port, config.Database)

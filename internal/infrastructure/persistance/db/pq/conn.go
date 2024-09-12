@@ -19,6 +19,8 @@ type PostgresDB struct {
 	db     *sql.DB
 }
 
+var _ DB = (*PostgresDB)(nil)
+
 func New(config Config) *PostgresDB {
 	cnn := fmt.Sprintf("host=%s port=%s userentity=%s password=%s dbname=%s sslmode=%s TimeZone=Asia/Tehran",
 		config.Host, config.Port, config.Username, config.Password,

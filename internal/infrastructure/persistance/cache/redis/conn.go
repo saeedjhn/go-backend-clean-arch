@@ -14,6 +14,8 @@ type RedisDB struct {
 	db     *redis.Client
 }
 
+var _ DB = (*RedisDB)(nil)
+
 func New(config Config) *RedisDB {
 	return (&RedisDB{config: config}).conn()
 }
