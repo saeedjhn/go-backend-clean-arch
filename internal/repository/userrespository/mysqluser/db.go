@@ -7,12 +7,15 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/mysql"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/service/userservice"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
 type DB struct {
 	conn mysql.DB
 }
+
+var _ userservice.Repository = (*DB)(nil)
 
 func New(conn mysql.DB) *DB {
 	return &DB{
