@@ -3,20 +3,20 @@ package userservice
 import (
 	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver/handler/userhandler"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	userauthservicedto2 "github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
-	usertaskservicedto2 "github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 )
 
 type TaskGenerator interface {
-	Create(dto usertaskservicedto2.CreateTaskRequest) (usertaskservicedto2.CreateTaskResponse, error)
-	TasksUser(dto usertaskservicedto2.TasksUserRequest) (usertaskservicedto2.TasksUserResponse, error)
+	Create(dto usertaskservicedto.CreateTaskRequest) (usertaskservicedto.CreateTaskResponse, error)
+	TasksUser(dto usertaskservicedto.TasksUserRequest) (usertaskservicedto.TasksUserResponse, error)
 }
 
 type AuthGenerator interface {
-	CreateAccessToken(dto userauthservicedto2.CreateTokenRequest) (userauthservicedto2.CreateTokenResponse, error)
-	CreateRefreshToken(dto userauthservicedto2.CreateTokenRequest) (userauthservicedto2.CreateTokenResponse, error)
-	ExtractIDFromRefreshToken(dto userauthservicedto2.ExtractIDFromTokenRequest) (userauthservicedto2.ExtractIDFromTokenResponse, error)
+	CreateAccessToken(dto userauthservicedto.CreateTokenRequest) (userauthservicedto.CreateTokenResponse, error)
+	CreateRefreshToken(dto userauthservicedto.CreateTokenRequest) (userauthservicedto.CreateTokenResponse, error)
+	ExtractIDFromRefreshToken(dto userauthservicedto.ExtractIDFromTokenRequest) (userauthservicedto.ExtractIDFromTokenResponse, error)
 }
 
 type Repository interface {
