@@ -5,10 +5,10 @@ import (
 )
 
 type CreateRequest struct {
-	UserID      uint          `json:"user_id"`
-	Title       string        `json:"title"`
-	Description string        `json:"description"`
-	Status      entity.Status `json:"status"`
+	UserID      uint              `json:"user_id"`
+	Title       string            `json:"title"`
+	Description string            `json:"description"`
+	Status      entity.TaskStatus `json:"status"`
 }
 
 type CreateResponse struct {

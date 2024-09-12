@@ -8,7 +8,7 @@ type CreateTaskRequest struct {
 	UserID      uint
 	Title       string
 	Description string
-	Status      entity.Status
+	Status      entity.TaskStatus
 }
 
 type CreateTaskResponse struct {

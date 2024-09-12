@@ -10,10 +10,10 @@ There are cases where using the zero value makes sense, for example when the zer
 desirable default behavior.
 */
 
-type Status uint8
+type TaskStatus uint8
 
 const (
-	Pending Status = iota + 1
+	Pending TaskStatus = iota + 1
 	InProgress
 	Completed
 )
@@ -24,7 +24,7 @@ const (
 	CompletedStr  = "completed"
 )
 
-func (s Status) String() string {
+func (s TaskStatus) String() string {
 	switch s {
 	case Pending:
 		return PendingStr
@@ -37,7 +37,7 @@ func (s Status) String() string {
 	return ""
 }
 
-func MapToStatusTaskEntity(status string) Status {
+func MapToTaskStatus(status string) TaskStatus {
 	switch status {
 	case PendingStr:
 		return Pending
@@ -47,7 +47,7 @@ func MapToStatusTaskEntity(status string) Status {
 		return Completed
 	}
 
-	return Status(0)
+	return TaskStatus(0)
 }
 
 type Task struct {
@@ -55,7 +55,7 @@ type Task struct {
 	UserID      uint
 	Title       string
 	Description string
-	Status      Status
+	Status      TaskStatus
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
