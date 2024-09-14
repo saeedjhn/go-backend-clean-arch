@@ -43,33 +43,3 @@ func New(config Config) *Logger {
 func (l *Logger) Set() *zap.Logger {
 	return l.logger
 }
-
-// var Logger *zap.Logger
-//var once = sync.Once{}
-//func init() {
-//	once.Do(func() {
-//		// Add & check production/development config variable
-//		//logger, _ = zap.NewProduction()
-//
-//		config := zap.NewProductionEncoderConfig()
-//		config.EncodeTime = zapcore.ISO8601TimeEncoder
-//		defaultEncoder := zapcore.NewJSONEncoder(config)
-//		// Add to config
-//		writer := zapcore.AddSync(&lumberjack.logger{
-//			Filename:  "./logs/log.json",
-//			LocalTime: false,
-//			MaxSize:   10, // megabytes
-//			//MaxBackups: 10,
-//			MaxAge: 30, // days
-//		})
-//
-//		stdOutWriter := zapcore.AddSync(os.Stdout)
-//		defaultLogLevel := zapcore.InfoLevel
-//		core := zapcore.NewTee(
-//			zapcore.NewCore(defaultEncoder, writer, defaultLogLevel),
-//			zapcore.NewCore(defaultEncoder, stdOutWriter, zap.InfoLevel),
-//		)
-//		//Logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
-//	})
-//}
-// Use: logger.Logger.Named("main").Info("config", zap.Any("config", app.Config))
