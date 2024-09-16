@@ -1,10 +1,11 @@
 package middleware
 
 import (
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	"log"
 	"time"
+
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 const errorMessage = "custom timeout error message returns to client"

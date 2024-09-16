@@ -1,11 +1,13 @@
 package authservice
 
 import (
+	"log"
+	"testing"
+	"time"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/token"
-	"testing"
-	"time"
 )
 
 var config = Config{

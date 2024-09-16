@@ -1,6 +1,7 @@
 package sanitize
 
 import (
+	"log"
 	"testing"
 )
 

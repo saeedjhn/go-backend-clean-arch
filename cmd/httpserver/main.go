@@ -2,14 +2,15 @@ package main
 
 import (
 	"context"
+	"log"
+	"os"
+	"os/signal"
+
 	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/cmd/migrations"
 	"go.uber.org/zap"
-	"log"
-	"os"
-	"os/signal"
 )
 
 func main() {

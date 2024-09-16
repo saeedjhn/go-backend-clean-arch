@@ -2,6 +2,7 @@ package uservalidator
 
 import (
 	"errors"
+
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"

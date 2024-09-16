@@ -1,13 +1,14 @@
 package middleware
 
 import (
+	"net/http"
+	"strings"
+
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/service/authservice"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
-	"net/http"
-	"strings"
 )
 
 func Auth(config authservice.Config, authInteractor *authservice.AuthInteractor) echo.MiddlewareFunc {

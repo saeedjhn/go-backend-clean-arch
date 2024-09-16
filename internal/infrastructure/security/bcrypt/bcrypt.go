@@ -2,6 +2,7 @@ package bcrypt
 
 import (
 	"errors"
+
 	"golang.org/x/crypto/bcrypt"
 )
 

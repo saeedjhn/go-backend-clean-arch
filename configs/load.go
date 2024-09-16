@@ -3,8 +3,9 @@ package configs
 import (
 	"errors"
 	"fmt"
-	"github.com/spf13/viper"
 	"log"
+
+	"github.com/spf13/viper"
 )
 
 type Env string

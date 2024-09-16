@@ -1,6 +1,7 @@
 package token
 
 import (
+	"log"
 	"testing"
 	"time"
 )

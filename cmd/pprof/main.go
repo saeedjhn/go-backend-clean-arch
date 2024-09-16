@@ -2,19 +2,23 @@ package main
 
 import (
 	"context"
-	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
-	"go.uber.org/zap"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
 	"os/signal"
+
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
+	"go.uber.org/zap"
 )
 
 func main() {
 	// Bootstrap
-	app := bootstrap.App(configs.Development)
+	app, err := bootstrap.App(configs.Development)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Log
 	app.Logger.Set().Named("main").Info("config", zap.Any("config", app.Config))

@@ -3,8 +3,9 @@ package token
 import (
 	"errors"
 	"fmt"
-	"github.com/golang-jwt/jwt/v5"
 	"strconv"
+
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func (a *Token) ExtractIdFromToken(requestToken string, secret string) (string, error) {

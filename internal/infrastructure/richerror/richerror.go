@@ -2,9 +2,10 @@ package richerror
 
 import (
 	"errors"
+	"strings"
+
 	"github.com/rotisserie/eris"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
-	"strings"
 )
 
 type Op string

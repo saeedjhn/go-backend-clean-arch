@@ -3,9 +3,10 @@ package mongo
 import (
 	"context"
 	"fmt"
+	"log"
+
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
 )
 
 type MongoDB struct {

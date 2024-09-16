@@ -3,11 +3,12 @@ package sanitize
 import (
 	"errors"
 	"fmt"
-	"github.com/microcosm-cc/bluemonday"
-	"github.com/mitchellh/mapstructure"
 	"log"
 	"reflect"
 	"regexp"
+
+	"github.com/microcosm-cc/bluemonday"
+	"github.com/mitchellh/mapstructure"
 )
 
 type Policy string

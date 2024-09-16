@@ -3,12 +3,13 @@ package main
 import (
 	"context"
 	"errors"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 )
 
 func main() {

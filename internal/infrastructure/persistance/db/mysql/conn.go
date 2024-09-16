@@ -3,8 +3,9 @@ package mysql
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
 	"time"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const driverName = "mysql"

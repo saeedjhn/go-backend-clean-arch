@@ -1,8 +1,9 @@
 package token
 
 import (
-	"github.com/golang-jwt/jwt/v5"
 	"time"
+
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func (a *Token) CreateRefreshToken(id uint, secret string, subject string, expire time.Duration) (string, error) {

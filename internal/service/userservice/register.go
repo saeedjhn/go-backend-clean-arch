@@ -2,6 +2,7 @@ package userservice
 
 import (
 	"errors"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"

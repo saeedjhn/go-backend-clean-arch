@@ -1,10 +1,11 @@
 package authservice
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/token"
 	"strconv"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/token"
 )
 
 type Config struct {

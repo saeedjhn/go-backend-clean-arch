@@ -1,9 +1,10 @@
 package healthcheckrouter
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
-	"net/http"
 )
 
 func New(_ *bootstrap.Application, e *echo.Group) {

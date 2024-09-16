@@ -1,6 +1,8 @@
 package userhandler
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/bind"
@@ -9,7 +11,6 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/sanitize"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 func (u *UserHandler) RefreshToken(c echo.Context) error {

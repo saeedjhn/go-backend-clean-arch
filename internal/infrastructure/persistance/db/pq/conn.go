@@ -3,8 +3,9 @@ package pq
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/lib/pq"
 	"time"
+
+	_ "github.com/lib/pq"
 )
 
 const driverName = "postgres"

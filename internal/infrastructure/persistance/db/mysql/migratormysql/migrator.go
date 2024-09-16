@@ -2,9 +2,10 @@ package migratormysql
 
 import (
 	"fmt"
+	"log"
+
 	migrate "github.com/rubenv/sql-migrate"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
-	"log"
 )
 
 const dialect = "mysql"

@@ -1,8 +1,9 @@
 package httpstatus
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
 	"net/http"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
 )
 
 func FromKind(k kind.Kind) int {

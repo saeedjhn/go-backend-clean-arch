@@ -2,9 +2,10 @@ package migrations
 
 import (
 	"flag"
+	"log"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/mysql/migratormysql"
-	"log"
 )
 
 const (

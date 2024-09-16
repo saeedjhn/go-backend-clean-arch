@@ -3,14 +3,15 @@ package mongo
 import (
 	"context"
 	"errors"
+	"reflect"
+	"time"
+
 	"go.mongodb.org/mongo-driver/bson/bsoncodec"
 	"go.mongodb.org/mongo-driver/bson/bsonrw"
 	"go.mongodb.org/mongo-driver/bson/bsontype"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"reflect"
-	"time"
 )
 
 type MongoConnection interface {
