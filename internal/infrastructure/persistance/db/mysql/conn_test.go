@@ -18,7 +18,10 @@ func TestConn(t *testing.T) {
 		ConnMaxLiftTime: 5,
 	}
 
-	mysqlConn := New(cfg)
+	mysql := New(cfg)
+	if err := mysql.ConnectTo(); err != nil {
+		log.Fatal(err)
+	}
 
-	log.Fatal(mysqlConn.Conn())
+	log.Println(mysql.Conn())
 }

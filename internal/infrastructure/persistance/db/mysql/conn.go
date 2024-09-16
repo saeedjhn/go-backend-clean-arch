@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"log"
 	"time"
 )
 
@@ -17,27 +16,37 @@ type DB interface {
 type MySqlDB struct {
 	config Config
 	db     *sql.DB
+	err    error
 }
 
 var _ DB = (*MySqlDB)(nil)
 
 func New(config Config) *MySqlDB {
-	conn := fmt.Sprintf("%s:%s@(%s:%s)/%s?parseTime=true",
-		config.Username, config.Password, config.Host, config.Port, config.Database)
+	return &MySqlDB{config: config}
+}
 
-	db, err := sql.Open(driverName, conn)
-	if err != nil {
-		log.Fatalf("can't open mysql db: %v", err)
+func (m *MySqlDB) ConnectTo() error {
+	conn := fmt.Sprintf("%s:%s@(%s:%s)/%s?parseTime=true",
+		m.config.Username, m.config.Password, m.config.Host, m.config.Port, m.config.Database)
+
+	m.db, m.err = sql.Open(driverName, conn)
+	if m.err != nil {
+		//log.Fatalf("can't open mysql db: %v", err)
+		return fmt.Errorf("can`t open mysql db: %w", m.err)
 	}
 
 	// See "Important settings" section.
-	db.SetMaxIdleConns(config.MaxIdleConns)
-	db.SetMaxOpenConns(config.MaxOpenConns)
-	db.SetConnMaxLifetime(config.ConnMaxLiftTime * time.Second)
+	m.db.SetMaxIdleConns(m.config.MaxIdleConns)
+	m.db.SetMaxOpenConns(m.config.MaxOpenConns)
+	m.db.SetConnMaxLifetime(m.config.ConnMaxLiftTime * time.Second)
 
-	return &MySqlDB{config: config, db: db}
+	return nil
 }
 
 func (m *MySqlDB) Conn() *sql.DB {
 	return m.db
+}
+
+func (m *MySqlDB) Error() error {
+	return m.err
 }
