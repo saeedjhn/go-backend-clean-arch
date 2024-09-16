@@ -21,9 +21,13 @@ func TestRedis(t *testing.T) {
 		IdleCheckFrequency: 0,
 	}
 
-	r := New(c)
-	log.Println(r.Client().Conn())
+	redis := New(c)
+	if err := redis.ConnectTo(); err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println(redis.Client().Conn())
 
 	expiration := time.Duration(200 * float64(time.Second))
-	log.Println(r.Client().Set(context.Background(), "KEY", "VALUE", expiration))
+	log.Println(redis.Client().Set(context.Background(), "KEY", "VALUE", expiration))
 }
