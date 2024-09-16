@@ -29,28 +29,34 @@ func Start(app *bootstrap.Application) {
 
 	log.Println("Startup migrations...")
 
-	HandleFlag(app, *up, *down, *rollback)
+	if err := HandleFlag(app, *up, *down, *rollback); err != nil {
+		log.Fatal(err)
+	}
 
 	log.Println("finished migrations.")
 }
 
-func HandleFlag(app *bootstrap.Application, up, down, rollback bool) {
+func HandleFlag(app *bootstrap.Application, up, down, rollback bool) error {
 	switch {
 	case up:
-		Up(app)
+		return Up(app)
 	case down:
-		Down(app)
+		return Down(app)
 	case rollback:
-		Rollback(app)
+		return Rollback(app)
 	default:
-		Rollback(app)
+		return Rollback(app)
 	}
 }
 
-func Up(app *bootstrap.Application) {
+func Up(app *bootstrap.Application) error {
 	// Mysql
 	migratorMysql := migratormysql.New(app.MysqlDB, mysqlDIR)
-	migratorMysql.Up()
+	if err := migratorMysql.Up(); err != nil {
+		return err
+	}
+
+	return nil
 
 	// Pq
 	//migratorPq := migratorpq.New(app.PostgresDB, pqDIR)
@@ -59,10 +65,14 @@ func Up(app *bootstrap.Application) {
 	// Etc
 }
 
-func Down(app *bootstrap.Application) {
+func Down(app *bootstrap.Application) error {
 	// Mysql
 	migratorMysql := migratormysql.New(app.MysqlDB, mysqlDIR)
-	migratorMysql.Down()
+	if err := migratorMysql.Down(); err != nil {
+		return err
+	}
+
+	return nil
 
 	// Pq
 	//migratorPq := migratorpq.New(app.PostgresDB, pqDIR)
@@ -71,12 +81,18 @@ func Down(app *bootstrap.Application) {
 	// Etc
 }
 
-func Rollback(app *bootstrap.Application) {
-
+func Rollback(app *bootstrap.Application) error {
 	// Mysql
 	migratorMysql := migratormysql.New(app.MysqlDB, mysqlDIR)
-	migratorMysql.Down()
-	migratorMysql.Up()
+	if err := migratorMysql.Down(); err != nil {
+		return err
+	}
+
+	if err := migratorMysql.Up(); err != nil {
+		return err
+	}
+
+	return nil
 
 	// Pq
 	//migratorPq := migratorpq.New(app.PostgresDB, pqDIR)
