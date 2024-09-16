@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
@@ -15,14 +14,20 @@ import (
 
 func main() {
 	// Bootstrap
-	app := bootstrap.App(configs.Development)
+	app, err := bootstrap.App(configs.Development)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	log.Printf("%#v", app)
 
 	// Log
 	app.Logger.Set().Named("main").Info("config", zap.Any("config", app.Config))
 
 	// Migrations
-	migrations.Up(app)
+	if err = migrations.Up(app); err != nil {
+		log.Fatal(err)
+	}
 
 	// Prof
 	//go func() {
@@ -45,13 +50,18 @@ func main() {
 	defer cancel()
 
 	if err := server.Router.Shutdown(ctxWithTimeout); err != nil {
-		fmt.Println("http server shutdown error", err)
+		log.Println("http server shutdown error", err)
 	}
 
 	log.Println("received interrupt signal, shutting down gracefully..")
-	// Close all db connection, etc
-	app.CloseMysqlConnection()
-	app.CloseRedisClientConnection()
+
+	// Close all DB connection, etc
+	if err = app.CloseMysqlConnection(); err != nil {
+		log.Fatal(err)
+	}
+	if err = app.CloseRedisClientConnection(); err != nil {
+		log.Fatal(err)
+	}
 	//app.ClosePostgresqlConnection() // Or etc..
 
 	<-ctxWithTimeout.Done()
