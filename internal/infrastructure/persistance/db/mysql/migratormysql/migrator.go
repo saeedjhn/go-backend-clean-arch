@@ -4,6 +4,7 @@ import (
 	"fmt"
 	migrate "github.com/rubenv/sql-migrate"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
+	"log"
 )
 
 const dialect = "mysql"
@@ -26,23 +27,29 @@ func New(conn pq.DB, absolutePath string) Migrator {
 	return Migrator{conn: conn, dialect: dialect, migrations: migrations}
 }
 
-func (m Migrator) Up() {
+func (m Migrator) Up() error {
 	n, err := migrate.Exec(m.conn.Conn(), m.dialect, m.migrations, migrate.Up)
 	if err != nil {
-		panic(fmt.Errorf("can't apply migrations: %w", err))
+		return fmt.Errorf("can't apply migrations: %w", err)
 	}
-	//panic(fmt.Errorf("can't apply migrations: %v", err))
-	fmt.Printf("Applied %d migrations!\n", n)
+
+	log.Printf("Applied %d migrations!\n", n)
+
+	return nil
 }
 
-func (m Migrator) Down() {
+func (m Migrator) Down() error {
 	n, err := migrate.Exec(m.conn.Conn(), m.dialect, m.migrations, migrate.Down)
 	if err != nil {
-		panic(fmt.Errorf("can't rollback migrations: %w", err))
+		return fmt.Errorf("can't rollback migrations: %w", err)
 	}
-	fmt.Printf("Rollbacked %d migrations!\n", n)
+
+	log.Printf("Rollbacked %d migrations!\n", n)
+
+	return nil
 }
 
 func (m Migrator) Status() {
 	// TODO - add status
+	panic("IMPLEMENT ME")
 }

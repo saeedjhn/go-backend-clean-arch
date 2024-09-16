@@ -31,7 +31,7 @@ func (m Migrator) Up() {
 	if err != nil {
 		panic(fmt.Errorf("can't apply migrations: %w", err))
 	}
-	fmt.Printf("Applied %d migrations!\n", n)
+	log.Printf("Applied %d migrations!\n", n)
 }
 
 func (m Migrator) Down() {
@@ -40,7 +40,7 @@ func (m Migrator) Down() {
 	if err != nil {
 		panic(fmt.Errorf("can't rollback migrations: %w", err))
 	}
-	fmt.Printf("Rollbacked %d migrations!\n", n)
+	log.Printf("Rollbacked %d migrations!\n", n)
 }
 
 func (m Migrator) Status() {
