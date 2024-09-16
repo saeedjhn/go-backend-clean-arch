@@ -31,7 +31,7 @@ import (
 //			return sanitizeStruct(param)
 //
 //		default:
-//			fmt.Println("type not supported", paramValue.Kind())
+//			log.Println("type not supported", paramValue.Kind())
 //		}
 //
 //		return nil, nil

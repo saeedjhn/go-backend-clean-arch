@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"errors"
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 	"net/http"
@@ -38,10 +37,10 @@ func main() {
 	defer cancel()
 
 	if err := e.Shutdown(ctxWithTimeout); err != nil {
-		fmt.Print("http server shutdown error", err)
+		log.Print("http server shutdown error", err)
 	}
 
-	fmt.Print("received interrupt signal, shutting down gracefully..")
+	log.Print("received interrupt signal, shutting down gracefully..")
 	// Close all services, etc
 
 	<-ctxWithTimeout.Done()

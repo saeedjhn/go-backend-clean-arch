@@ -1,7 +1,6 @@
 package sanitize
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -26,15 +25,15 @@ func TestSanitize(t *testing.T) {
 		Status:      Pending,
 	}
 
-	fmt.Println(p)
+	log.Println(p)
 
 	any, err := s.Any(p)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
-	fmt.Println("any: ", any)
+	log.Println("any: ", any)
 
 	s.Struct(&p)
 
-	fmt.Println(p)
+	log.Println(p)
 }

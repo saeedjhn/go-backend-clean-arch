@@ -1,7 +1,6 @@
 package token
 
 import (
-	"fmt"
 	"testing"
 	"time"
 )
@@ -25,30 +24,30 @@ func TestService(t *testing.T) {
 	//})
 	as := New()
 
-	fmt.Println("Access Token is:")
+	log.Println("Access Token is:")
 	accessToken, _ := as.CreateAccessToken(ID, AccessTokenSecret, AccessSubject, AccessTokenExpiryTime)
-	fmt.Println(accessToken)
+	log.Println(accessToken)
 
-	fmt.Println("Parse Token, Access Token")
+	log.Println("Parse Token, Access Token")
 	pt, _ := as.ParseToken(accessToken, AccessTokenSecret)
-	fmt.Println(pt)
+	log.Println(pt)
 
-	fmt.Println("Is authorized, access Token")
-	fmt.Println(as.IsAuthorized(accessToken, AccessTokenSecret))
+	log.Println("Is authorized, access Token")
+	log.Println(as.IsAuthorized(accessToken, AccessTokenSecret))
 
-	fmt.Println("Extract Id from access token")
-	fmt.Println(as.ExtractIdFromToken(accessToken, AccessTokenSecret))
+	log.Println("Extract Id from access token")
+	log.Println(as.ExtractIdFromToken(accessToken, AccessTokenSecret))
 
-	fmt.Println("Refresh Token is")
+	log.Println("Refresh Token is")
 	refreshToken, _ := as.CreateRefreshToken(ID, RefreshTokenSecret, RefreshSubject, RefreshTokenExpiryTime)
-	fmt.Println(refreshToken)
+	log.Println(refreshToken)
 
-	fmt.Println("Parse Token, Refresh Token")
-	fmt.Println(as.ParseToken(refreshToken, RefreshTokenSecret))
+	log.Println("Parse Token, Refresh Token")
+	log.Println(as.ParseToken(refreshToken, RefreshTokenSecret))
 
-	fmt.Println("Is authorized, refresh Token")
-	fmt.Println(as.IsAuthorized(refreshToken, RefreshTokenSecret))
+	log.Println("Is authorized, refresh Token")
+	log.Println(as.IsAuthorized(refreshToken, RefreshTokenSecret))
 
-	fmt.Println("Extract Id from refresh token")
-	fmt.Println(as.ExtractIdFromToken(refreshToken, RefreshTokenSecret))
+	log.Println("Extract Id from refresh token")
+	log.Println(as.ExtractIdFromToken(refreshToken, RefreshTokenSecret))
 }
