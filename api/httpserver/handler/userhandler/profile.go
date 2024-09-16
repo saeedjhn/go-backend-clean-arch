@@ -1,20 +1,22 @@
 package userhandler
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/httpstatus"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/service/authservice"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 func (u *UserHandler) Profile(c echo.Context) error {
 	// Give claims
-	claims := claim.GetClaimsFromEchoContext(c, configs.AuthMiddlewareContextKey)
+	claims := claim.GetClaimsFromEchoContext[authservice.Claims](c, configs.AuthMiddlewareContextKey)
 
 	// Usage Use-case
 	resp, err := u.userInteractor.Profile(

@@ -2,11 +2,10 @@ package claim
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/service/authservice"
 )
 
-func GetClaimsFromEchoContext(c echo.Context, key string) authservice.Claims {
-	return c.Get(key).(authservice.Claims)
+func GetClaimsFromEchoContext[T interface{}](c echo.Context, key string) T {
+	return c.Get(key).(T)
 }
 
 func SetClaimsFromEchoContext(c echo.Context, key string, val interface{}) {
