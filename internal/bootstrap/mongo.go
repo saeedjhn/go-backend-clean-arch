@@ -1,9 +1,9 @@
 package bootstrap
 
 func NewMongoConnection() {
-
+	panic("IMPLEMENT ME")
 }
 
-func CloseMongoConnection() {
-
+func CloseMongoConnection() error {
+	panic("IMPLEMENT ME")
 }

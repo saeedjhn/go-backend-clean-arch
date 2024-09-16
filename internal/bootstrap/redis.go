@@ -1,18 +1,26 @@
 package bootstrap
 
 import (
+	"fmt"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/cache/redis"
-	"log"
 )
 
-func NewRedisClient(config redis.Config) redis.DB {
-	return redis.New(config)
+func NewRedisClient(config redis.Config) (redis.DB, error) {
+	//redis.New(config)
+
+	myDB := redis.New(config)
+
+	if err := myDB.ConnectTo(); err != nil {
+		return nil, err
+	}
+
+	return myDB, nil
 }
 
-func CloseRedisClient(redisClient redis.DB) {
-	err := redisClient.Client().Close()
-
-	if err != nil {
-		log.Fatalf("don`t close redis client connection: %s", err.Error())
+func CloseRedisClient(redisClient redis.DB) error {
+	if err := redisClient.Client().Close(); err != nil {
+		return fmt.Errorf("don`t close redis client connection: %w", err)
 	}
+
+	return nil
 }

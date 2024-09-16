@@ -10,31 +10,61 @@ import (
 
 type Application struct {
 	Config      *configs.Config
+	EnvMode     configs.Env
 	Logger      *logger.Logger
 	MysqlDB     mysql.DB
 	PostgresDB  pq.DB
 	RedisClient redis.DB
 }
 
-func App(env configs.Env) *Application {
-	var app = &Application{}
-	app.Config = ConfigLoad(env)
-	app.Logger = NewLogger(app.Config.Logger)
-	app.MysqlDB = NewMysqlConnection(app.Config.Mysql)
-	//app.PostgresDB = NewPostgresConnection(app.Config.Postgres)
-	app.RedisClient = NewRedisClient(app.Config.Redis)
+func App(env configs.Env) (*Application, error) {
+	var app = &Application{EnvMode: env}
+	//var err error
 
-	return app
+	//app.Logger = NewLogger(app.Config.Logger)
+	//app.MysqlDB, err = NewMysqlConnection(app.Config.Mysql)
+	//app.PostgresDB = NewPostgresConnection(app.Config.Postgres)
+	//app.RedisClient = NewRedisClient(app.Config.Redis)
+
+	if err := app.setup(); err != nil {
+		return nil, err
+	}
+
+	return app, nil
 }
 
-//func (a *Application) ClosePostgresqlConnection() {
-//	ClosePostgresConnection(a.PostgresDB)
+func (a *Application) setup() error {
+	var err error
+
+	if a.Config, err = ConfigLoad(a.EnvMode); err != nil {
+		return err
+	}
+
+	if a.MysqlDB, err = NewMysqlConnection(a.Config.Mysql); err != nil {
+		return err
+	}
+
+	a.Logger = NewLogger(a.Config.Logger)
+
+	if a.PostgresDB, err = NewPostgresConnection(a.Config.Postgres); err != nil {
+		return err
+	}
+
+	if a.RedisClient, err = NewRedisClient(a.Config.Redis); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+//func (a *Application) ClosePostgresqlConnection() error {
+//	return ClosePostgresConnection(a.PostgresDB)
 //}
 
-func (a *Application) CloseMysqlConnection() {
-	CloseMysqlConnection(a.MysqlDB)
+func (a *Application) CloseMysqlConnection() error {
+	return CloseMysqlConnection(a.MysqlDB)
 }
 
-func (a *Application) CloseRedisClientConnection() {
-	CloseRedisClient(a.RedisClient)
+func (a *Application) CloseRedisClientConnection() error {
+	return CloseRedisClient(a.RedisClient)
 }

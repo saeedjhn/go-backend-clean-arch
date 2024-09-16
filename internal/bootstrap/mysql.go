@@ -1,18 +1,26 @@
 package bootstrap
 
 import (
+	"fmt"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/mysql"
-	"log"
 )
 
-func NewMysqlConnection(config mysql.Config) mysql.DB {
-	return mysql.New(config)
+func NewMysqlConnection(config mysql.Config) (mysql.DB, error) {
+	//return mysql.New(config)
+
+	myDB := mysql.New(config)
+
+	if err := myDB.ConnectTo(); err != nil {
+		return nil, err
+	}
+
+	return myDB, nil
 }
 
-func CloseMysqlConnection(mysqlDB mysql.DB) {
-	err := mysqlDB.Conn().Close()
-
-	if err != nil {
-		log.Fatalf("don`t close mysql connection: %s", err.Error())
+func CloseMysqlConnection(mysqlDB mysql.DB) error {
+	if err := mysqlDB.Conn().Close(); err != nil {
+		return fmt.Errorf("don`t close mysql connection: %w", err)
 	}
+
+	return nil
 }
