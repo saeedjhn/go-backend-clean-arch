@@ -187,6 +187,11 @@ run/scheduler:
 # QUALITY CONTROL
 # ==================================================================================== #
 
+## goimports: This tool updates your Go import lines, adding missing ones and removing unreferenced ones
+.PHONY: goimports
+goimports:
+	goimports -w .
+
 ## tidy: format code and tidy mod file
 .PHONY: tidy
 tidy:
