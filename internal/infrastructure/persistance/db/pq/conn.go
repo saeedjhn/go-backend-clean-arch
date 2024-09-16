@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
-	"log"
 	"time"
 )
 
@@ -17,28 +16,37 @@ type DB interface {
 type PostgresDB struct {
 	config Config
 	db     *sql.DB
+	err    error
 }
 
 var _ DB = (*PostgresDB)(nil)
 
 func New(config Config) *PostgresDB {
-	cnn := fmt.Sprintf("host=%s port=%s userentity=%s password=%s dbname=%s sslmode=%s TimeZone=Asia/Tehran",
-		config.Host, config.Port, config.Username, config.Password,
-		config.Database, config.SSLMode)
+	return &PostgresDB{config: config}
+}
 
-	db, err := sql.Open(driverName, cnn)
-	if err != nil {
-		log.Fatalf("can`t open postgres connection: %v", err)
+func (p *PostgresDB) ConnectTo() error {
+	cnn := fmt.Sprintf("host=%s port=%s userentity=%s password=%s dbname=%s sslmode=%s TimeZone=Asia/Tehran",
+		p.config.Host, p.config.Port, p.config.Username, p.config.Password,
+		p.config.Database, p.config.SSLMode)
+
+	p.db, p.err = sql.Open(driverName, cnn)
+	if p.err != nil {
+		return fmt.Errorf("can`t open postgres connection: %w", p.err)
 	}
 
 	// See "Important config" section
-	db.SetMaxIdleConns(config.MaxIdleConns)
-	db.SetMaxOpenConns(config.MaxOpenConns)
-	db.SetConnMaxLifetime(config.ConnMaxLiftTime * time.Second)
+	p.db.SetMaxIdleConns(p.config.MaxIdleConns)
+	p.db.SetMaxOpenConns(p.config.MaxOpenConns)
+	p.db.SetConnMaxLifetime(p.config.ConnMaxLiftTime * time.Second)
 
-	return &PostgresDB{config: config, db: db}
+	return nil
 }
 
-func (m *PostgresDB) Conn() *sql.DB {
-	return m.db
+func (p *PostgresDB) Conn() *sql.DB {
+	return p.db
+}
+
+func (p *PostgresDB) Error() error {
+	return p.err
 }

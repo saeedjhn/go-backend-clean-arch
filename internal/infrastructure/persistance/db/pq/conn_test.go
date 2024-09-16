@@ -18,7 +18,10 @@ func TestConn(t *testing.T) {
 		ConnMaxLiftTime: 5,
 	}
 
-	postgresqlConn := New(cfg)
+	pq := New(cfg)
+	if err := pq.ConnectTo(); err != nil {
+		log.Fatal(err)
+	}
 
-	log.Fatal(postgresqlConn.Conn())
+	log.Println(pq.Conn())
 }
