@@ -17,7 +17,7 @@ func (v Validator) ValidateRefreshTokenRequest(req userdto.RefreshTokenRequest) 
 		validation.Field(&req.RefreshToken,
 			validation.Required),
 	); err != nil {
-		fieldErrors := make(map[string]string)
+		var fieldErrors = make(map[string]string)
 
 		var errV validation.Errors
 		ok := errors.As(err, &errV)

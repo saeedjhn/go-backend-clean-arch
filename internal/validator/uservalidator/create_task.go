@@ -22,7 +22,7 @@ func (v Validator) ValidateCreateTaskRequest(req userdto.CreateTaskRequest) (map
 			validation.Required,
 			validation.Length(11, 1024)),
 	); err != nil {
-		fieldErrors := make(map[string]string)
+		var fieldErrors = make(map[string]string)
 
 		var errV validation.Errors
 		ok := errors.As(err, &errV)

@@ -17,7 +17,7 @@ func (v Validator) ValidateProfileRequest(req userdto.ProfileRequest) (map[strin
 		validation.Field(&req.ID,
 			validation.Required),
 	); err != nil {
-		fieldErrors := make(map[string]string)
+		var fieldErrors = make(map[string]string)
 
 		var errV validation.Errors
 		ok := errors.As(err, &errV)

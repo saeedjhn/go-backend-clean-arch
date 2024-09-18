@@ -26,7 +26,7 @@ func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[str
 			validation.Required,
 			validation.Length(3, 128)),
 	); err != nil {
-		fieldErrors := make(map[string]string)
+		var fieldErrors = make(map[string]string)
 
 		var errV validation.Errors
 		ok := errors.As(err, &errV)

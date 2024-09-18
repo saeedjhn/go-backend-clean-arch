@@ -22,7 +22,7 @@ func (v Validator) ValidateLoginRequest(req userdto.LoginRequest) (map[string]st
 			validation.Required,
 			validation.Length(3, 128)),
 	); err != nil {
-		fieldErrors := make(map[string]string)
+		var fieldErrors = make(map[string]string)
 
 		var errV validation.Errors
 		ok := errors.As(err, &errV)
