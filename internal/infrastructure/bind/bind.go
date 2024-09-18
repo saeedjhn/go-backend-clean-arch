@@ -5,7 +5,7 @@ import (
 	"errors"
 )
 
-func CheckErrFromBind(err error) error {
+func CheckErrorFromBind(err error) error {
 	var v *json.UnmarshalTypeError
 	if errors.As(err, &v) {
 		return NewJSONUnmarshalTypeErr(v)

@@ -21,7 +21,7 @@ func (u *UserHandler) Tasks(c echo.Context) error {
 			echo.Map{
 				"status":  false,
 				"message": message.ErrorMsg400BadRequest,
-				"errors":  bind.CheckErrFromBind(err).Error(),
+				"errors":  bind.CheckErrorFromBind(err).Error(),
 			},
 		)
 	}
