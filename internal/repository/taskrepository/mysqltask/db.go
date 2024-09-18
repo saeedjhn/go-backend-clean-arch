@@ -93,14 +93,14 @@ func (r *DB) GetAllByUserID(userID uint) ([]entity.Task, error) {
 	defer rows.Close()
 
 	if err != nil {
-		return []entity.Task{}, richerror.New(op).WithErr(err).
+		return nil, richerror.New(op).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).
 			WithKind(kind.KindStatusInternalServerError)
 	}
 
 	tasks, err := scanTasks(rows)
 	if err != nil {
-		return []entity.Task{}, richerror.New(op).WithErr(err).
+		return nil, richerror.New(op).WithErr(err).
 			WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
 	}
 
@@ -114,14 +114,14 @@ func (r *DB) GetAll() ([]entity.Task, error) {
 	defer rows.Close()
 
 	if err != nil {
-		return []entity.Task{}, richerror.New(op).WithErr(err).
+		return nil, richerror.New(op).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).
 			WithKind(kind.KindStatusInternalServerError)
 	}
 
 	tasks, err := scanTasks(rows)
 	if err != nil {
-		return []entity.Task{}, richerror.New(op).WithErr(err).
+		return nil, richerror.New(op).WithErr(err).
 			WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
 	}
 
