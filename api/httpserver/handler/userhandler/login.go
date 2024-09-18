@@ -15,7 +15,7 @@ import (
 
 func (u *UserHandler) Login(c echo.Context) error {
 	// Bind
-	var req = userdto.LoginRequest{}
+	req := userdto.LoginRequest{}
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest,
 			echo.Map{

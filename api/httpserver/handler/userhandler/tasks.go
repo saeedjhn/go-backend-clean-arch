@@ -15,7 +15,7 @@ import (
 
 func (u *UserHandler) Tasks(c echo.Context) error {
 	// Bind
-	var req = userdto.TasksRequest{}
+	req := userdto.TasksRequest{}
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest,
 			echo.Map{

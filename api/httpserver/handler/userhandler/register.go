@@ -15,7 +15,7 @@ import (
 
 func (u *UserHandler) Register(c echo.Context) error {
 	// Bind
-	var req = userdto.RegisterRequest{}
+	req := userdto.RegisterRequest{}
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest,
 			echo.Map{

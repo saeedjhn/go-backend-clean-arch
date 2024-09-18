@@ -15,7 +15,7 @@ import (
 
 func (u *UserHandler) RefreshToken(c echo.Context) error {
 	// Bind
-	var req = userdto.RefreshTokenRequest{}
+	req := userdto.RefreshTokenRequest{}
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest,
 			echo.Map{
