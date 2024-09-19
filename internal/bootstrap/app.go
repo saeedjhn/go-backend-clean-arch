@@ -19,12 +19,6 @@ type Application struct {
 
 func App(env configs.Env) (*Application, error) {
 	var app = &Application{EnvMode: env}
-	//var err error
-
-	//app.Logger = NewLogger(app.Config.Logger)
-	//app.MysqlDB, err = NewMysqlConnection(app.Config.Mysql)
-	//app.PostgresDB = NewPostgresConnection(app.Config.Postgres)
-	//app.RedisClient = NewRedisClient(app.Config.Redis)
 
 	if err := app.setup(); err != nil {
 		return nil, err
@@ -57,10 +51,6 @@ func (a *Application) setup() error {
 	return nil
 }
 
-//func (a *Application) ClosePostgresqlConnection() error {
-//	return ClosePostgresConnection(a.PostgresDB)
-//}
-
 func (a *Application) CloseMysqlConnection() error {
 	return CloseMysqlConnection(a.MysqlDB)
 }
@@ -68,3 +58,7 @@ func (a *Application) CloseMysqlConnection() error {
 func (a *Application) CloseRedisClientConnection() error {
 	return CloseRedisClient(a.RedisClient)
 }
+
+// func (a *Application) ClosePostgresqlConnection() error {
+//	return ClosePostgresConnection(a.PostgresDB)
+// }

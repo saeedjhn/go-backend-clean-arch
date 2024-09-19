@@ -14,7 +14,7 @@ func (a *Token) CreateRefreshToken(id uint, secret string, subject string, expir
 			//ExpiresAt: jwt.NewNumericDate(time.Now().Add(a.config.RefreshTokenExpiryTime * time.Second)),
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expire)),
 		},
-		UserId: id,
+		UserID: id,
 		// any more property for response to user (name, family, role, etc...)
 	}
 

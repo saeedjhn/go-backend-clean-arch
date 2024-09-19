@@ -22,7 +22,7 @@ func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.Register
 	if !isUnique {
 		return userdto.RegisterResponse{},
 			richerror.New(op).
-				WithErr(errors.New(message.ErrorMsgMobileIsNotUnique)). //nolint:err113
+				WithErr(errors.New(message.ErrorMsgMobileIsNotUnique)).
 				WithMessage(message.ErrorMsgInvalidInput).
 				WithKind(kind.KindStatusBadRequest)
 	}

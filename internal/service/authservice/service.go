@@ -22,13 +22,15 @@ type AuthInteractor struct {
 	token  *token.Token
 }
 
-//var _ userservice.AuthGenerator = (*AuthInteractor)(nil) // Commented, because it happens import cycle.
+// var _ userservice.AuthGenerator = (*AuthInteractor)(nil) // Commented, because it happens import cycle.
 
 func New(config Config, token *token.Token) *AuthInteractor {
 	return &AuthInteractor{config: config, token: token}
 }
 
-func (a AuthInteractor) CreateAccessToken(req userauthservicedto.CreateTokenRequest) (userauthservicedto.CreateTokenResponse, error) {
+func (a AuthInteractor) CreateAccessToken(
+	req userauthservicedto.CreateTokenRequest,
+) (userauthservicedto.CreateTokenResponse, error) {
 	at, err := a.token.CreateAccessToken(
 		req.User.ID,
 		a.config.AccessTokenSecret,
@@ -39,7 +41,9 @@ func (a AuthInteractor) CreateAccessToken(req userauthservicedto.CreateTokenRequ
 	return userauthservicedto.CreateTokenResponse{Token: at}, err
 }
 
-func (a AuthInteractor) CreateRefreshToken(req userauthservicedto.CreateTokenRequest) (userauthservicedto.CreateTokenResponse, error) {
+func (a AuthInteractor) CreateRefreshToken(
+	req userauthservicedto.CreateTokenRequest,
+) (userauthservicedto.CreateTokenResponse, error) {
 	rt, err := a.token.CreateRefreshToken(
 		req.User.ID,
 		a.config.RefreshTokenSecret,
@@ -54,11 +58,13 @@ func (a AuthInteractor) IsAuthorized(requestToken string, secret string) (bool, 
 	return a.token.IsAuthorized(requestToken, secret)
 }
 
-//func (a AuthInteractor) ExtractIDFromAccessToken(requestToken string) (string, error) {
+// func (a AuthInteractor) ExtractIDFromAccessToken(requestToken string) (string, error) {
 //	return a.token.ExtractIdFromToken(requestToken)
-//}
+// }
 
-func (a AuthInteractor) ExtractIDFromAccessToken(req userauthservicedto.ExtractIDFromTokenRequest) (userauthservicedto.ExtractIDFromTokenResponse, error) {
+func (a AuthInteractor) ExtractIDFromAccessToken(
+	req userauthservicedto.ExtractIDFromTokenRequest,
+) (userauthservicedto.ExtractIDFromTokenResponse, error) {
 	et, err := a.token.ExtractIdFromToken(req.Token, a.config.AccessTokenSecret)
 
 	// Convert string to uint
@@ -69,7 +75,9 @@ func (a AuthInteractor) ExtractIDFromAccessToken(req userauthservicedto.ExtractI
 	}, err
 }
 
-func (a AuthInteractor) ExtractIDFromRefreshToken(req userauthservicedto.ExtractIDFromTokenRequest) (userauthservicedto.ExtractIDFromTokenResponse, error) {
+func (a AuthInteractor) ExtractIDFromRefreshToken(
+	req userauthservicedto.ExtractIDFromTokenRequest,
+) (userauthservicedto.ExtractIDFromTokenResponse, error) {
 	et, err := a.token.ExtractIdFromToken(req.Token, a.config.RefreshTokenSecret)
 
 	// Convert string to uint

@@ -31,10 +31,10 @@ func main() {
 	}
 
 	// Prof
-	//go func() {
+	// go func() {
 	//	log.Println("pprof server running")
 	//	http.ListenAndServe(":8001", nil)
-	//}()
+	// }()
 
 	// Start server
 	server := httpserver.New(app)
@@ -50,7 +50,7 @@ func main() {
 	ctxWithTimeout, cancel := context.WithTimeout(ctx, app.Config.Application.GracefulShutdownTimeout)
 	defer cancel()
 
-	if err := server.Router.Shutdown(ctxWithTimeout); err != nil {
+	if err = server.Router.Shutdown(ctxWithTimeout); err != nil {
 		log.Println("http server shutdown error", err)
 	}
 
@@ -63,7 +63,7 @@ func main() {
 	if err = app.CloseRedisClientConnection(); err != nil {
 		log.Fatal(err)
 	}
-	//app.ClosePostgresqlConnection() // Or etc..
+	// app.ClosePostgresqlConnection() // Or etc..
 
 	<-ctxWithTimeout.Done()
 }

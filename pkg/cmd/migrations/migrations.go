@@ -60,8 +60,8 @@ func Up(app *bootstrap.Application) error {
 	return nil
 
 	// Pq
-	//migratorPq := migratorpq.New(app.PostgresDB, pqDIR)
-	//migratorPq.Up()
+	// migratorPq := migratorpq.New(app.PostgresDB, pqDIR)
+	// migratorPq.Up()
 
 	// Etc
 }
@@ -76,8 +76,8 @@ func Down(app *bootstrap.Application) error {
 	return nil
 
 	// Pq
-	//migratorPq := migratorpq.New(app.PostgresDB, pqDIR)
-	//migratorPq.Down()
+	// migratorPq := migratorpq.New(app.PostgresDB, pqDIR)
+	// migratorPq.Down()
 
 	// Etc
 }
@@ -96,9 +96,9 @@ func Rollback(app *bootstrap.Application) error {
 	return nil
 
 	// Pq
-	//migratorPq := migratorpq.New(app.PostgresDB, pqDIR)
-	//migratorPq.Down()
-	//migratorPq.Up()
+	// migratorPq := migratorpq.New(app.PostgresDB, pqDIR)
+	// migratorPq.Down()
+	// migratorPq.Up()
 
 	// etc
 }

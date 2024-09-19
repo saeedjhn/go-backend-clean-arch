@@ -52,6 +52,7 @@ func (u *UserHandler) Register(c echo.Context) error {
 		code := httpstatus.FromKind(richErr.Kind())
 
 		u.app.Logger.Set().Named("users").Error("register", zap.Any("error", err.Error()))
+
 		return echo.NewHTTPError(code,
 			echo.Map{
 				"status":  false,
@@ -59,6 +60,7 @@ func (u *UserHandler) Register(c echo.Context) error {
 				"errors":  richErr.Error(),
 			})
 	}
+
 	return c.JSON(http.StatusCreated,
 		echo.Map{
 			"status":  true,

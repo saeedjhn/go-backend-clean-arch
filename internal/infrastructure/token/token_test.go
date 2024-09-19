@@ -17,12 +17,12 @@ const (
 )
 
 func TestService(t *testing.T) {
-	//as := New(Config{
+	// as := New(Config{
 	//	AccessTokenSecret:      AccessTokenSecret,
 	//	RefreshTokenSecret:     RefreshTokenSecret,
 	//	AccessTokenExpiryTime:  60,
 	//	RefreshTokenExpiryTime: 60,
-	//})
+	// })
 	as := New()
 
 	log.Println("Access Token is:")

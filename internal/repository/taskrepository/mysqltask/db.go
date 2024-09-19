@@ -134,7 +134,6 @@ func scanTask(scanner RowScanner) (entity.Task, error) {
 		status string
 	)
 
-	//err := scanner.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &task.TaskStatus, &task.CreatedAt, &task.UpdatedAt)
 	err := scanner.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &status, &task.CreatedAt, &task.UpdatedAt)
 
 	task.Status = entity.MapToTaskStatus(status)
@@ -150,7 +149,6 @@ func scanTasks(scanner RowsScanner) ([]entity.Task, error) {
 	)
 
 	for scanner.Next() {
-		//err := rows.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &task.TaskStatus, &task.CreatedAt, &task.UpdatedAt)
 		err := scanner.Scan(&task.ID, &task.UserID, &task.Title, &task.Description, &status, &task.CreatedAt, &task.UpdatedAt)
 		task.Status = entity.MapToTaskStatus(status)
 

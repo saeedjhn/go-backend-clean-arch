@@ -18,7 +18,7 @@ func (u *UserInteractor) Profile(req userdto.ProfileRequest) (userdto.ProfileRes
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}}, nil // Or
-	//return userdto.ProfileResponse{
+	// return userdto.ProfileResponse{
 	//	User: user.ToUserInfoDTO(),
-	//}, nil
+	// }, nil
 }

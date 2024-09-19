@@ -2,7 +2,9 @@ package message
 
 // Rule: Op + Package(Pascal-case) + MethodOrFunction(Pascal-case)
 const (
+
 	// Validation
+
 	OpUserValidatorValidateRegisterRequest     = "uservalidator.ValidateRegisterRequest"
 	OpUserValidatorValidateLoginRequest        = "uservalidator.ValidateLoginRequest"
 	OpUserValidatorValidateRefreshTokenRequest = "uservalidator.ValidateRefreshTokenRequest"
@@ -10,13 +12,15 @@ const (
 	OpTaskValidatorValidateCreateTaskRequest   = "taskvalidator.ValidateCreateTaskRequest"
 
 	// UseCase
+
 	OpUserUsecaseRegister     = "userservice.Register"
 	OpUserUsecaseLogin        = "userservice.Login"
 	OpUserUsecaseRefreshToken = "userservice.RefreshToken"
-	OpTaskUsecaseCreate       = "taskservice.Create"
 	OpUserUsecaseCreateTask   = "userservice.CreateTask"
+	OpTaskUsecaseCreate       = "taskservice.Create"
 
 	// Repository
+
 	OpMysqlUserCreate         = "mysqluser.Create"
 	OpMysqlUserIsMobileUnique = "mysqluser.IsMobileUnique"
 	OpMysqlUserGetByMobile    = "mysqluser.GetByMobile"
@@ -28,5 +32,6 @@ const (
 	OpMysqlTaskIsExistsUser   = "mysqltask.IsExistsUser"
 
 	// Compare password
+
 	InvalidCredentials = "Invalid credentials"
 )

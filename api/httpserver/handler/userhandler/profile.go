@@ -20,13 +20,14 @@ func (u *UserHandler) Profile(c echo.Context) error {
 
 	// Usage Use-case
 	resp, err := u.userInteractor.Profile(
-		userdto.ProfileRequest{ID: claims.UserId},
+		userdto.ProfileRequest{ID: claims.UserID},
 	)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
 		u.app.Logger.Set().Named("users").Error("profile", zap.Any("error", err.Error()))
+
 		return echo.NewHTTPError(code,
 			echo.Map{
 				"status":  false,
@@ -34,6 +35,7 @@ func (u *UserHandler) Profile(c echo.Context) error {
 				"errors":  richErr.Error(),
 			})
 	}
+
 	return c.JSON(http.StatusOK,
 		echo.Map{
 			"status":  true,

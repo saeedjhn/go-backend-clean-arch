@@ -7,8 +7,6 @@ import (
 )
 
 func NewMysqlConnection(config mysql.Config) (mysql.DB, error) {
-	//return mysql.New(config)
-
 	myDB := mysql.New(config)
 
 	if err := myDB.ConnectTo(); err != nil {

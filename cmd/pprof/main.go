@@ -25,7 +25,9 @@ func main() {
 
 	// Prof
 	go func() {
-		http.ListenAndServe(app.Config.Pprof.Port, nil)
+		if err = http.ListenAndServe(app.Config.Pprof.Port, nil); err != nil {
+			log.Fatal(err)
+		}
 	}()
 
 	quit := make(chan os.Signal, 1)

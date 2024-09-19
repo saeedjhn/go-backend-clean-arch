@@ -7,8 +7,6 @@ import (
 )
 
 func NewRedisClient(config redis.Config) (redis.DB, error) {
-	//redis.New(config)
-
 	myDB := redis.New(config)
 
 	if err := myDB.ConnectTo(); err != nil {

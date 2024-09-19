@@ -1,12 +1,16 @@
 package message
 
 const (
+
 	// 1XX: Information
-	Msg100Continue           = "The server has received the request headers, and the client should proceed to send the request body"
+
+	Msg100Continue = "The server has received the request headers, " +
+		"and the client should proceed to send the request body"
 	Msg101SwitchingProtocols = "The requester has asked the server to switch protocols"
 	Msg102EarlyHints         = "Used with the Link header to allow the browser to start preloading resources while the server prepares a response"
 
 	// 2XX: Successful
+
 	Msg200Ok                          = "The request is OK"
 	Msg201Created                     = "The request has been fulfilled, and a new resource is created"
 	Msg202Accepted                    = "The request has been accepted for processing, but the processing has not been completed"
@@ -16,6 +20,7 @@ const (
 	Msg206PartialContent              = "The server is delivering only part of the resource due to a range header sent by the client"
 
 	// 3XX: Redirection
+
 	Msg300MultipleChoices   = "A link list. The userentity can select a link and go to that location. Maximum five addresses"
 	Msg301MovedPermanently  = "The requested page has moved to a new URL"
 	Msg302Found             = "The requested page has moved temporarily to a new URL"
@@ -25,6 +30,7 @@ const (
 	Msg308PermanentRedirect = "The requested page has moved permanently to a new URL"
 
 	// 4XX: Client Error
+
 	ErrorMsg400BadRequest                  = "The request cannot be fulfilled due to bad syntax"
 	ErrorMsg401UnAuthorized                = "The request was a legal request, but the server is refusing to respond to it. For use when authentication is possible but has failed or not yet been provided"
 	ErrorMsg402PaymentRequired             = "Reserved for future use"
@@ -45,6 +51,7 @@ const (
 	ErrorMsg417ExpectationFailed           = "The server cannot meet the requirements of the Expect request-header field"
 
 	// 5XX: Server Error
+
 	ErrorMsg500InternalServerError           = "A generic error message, given when no more specific message is suitable"
 	ErrorMsg501NotImplemented                = "The server either does not recognize the request method, or it lacks the ability to fulfill the request"
 	ErrorMsg502BadGateway                    = "The server was acting as a gateway or proxy and received an invalid response from the upstream server"
@@ -54,9 +61,11 @@ const (
 	ErrorMsg511NetworkAuthenticationRequired = ""
 
 	// General
+
 	ErrorMsgSomethingWentWrong = "Something went wrong"
 
 	// DB
+
 	ErrorMsgDBRecordNotFound      = "Record not found"
 	ErrorMsgDBCantScanQueryResult = "Can't scan query result"
 

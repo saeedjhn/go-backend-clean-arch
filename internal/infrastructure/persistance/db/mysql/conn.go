@@ -32,7 +32,6 @@ func (m *MySqlDB) ConnectTo() error {
 
 	m.db, m.err = sql.Open(driverName, conn)
 	if m.err != nil {
-		//log.Fatalf("can't open mysql db: %v", err)
 		return fmt.Errorf("can`t open mysql db: %w", m.err)
 	}
 

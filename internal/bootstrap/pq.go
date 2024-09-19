@@ -7,8 +7,6 @@ import (
 )
 
 func NewPostgresConnection(config pq.Config) (pq.DB, error) {
-	//return pq.New(config)
-
 	myDB := pq.New(config)
 
 	if err := myDB.ConnectTo(); err != nil {

@@ -14,7 +14,7 @@ type User struct {
 	UpdatedAt time.Time
 }
 
-//func (u User) ToUserInfoDTO() userdto.UserInfo {
+// func (u User) ToUserInfoDTO() userdto.UserInfo {
 //	return userdto.UserInfo{
 //		ID:        u.ID,
 //		Name:      u.Name,
@@ -23,4 +23,4 @@ type User struct {
 //		CreatedAt: u.CreatedAt,
 //		UpdatedAt: u.UpdatedAt,
 //	}
-//}
+// }
