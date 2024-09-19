@@ -187,6 +187,16 @@ run/scheduler:
 # QUALITY CONTROL
 # ==================================================================================== #
 
+## golangci-lint: Smart, fast linters runner
+.PHONY: golangci-lint
+lint:
+	@#echo " > Installing:"
+	#go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	golangci-lint --version
+
+	@echo " > Running:"
+	golangci-lint run --config .golangci.yml
+
 ## goimports: This tool updates your Go import lines, adding missing ones and removing unreferenced ones
 .PHONY: goimports
 goimports:
