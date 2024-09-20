@@ -34,5 +34,5 @@ func (v Validator) ValidateProfileRequest(req userdto.ProfileRequest) (map[strin
 			WithKind(kind.KindStatusUnprocessableEntity)
 	}
 
-	return nil, nil
+	return map[string]string{}, nil
 }

@@ -34,5 +34,5 @@ func (v Validator) ValidateRefreshTokenRequest(req userdto.RefreshTokenRequest) 
 			WithKind(kind.KindStatusUnprocessableEntity)
 	}
 
-	return nil, nil
+	return map[string]string{}, nil
 }

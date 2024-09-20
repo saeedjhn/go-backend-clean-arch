@@ -39,5 +39,5 @@ func (v Validator) ValidateLoginRequest(req userdto.LoginRequest) (map[string]st
 			WithKind(kind.KindStatusUnprocessableEntity)
 	}
 
-	return nil, nil
+	return map[string]string{}, nil
 }

@@ -39,5 +39,5 @@ func (v Validator) ValidateCreateTaskRequest(req userdto.CreateTaskRequest) (map
 			WithKind(kind.KindStatusUnprocessableEntity)
 	}
 
-	return nil, nil
+	return map[string]string{}, nil
 }
