@@ -8,6 +8,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
+	passwordvalidator "github.com/wagslane/go-password-validator"
 )
 
 func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[string]string, error) {
@@ -24,7 +25,8 @@ func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[str
 
 		validation.Field(&req.Password,
 			validation.Required,
-			validation.Length(3, 128)),
+			validation.Length(3, 128),
+			validation.By(isSecurePassword(v.config.Application.EntropyPassword))),
 	); err != nil {
 		var fieldErrors = make(map[string]string)
 
@@ -43,5 +45,19 @@ func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[str
 			WithKind(kind.KindStatusUnprocessableEntity)
 	}
 
-	return nil, nil
+	return map[string]string{}, nil
+}
+
+func isSecurePassword(entropy float64) func(value interface{}) error {
+	return func(value interface{}) error {
+		p, _ := value.(string)
+
+		if err := passwordvalidator.Validate(p, entropy); err != nil {
+			return errors.New(
+				"insecure password, try including more special characters, using uppercase letters, using numbers or using a longer password",
+			)
+		}
+
+		return nil
+	}
 }

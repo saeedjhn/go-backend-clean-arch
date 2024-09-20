@@ -19,6 +19,7 @@ const (
 type Application struct {
 	Env                     Env           `mapstructure:"env"`
 	Debug                   bool          `mapstructure:"debug"`
+	EntropyPassword         float64       `mapstructure:"entropy_password"`
 	GracefulShutdownTimeout time.Duration `mapstructure:"graceful_shutdown_timeout"`
 }
 

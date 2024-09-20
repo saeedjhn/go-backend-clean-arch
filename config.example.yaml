@@ -1,11 +1,15 @@
 application:
   env: development
   debug: false
-  graceful_shutdown_timeout: "30s"
+  entropy_password: 80
+  graceful_shutdown_timeout: "10s"
 
 http_server:
   port: 8000
   timeout: "5s"
+
+pprof:
+  port: 8001
 
 logger:
   filename: "./logs/log.json"

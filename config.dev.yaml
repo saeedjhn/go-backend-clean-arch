@@ -1,6 +1,7 @@
 application:
   env: development
-  debug: false
+  debug: true
+  entropy_password: 80
   graceful_shutdown_timeout: "10s"
 
 http_server:

@@ -33,7 +33,7 @@ func New(
 	)
 
 	// Validator
-	validator := uservalidator.New()
+	validator := uservalidator.New(app.Config)
 
 	// Handler
 	handler := userhandler.New(app, validator, userSvc)
