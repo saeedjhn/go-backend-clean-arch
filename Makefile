@@ -187,6 +187,14 @@ run/scheduler:
 # QUALITY CONTROL
 # ==================================================================================== #
 
+## gosec: The go security checker
+.PHONY: gosec
+gosec:
+	@#echo " > Installing:"
+	#go install github.com/securego/gosec/v2/cmd/gosec@latest
+	gosec --version
+	gosec ./..
+
 ## golangci-lint: Smart, fast linters runner
 .PHONY: golangci-lint
 lint:
