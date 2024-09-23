@@ -62,26 +62,26 @@ const (
 
 	// General
 
-	ErrorMsgSomethingWentWrong = "Something went wrong"
+	ErrorMsgSomethingWentWrong = "something went wrong"
 
 	// DB
 
-	ErrorMsgDBRecordNotFound      = "Record not found"
-	ErrorMsgDBCantScanQueryResult = "Can't scan query result"
+	ErrorMsgDBRecordNotFound      = "record not found"
+	ErrorMsgDBCantScanQueryResult = "can't scan query result"
 
-	ErrorMsgMobileIsNotUnique  = "Mobile is not unique"
-	ErrorMsgInvalidInput       = "Invalid input"
-	ErrorMsgMobileIsNotValid   = "Mobile is not valid"
-	ErrorMsgUserNotAllowed     = "User not allowed"
-	ErrorMsgUserNotFound       = "User not found"
-	ErrorMsgCategoryIsNotValid = "Category is not valid"
-	ErrorMsgUserNotExists      = "User is not exists"
+	ErrorMsgMobileIsNotUnique  = "mobile is not unique"
+	ErrorMsgInvalidInput       = "invalid input"
+	ErrorMsgMobileIsNotValid   = "mobile is not valid"
+	ErrorMsgUserNotAllowed     = "user not allowed"
+	ErrorMsgUserNotFound       = "user not found"
+	ErrorMsgCategoryIsNotValid = "category is not valid"
+	ErrorMsgUserNotExists      = "user is not exists"
 
-	MsgUserRegisterSuccessfully        = "User is register successfully"
-	MsgUserLoginSuccessfully           = "User is login successfully"
-	MsgUserSeeProfileSuccessfully      = "User see profile successfully"
-	MsgUserGetTasksSuccessfully        = "User get tasks successfully"
-	MsgUserCreateTaskSuccessfully      = "User create taskentity successfully"
-	MsgUserGetRefreshTokenSuccessfully = "User get refresh token successfully"
-	MsgUserGetAllTaskSuccessfully      = "User get all tasks successfully"
+	MsgUserRegisterSuccessfully        = "user is register successfully"
+	MsgUserLoginSuccessfully           = "user is login successfully"
+	MsgUserSeeProfileSuccessfully      = "user see profile successfully"
+	MsgUserGetTasksSuccessfully        = "user get tasks successfully"
+	MsgUserCreateTaskSuccessfully      = "user create taskentity successfully"
+	MsgUserGetRefreshTokenSuccessfully = "ser get refresh token successfully"
+	MsgUserGetAllTaskSuccessfully      = "user get all tasks successfully"
 )
