@@ -17,15 +17,15 @@ func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[str
 	if err := validation.ValidateStruct(&req,
 		validation.Field(&req.Name,
 			validation.Required,
-			validation.Length(3, 128)),
+			validation.Length(NameMinLen, NameMaxLen)),
 
 		validation.Field(&req.Mobile,
 			validation.Required,
-			validation.Length(11, 11)),
+			validation.Length(MobileMinLen, MobileMaxLen)),
 
 		validation.Field(&req.Password,
 			validation.Required,
-			validation.Length(3, 128),
+			validation.Length(PasswordMinLen, PasswordMaxLen),
 			validation.By(isSecurePassword(v.config.Application.EntropyPassword))),
 	); err != nil {
 		var fieldErrors = make(map[string]string)

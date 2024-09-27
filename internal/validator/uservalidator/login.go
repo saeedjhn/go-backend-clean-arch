@@ -16,11 +16,11 @@ func (v Validator) ValidateLoginRequest(req userdto.LoginRequest) (map[string]st
 	if err := validation.ValidateStruct(&req,
 		validation.Field(&req.Mobile,
 			validation.Required,
-			validation.Length(11, 11)),
+			validation.Length(MobileMinLen, MobileMaxLen)),
 
 		validation.Field(&req.Password,
 			validation.Required,
-			validation.Length(3, 128)),
+			validation.Length(PasswordMinLen, PasswordMaxLen)),
 	); err != nil {
 		var fieldErrors = make(map[string]string)
 
