@@ -1,9 +1,9 @@
 package message
 
-// Rule: Op + Package(Pascal-case) + MethodOrFunction(Pascal-case)
+// Rule: Op + Package(Pascal-case) + MethodOrFunction(Pascal-case).
 const (
 
-	// Validation
+	// Validation.
 
 	OpUserValidatorValidateRegisterRequest     = "uservalidator.ValidateRegisterRequest"
 	OpUserValidatorValidateLoginRequest        = "uservalidator.ValidateLoginRequest"
@@ -11,7 +11,7 @@ const (
 	OpTaskValidatorValidateCreateRequest       = "taskvalidator.ValidateCreateRequest"
 	OpTaskValidatorValidateCreateTaskRequest   = "taskvalidator.ValidateCreateTaskRequest"
 
-	// UseCase
+	// UseCase.
 
 	OpUserUsecaseRegister     = "userservice.Register"
 	OpUserUsecaseLogin        = "userservice.Login"
@@ -19,7 +19,7 @@ const (
 	OpUserUsecaseCreateTask   = "userservice.CreateTask"
 	OpTaskUsecaseCreate       = "taskservice.Create"
 
-	// Repository
+	// Repository.
 
 	OpMysqlUserCreate         = "mysqluser.Create"
 	OpMysqlUserIsMobileUnique = "mysqluser.IsMobileUnique"
@@ -31,7 +31,7 @@ const (
 	OpMysqlTaskGetAllByUserID = "mysqltask.GetAllByUserID"
 	OpMysqlTaskIsExistsUser   = "mysqltask.IsExistsUser"
 
-	// Compare password
+	// Compare password.
 
-	InvalidCredentials = "Invalid credentials"
+	InvalidCredentials = "invalid credentials"
 )
