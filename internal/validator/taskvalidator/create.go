@@ -16,11 +16,11 @@ func (v Validator) ValidateCreateRequest(req taskdto.CreateRequest) (map[string]
 	if err := validation.ValidateStruct(&req,
 		validation.Field(&req.Title,
 			validation.Required,
-			validation.Length(3, 128)),
+			validation.Length(TitleMinLen, TitleMaxLen)),
 
 		validation.Field(&req.Description,
 			validation.Required,
-			validation.Length(12, 1024)),
+			validation.Length(DescMinLen, DescMaxLen)),
 	); err != nil {
 		var fieldErrors = make(map[string]string)
 
