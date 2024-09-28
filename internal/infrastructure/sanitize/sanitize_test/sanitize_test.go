@@ -1,8 +1,10 @@
-package sanitize
+package sanitize_test
 
 import (
 	"log"
 	"testing"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/sanitize"
 )
 
 type Status string
@@ -18,7 +20,8 @@ type Post struct {
 }
 
 func TestSanitize(t *testing.T) {
-	s := New().SetPolicy(StrictPolicy)
+	var err error
+	s := sanitize.New().SetPolicy(sanitize.StrictPolicy)
 
 	p := Post{
 		Title:       "This is a <a>Title</a>",
@@ -26,15 +29,18 @@ func TestSanitize(t *testing.T) {
 		Status:      Pending,
 	}
 
-	log.Println(p)
+	t.Log(p)
 
-	any, err := s.Any(p)
+	res, err := s.Any(p)
 	if err != nil {
 		log.Println(err)
 	}
-	log.Println("any: ", any)
 
-	s.Struct(&p)
+	t.Log("result: ", res)
 
-	log.Println(p)
+	if err = s.Struct(&p); err != nil {
+		t.Fatal(err)
+	}
+
+	t.Log(p)
 }
