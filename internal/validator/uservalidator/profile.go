@@ -7,12 +7,9 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
 func (v Validator) ValidateProfileRequest(req userdto.ProfileRequest) (map[string]string, error) {
-	const op = message.OpUserValidatorValidateLoginRequest
-
 	if err := validation.ValidateStruct(&req,
 		validation.Field(&req.ID,
 			validation.Required),
@@ -29,8 +26,8 @@ func (v Validator) ValidateProfileRequest(req userdto.ProfileRequest) (map[strin
 			}
 		}
 
-		return fieldErrors, richerror.New(op).WithErr(err).
-			WithMessage(message.ErrorMsgInvalidInput).
+		return fieldErrors, richerror.New(_opUserValidatorValidateProfileRequest).WithErr(err).
+			WithMessage(_errMsgInvalidInput).
 			WithKind(kind.KindStatusUnprocessableEntity)
 	}
 

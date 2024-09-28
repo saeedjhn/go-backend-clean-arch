@@ -7,20 +7,17 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
 func (v Validator) ValidateLoginRequest(req userdto.LoginRequest) (map[string]string, error) {
-	const op = message.OpUserValidatorValidateLoginRequest
-
 	if err := validation.ValidateStruct(&req,
 		validation.Field(&req.Mobile,
 			validation.Required,
-			validation.Length(MobileMinLen, MobileMaxLen)),
+			validation.Length(_mobileMinLen, _mobileMaxLen)),
 
 		validation.Field(&req.Password,
 			validation.Required,
-			validation.Length(PasswordMinLen, PasswordMaxLen)),
+			validation.Length(_passMinLen, _passMaxLen)),
 	); err != nil {
 		var fieldErrors = make(map[string]string)
 
@@ -34,8 +31,8 @@ func (v Validator) ValidateLoginRequest(req userdto.LoginRequest) (map[string]st
 			}
 		}
 
-		return fieldErrors, richerror.New(op).WithErr(err).
-			WithMessage(message.ErrorMsgInvalidInput).
+		return fieldErrors, richerror.New(_opUserValidatorValidateLoginRequest).WithErr(err).
+			WithMessage(_errMsgInvalidInput).
 			WithKind(kind.KindStatusUnprocessableEntity)
 	}
 

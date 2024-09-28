@@ -7,25 +7,22 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 	passwordvalidator "github.com/wagslane/go-password-validator"
 )
 
 func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[string]string, error) {
-	const op = message.OpUserValidatorValidateRegisterRequest
-
 	if err := validation.ValidateStruct(&req,
 		validation.Field(&req.Name,
 			validation.Required,
-			validation.Length(NameMinLen, NameMaxLen)),
+			validation.Length(_nameMinLen, _nameMaxLen)),
 
 		validation.Field(&req.Mobile,
 			validation.Required,
-			validation.Length(MobileMinLen, MobileMaxLen)),
+			validation.Length(_mobileMinLen, _mobileMaxLen)),
 
 		validation.Field(&req.Password,
 			validation.Required,
-			validation.Length(PasswordMinLen, PasswordMaxLen),
+			validation.Length(_passMinLen, _passMaxLen),
 			validation.By(isSecurePassword(v.config.Application.EntropyPassword))),
 	); err != nil {
 		var fieldErrors = make(map[string]string)
@@ -40,8 +37,8 @@ func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[str
 			}
 		}
 
-		return fieldErrors, richerror.New(op).WithErr(err).
-			WithMessage(message.ErrorMsgInvalidInput).
+		return fieldErrors, richerror.New(_opUserValidatorValidateRegisterRequest).WithErr(err).
+			WithMessage(_errMsgInvalidInput).
 			WithKind(kind.KindStatusUnprocessableEntity)
 	}
 
@@ -54,7 +51,8 @@ func isSecurePassword(entropy float64) func(value interface{}) error {
 
 		if err := passwordvalidator.Validate(p, entropy); err != nil {
 			return errors.New(
-				"insecure password, try including more special characters, using uppercase letters, using numbers or using a longer password",
+				"insecure password, try including more special characters, " +
+					"using uppercase letters, using numbers or using a longer password",
 			)
 		}
 
