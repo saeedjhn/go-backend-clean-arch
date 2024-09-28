@@ -6,7 +6,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func (a *Token) CreateAccessToken(id uint, secret string, subject string, expire time.Duration) (string, error) {
+func (a *Token) CreateAccessToken(id uint64, secret string, subject string, expire time.Duration) (string, error) {
 	// set our claims
 	claims := Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
