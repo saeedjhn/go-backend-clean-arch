@@ -1,8 +1,12 @@
 package taskvalidator
 
 const (
-	TitleMinLen = 3
-	TitleMaxLen = 128
-	DescMinLen  = 10
-	DescMaxLen  = 1024
+	_opTaskValidatorValidateCreateRequest = "taskvalidator_ValidateCreateRequest"
+
+	_titleMinLen = 3
+	_titleMaxLen = 128
+	_descMinLen  = 10
+	_descMaxLen  = 1024
+
+	_errMsgInvalidInput = "invalid input"
 )

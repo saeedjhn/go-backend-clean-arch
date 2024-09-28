@@ -7,20 +7,17 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/taskdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
 func (v Validator) ValidateCreateRequest(req taskdto.CreateRequest) (map[string]string, error) {
-	const op = message.OpTaskValidatorValidateCreateRequest
-
 	if err := validation.ValidateStruct(&req,
 		validation.Field(&req.Title,
 			validation.Required,
-			validation.Length(TitleMinLen, TitleMaxLen)),
+			validation.Length(_titleMinLen, _titleMaxLen)),
 
 		validation.Field(&req.Description,
 			validation.Required,
-			validation.Length(DescMinLen, DescMaxLen)),
+			validation.Length(_descMinLen, _descMaxLen)),
 	); err != nil {
 		var fieldErrors = make(map[string]string)
 
@@ -34,8 +31,8 @@ func (v Validator) ValidateCreateRequest(req taskdto.CreateRequest) (map[string]
 			}
 		}
 
-		return fieldErrors, richerror.New(op).WithErr(err).
-			WithMessage(message.ErrorMsgInvalidInput).
+		return fieldErrors, richerror.New(_opTaskValidatorValidateCreateRequest).WithErr(err).
+			WithMessage(_errMsgInvalidInput).
 			WithKind(kind.KindStatusUnprocessableEntity)
 	}
 
