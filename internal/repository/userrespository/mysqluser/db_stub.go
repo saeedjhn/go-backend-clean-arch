@@ -13,20 +13,41 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 )
 
+const (
+	_FirstRecordID  = 1001
+	_SecondRecordID = 1002
+)
+
 type DBStub struct {
-	conn map[uint]entity.User
+	conn map[uint64]entity.User
 }
 
 func NewDBStub() *DBStub {
-	conn := map[uint]entity.User{
-		1001: {1001, "s", "m", "e", "p", time.Now(), time.Now()},
-		1002: {1002, "ss", "mm", "ee", "pp", time.Now(), time.Now()},
+	conn := map[uint64]entity.User{
+		1001: {
+			ID:        _FirstRecordID,
+			Name:      "n",
+			Mobile:    "m",
+			Email:     "e",
+			Password:  "p",
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+		},
+		1002: {
+			ID:        _SecondRecordID,
+			Name:      "nn",
+			Mobile:    "mm",
+			Email:     "ee",
+			Password:  "pp",
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+		},
 	}
 
 	return &DBStub{conn: conn}
 }
 
-func (s DBStub) Create(u entity.User) (uint, error) {
+func (s DBStub) Create(u entity.User) (uint64, error) {
 	s.conn[u.ID] = u
 	exists := s.IsByID(u.ID)
 	if exists {
@@ -36,7 +57,7 @@ func (s DBStub) Create(u entity.User) (uint, error) {
 	return u.ID, nil
 }
 
-func (s DBStub) GetByID(id uint) (entity.User, error) {
+func (s DBStub) GetByID(id uint64) (entity.User, error) {
 	user, exists := s.conn[id]
 	if !exists {
 		return entity.User{}, errors.New("user not found")
@@ -45,7 +66,7 @@ func (s DBStub) GetByID(id uint) (entity.User, error) {
 	return user, nil
 }
 
-func (s DBStub) IsByID(id uint) bool {
+func (s DBStub) IsByID(id uint64) bool {
 	_, exists := s.conn[id]
 
 	return exists

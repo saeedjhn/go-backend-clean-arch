@@ -25,27 +25,23 @@ func New(conn mysql.DB) *DB {
 }
 
 func (r *DB) Create(u entity.User) (entity.User, error) {
-	const op = message.OpMysqlUserCreate
-
 	query := "INSERT INTO users (name, mobile, email, password) values(?, ?, ?, ?)"
 
 	res, err := r.conn.Conn().Exec(query, u.Name, u.Mobile, u.Email, u.Password)
 	if err != nil {
 		return entity.User{},
-			richerror.New(op).
-				WithErr(err).
+			richerror.New(_opMysqlUserCreate).WithErr(err).
 				WithMessage(message.ErrorMsg500InternalServerError).
 				WithKind(kind.KindStatusInternalServerError)
 	}
 
 	id, _ := res.LastInsertId()
-	u.ID = uint(id)
+	u.ID = uint64(id) // #nosec G115 // integer overflow conversion int64 -> uint64
 
 	return u, nil
 }
 
 func (r *DB) IsMobileUnique(mobile string) (bool, error) {
-	const op = message.OpMysqlUserIsMobileUnique
 	var exists bool
 
 	err := r.conn.Conn().
@@ -53,8 +49,7 @@ func (r *DB) IsMobileUnique(mobile string) (bool, error) {
 
 	if err != nil {
 		return false,
-			richerror.New(op).
-				WithErr(err).
+			richerror.New(_opMysqlUserIsMobileUnique).WithErr(err).
 				WithMessage(message.ErrorMsg500InternalServerError).
 				WithKind(kind.KindStatusInternalServerError)
 	}
@@ -67,38 +62,40 @@ func (r *DB) IsMobileUnique(mobile string) (bool, error) {
 }
 
 func (r *DB) GetByMobile(mobile string) (entity.User, error) {
-	const op = message.OpMysqlUserGetByMobile
-
 	query := "SELECT * FROM users WHERE mobile = ?"
 	row := r.conn.Conn().QueryRow(query, mobile)
+
 	user, err := scanUser(row)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return entity.User{}, richerror.New(op).WithErr(err).
-				WithMessage(message.ErrorMsgDBRecordNotFound).WithKind(kind.KindStatusNotFound)
+			return entity.User{}, richerror.New(_opMysqlUserGetByMobile).WithErr(err).
+				WithMessage(_errMsgDBRecordNotFound).
+				WithKind(kind.KindStatusNotFound)
 		}
 
-		return entity.User{}, richerror.New(op).WithErr(err).
-			WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
+		return entity.User{}, richerror.New(_opMysqlUserGetByMobile).WithErr(err).
+			WithMessage(_errMsgDBCantScanQueryResult).
+			WithKind(kind.KindStatusInternalServerError)
 	}
 
 	return user, nil
 }
 
-func (r *DB) GetByID(id uint) (entity.User, error) {
-	const op = message.OpMysqlUserGetByID
-
+func (r *DB) GetByID(id uint64) (entity.User, error) {
 	query := "SELECT * FROM users WHERE id = ?"
 	row := r.conn.Conn().QueryRow(query, id)
+
 	user, err := scanUser(row)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return entity.User{}, richerror.New(op).WithErr(err).
-				WithMessage(message.ErrorMsgDBRecordNotFound).WithKind(kind.KindStatusNotFound)
+			return entity.User{}, richerror.New(_opMysqlUserGetByID).WithErr(err).
+				WithMessage(_errMsgDBRecordNotFound).
+				WithKind(kind.KindStatusNotFound)
 		}
 
-		return entity.User{}, richerror.New(op).WithErr(err).
-			WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
+		return entity.User{}, richerror.New(_opMysqlUserGetByID).WithErr(err).
+			WithMessage(_errMsgDBCantScanQueryResult).
+			WithKind(kind.KindStatusInternalServerError)
 	}
 
 	return user, nil

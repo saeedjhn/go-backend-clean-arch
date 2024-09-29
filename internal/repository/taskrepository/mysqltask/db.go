@@ -25,38 +25,32 @@ func New(conn mysql.DB) *DB {
 }
 
 func (r *DB) Create(t entity.Task) (entity.Task, error) {
-	const op = message.OpMysqlTaskCreate
-
 	query := "INSERT INTO tasks (user_id, title, description, status)  values(?, ?, ?, ?)"
 
 	res, err := r.conn.Conn().Exec(query, t.UserID, t.Title, t.Description, t.Status)
 	if err != nil {
 		return entity.Task{},
-			richerror.New(op).
-				WithErr(err).
+			richerror.New(_opMysqlTaskCreate).WithErr(err).
 				WithMessage(message.ErrorMsg500InternalServerError).
 				WithKind(kind.KindStatusInternalServerError)
 	}
 
 	id, _ := res.LastInsertId()
-	t.ID = uint(id)
+	t.ID = uint64(id) // #nosec G115 // integer overflow conversion int64 -> uint64
 
 	return t, nil
 }
 
-func (r *DB) IsExistsUser(id uint) (bool, error) {
-	const op = message.OpMysqlTaskIsExistsUser
+func (r *DB) IsExistsUser(id uint64) (bool, error) {
 	var exists bool
 
 	err := r.conn.Conn().
 		QueryRow(`select exists(select 1 from users where id = ?)`, id).Scan(&exists) // TODO - IsExistsUser
 
 	if err != nil {
-		return false,
-			richerror.New(op).
-				WithErr(err).
-				WithMessage(message.ErrorMsg500InternalServerError).
-				WithKind(kind.KindStatusInternalServerError)
+		return false, richerror.New(_opMysqlTaskIsExistsUser).WithErr(err).
+			WithMessage(message.ErrorMsg500InternalServerError).
+			WithKind(kind.KindStatusInternalServerError)
 	}
 
 	if exists {
@@ -66,63 +60,79 @@ func (r *DB) IsExistsUser(id uint) (bool, error) {
 	return false, nil
 }
 
-func (r *DB) GetByID(id uint) (entity.Task, error) {
-	const op = message.OpMysqlTaskGetByID
-
+func (r *DB) GetByID(id uint64) (entity.Task, error) {
 	query := "SELECT * FROM users WHERE id = ?" // TODO - GetByID
 	row := r.conn.Conn().QueryRow(query, id)
+
 	task, err := scanTask(row)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return entity.Task{}, richerror.New(op).WithErr(err).
-				WithMessage(message.ErrorMsgDBRecordNotFound).WithKind(kind.KindStatusNotFound)
+			return entity.Task{}, richerror.New(_opMysqlTaskGetByID).WithErr(err).
+				WithMessage(_errMsgDBRecordNotFound).
+				WithKind(kind.KindStatusNotFound)
 		}
 
-		return entity.Task{}, richerror.New(op).WithErr(err).
-			WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
+		return entity.Task{}, richerror.New(_opMysqlTaskGetByID).WithErr(err).
+			WithMessage(_errMsgDBCantScanQueryResult).
+			WithKind(kind.KindStatusInternalServerError)
 	}
 
 	return task, nil
 }
 
-func (r *DB) GetAllByUserID(userID uint) ([]entity.Task, error) {
-	const op = message.OpMysqlTaskGetAllByUserID
-
+func (r *DB) GetAllByUserID(userID uint64) ([]entity.Task, error) {
 	query := "SELECT * FROM tasks WHERE user_id = ? ORDER BY id DESC"
-	rows, err := r.conn.Conn().Query(query, userID)
-	defer rows.Close()
 
-	if err != nil {
-		return nil, richerror.New(op).WithErr(err).
+	rows, err := r.conn.Conn().Query(query, userID)
+	if err != nil || rows.Err() != nil {
+		return nil, richerror.New(_opMysqlTaskGetAllByUserID).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).
 			WithKind(kind.KindStatusInternalServerError)
 	}
 
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
+
 	tasks, err := scanTasks(rows)
 	if err != nil {
-		return nil, richerror.New(op).WithErr(err).
-			WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
+		if errors.Is(err, sql.ErrNoRows) {
+			return []entity.Task{}, richerror.New(_opMysqlTaskGetByID).WithErr(err).
+				WithMessage(_errMsgDBRecordNotFound).
+				WithKind(kind.KindStatusNotFound)
+		}
+
+		return nil, richerror.New(_opMysqlTaskGetAllByUserID).WithErr(err).
+			WithMessage(_errMsgDBCantScanQueryResult).
+			WithKind(kind.KindStatusInternalServerError)
 	}
 
 	return tasks, nil
 }
 
 func (r *DB) GetAll() ([]entity.Task, error) {
-	const op = message.OpMysqlTaskGetAll
-
 	rows, err := r.conn.Conn().Query("SELECT * FROM tasks ORDER BY id DESC ")
-	defer rows.Close()
-
-	if err != nil {
-		return nil, richerror.New(op).WithErr(err).
+	if err != nil || rows.Err() != nil {
+		return nil, richerror.New(_opMysqlTaskGetAll).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).
 			WithKind(kind.KindStatusInternalServerError)
 	}
 
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
+
 	tasks, err := scanTasks(rows)
 	if err != nil {
-		return nil, richerror.New(op).WithErr(err).
-			WithMessage(message.ErrorMsgDBCantScanQueryResult).WithKind(kind.KindStatusInternalServerError)
+		if errors.Is(err, sql.ErrNoRows) {
+			return []entity.Task{}, richerror.New(_opMysqlTaskGetByID).WithErr(err).
+				WithMessage(_errMsgDBRecordNotFound).
+				WithKind(kind.KindStatusNotFound)
+		}
+
+		return nil, richerror.New(_opMysqlTaskGetAll).WithErr(err).
+			WithMessage(_errMsgDBCantScanQueryResult).
+			WithKind(kind.KindStatusInternalServerError)
 	}
 
 	return tasks, nil
@@ -153,7 +163,7 @@ func scanTasks(scanner RowsScanner) ([]entity.Task, error) {
 		task.Status = entity.MapToTaskStatus(status)
 
 		if err != nil {
-			return nil, nil
+			return nil, err
 		}
 
 		tasks = append(tasks, task)
