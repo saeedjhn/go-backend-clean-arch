@@ -1,9 +1,10 @@
-package token
+package token_test
 
 import (
-	"log"
 	"testing"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/token"
 )
 
 const (
@@ -23,32 +24,26 @@ func TestService(t *testing.T) {
 	//	AccessTokenExpiryTime:  60,
 	//	RefreshTokenExpiryTime: 60,
 	// })
-	as := New()
+	as := token.New()
 
-	log.Println("Access Token is:")
+	t.Log("Access Token is:")
 	accessToken, _ := as.CreateAccessToken(ID, AccessTokenSecret, AccessSubject, AccessTokenExpiryTime)
-	log.Println(accessToken)
+	t.Log(accessToken)
 
-	log.Println("Parse Token, Access Token")
+	t.Log("Parse Token, Access Token")
 	pt, _ := as.ParseToken(accessToken, AccessTokenSecret)
-	log.Println(pt)
+	t.Log(pt)
 
-	log.Println("Is authorized, access Token")
-	log.Println(as.IsAuthorized(accessToken, AccessTokenSecret))
+	t.Log("Is authorized, access Token")
+	t.Log(as.IsAuthorized(accessToken, AccessTokenSecret))
 
-	log.Println("Extract Id from access token")
-	log.Println(as.ExtractIdFromToken(accessToken, AccessTokenSecret))
-
-	log.Println("Refresh Token is")
+	t.Log("Refresh Token is")
 	refreshToken, _ := as.CreateRefreshToken(ID, RefreshTokenSecret, RefreshSubject, RefreshTokenExpiryTime)
-	log.Println(refreshToken)
+	t.Log(refreshToken)
 
-	log.Println("Parse Token, Refresh Token")
-	log.Println(as.ParseToken(refreshToken, RefreshTokenSecret))
+	t.Log("Parse Token, Refresh Token")
+	t.Log(as.ParseToken(refreshToken, RefreshTokenSecret))
 
-	log.Println("Is authorized, refresh Token")
-	log.Println(as.IsAuthorized(refreshToken, RefreshTokenSecret))
-
-	log.Println("Extract Id from refresh token")
-	log.Println(as.ExtractIdFromToken(refreshToken, RefreshTokenSecret))
+	t.Log("Is authorized, refresh Token")
+	t.Log(as.IsAuthorized(refreshToken, RefreshTokenSecret))
 }
