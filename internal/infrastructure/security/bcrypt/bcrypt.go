@@ -15,7 +15,7 @@ const (
 )
 
 func Generate(str string, cost Cost) (string, error) {
-	if cost > 31 {
+	if cost > MaxCost {
 		return "", errors.New("don`t supported cost")
 	}
 
