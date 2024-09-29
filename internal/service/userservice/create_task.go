@@ -4,12 +4,9 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
 func (u *UserInteractor) CreateTask(req userdto.CreateTaskRequest) (userdto.CreateTaskResponse, error) {
-	const op = message.OpUserUsecaseCreateTask
-
 	dto := usertaskservicedto.CreateTaskRequest{
 		UserID:      req.UserID,
 		Title:       req.Title,

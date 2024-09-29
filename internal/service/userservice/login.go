@@ -11,8 +11,6 @@ import (
 )
 
 func (u *UserInteractor) Login(req userdto.LoginRequest) (userdto.LoginResponse, error) {
-	const op = message.OpUserUsecaseLogin
-
 	user, err := u.repository.GetByMobile(req.Mobile)
 	if err != nil {
 		return userdto.LoginResponse{}, err
@@ -20,8 +18,8 @@ func (u *UserInteractor) Login(req userdto.LoginRequest) (userdto.LoginResponse,
 
 	err = bcrypt.CompareHashAndSTR(user.Password, req.Password)
 	if err != nil {
-		return userdto.LoginResponse{}, richerror.New(op).WithErr(err).
-			WithMessage(message.InvalidCredentials).
+		return userdto.LoginResponse{}, richerror.New(_opUserServiceLogin).WithErr(err).
+			WithMessage(_errMsgIncorrectPassword).
 			WithKind(kind.KindStatusBadRequest)
 	}
 
@@ -37,14 +35,14 @@ func (u *UserInteractor) Login(req userdto.LoginRequest) (userdto.LoginResponse,
 
 	accessToken, err := u.authInteractor.CreateAccessToken(dto)
 	if err != nil {
-		return userdto.LoginResponse{}, richerror.New(op).WithErr(err).
+		return userdto.LoginResponse{}, richerror.New(_opUserServiceLogin).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).
 			WithKind(kind.KindStatusInternalServerError)
 	}
 
 	refreshToken, err := u.authInteractor.CreateRefreshToken(dto)
 	if err != nil {
-		return userdto.LoginResponse{}, richerror.New(op).WithErr(err).
+		return userdto.LoginResponse{}, richerror.New(_opUserServiceLogin).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).
 			WithKind(kind.KindStatusInternalServerError)
 	}
@@ -64,5 +62,4 @@ func (u *UserInteractor) Login(req userdto.LoginRequest) (userdto.LoginResponse,
 			RefreshToken: refreshToken.Token,
 		},
 	}, nil
-
 }

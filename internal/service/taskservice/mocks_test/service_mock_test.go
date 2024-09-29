@@ -63,7 +63,7 @@ func TestCreate(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, task.Task)
-	require.Equal(t, uint(1), task.Task.ID)
+	require.Equal(t, uint64(1), task.Task.ID)
 	require.Equal(t, "My title", createdTask.Title)
 
 	// More

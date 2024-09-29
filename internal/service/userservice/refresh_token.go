@@ -9,13 +9,11 @@ import (
 )
 
 func (u *UserInteractor) RefreshToken(req userdto.RefreshTokenRequest) (userdto.RefreshTokenResponse, error) {
-	const op = message.OpUserUsecaseRefreshToken
-
 	dto := userauthservicedto.ExtractIDFromTokenRequest{Token: req.RefreshToken}
 
 	id, err := u.authInteractor.ExtractIDFromRefreshToken(dto)
 	if err != nil {
-		return userdto.RefreshTokenResponse{}, richerror.New(op).WithErr(err).
+		return userdto.RefreshTokenResponse{}, richerror.New(_opUserServiceRefreshToken).WithErr(err).
 			WithMessage(message.ErrorMsg403Forbidden).
 			WithKind(kind.KindStatusBadRequest)
 	}
@@ -29,14 +27,14 @@ func (u *UserInteractor) RefreshToken(req userdto.RefreshTokenRequest) (userdto.
 
 	accessToken, err := u.authInteractor.CreateAccessToken(dto2)
 	if err != nil {
-		return userdto.RefreshTokenResponse{}, richerror.New(op).WithErr(err).
+		return userdto.RefreshTokenResponse{}, richerror.New(_opUserServiceRefreshToken).WithErr(err).
 			WithMessage(message.ErrorMsg400BadRequest).
 			WithKind(kind.KindStatusBadRequest)
 	}
 
 	refreshToken, err := u.authInteractor.CreateRefreshToken(dto2)
 	if err != nil {
-		return userdto.RefreshTokenResponse{}, richerror.New(op).WithErr(err).
+		return userdto.RefreshTokenResponse{}, richerror.New(_opUserServiceRefreshToken).WithErr(err).
 			WithMessage(message.ErrorMsg400BadRequest).
 			WithKind(kind.KindStatusBadRequest)
 	}

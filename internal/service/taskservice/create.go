@@ -7,12 +7,11 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
-func (t *TaskInteractor) Create(req usertaskservicedto.CreateTaskRequest) (usertaskservicedto.CreateTaskResponse, error) {
-	const op = message.OpTaskUsecaseCreate
-
+func (t *TaskInteractor) Create(
+	req usertaskservicedto.CreateTaskRequest,
+) (usertaskservicedto.CreateTaskResponse, error) {
 	task := entity.Task{
 		UserID:      req.UserID,
 		Title:       req.Title,
@@ -26,9 +25,9 @@ func (t *TaskInteractor) Create(req usertaskservicedto.CreateTaskRequest) (usert
 	}
 
 	if !isExistsUser {
-		return usertaskservicedto.CreateTaskResponse{}, richerror.New(op).
-			WithErr(errors.New(message.ErrorMsgUserNotExists)).
-			WithMessage(message.ErrorMsgInvalidInput).
+		return usertaskservicedto.CreateTaskResponse{}, richerror.New(_opTaskServiceCreate).
+			WithErr(errors.New(_errMsgUserNotFound)).
+			WithMessage(_errMsgUserNotFound).
 			WithKind(kind.KindStatusBadRequest)
 	}
 

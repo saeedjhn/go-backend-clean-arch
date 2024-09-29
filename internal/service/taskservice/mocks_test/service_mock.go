@@ -50,7 +50,7 @@ func (mr *MockRepositoryMockRecorder) Create(u interface{}) *gomock.Call {
 }
 
 // GetAllByUserID mocks base method.
-func (m *MockRepository) GetAllByUserID(userID uint) ([]entity.Task, error) {
+func (m *MockRepository) GetAllByUserID(userID uint64) ([]entity.Task, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAllByUserID", userID)
 	ret0, _ := ret[0].([]entity.Task)
@@ -65,7 +65,7 @@ func (mr *MockRepositoryMockRecorder) GetAllByUserID(userID interface{}) *gomock
 }
 
 // GetByID mocks base method.
-func (m *MockRepository) GetByID(id uint) (entity.Task, error) {
+func (m *MockRepository) GetByID(id uint64) (entity.Task, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetByID", id)
 	ret0, _ := ret[0].(entity.Task)
@@ -80,7 +80,7 @@ func (mr *MockRepositoryMockRecorder) GetByID(id interface{}) *gomock.Call {
 }
 
 // IsExistsUser mocks base method.
-func (m *MockRepository) IsExistsUser(id uint) (bool, error) {
+func (m *MockRepository) IsExistsUser(id uint64) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "IsExistsUser", id)
 	ret0, _ := ret[0].(bool)

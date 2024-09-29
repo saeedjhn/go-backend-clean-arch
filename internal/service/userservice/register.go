@@ -8,12 +8,9 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/security/bcrypt"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
 func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.RegisterResponse, error) {
-	const op = message.OpUserUsecaseRegister
-
 	isUnique, err := u.repository.IsMobileUnique(req.Mobile)
 	if err != nil {
 		return userdto.RegisterResponse{}, err
@@ -21,9 +18,9 @@ func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.Register
 
 	if !isUnique {
 		return userdto.RegisterResponse{},
-			richerror.New(op).
-				WithErr(errors.New(message.ErrorMsgMobileIsNotUnique)).
-				WithMessage(message.ErrorMsgInvalidInput).
+			richerror.New(_opUserServiceRegister).
+				WithErr(errors.New(_errMsgMobileIsNotUnique)).
+				WithMessage(_errMsgMobileIsNotUnique).
 				WithKind(kind.KindStatusBadRequest)
 	}
 

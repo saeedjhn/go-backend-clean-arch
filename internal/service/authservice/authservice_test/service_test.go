@@ -23,8 +23,8 @@ func TestCreateToken(t *testing.T) {
 
 	u := entity.User{
 		ID:        7,
-		Name:      "",
-		Mobile:    "",
+		Name:      "John",
+		Mobile:    "09111111111",
 		Email:     "",
 		Password:  "",
 		CreatedAt: time.Time{},
@@ -35,11 +35,15 @@ func TestCreateToken(t *testing.T) {
 
 	at, _ := ai.CreateAccessToken(userauthservicedto.CreateTokenRequest{User: u})
 	t.Log(at)
-	t.Log(ai.ExtractIDFromAccessToken(userauthservicedto.ExtractIDFromTokenRequest{Token: at.Token}))
+
+	t.Log(ai.ExtractIDFromAccessToken(struct{ Token string }{Token: at.Token}))
+
 	t.Log(ai.ParseAccessToken(at.Token))
 
 	rt, _ := ai.CreateRefreshToken(userauthservicedto.CreateTokenRequest{User: u})
 	t.Log(rt)
-	t.Log(ai.ExtractIDFromRefreshToken(userauthservicedto.ExtractIDFromTokenRequest{Token: rt.Token}))
+
+	t.Log(ai.ExtractIDFromRefreshToken(struct{ Token string }{Token: rt.Token}))
+
 	t.Log(ai.ParseRefreshToken(rt.Token))
 }

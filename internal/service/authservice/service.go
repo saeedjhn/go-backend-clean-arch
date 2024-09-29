@@ -1,7 +1,6 @@
 package authservice
 
 import (
-	"strconv"
 	"time"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
@@ -58,33 +57,23 @@ func (a AuthInteractor) IsAuthorized(requestToken string, secret string) (bool, 
 	return a.token.IsAuthorized(requestToken, secret)
 }
 
-// func (a AuthInteractor) ExtractIDFromAccessToken(requestToken string) (string, error) {
-//	return a.token.ExtractIDFromToken(requestToken)
-// }
-
 func (a AuthInteractor) ExtractIDFromAccessToken(
 	req userauthservicedto.ExtractIDFromTokenRequest,
 ) (userauthservicedto.ExtractIDFromTokenResponse, error) {
-	et, err := a.token.ExtractIDFromToken(req.Token, a.config.AccessTokenSecret)
-
-	// Convert string to uint
-	i, _ := strconv.ParseUint(et, 10, 64) // Check err
+	et, err := a.token.ParseToken(req.Token, a.config.AccessTokenSecret)
 
 	return userauthservicedto.ExtractIDFromTokenResponse{
-		UserID: uint(i),
+		UserID: et.UserID,
 	}, err
 }
 
 func (a AuthInteractor) ExtractIDFromRefreshToken(
 	req userauthservicedto.ExtractIDFromTokenRequest,
 ) (userauthservicedto.ExtractIDFromTokenResponse, error) {
-	et, err := a.token.ExtractIDFromToken(req.Token, a.config.RefreshTokenSecret)
-
-	// Convert string to uint
-	i, _ := strconv.ParseUint(et, 10, 64) // Check err
+	et, err := a.token.ParseToken(req.Token, a.config.RefreshTokenSecret)
 
 	return userauthservicedto.ExtractIDFromTokenResponse{
-		UserID: uint(i),
+		UserID: et.UserID,
 	}, err
 }
 

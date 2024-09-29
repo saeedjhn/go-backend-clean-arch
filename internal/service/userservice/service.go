@@ -16,14 +16,16 @@ type TaskGenerator interface {
 type AuthGenerator interface {
 	CreateAccessToken(dto userauthservicedto.CreateTokenRequest) (userauthservicedto.CreateTokenResponse, error)
 	CreateRefreshToken(dto userauthservicedto.CreateTokenRequest) (userauthservicedto.CreateTokenResponse, error)
-	ExtractIDFromRefreshToken(dto userauthservicedto.ExtractIDFromTokenRequest) (userauthservicedto.ExtractIDFromTokenResponse, error)
+	ExtractIDFromRefreshToken(
+		dto userauthservicedto.ExtractIDFromTokenRequest,
+	) (userauthservicedto.ExtractIDFromTokenResponse, error)
 }
 
 type Repository interface {
 	Create(u entity.User) (entity.User, error)
 	IsMobileUnique(mobile string) (bool, error)
 	GetByMobile(mobile string) (entity.User, error)
-	GetByID(id uint) (entity.User, error)
+	GetByID(id uint64) (entity.User, error)
 }
 
 type UserInteractor struct {
