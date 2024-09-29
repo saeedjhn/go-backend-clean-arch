@@ -1,27 +1,28 @@
-package mysql
+package pq_test
 
 import (
-	"log"
 	"testing"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
 )
 
 func TestConn(t *testing.T) {
-	cfg := Config{
+	cfg := pq.Config{
 		Host:            "localhost", // usage docker: hostName(container name)
 		Port:            "5001",      // usage docker: postName(5342)
 		Username:        "admin",
 		Password:        "123456",
-		Database:        "simorgh_db",
+		Database:        "backend_db",
 		SSLMode:         "disable",
 		MaxIdleConns:    2,
 		MaxOpenConns:    15,
 		ConnMaxLiftTime: 5,
 	}
 
-	mysql := New(cfg)
-	if err := mysql.ConnectTo(); err != nil {
-		log.Fatal(err)
+	pq := pq.New(cfg)
+	if err := pq.ConnectTo(); err != nil {
+		t.Fatal(err)
 	}
 
-	log.Println(mysql.Conn())
+	t.Log(pq.Conn())
 }

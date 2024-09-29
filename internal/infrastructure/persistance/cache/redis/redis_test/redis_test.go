@@ -1,14 +1,15 @@
-package redis
+package redis_test
 
 import (
 	"context"
-	"log"
 	"testing"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/cache/redis"
 )
 
 func TestRedis(t *testing.T) {
-	c := Config{
+	c := redis.Config{
 		Host:               "127.0.0.1",
 		Port:               "6379",
 		Password:           "123456",
@@ -21,13 +22,13 @@ func TestRedis(t *testing.T) {
 		IdleCheckFrequency: 0,
 	}
 
-	redis := New(c)
+	redis := redis.New(c)
 	if err := redis.ConnectTo(); err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
 
-	log.Println(redis.Client().Conn())
+	t.Log(redis.Client().Conn())
 
 	expiration := time.Duration(200 * float64(time.Second))
-	log.Println(redis.Client().Set(context.Background(), "KEY", "VALUE", expiration))
+	t.Log(redis.Client().Set(context.Background(), "KEY", "VALUE", expiration))
 }
