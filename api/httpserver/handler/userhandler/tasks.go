@@ -27,9 +27,17 @@ func (u *UserHandler) Tasks(c echo.Context) error {
 	}
 
 	// Sanitize
-	sanitize.New().
+	err := sanitize.New().
 		SetPolicy(sanitize.StrictPolicy).
-		Struct(&req) // Check err
+		Struct(&req)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest,
+			echo.Map{
+				"status":  false,
+				"message": message.ErrorMsg400BadRequest,
+				"errors":  nil,
+			})
+	}
 
 	// Usage Use-case
 	resp, err := u.userInteractor.Tasks(req)
@@ -45,7 +53,6 @@ func (u *UserHandler) Tasks(c echo.Context) error {
 				"message": richErr.Message(),
 				"errors":  richErr.Error(),
 			})
-
 	}
 
 	return c.JSON(http.StatusOK,

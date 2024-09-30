@@ -1,4 +1,4 @@
-package userhandler
+package userhandler //nolint:dupl // 1-79 lines are duplicate
 
 import (
 	"net/http"
@@ -41,9 +41,17 @@ func (u *UserHandler) Register(c echo.Context) error {
 	}
 
 	// Sanitize
-	sanitize.New().
+	err := sanitize.New().
 		SetPolicy(sanitize.StrictPolicy).
-		Struct(&req) // Check err
+		Struct(&req)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest,
+			echo.Map{
+				"status":  false,
+				"message": message.ErrorMsg400BadRequest,
+				"errors":  nil,
+			})
+	}
 
 	// Usage Use-case
 	resp, err := u.userInteractor.Register(req)
