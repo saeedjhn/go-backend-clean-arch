@@ -11,19 +11,19 @@ type DB interface {
 	Client() *redis.Client
 }
 
-type RedisDB struct {
+type Redis struct {
 	config Config
 	db     *redis.Client
 	err    error
 }
 
-var _ DB = (*RedisDB)(nil)
+var _ DB = (*Redis)(nil)
 
-func New(config Config) *RedisDB {
-	return &RedisDB{config: config}
+func New(config Config) *Redis {
+	return &Redis{config: config}
 }
 
-func (r *RedisDB) ConnectTo() error {
+func (r *Redis) ConnectTo() error {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%s", r.config.Host, r.config.Port),
 		Password: r.config.Password,
@@ -38,6 +38,6 @@ func (r *RedisDB) ConnectTo() error {
 	return nil
 }
 
-func (r *RedisDB) Client() *redis.Client {
+func (r *Redis) Client() *redis.Client {
 	return r.db
 }

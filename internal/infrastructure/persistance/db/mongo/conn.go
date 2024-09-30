@@ -2,24 +2,28 @@ package mongo
 
 import (
 	"context"
-	"fmt"
 	"log"
+	"net"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type MongoDB struct {
+type Mongo struct {
 	config Config
 	client *mongo.Client
 	db     *mongo.Database
 }
 
-func New(config Config) *MongoDB {
+func New(config Config) *Mongo {
 	ctx := context.Background()
 
-	connectionURI := fmt.Sprintf("mongodb://%s:%s/", config.Host, config.Port) // for local machine
-	//connectionURI := fmt.Sprintf("mongodb://%s:%s@%s:%s", config.Username, config.Password, config.Host, config.Port) // for server machine
+	// connectionURI := fmt.Sprintf("mongodb://%s:%s/", config.Host, config.Port) // for local machine
+	connectionURI := net.JoinHostPort(config.Host, config.Port)
+	// connectionURI :=
+	// fmt.Sprintf(
+	// "mongodb://%s:%s@%s:%s", config.Username, config.Password, config.Host, config.Port,
+	// ) // for server machine
 
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(connectionURI))
 
@@ -31,13 +35,13 @@ func New(config Config) *MongoDB {
 
 	// err = client.Ping(Ctx, nil) if err != nil { log.Fatal(err) }
 
-	return &MongoDB{config: config, client: client, db: db}
+	return &Mongo{config: config, client: client, db: db}
 }
 
-func (m *MongoDB) Client() *mongo.Client {
+func (m *Mongo) Client() *mongo.Client {
 	return m.client
 }
 
-func (m *MongoDB) Database() *mongo.Database {
+func (m *Mongo) Database() *mongo.Database {
 	return m.db
 }

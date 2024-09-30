@@ -3,9 +3,8 @@ package pq
 import (
 	"database/sql"
 	"fmt"
-	"time"
 
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // Blank import without comment
 )
 
 const driverName = "postgres"
@@ -14,19 +13,19 @@ type DB interface {
 	Conn() *sql.DB
 }
 
-type PostgresDB struct {
+type Pq struct {
 	config Config
 	db     *sql.DB
 	err    error
 }
 
-var _ DB = (*PostgresDB)(nil)
+var _ DB = (*Pq)(nil)
 
-func New(config Config) *PostgresDB {
-	return &PostgresDB{config: config}
+func New(config Config) *Pq {
+	return &Pq{config: config}
 }
 
-func (p *PostgresDB) ConnectTo() error {
+func (p *Pq) ConnectTo() error {
 	cnn := fmt.Sprintf("host=%s port=%s userentity=%s password=%s dbname=%s sslmode=%s TimeZone=Asia/Tehran",
 		p.config.Host, p.config.Port, p.config.Username, p.config.Password,
 		p.config.Database, p.config.SSLMode)
@@ -39,15 +38,15 @@ func (p *PostgresDB) ConnectTo() error {
 	// See "Important config" section
 	p.db.SetMaxIdleConns(p.config.MaxIdleConns)
 	p.db.SetMaxOpenConns(p.config.MaxOpenConns)
-	p.db.SetConnMaxLifetime(p.config.ConnMaxLiftTime * time.Second)
+	p.db.SetConnMaxLifetime(p.config.ConnMaxLiftTime)
 
 	return nil
 }
 
-func (p *PostgresDB) Conn() *sql.DB {
+func (p *Pq) Conn() *sql.DB {
 	return p.db
 }
 
-func (p *PostgresDB) Error() error {
+func (p *Pq) Error() error {
 	return p.err
 }
