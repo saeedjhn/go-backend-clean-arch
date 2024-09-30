@@ -1,4 +1,4 @@
-package httpstatus
+package httpstatus //nolint:cyclop // the average complexity for the package httpstatus is 24.000000, max is 10.000000
 
 import (
 	"net/http"
@@ -7,7 +7,7 @@ import (
 )
 
 func FromKind(k kind.Kind) int {
-	switch k {
+	switch k { //nolint:exhaustive // missing cases in switch of type kind.Kind
 	case kind.KindStatusContinue:
 		return http.StatusContinue
 	case kind.KindStatusSwitchingProtocols:
