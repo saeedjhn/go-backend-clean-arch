@@ -10,6 +10,10 @@ http_server:
 
 pprof:
   port: 8001
+  read_timeout: "10s"
+  read_header_timeout: "5s"
+  write_timeout: "10s"
+  idle_timeout: "120s"
 
 logger:
   filename: "./logs/log.json"
@@ -28,7 +32,7 @@ mysql:
   ssl_mode: disable
   max_idle_conns: 15
   max_open_conns: 100
-  conn_max_life_time: 5
+  conn_max_life_time: "5s"
 
 postgres:
   host: go-backend-clean-arch_psqldb
@@ -39,19 +43,19 @@ postgres:
   ssl_mode: disable
   max_idle_conns: 15
   max_open_conns: 100
-  conn_max_life_time: 5
+  conn_max_life_time: "5s"
 
 redis:
   host: go-backend-clean-arch_redis
   port: 6379
   password: 123456
   db: 0
-  dial_timeout: 5
-  read_timeout: 5
-  write_timeout: 5
+  dial_timeout: "5s"
+  read_timeout: "5s"
+  write_timeout: "5s"
   pool_size: 10
-  pool_timeout: 15
-  idle_check_frequency: 500
+  pool_timeout: "15s"
+  idle_check_frequency: "2s"
 
 auth:
   access_secret: "MYSECRETKEY"
