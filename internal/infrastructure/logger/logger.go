@@ -14,7 +14,7 @@ type Logger struct {
 
 func New(config Config) *Logger {
 	// TODO - add & check production/development config variable
-	var logger, _ = zap.NewProduction()
+	// var logger, _ = zap.NewProduction()
 
 	configZap := zap.NewProductionEncoderConfig()
 	configZap.EncodeTime = zapcore.ISO8601TimeEncoder
@@ -36,7 +36,7 @@ func New(config Config) *Logger {
 		zapcore.NewCore(defaultEncoder, stdOutWriter, zap.DebugLevel),
 	)
 
-	logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
+	logger := zap.New(core, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
 
 	return &Logger{logger: logger}
 }
