@@ -5,7 +5,7 @@ import (
 )
 
 type TasksUserRequest struct {
-	UserID uint
+	UserID uint64
 }
 
 type TasksUserResponse struct {

@@ -5,7 +5,7 @@ import (
 )
 
 type CreateTaskRequest struct {
-	UserID      uint
+	UserID      uint64
 	Title       string
 	Description string
 	Status      entity.TaskStatus

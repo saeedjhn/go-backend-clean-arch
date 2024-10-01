@@ -7,7 +7,7 @@ import (
 )
 
 type TaskInfo struct {
-	ID          uint              `json:"id"`
+	ID          uint64            `json:"id"`
 	Title       string            `json:"title"`
 	Description string            `json:"description"`
 	Status      entity.TaskStatus `json:"status"`

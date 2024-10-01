@@ -5,5 +5,5 @@ type ExtractIDFromTokenRequest struct {
 }
 
 type ExtractIDFromTokenResponse struct {
-	UserID uint
+	UserID uint64
 }

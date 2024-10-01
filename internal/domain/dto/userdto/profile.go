@@ -1,7 +1,7 @@
 package userdto
 
 type ProfileRequest struct {
-	ID uint `json:"id"`
+	ID uint64 `json:"id"`
 }
 
 type ProfileResponse struct {
