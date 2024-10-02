@@ -11,18 +11,20 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
-func Auth(config authservice.Config, authInteractor *authservice.AuthInteractor) echo.MiddlewareFunc {
+const _lenValidAuthorizationKeyFromHeader = 2
 
+func Auth(config authservice.Config, authInteractor *authservice.AuthInteractor) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) (err error) {
+		return func(c echo.Context) error {
 			authHeader := c.Request().Header.Get("Authorization")
 			t := strings.Split(authHeader, " ")
-			if len(t) == 2 {
+
+			if len(t) == _lenValidAuthorizationKeyFromHeader {
 				authToken := t[1]
 				authorized, err := authInteractor.IsAuthorized(authToken, config.AccessTokenSecret)
 				if authorized {
-					claims, err := authInteractor.ParseAccessToken(authToken)
-					if err != nil {
+					claims, errParse := authInteractor.ParseAccessToken(authToken)
+					if errParse != nil {
 						return c.JSON(http.StatusUnauthorized, echo.Map{
 							"status":  false,
 							"message": message.ErrorMsg401UnAuthorized,

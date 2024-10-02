@@ -3,7 +3,6 @@ package sanitize
 import (
 	"errors"
 	"fmt"
-	"log"
 	"reflect"
 	"regexp"
 
@@ -17,22 +16,24 @@ const (
 	StrictPolicy    Policy = "strict_policy"
 	UGCPolicy       Policy = "ugc_policy"
 	StripTagsPolicy Policy = "strip_tags_policy"
-	//NewPolicy       Policy = "new_policy"
 )
 
-// SanitizeStrictPolicy - bluemonday.StrictPolicy() which can be thought of as equivalent to stripping all HTML elements and their attributes as it has nothing on its allowlist.
-// An example usage scenario would be blog post titles where HTML tags are not expected at all and if they are then the elements and the content of the elements
+// SanitizeStrictPolicy - bluemonday.StrictPolicy() which can be thought of as equivalent to stripping all HTML elements
+// and their attributes as it has nothing on its allowlist.
+// An example usage scenario would be blog post titles where HTML tags are not expected at all and if they are
+// then the elements and the content of the elements
 // should be stripped. This is a very strict policy.
 // func sanitizeStrictPolicy(ctx fiber.Ctx) error {
 //	return ctx.Next()
-//}
+// }
 
-// SanitizeUGCPolicy -  bluemonday.UGCPolicy() which allows a broad selection of HTML elements and attributes that are safe for userentity generated content.
-// Note that this policy does not allow iframes, object, embed, styles, script, etc. An example usage scenario would be blog post bodies
-// where a variety of formatting is expected along with the potential for TABLEs and IMGs.
+// SanitizeUGCPolicy -  bluemonday.UGCPolicy() which allows a broad selection of HTML elements
+// and attributes that are safe for userentity generated content.
+// Note that this policy does not allow iframes, object, embed, styles, script, etc. An example usage scenario
+// would be blog post bodies where a variety of formatting is expected along with the potential for TABLEs and IMGs.
 // func sanitizeUGCPolicy(ctx fiber.Ctx) error {
 //	return ctx.Next()
-//}
+// }
 
 type Sanitize struct {
 	policy *bluemonday.Policy
@@ -95,6 +96,8 @@ func (s Sanitize) Struct(ptr interface{}) error {
 func (s Sanitize) Array(param interface{}) ([]interface{}, error) {
 	paramValue := reflect.ValueOf(param)
 	var sanitisedArray []interface{}
+
+	//nolint:intrange // for loop can be changed to use an integer range (Go 1.22+)
 	for index := 0; index < paramValue.Len(); index++ {
 		sanitisedParam, err := s.recursively(paramValue.Index(index).Interface())
 		if err != nil {
@@ -124,8 +127,8 @@ func (s Sanitize) Map(param interface{}) (map[string]interface{}, error) {
 }
 
 func (s Sanitize) String(param string) string {
-	//sanitizedHTMLStr := s.policy.Sanitize(param)
-	//v := reflect.ValueOf(param)
+	// sanitizedHTMLStr := s.policy.Sanitize(param)
+	// v := reflect.ValueOf(param)
 
 	sanitizedHTMLStr := s.policy.Sanitize(param)
 
@@ -140,11 +143,10 @@ func (s Sanitize) recursively(param interface{}) (interface{}, error) {
 	}
 
 	paramValue := reflect.ValueOf(param)
-
-	switch paramValue.Kind() {
+	switch paramValue.Kind() { //nolint:exhaustive // missing cases in switch of type paramValue.Kind()
 	case reflect.String:
 		return s.String(reflect.ValueOf(param).String()), nil
-		//return s.String(param.(string)), nil
+		// return s.String(param.(string)), nil
 
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Float32,
 		reflect.Float64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Bool:
@@ -160,10 +162,8 @@ func (s Sanitize) recursively(param interface{}) (interface{}, error) {
 		return s.StructToMap(param)
 
 	default:
-		log.Println("type not supported", paramValue.Kind())
+		return nil, fmt.Errorf("type not supported %v", paramValue.Kind().String())
 	}
-
-	return nil, nil
 }
 
 func (s Sanitize) structure(param interface{}) (map[string]interface{}, error) {
@@ -174,6 +174,7 @@ func (s Sanitize) structure(param interface{}) (map[string]interface{}, error) {
 
 	sanitisedStruct := make(map[string]interface{})
 
+	//nolint:intrange // for loop can be changed to use an integer range (Go 1.22+)
 	for i := 0; i < paramValue.NumField(); i++ {
 		fieldName := newStruct.Type().Field(i).Name
 		values[i], _ = s.recursively(paramValue.Field(i).Interface())

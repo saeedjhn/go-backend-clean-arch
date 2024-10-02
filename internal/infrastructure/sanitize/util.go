@@ -95,30 +95,31 @@ import (
 //		return sanitisedStruct, nil
 //	}
 //
-// //func sanitizeBodyAndQuery(params interface{}) (interface{}, error) {
-// //	sanitisedParams, _ := sanitizeRecursively(params)
-// //
-// //	return sanitisedParams, nil
-// //}
+// func sanitizeBodyAndQuery(params interface{}) (interface{}, error) {
+//	sanitisedParams, _ := sanitizeRecursively(params)
 //
-// //func mapToStruct(ptr interface{}) error {
-// //	if !isPointer(ptr) {
-// //		return fmt.Errorf("please give me the pointer arg")
-// //	}
-// //
-// //	dataMap, err := sanitizeStruct(reflect.ValueOf(ptr).Elem().Interface())
-// //	//dataMap, err := sanitizeStruct(ptr)
-// //	if err != nil {
-// //		return fmt.Errorf("cannot perform the operation")
-// //	}
-// //	// Go library for decoding generic map values into native Go structures and vice versa.
-// //	err = mapstructure.Decode(dataMap, &ptr)
-// //	if err != nil {
-// //		return fmt.Errorf("in decode, %w", err)
-// //	}
-// //
-// //	return nil
-// //}
+//	return sanitisedParams, nil
+// }
+
+// func mapToStruct(ptr interface{}) error {
+//	if !isPointer(ptr) {
+//		return fmt.Errorf("please give me the pointer arg")
+//	}
+//
+//	dataMap, err := sanitizeStruct(reflect.ValueOf(ptr).Elem().Interface())
+//	//dataMap, err := sanitizeStruct(ptr)
+//	if err != nil {
+//		return fmt.Errorf("cannot perform the operation")
+//	}
+//	// Go library for decoding generic map values into native Go structures and vice versa.
+//	err = mapstructure.Decode(dataMap, &ptr)
+//	if err != nil {
+//		return fmt.Errorf("in decode, %w", err)
+//	}
+//
+//	return nil
+// }
+
 func isPointer(param interface{}) bool {
 	return reflect.ValueOf(param).Kind() == reflect.Ptr
 }

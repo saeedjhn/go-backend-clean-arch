@@ -57,12 +57,27 @@ func main() {
 	log.Println("received interrupt signal, shutting down gracefully..")
 
 	// Close all DB connection, etc
-	if err = app.CloseMysqlConnection(); err != nil {
-		log.Fatal(err)
-	}
-	if err = app.CloseRedisClientConnection(); err != nil {
-		log.Fatal(err)
-	}
+	// if err = app.CloseMysqlConnection(); err != nil {
+	//	log.Fatal(err)
+	// }
+	// if err = app.CloseRedisClientConnection(); err != nil {
+	//	log.Fatal(err)
+	//}
+
+	defer func(app *bootstrap.Application) {
+		err = app.CloseRedisClientConnection()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(app)
+
+	defer func(app *bootstrap.Application) {
+		err = app.CloseMysqlConnection()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(app)
+
 	// app.ClosePostgresqlConnection() // Or etc..
 
 	<-ctxWithTimeout.Done()

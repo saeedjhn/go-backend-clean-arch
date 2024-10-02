@@ -25,7 +25,7 @@ const (
 	KindStatusSeeOther
 	KindStatusNotModified
 	KindStatusUseProxy
-	Kind_
+	KindUnderscore // Kind_
 	KindStatusTemporaryRedirect
 	KindStatusPermanentRedirect
 

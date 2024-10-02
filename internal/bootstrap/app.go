@@ -60,5 +60,5 @@ func (a *Application) CloseRedisClientConnection() error {
 }
 
 // func (a *Application) ClosePostgresqlConnection() error {
-//	return ClosePostgresConnection(a.PostgresDB)
+//	return ClosePostgresConnection(a.Pq)
 // }

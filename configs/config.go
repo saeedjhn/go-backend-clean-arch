@@ -24,7 +24,11 @@ type Application struct {
 }
 
 type Pprof struct {
-	Port string `mapstructure:"port"`
+	Port              string        `mapstructure:"port"`
+	ReadTimeout       time.Duration `mapstructure:"read_timeout"`
+	ReadHeaderTimeout time.Duration `mapstructure:"read_header_timeout"`
+	WriteTimeout      time.Duration `mapstructure:"write_timeout"`
+	IdleTimeout       time.Duration `mapstructure:"idle_timeout"`
 }
 
 type HTTPServer struct {

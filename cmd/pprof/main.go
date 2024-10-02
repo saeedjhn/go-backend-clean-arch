@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
-	_ "net/http/pprof"
+	_ "net/http/pprof" // #nosec G108
 	"os"
 	"os/signal"
 
@@ -25,7 +25,27 @@ func main() {
 
 	// Prof
 	go func() {
-		if err = http.ListenAndServe(app.Config.Pprof.Port, nil); err != nil {
+		mux := http.NewServeMux()
+		server := http.Server{
+			Addr:                         app.Config.Pprof.Port,
+			Handler:                      mux,
+			DisableGeneralOptionsHandler: false,
+			TLSConfig:                    nil,
+			ReadTimeout:                  app.Config.Pprof.ReadTimeout,
+			ReadHeaderTimeout:            app.Config.Pprof.ReadHeaderTimeout,
+			WriteTimeout:                 app.Config.Pprof.WriteTimeout,
+			IdleTimeout:                  app.Config.Pprof.WriteTimeout,
+			MaxHeaderBytes:               0,
+			TLSNextProto:                 nil,
+			ConnState:                    nil,
+			ErrorLog:                     nil,
+			BaseContext:                  nil,
+			ConnContext:                  nil,
+		}
+
+		log.Printf("Server Pprof is starting on %server", app.Config.Pprof.Port)
+
+		if err = server.ListenAndServe(); err != nil {
 			log.Fatal(err)
 		}
 	}()
