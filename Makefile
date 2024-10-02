@@ -39,7 +39,7 @@ test:
 .PHONY: test/cover
 test/cover:
 	go test -v -race -buildvcs -coverprofile=/tmp/coverage.out ./...
-	go tool cover -html=/tmp/coverage.out
+	go tool cover -html=/tmp/coverage.out # -html, func, etc...
 
 ## up: Startup / Build services from docker-compose and air for live reloading
 .PHONY: up
@@ -193,7 +193,23 @@ gosec:
 	@#echo " > Installing:"
 	#go install github.com/securego/gosec/v2/cmd/gosec@latest
 	gosec --version
-	gosec ./..
+	gosec ./...
+
+## staticcheck: The advanced Go linter
+.PHONY: staticcheck
+staticcheck:
+	@#echo " > Installing:"
+    #go install honnef.co/go/tools/cmd/staticcheck@latest
+	staticcheck --version
+	staticcheck ./...
+
+## govulncheck: looks for vulnerabilities in Go programs using a specific build configuration. For analyzing source code
+.PHONY: govulncheck
+govulncheck:
+	@#echo " > Installing:"
+	#go install golang.org/x/vuln/cmd/govulncheck@latest
+	govulncheck --version
+	govulncheck ./...
 
 ## golangci-lint: Smart, fast linters runner
 .PHONY: golangci-lint
@@ -208,6 +224,7 @@ lint:
 ## goimports: This tool updates your Go import lines, adding missing ones and removing unreferenced ones
 .PHONY: goimports
 goimports:
+	#go install golang.org/x/tools/cmd/goimports
 	goimports -w .
 
 ## tidy: format code and tidy mod file
@@ -221,9 +238,13 @@ tidy:
 audit:
 	go mod verify
 	go vet ./...
-	go run honnef.co/go/tools/cmd/staticcheck@latest -checks=all,-ST1000,-U1000 ./...
-	go run golang.org/x/vuln/cmd/govulncheck@latest ./...
-	go test -race -buildvcs -vet=off ./...
+	go fmt ./...
+	go install golang.org/x/tools/cmd/goimports -w . #goimports -w .
+	go run honnef.co/go/tools/cmd/staticcheck@latest -checks=all,-ST1000,-U1000 ./... #staticcheck ./...
+	go run golang.org/x/vuln/cmd/govulncheck@latest ./... #govulncheck ./...
+	go run github.com/securego/gosec/v2/cmd/gosec@latest ./... #gosec ./...
+	go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest run --config .golangci.yml #golangci-lint run --config .golangci.yml
+	go test -v -race -buildvcs ./... # -vet=off: Nothing result
 
 # ==================================================================================== #
 # OPERATIONS
