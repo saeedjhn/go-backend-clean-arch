@@ -54,17 +54,21 @@ jobs:
       # Run goimports
       - name: Run goimports
         run: |
-          go get golang.org/x/tools/cmd/goimports -w .
+          go install golang.org/x/tools/cmd/goimports@latest
+          goimports -w .
+      
 
       # Run Staticcheck
       - name: Run Staticcheck
         run: |
-          go get honnef.co/go/tools/cmd/staticcheck@latest staticcheck ./...
+          go install honnef.co/go/tools/cmd/staticcheck@latest
+          staticcheck ./...
 
       # Run govulncheck
       - name: Run govulncheck
         run: |
-          go get golang.org/x/vuln/cmd/govulncheck@latest govulncheck ./...
+          go install golang.org/x/vuln/cmd/govulncheck@latest 
+          govulncheck ./...
 
       # Run Linting with golangci-lint
       - name: Run GolangCI-Lint
@@ -117,7 +121,8 @@ jobs:
       # Run Gosec (Go security scanner)
       - name: Run Gosec
         run: |
-          go get github.com/securego/gosec/v2/cmd/gosec@latest gosec ./...
+          go install github.com/securego/gosec/v2/cmd/gosec@latest 
+          gosec ./...
 
   deploy:
     name: Deploy to Production
