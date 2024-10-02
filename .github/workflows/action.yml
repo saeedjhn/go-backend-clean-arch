@@ -54,19 +54,19 @@ jobs:
       # Run goimports
       - name: Run goimports
         run: |
-          go install golang.org/x/tools/cmd/goimports
+          go get golang.org/x/tools/cmd/goimports
           goimports -w .
 
       # Run Staticcheck
       - name: Run Staticcheck
         run: |
-          go install honnef.co/go/tools/cmd/staticcheck@latest
+          go get honnef.co/go/tools/cmd/staticcheck@latest
           staticcheck ./...
 
       # Run govulncheck
       - name: Run govulncheck
         run: |
-          go run golang.org/x/vuln/cmd/govulncheck@latest
+          go get golang.org/x/vuln/cmd/govulncheck@latest
           govulncheck ./...
 
       # Run Linting with golangci-lint
@@ -85,7 +85,6 @@ jobs:
       #        run: |
       #          go test -coverprofile=coverage.out ./...
       #          go tool cover -func=coverage.out
-      #        continue-on-error: true
 
       # Upload Coverage Report - Coverage with Codecov
       - name: Run coverage
@@ -102,6 +101,7 @@ jobs:
       - name: Build
         run: go build -v ./...
 
+        #        continue-on-error: true
   security:
     name: Security Checks
     runs-on: ubuntu-latest
@@ -120,7 +120,7 @@ jobs:
       # Run Gosec (Go security scanner)
       - name: Run Gosec
         run: |
-          go install github.com/securego/gosec/v2/cmd/gosec@latest
+          go get github.com/securego/gosec/v2/cmd/gosec@latest
           gosec ./...
 
   deploy:
