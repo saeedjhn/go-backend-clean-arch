@@ -1,6 +1,6 @@
 package taskvalidator
 
-import "github.com/saeedjhn/go-backend-clean-arch/internal/delivery/http/handler/taskhandler"
+import "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler/taskhandler"
 
 type Validator struct {
 }

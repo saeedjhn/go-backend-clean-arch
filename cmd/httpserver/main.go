@@ -6,7 +6,7 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/delivery/http"
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
@@ -31,14 +31,19 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Start server
-	server := http.New(app)
-	go func() {
-		server.Serve()
-	}()
-
+	// Signal
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt) // more SIGX (SIGINT, SIGTERM, etc)
+
+	// Start server
+	server := http.New(app)
+
+	go func() {
+		if err = server.Run(); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
 	<-quit
 
 	ctx := context.Background()

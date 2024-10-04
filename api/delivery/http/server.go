@@ -2,13 +2,11 @@ package http
 
 import (
 	"fmt"
-	"log"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	myMiddleware "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/middleware"
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
-	myMiddleware "github.com/saeedjhn/go-backend-clean-arch/internal/delivery/http/middleware"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/delivery/http/router"
 	"go.uber.org/zap"
 )
 
@@ -26,7 +24,7 @@ func New(
 	}
 }
 
-func (s Server) Serve() {
+func (s Server) Run() error {
 	s.Router.Debug = s.App.Config.Application.Debug
 
 	// Global Middleware Setup
@@ -74,10 +72,12 @@ func (s Server) Serve() {
 	// Router Setup
 	router.Setup(s.App, s.Router)
 
-	var address = fmt.Sprintf(":%s", s.App.Config.HTTPServer.Port)
+	address := fmt.Sprintf(":%s", s.App.Config.HTTPServer.Port)
 
 	s.App.Logger.Set().Named("server").Info("start-echo-server", zap.Any("server-config", s.App.Config.HTTPServer))
-	if err := s.Router.Start(address); err != nil {
-		log.Println("router start error", err)
-	}
+
+	return s.Router.Start(address)
+	//if err := s.Router.Start(address); err != nil {
+	//	log.Println("router start error", err)
+	//}
 }

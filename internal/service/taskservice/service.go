@@ -1,7 +1,7 @@
 package taskservice
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/delivery/http/handler/taskhandler"
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler/taskhandler"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 )
 

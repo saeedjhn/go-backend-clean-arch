@@ -1,8 +1,8 @@
 package uservalidator
 
 import (
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler/userhandler"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/delivery/http/handler/userhandler"
 )
 
 type Validator struct {
