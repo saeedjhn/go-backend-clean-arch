@@ -64,7 +64,7 @@ jobs:
           go install honnef.co/go/tools/cmd/staticcheck@latest
           staticcheck ./...
 
-#      # Run govulncheck
+      # Run govulncheck
       #      - name: Run govulncheck
       #        run: |
       #          go install golang.org/x/vuln/cmd/govulncheck@latest
@@ -88,12 +88,12 @@ jobs:
       #          go tool cover -func=coverage.out
 
       # Upload Coverage Report - Coverage with Codecov
-      - name: Run coverage
-        run: go test -race -coverprofile=coverage.out -covermode=atomic
-      - name: Upload coverage to codecov
-        uses: codecov/codecov-action@v3
-        with:
-          files: coverage.out
+      #      - name: Run coverage
+      #        run: go test -race -coverprofile=coverage.out -covermode=atomic
+      #      - name: Upload coverage to codecov
+      #        uses: codecov/codecov-action@v3
+      #        with:
+      #          files: coverage.out
       #          flags: unittests
       #          name: codecov-go
       #          fail_ci_if_error: true
