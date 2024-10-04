@@ -74,7 +74,7 @@ jobs:
       - name: Run GolangCI-Lint
         uses: golangci/golangci-lint-action@v3
         with:
-          version: v1.23.2
+          version: v1.28.3
           args: --timeout=5m
 
       # Run Unit Tests
