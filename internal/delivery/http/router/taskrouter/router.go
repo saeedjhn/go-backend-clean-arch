@@ -2,9 +2,9 @@ package taskrouter
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver/handler/taskhandler"
-	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver/middleware"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/delivery/http/handler/taskhandler"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/delivery/http/middleware"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/token"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/taskrepository/mysqltask"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/service/authservice"

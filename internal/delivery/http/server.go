@@ -1,4 +1,4 @@
-package httpserver
+package http
 
 import (
 	"fmt"
@@ -6,27 +6,27 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	myMiddleware "github.com/saeedjhn/go-backend-clean-arch/api/httpserver/middleware"
-	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver/router"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
+	myMiddleware "github.com/saeedjhn/go-backend-clean-arch/internal/delivery/http/middleware"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/delivery/http/router"
 	"go.uber.org/zap"
 )
 
-type HTTPServer struct {
+type Server struct {
 	App    *bootstrap.Application
 	Router *echo.Echo
 }
 
 func New(
 	app *bootstrap.Application,
-) *HTTPServer {
-	return &HTTPServer{
+) *Server {
+	return &Server{
 		App:    app,
 		Router: echo.New(),
 	}
 }
 
-func (s HTTPServer) Serve() {
+func (s Server) Serve() {
 	s.Router.Debug = s.App.Config.Application.Debug
 
 	// Global Middleware Setup
@@ -78,6 +78,6 @@ func (s HTTPServer) Serve() {
 
 	s.App.Logger.Set().Named("server").Info("start-echo-server", zap.Any("server-config", s.App.Config.HTTPServer))
 	if err := s.Router.Start(address); err != nil {
-		log.Print("router start error", err)
+		log.Println("router start error", err)
 	}
 }

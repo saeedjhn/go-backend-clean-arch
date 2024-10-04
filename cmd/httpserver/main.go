@@ -6,7 +6,8 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/delivery/http"
+
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/cmd/migrations"
@@ -30,14 +31,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Prof
-	// go func() {
-	//	log.Println("pprof server running")
-	//	http.ListenAndServe(":8001", nil)
-	// }()
-
 	// Start server
-	server := httpserver.New(app)
+	server := http.New(app)
 	go func() {
 		server.Serve()
 	}()

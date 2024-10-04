@@ -1,8 +1,8 @@
 package userservice
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/api/httpserver/handler/userhandler"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/delivery/http/handler/userhandler"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
