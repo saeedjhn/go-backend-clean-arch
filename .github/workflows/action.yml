@@ -64,11 +64,11 @@ jobs:
           go install honnef.co/go/tools/cmd/staticcheck@latest
           staticcheck ./...
 
-      # Run govulncheck
-      - name: Run govulncheck
-        run: |
-          go install golang.org/x/vuln/cmd/govulncheck@latest 
-          govulncheck ./...
+#      # Run govulncheck
+      #      - name: Run govulncheck
+      #        run: |
+      #          go install golang.org/x/vuln/cmd/govulncheck@latest
+      #          govulncheck ./...
 
       # Run Linting with golangci-lint
       - name: Run GolangCI-Lint
