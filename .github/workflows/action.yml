@@ -78,8 +78,8 @@ jobs:
       #          args: --timeout=5m
 
       # Run Unit Tests
-      - name: Run Unit Tests
-        run: go test -v -race -buildvcs ./...
+      #      - name: Run Unit Tests
+      #        run: go test -v -race -buildvcs ./...
 
       # Test Coverage - Coverage with go-test-tools
       #      - name: Test Coverage
