@@ -18,17 +18,15 @@ func main() {
 	// Bootstrap
 	app, err := bootstrap.App(configs.Development)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("bootstrap app: %v", err)
 	}
 
-	log.Printf("%#v", app)
-
 	// Log
-	app.Logger.Set().Named("main").Info("config", zap.Any("config", app.Config))
+	app.Logger.Set().Named("Main").Info("Config", zap.Any("config", app.Config))
 
 	// Migrations
 	if err = migrations.Up(app); err != nil {
-		log.Fatal(err)
+		app.Logger.Set().Named("Main").Fatal("Migrations.Up", zap.Error(err))
 	}
 
 	// Signal
@@ -40,7 +38,7 @@ func main() {
 
 	go func() {
 		if err = server.Run(); err != nil {
-			log.Fatal(err)
+			app.Logger.Set().Named("Main").Fatal("Server.HTTP.Run", zap.Error(err))
 		}
 	}()
 
@@ -51,10 +49,10 @@ func main() {
 	defer cancel()
 
 	if err = server.Router.Shutdown(ctxWithTimeout); err != nil {
-		log.Println("http server shutdown error", err)
+		app.Logger.Set().Named("Main").Error("Server.HTTP.Shutdown", zap.Error(err))
 	}
 
-	log.Println("received interrupt signal, shutting down gracefully..")
+	app.Logger.Set().Named("Main").Info("Received.Interrupt.Signal.For.Shutting.Down.Gracefully")
 
 	// Close all DB connection, etc
 	// if err = app.CloseMysqlConnection(); err != nil {
@@ -67,14 +65,14 @@ func main() {
 	defer func(app *bootstrap.Application) {
 		err = app.CloseRedisClientConnection()
 		if err != nil {
-			log.Fatal(err)
+			app.Logger.Set().Named("Main").Error("Close.Redis.Connection", zap.Error(err))
 		}
 	}(app)
 
 	defer func(app *bootstrap.Application) {
 		err = app.CloseMysqlConnection()
 		if err != nil {
-			log.Fatal(err)
+			app.Logger.Set().Named("Main").Error("Close.Mysql.Connection", zap.Error(err))
 		}
 	}(app)
 

@@ -2,6 +2,7 @@ package http
 
 import (
 	"fmt"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	myMiddleware "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/middleware"
@@ -51,7 +52,7 @@ func (s Server) Run() error {
 				errMsg = request.Error.Error()
 			}
 
-			s.App.Logger.Set().Named("http-server").Info("request",
+			s.App.Logger.Set().Named("HTTP.Server").Info("Request",
 				zap.String("request_id", request.RequestID),
 				zap.String("host", request.Host),
 				zap.String("content-length", request.ContentLength),
@@ -74,10 +75,7 @@ func (s Server) Run() error {
 
 	address := fmt.Sprintf(":%s", s.App.Config.HTTPServer.Port)
 
-	s.App.Logger.Set().Named("server").Info("start-echo-server", zap.Any("server-config", s.App.Config.HTTPServer))
+	s.App.Logger.Set().Named("Server").Info("Start.Router", zap.Any("Server.Config", s.App.Config.HTTPServer))
 
 	return s.Router.Start(address)
-	//if err := s.Router.Start(address); err != nil {
-	//	log.Println("router start error", err)
-	//}
 }
