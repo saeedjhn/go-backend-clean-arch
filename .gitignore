@@ -15,6 +15,9 @@ build/
 # Logs
 logs/
 
+# Generate proto(s)
+api/v1/proto/**/gen
+
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
