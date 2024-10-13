@@ -1,0 +1,71 @@
+//syntax = "proto3";
+//
+//package users.v1;
+//
+//option go_package = "proto/v1/users/gen";
+//
+//import "messages/order.proto";
+//import "messages/create.proto";
+//import "messages/get.proto";
+//import "messages/update.proto";
+//import "messages/delete.proto";
+//import "messages/list.proto";
+//
+//service UserService {
+//  rpc CreateUser(CreateUserRequest) returns (User);
+//  rpc GetUser(GetUserRequest) returns (User);
+//  rpc UpdateUser(UpdateUserRequest) returns (User);
+//  rpc DeleteUser(DeleteUserRequest) returns (User);
+//  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
+//}
+syntax = "proto3";
+
+package users.v1;
+
+option go_package = "users/gen;gen";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+message CreateUserRequest {
+  string name = 1;
+  string mobile = 2;
+  string email = 3;
+  string password = 4;
+  google.protobuf.Timestamp createdAt = 5;
+  google.protobuf.Timestamp updatedAt = 6;
+}
+
+message GetUserRequest {
+  uint64 id = 1;
+}
+
+message UpdateUserRequest {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string password = 4;
+  google.protobuf.Timestamp updatedAt = 6;
+}
+
+message DeleteUserRequest {
+  uint64 id = 1;
+}
+
+message User {
+  uint64 id = 1;
+  string name = 2;
+  string mobile = 3;
+  string email = 4;
+  string password = 5;
+  google.protobuf.Timestamp createdAt = 6;
+  google.protobuf.Timestamp updatedAt = 7;
+}
+
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (User);
+  rpc GetUser(GetUserRequest) returns (User);
+  rpc UpdateUser(UpdateUserRequest) returns (User);
+  rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty);
+  rpc ListUsers(google.protobuf.Empty) returns (stream User);
+}
