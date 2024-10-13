@@ -2,10 +2,10 @@ package router
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http/router/healthcheckrouter"
+	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http/router/taskrouter"
+	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http/router/userrouter"
 
-	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router/healthcheckrouter"
-	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router/taskrouter"
-	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router/userrouter"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 )
 
