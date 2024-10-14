@@ -14,7 +14,6 @@ type DB interface {
 type Redis struct {
 	config Config
 	db     *redis.Client
-	err    error
 }
 
 var _ DB = (*Redis)(nil)
@@ -24,14 +23,16 @@ func New(config Config) *Redis {
 }
 
 func (r *Redis) ConnectTo() error {
+	var err error
+
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%s", r.config.Host, r.config.Port),
 		Password: r.config.Password,
 		DB:       r.config.DB,
 	})
 
-	if r.err = rdb.Ping(context.Background()).Err(); r.err != nil {
-		return r.err
+	if err = rdb.Ping(context.Background()).Err(); err != nil {
+		return err
 	}
 	r.db = rdb
 

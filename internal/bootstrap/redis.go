@@ -6,18 +6,18 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/cache/redis"
 )
 
-func NewRedisClient(config redis.Config) (redis.DB, error) {
-	myDB := redis.New(config)
+func NewRedisClient(c redis.Config) (redis.DB, error) {
+	db := redis.New(c)
 
-	if err := myDB.ConnectTo(); err != nil {
+	if err := db.ConnectTo(); err != nil {
 		return nil, err
 	}
 
-	return myDB, nil
+	return db, nil
 }
 
-func CloseRedisClient(redisClient redis.DB) error {
-	if err := redisClient.Client().Close(); err != nil {
+func CloseRedisClient(db redis.DB) error {
+	if err := db.Client().Close(); err != nil {
 		return fmt.Errorf("don`t close redis client connection: %w", err)
 	}
 

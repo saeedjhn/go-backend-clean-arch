@@ -7,7 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql" // Blank import without comment
 )
 
-const driverName = "mysql"
+const _driverName = "mysql"
 
 type DB interface {
 	Conn() *sql.DB
@@ -16,7 +16,6 @@ type DB interface {
 type Mysql struct {
 	config Config
 	db     *sql.DB
-	err    error
 }
 
 var _ DB = (*Mysql)(nil)
@@ -26,12 +25,14 @@ func New(config Config) *Mysql {
 }
 
 func (m *Mysql) ConnectTo() error {
-	conn := fmt.Sprintf("%s:%s@(%s:%s)/%s?parseTime=true",
+	var err error
+
+	uri := fmt.Sprintf("%s:%s@(%s:%s)/%s?parseTime=true",
 		m.config.Username, m.config.Password, m.config.Host, m.config.Port, m.config.Database)
 
-	m.db, m.err = sql.Open(driverName, conn)
-	if m.err != nil {
-		return fmt.Errorf("can`t open mysql db: %w", m.err)
+	m.db, err = sql.Open(_driverName, uri)
+	if err != nil {
+		return fmt.Errorf("can`t open mysql db: %w", err)
 	}
 
 	// See "Important settings" section.
@@ -44,8 +45,4 @@ func (m *Mysql) ConnectTo() error {
 
 func (m *Mysql) Conn() *sql.DB {
 	return m.db
-}
-
-func (m *Mysql) Error() error {
-	return m.err
 }

@@ -12,19 +12,19 @@ type Application struct {
 	Config      *configs.Config
 	EnvMode     configs.Env
 	Logger      *logger.Logger
-	MysqlDB     mysql.DB
+	MySQLDB     mysql.DB
 	PostgresDB  pq.DB
 	RedisClient redis.DB
 }
 
 func App(env configs.Env) (*Application, error) {
-	var app = &Application{EnvMode: env}
+	a := &Application{EnvMode: env}
 
-	if err := app.setup(); err != nil {
+	if err := a.setup(); err != nil {
 		return nil, err
 	}
 
-	return app, nil
+	return a, nil
 }
 
 func (a *Application) setup() error {
@@ -34,7 +34,7 @@ func (a *Application) setup() error {
 		return err
 	}
 
-	if a.MysqlDB, err = NewMysqlConnection(a.Config.Mysql); err != nil {
+	if a.MySQLDB, err = NewMysqlConnection(a.Config.Mysql); err != nil {
 		return err
 	}
 
@@ -52,7 +52,7 @@ func (a *Application) setup() error {
 }
 
 func (a *Application) CloseMysqlConnection() error {
-	return CloseMysqlConnection(a.MysqlDB)
+	return CloseMysqlConnection(a.MySQLDB)
 }
 
 func (a *Application) CloseRedisClientConnection() error {
@@ -60,5 +60,5 @@ func (a *Application) CloseRedisClientConnection() error {
 }
 
 // func (a *Application) ClosePostgresqlConnection() error {
-//	return ClosePostgresConnection(a.Pq)
+//	return ClosePostgresConnection(a.Postgres)
 // }
