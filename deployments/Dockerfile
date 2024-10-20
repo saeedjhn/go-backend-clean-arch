@@ -1,4 +1,4 @@
-FROM golang:latest
+FROM golang:latest AS builder
 
 ENV PROJECT_DIR=/app \
     GO111MODULE=on \
@@ -19,12 +19,28 @@ RUN go mod download
 COPY . .
 
 # Install air
-#RUN go install github.com/cosmtrek/air@latest
 RUN go install github.com/air-verse/air@latest
 
+# For Development
+FROM golang:alpine3.19 AS dev
+
+# Copy local code to the container image. (current directory)
+WORKDIR /app
+
+# --from=builder: This instructs Docker to copy files from the builder stage (defined earlier in the Dockerfile using AS builder).
+# /app: This refers to the /app directory in the builder stage, which contains your source code and possibly other files.
+# .: This copies the files into the current working directory (WORKDIR), which in this case is set to /app in the dev stage.
+# COPY --from=builder target source
+COPY --from=builder /app .
+
+# Copy air binary from Go bin in builder stage
+COPY --from=builder /go/bin/air /usr/local/bin/air
+
 # Expose port 8000 to the outside world
-EXPOSE 8000 8001
+EXPOSE 8000
 
 # Run
 #ENTRYPOINT ["make"]
 CMD ["air", "-c", ".air.toml"]
+
+# For Production

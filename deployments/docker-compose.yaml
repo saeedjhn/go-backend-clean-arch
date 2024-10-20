@@ -7,6 +7,7 @@ services:
     build:
       context: ..
       dockerfile: ./deployments/Dockerfile
+      target: dev # For Development
     ports:
       - "8000:8000"
     volumes:
@@ -21,7 +22,14 @@ services:
       #      - mongodb
       - redis
 
-  ######################## MYSQL ########################
+
+      #  prod-app:
+      #    build:
+      #      context: ..
+      #      dockerfile: ./deployments/Dockerfile
+      #      target: prod # For Production
+
+      ######################## MYSQL ########################
   mysqldb:
     container_name: go-backend-clean-arch_mysqldb
     image: mysql:latest
@@ -103,7 +111,7 @@ volumes:
   mysql:
   #  psql:
   #  mongodb-data:
-#  pgadmin:
+  #  pgadmin:
   redis:
   logs:
 
