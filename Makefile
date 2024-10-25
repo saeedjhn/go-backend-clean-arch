@@ -186,45 +186,64 @@ run/scheduler:
 # ==================================================================================== #
 # QUALITY CONTROL
 # ==================================================================================== #
-
 ## gosec: The go security checker
 .PHONY: gosec
 gosec:
-	@#echo " > Installing:"
-	#go install github.com/securego/gosec/v2/cmd/gosec@latest
+	@if ! command -v gosec &> /dev/null; then \
+    	echo "gosec not found, installing..."; \
+		go install github.com/securego/gosec/v2/cmd/gosec@latest; \
+    else \
+    	echo "gosec is already installed"; \
+	fi
 	gosec --version
 	gosec ./...
 
 ## staticcheck: The advanced Go linter
 .PHONY: staticcheck
 staticcheck:
-	@#echo " > Installing:"
-    #go install honnef.co/go/tools/cmd/staticcheck@latest
+	@if ! command -v staticcheck &> /dev/null; then \
+    	echo "staticcheck not found, installing..."; \
+    	go install honnef.co/go/tools/cmd/staticcheck@latest; \
+    else \
+    	echo "staticcheck is already installed"; \
+	fi
 	staticcheck --version
 	staticcheck ./...
 
 ## govulncheck: looks for vulnerabilities in Go programs using a specific build configuration. For analyzing source code
 .PHONY: govulncheck
 govulncheck:
-	@#echo " > Installing:"
-	#go install golang.org/x/vuln/cmd/govulncheck@latest
+	@if ! command -v govulncheck &> /dev/null; then \
+    	echo "govulncheck not found, installing..."; \
+		go install golang.org/x/vuln/cmd/govulncheck@latest ; \
+    else \
+    	echo "govulncheck is already installed"; \
+	fi
 	govulncheck --version
 	govulncheck ./...
 
 ## golangci-lint: Smart, fast linters runner
 .PHONY: golangci-lint
 lint:
-	@#echo " > Installing:"
-	#go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	@if ! command -v golangci-lint &> /dev/null; then \
+		echo "golangci-lint not found, installing..."; \
+		go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest; \
+	else \
+		echo "golangci-lint is already installed"; \
+	fi
 	golangci-lint --version
-
-	@echo " > Running:"
 	golangci-lint run --config .golangci.yml
 
 ## goimports: This tool updates your Go import lines, adding missing ones and removing unreferenced ones
 .PHONY: goimports
 goimports:
-	#go install golang.org/x/tools/cmd/goimports
+	goimports -w .
+	@if ! command -v goimports &> /dev/null; then \
+		echo "golangci-lint not found, installing..."; \
+		go install golang.org/x/tools/cmd/goimports@latest; \
+    else \
+		echo "goimports is already installed"; \
+    fi
 	goimports -w .
 
 ## tidy: format code and tidy mod file
