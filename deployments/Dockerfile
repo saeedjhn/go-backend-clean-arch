@@ -36,8 +36,8 @@ COPY --from=builder /app .
 # Copy air binary from Go bin in builder stage
 COPY --from=builder /go/bin/air /usr/local/bin/air
 
-# Expose port 8000 to the outside world
-EXPOSE 8000
+# Expose ports to the outside world
+EXPOSE 8000 50000
 
 # Run
 #ENTRYPOINT ["make"]

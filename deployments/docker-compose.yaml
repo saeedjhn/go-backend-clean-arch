@@ -2,18 +2,19 @@ version: '3.8'
 
 services:
   ####################### APPLICATION #######################
-  app:
-    container_name: go-backend-clean-arch_app
+  app-dev:
+    container_name: go-backend-clean-arch_app-dev
     build:
       context: ..
       dockerfile: ./deployments/Dockerfile
       target: dev # For Development
     ports:
       - "8000:8000"
+      - "50000:50000"
     volumes:
       #      - ./:/app
       #      - host machine absolutePath:/containerPath(for ex: /opt/htdocs/go-backend-clean-arch:/app)
-      - /opt/lampp/htdocs/Golang/go-backend-clean-arch:/app
+      - /opt/lampp/htdocs/Golang/github-self/go-backend-clean-arch:/app # important
     networks:
       - go-backend-clean-arch_network
     depends_on:
@@ -23,7 +24,7 @@ services:
       - redis
 
 
-      #  prod-app:
+      #  app-prod:
       #    build:
       #      context: ..
       #      dockerfile: ./deployments/Dockerfile
