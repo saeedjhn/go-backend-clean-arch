@@ -36,10 +36,17 @@ type HTTPServer struct {
 	Timeout time.Duration `mapstructure:"timeout"`
 }
 
+type GRPCServer struct {
+	Network string        `mapstructure:"network"`
+	Port    string        `mapstructure:"port"`
+	Timeout time.Duration `mapstructure:"timeout"`
+}
+
 type Config struct {
 	Application Application        `mapstructure:"application"`
 	Pprof       Pprof              `mapstructure:"pprof"`
 	HTTPServer  HTTPServer         `mapstructure:"http_server"`
+	GRPCServer  GRPCServer         `mapstructure:"grpc_server"`
 	Logger      logger.Config      `mapstructure:"logger"`
 	Mysql       mysql.Config       `mapstructure:"mysql"`
 	Postgres    pq.Config          `mapstructure:"postgres"`

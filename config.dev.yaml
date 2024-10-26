@@ -8,6 +8,11 @@ http_server:
   port: 8000
   timeout: "5s"
 
+grpc_server:
+  network: "tcp"
+  port: 50000
+  timeout: "5s"
+
 pprof:
   port: 8001
   read_timeout: "10s"

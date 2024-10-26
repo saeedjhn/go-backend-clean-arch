@@ -3,8 +3,6 @@ package configs
 import (
 	"errors"
 	"fmt"
-	"log"
-
 	"github.com/spf13/viper"
 )
 
@@ -31,10 +29,6 @@ func Load(env Env) (*Config, error) {
 	err = viper.Unmarshal(&config)
 	if err != nil {
 		return &config, fmt.Errorf("environment can't be loaded: %w", err)
-	}
-
-	if config.Application.Env == "development" {
-		log.Println("The App is running in development")
 	}
 
 	return &config, nil
