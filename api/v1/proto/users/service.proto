@@ -1,23 +1,3 @@
-//syntax = "proto3";
-//
-//package users.v1;
-//
-//option go_package = "proto/v1/users/gen";
-//
-//import "messages/order.proto";
-//import "messages/create.proto";
-//import "messages/get.proto";
-//import "messages/update.proto";
-//import "messages/delete.proto";
-//import "messages/list.proto";
-//
-//service UserService {
-//  rpc CreateUser(CreateUserRequest) returns (User);
-//  rpc GetUser(GetUserRequest) returns (User);
-//  rpc UpdateUser(UpdateUserRequest) returns (User);
-//  rpc DeleteUser(DeleteUserRequest) returns (User);
-//  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
-//}
 syntax = "proto3";
 
 package users.v1;
