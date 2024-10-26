@@ -2,10 +2,11 @@ package main
 
 import (
 	"context"
-	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http"
 	"log"
 	"os"
 	"os/signal"
+
+	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
@@ -19,6 +20,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("bootstrap app: %v", err)
 	}
+
+	//if app.Config.Application.Env == configs.Development {
+	//	log.Println("The App is running in development")
+	//}
 
 	// Log
 	app.Logger.Set().Named("Main").Info("Config", zap.Any("config", app.Config))

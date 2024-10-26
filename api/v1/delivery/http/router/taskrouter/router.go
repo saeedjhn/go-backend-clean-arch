@@ -14,7 +14,7 @@ import (
 
 func New(app *bootstrap.Application, group *echo.Group) {
 	// Repository
-	taskMysql := mysqltask.New(app.MysqlDB)
+	taskMysql := mysqltask.New(app.MySQLDB)
 
 	// Usecase
 	taskSvc := taskservice.New(taskMysql)
