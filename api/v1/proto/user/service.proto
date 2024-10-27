@@ -1,13 +1,13 @@
 syntax = "proto3";
 
-package users.v1;
+package user.v1;
 
-option go_package = "users/gen;gen";
+option go_package = "user/gen;gen";
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 
-message CreateUserRequest {
+message CreateRequest {
   string name = 1;
   string mobile = 2;
   string email = 3;
@@ -16,11 +16,19 @@ message CreateUserRequest {
   google.protobuf.Timestamp updatedAt = 6;
 }
 
-message GetUserRequest {
-  uint64 id = 1;
+message GetRequest {
+  string id = 1;
 }
 
-message UpdateUserRequest {
+message ProfileRequest {
+  string id = 1;
+}
+
+message ProfileResponse {
+  User user = 1;
+}
+
+message UpdateRequest {
   string id = 1;
   string name = 2;
   string email = 3;
@@ -28,12 +36,12 @@ message UpdateUserRequest {
   google.protobuf.Timestamp updatedAt = 6;
 }
 
-message DeleteUserRequest {
-  uint64 id = 1;
+message DeleteRequest {
+  string id = 1;
 }
 
 message User {
-  uint64 id = 1;
+  string id = 1;
   string name = 2;
   string mobile = 3;
   string email = 4;
@@ -43,9 +51,10 @@ message User {
 }
 
 service UserService {
-  rpc CreateUser(CreateUserRequest) returns (User);
-  rpc GetUser(GetUserRequest) returns (User);
-  rpc UpdateUser(UpdateUserRequest) returns (User);
-  rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty);
-  rpc ListUsers(google.protobuf.Empty) returns (stream User);
+  rpc Create(CreateRequest) returns (User);
+  rpc Get(GetRequest) returns (User);
+  rpc Profile(ProfileRequest) returns (ProfileResponse);
+  rpc Update(UpdateRequest) returns (User);
+  rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
+  rpc List(google.protobuf.Empty) returns (stream User);
 }
