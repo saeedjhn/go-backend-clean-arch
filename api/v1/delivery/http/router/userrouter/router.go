@@ -5,12 +5,6 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http/handler/userhandler"
 	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http/middleware"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/token"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/taskrepository/mysqltask"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/userrespository/mysqluser"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/service/authservice"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/service/taskservice"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/service/userservice"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/validator/uservalidator"
 )
 
@@ -18,25 +12,12 @@ func New(
 	app *bootstrap.Application,
 	group *echo.Group,
 ) {
-	// Repository
-	taskMysql := mysqltask.New(app.MySQLDB)
-	userMysql := mysqluser.New(app.MySQLDB)
-
-	// Usecase
-	taskSvc := taskservice.New(taskMysql)
-	authSvc := authservice.New(app.Config.Auth, token.New())
-
-	// Service-oriented - inject service to another service
-	// Repository & Usecase
-	userSvc := userservice.New(
-		app.Config, authSvc, taskSvc, userMysql,
-	)
-
 	// Validator
 	validator := uservalidator.New(app.Config)
 
 	// Handler
-	handler := userhandler.New(app, validator, userSvc)
+	//handler := userhandler.New(app, validator, userSvc)
+	handler := userhandler.New(app, validator, app.Provider.UserSvc)
 
 	usersGroup := group.Group("/users")
 	{
@@ -52,7 +33,8 @@ func New(
 		}
 
 		protectedRouter := usersGroup.Group("")
-		protectedRouter.Use(middleware.Auth(app.Config.Auth, authSvc))
+		//protectedRouter.Use(middleware.Auth(app.Config.Auth, authSvc))
+		protectedRouter.Use(middleware.Auth(app.Config.Auth, app.Provider.AuthSvc))
 		{
 			protectedRouter.GET("/profile", handler.Profile)
 			protectedRouter.POST("/:id/tasks", handler.CreateTask, middleware.CheckIsValidUserID)

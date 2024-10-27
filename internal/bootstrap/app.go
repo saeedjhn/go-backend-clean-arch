@@ -15,6 +15,7 @@ type Application struct {
 	MySQLDB     mysql.DB
 	PostgresDB  pq.DB
 	RedisClient redis.DB
+	Provider    *Provider
 }
 
 func App(env configs.Env) (*Application, error) {
@@ -47,6 +48,14 @@ func (a *Application) setup() error {
 	if a.RedisClient, err = NewRedisClient(a.Config.Redis); err != nil {
 		return err
 	}
+
+	a.Provider = NewProvider(
+		a.Config,
+		a.Logger,
+		a.RedisClient,
+		a.MySQLDB,
+		a.PostgresDB,
+	)
 
 	return nil
 }

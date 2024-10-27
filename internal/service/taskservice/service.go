@@ -1,7 +1,7 @@
 package taskservice
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http/handler/taskhandler"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 )
 
@@ -14,11 +14,18 @@ type Repository interface {
 }
 
 type TaskInteractor struct {
+	config     *configs.Config
 	repository Repository
 }
 
-var _ taskhandler.Interactor = (*TaskInteractor)(nil)
+// var _ taskhandler.Interactor = (*TaskInteractor)(nil) // Commented, because it happens import cycle.
 
-func New(repository Repository) *TaskInteractor {
-	return &TaskInteractor{repository: repository}
+func New(
+	config *configs.Config,
+	repository Repository,
+) *TaskInteractor {
+	return &TaskInteractor{
+		config:     config,
+		repository: repository,
+	}
 }
