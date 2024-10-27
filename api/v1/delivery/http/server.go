@@ -3,11 +3,10 @@ package http
 import (
 	"fmt"
 
-	myMiddleware "github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http/middleware"
-	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http/router"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	myMiddleware "github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http/middleware"
+	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http/router"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"go.uber.org/zap"
 )
@@ -34,6 +33,12 @@ func (s Server) Run() error {
 	// s.Router.Use(middleware.logger())
 	s.Router.Use(middleware.Recover())
 	s.Router.Use(middleware.RequestID())
+	s.Router.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:     s.App.Config.CORS.AllowOrigins,
+		AllowMethods:     s.App.Config.CORS.AllowMethods,
+		AllowHeaders:     s.App.Config.CORS.AllowHeaders,
+		AllowCredentials: s.App.Config.CORS.AllowCredentials,
+	}))
 
 	s.Router.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
 		LogURI:           true,

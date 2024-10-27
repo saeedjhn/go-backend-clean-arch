@@ -8,6 +8,16 @@ http_server:
   port: 8000
   timeout: "5s"
 
+cors:
+  allow_origins:
+    - "http://example.com"
+    - "https://example.com"
+  allow_methods:
+    - "*"
+  allow_headers:
+    - "*"
+  allow_credentials: true
+
 grpc_server:
   network: "tcp"
   port: 50000

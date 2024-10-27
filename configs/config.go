@@ -42,11 +42,19 @@ type GRPCServer struct {
 	Timeout time.Duration `mapstructure:"timeout"`
 }
 
+type CORS struct {
+	AllowOrigins     []string `mapstructure:"allow_origins"`
+	AllowMethods     []string `mapstructure:"allow_methods"`
+	AllowHeaders     []string `mapstructure:"allow_headers"`
+	AllowCredentials bool     `mapstructure:"allow_credentials"`
+}
+
 type Config struct {
 	Application Application        `mapstructure:"application"`
 	Pprof       Pprof              `mapstructure:"pprof"`
 	HTTPServer  HTTPServer         `mapstructure:"http_server"`
 	GRPCServer  GRPCServer         `mapstructure:"grpc_server"`
+	CORS        CORS               `mapstructure:"cors"`
 	Logger      logger.Config      `mapstructure:"logger"`
 	Mysql       mysql.Config       `mapstructure:"mysql"`
 	Postgres    pq.Config          `mapstructure:"postgres"`
