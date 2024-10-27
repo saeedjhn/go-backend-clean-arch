@@ -1,13 +1,14 @@
 FROM golang:latest AS builder
 
 ENV PROJECT_DIR=/app \
+    BUILD_DIR=/build \
     GO111MODULE=on \
     CGO_ENABLED=0
 
 # Copy local code to the container image.
-WORKDIR /app
+WORKDIR $PROJECT_DIR
 
-RUN mkdir /build
+RUN mkdir $BUILD_DIR
 
 # Copy go mod and sum files
 COPY go.mod go.sum ./
@@ -24,14 +25,19 @@ RUN go install github.com/air-verse/air@latest
 # For Development
 FROM golang:alpine3.19 AS dev
 
+ENV PROJECT_DIR=/app \
+    BUILD_DIR=/build \
+    GO111MODULE=on \
+    CGO_ENABLED=0
+
 # Copy local code to the container image. (current directory)
-WORKDIR /app
+WORKDIR $PROJECT_DIR
 
 # --from=builder: This instructs Docker to copy files from the builder stage (defined earlier in the Dockerfile using AS builder).
 # /app: This refers to the /app directory in the builder stage, which contains your source code and possibly other files.
 # .: This copies the files into the current working directory (WORKDIR), which in this case is set to /app in the dev stage.
 # COPY --from=builder target source
-COPY --from=builder /app .
+COPY --from=builder $PROJECT_DIR .
 
 # Copy air binary from Go bin in builder stage
 COPY --from=builder /go/bin/air /usr/local/bin/air

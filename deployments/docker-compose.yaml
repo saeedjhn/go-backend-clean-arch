@@ -12,9 +12,7 @@ services:
       - "8000:8000"
       - "50000:50000"
     volumes:
-      #      - ./:/app
-      #      - host machine absolutePath:/containerPath(for ex: /opt/htdocs/go-backend-clean-arch:/app)
-      - /opt/lampp/htdocs/Golang/github-self/go-backend-clean-arch:/app # important
+      - ../:/app # important (- ./:/app)
     networks:
       - go-backend-clean-arch_network
     depends_on:
