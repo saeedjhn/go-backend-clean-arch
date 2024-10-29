@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/grpc/usersvcserver"
+	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/grpc/userservice"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"google.golang.org/grpc/reflection"
@@ -41,7 +41,7 @@ func (s Server) Run() error {
 	gs := grpc.NewServer()
 
 	// Register xxxServiceServer
-	usersvcserver.Register(s.app, gs)
+	userservice.Register(s.app, gs)
 
 	if s.app.Config.Application.Env != configs.Production {
 		reflection.Register(gs)
