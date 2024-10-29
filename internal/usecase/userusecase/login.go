@@ -12,7 +12,7 @@ import (
 )
 
 func (i *Interactor) Login(ctx context.Context, req userdto.LoginRequest) (userdto.LoginResponse, error) {
-	user, err := i.repository.GetByMobile(req.Mobile)
+	user, err := i.repository.GetByMobile(ctx, req.Mobile)
 	if err != nil {
 		return userdto.LoginResponse{}, err
 	}

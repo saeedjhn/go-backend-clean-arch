@@ -21,7 +21,7 @@ func (i *Interactor) Create(
 		Status:      req.Status,
 	}
 
-	isExistsUser, err := i.repository.IsExistsUser(req.UserID)
+	isExistsUser, err := i.repository.IsExistsUser(ctx, req.UserID)
 	if err != nil {
 		return usertaskservicedto.CreateTaskResponse{}, err
 	}
@@ -33,7 +33,7 @@ func (i *Interactor) Create(
 			WithKind(kind.KindStatusBadRequest)
 	}
 
-	createdTask, err := i.repository.Create(task)
+	createdTask, err := i.repository.Create(ctx, task)
 	if err != nil {
 		return usertaskservicedto.CreateTaskResponse{}, err
 	}

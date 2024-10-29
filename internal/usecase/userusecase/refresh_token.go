@@ -19,7 +19,7 @@ func (i *Interactor) RefreshToken(ctx context.Context, req userdto.RefreshTokenR
 			WithKind(kind.KindStatusBadRequest)
 	}
 
-	user, err := i.repository.GetByID(id.UserID)
+	user, err := i.repository.GetByID(ctx, id.UserID)
 	if err != nil {
 		return userdto.RefreshTokenResponse{}, err
 	}

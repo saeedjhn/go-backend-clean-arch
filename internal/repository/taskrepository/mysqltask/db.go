@@ -1,6 +1,7 @@
 package mysqltask
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 
@@ -23,7 +24,7 @@ func New(conn mysql.DB) *DB {
 	}
 }
 
-func (r *DB) Create(t entity.Task) (entity.Task, error) {
+func (r *DB) Create(ctx context.Context, t entity.Task) (entity.Task, error) {
 	query := "INSERT INTO tasks (user_id, title, description, status)  values(?, ?, ?, ?)"
 
 	res, err := r.conn.Conn().Exec(query, t.UserID, t.Title, t.Description, t.Status)
@@ -40,7 +41,7 @@ func (r *DB) Create(t entity.Task) (entity.Task, error) {
 	return t, nil
 }
 
-func (r *DB) IsExistsUser(id uint64) (bool, error) {
+func (r *DB) IsExistsUser(ctx context.Context, id uint64) (bool, error) {
 	var exists bool
 
 	err := r.conn.Conn().
@@ -59,7 +60,7 @@ func (r *DB) IsExistsUser(id uint64) (bool, error) {
 	return false, nil
 }
 
-func (r *DB) GetByID(id uint64) (entity.Task, error) {
+func (r *DB) GetByID(ctx context.Context, id uint64) (entity.Task, error) {
 	query := "SELECT * FROM users WHERE id = ?" // TODO - GetByID
 	row := r.conn.Conn().QueryRow(query, id)
 
@@ -79,7 +80,7 @@ func (r *DB) GetByID(id uint64) (entity.Task, error) {
 	return task, nil
 }
 
-func (r *DB) GetAllByUserID(userID uint64) ([]entity.Task, error) {
+func (r *DB) GetAllByUserID(ctx context.Context, userID uint64) ([]entity.Task, error) {
 	query := "SELECT * FROM tasks WHERE user_id = ? ORDER BY id DESC"
 
 	rows, err := r.conn.Conn().Query(query, userID)
@@ -109,7 +110,7 @@ func (r *DB) GetAllByUserID(userID uint64) ([]entity.Task, error) {
 	return tasks, nil
 }
 
-func (r *DB) GetAll() ([]entity.Task, error) {
+func (r *DB) GetAll(ctx context.Context) ([]entity.Task, error) {
 	rows, err := r.conn.Conn().Query("SELECT * FROM tasks ORDER BY id DESC ")
 	if err != nil || rows.Err() != nil {
 		return nil, richerror.New(_opMysqlTaskGetAll).WithErr(err).

@@ -9,7 +9,7 @@ func (i *Interactor) TasksUser(
 	ctx context.Context,
 	req usertaskservicedto.TasksUserRequest,
 ) (usertaskservicedto.TasksUserResponse, error) {
-	tasks, err := i.repository.GetAllByUserID(req.UserID)
+	tasks, err := i.repository.GetAllByUserID(ctx, req.UserID)
 	if err != nil {
 		return usertaskservicedto.TasksUserResponse{}, err
 	}

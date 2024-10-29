@@ -12,7 +12,7 @@ import (
 )
 
 func (i *Interactor) Register(ctx context.Context, req userdto.RegisterRequest) (userdto.RegisterResponse, error) {
-	isUnique, err := i.repository.IsMobileUnique(req.Mobile)
+	isUnique, err := i.repository.IsMobileUnique(ctx, req.Mobile)
 	if err != nil {
 		return userdto.RegisterResponse{}, err
 	}
@@ -33,7 +33,7 @@ func (i *Interactor) Register(ctx context.Context, req userdto.RegisterRequest) 
 	encryptedPass, _ := bcrypt.Generate(req.Password, bcrypt.DefaultCost) // Check err
 	user.Password = encryptedPass
 
-	createdUser, err := i.repository.Create(user)
+	createdUser, err := i.repository.Create(ctx, user)
 	if err != nil {
 		return userdto.RegisterResponse{}, err
 	}

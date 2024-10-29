@@ -22,10 +22,10 @@ type AuthInteractor interface {
 }
 
 type Repository interface {
-	Create(u entity.User) (entity.User, error)
-	IsMobileUnique(mobile string) (bool, error)
-	GetByMobile(mobile string) (entity.User, error)
-	GetByID(id uint64) (entity.User, error)
+	Create(ctx context.Context, u entity.User) (entity.User, error)
+	IsMobileUnique(ctx context.Context, mobile string) (bool, error)
+	GetByMobile(ctx context.Context, mobile string) (entity.User, error)
+	GetByID(ctx context.Context, id uint64) (entity.User, error)
 }
 
 type Interactor struct {

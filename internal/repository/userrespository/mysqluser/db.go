@@ -1,6 +1,7 @@
 package mysqluser
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 
@@ -23,7 +24,7 @@ func New(conn mysql.DB) *DB {
 	}
 }
 
-func (r *DB) Create(u entity.User) (entity.User, error) {
+func (r *DB) Create(ctx context.Context, u entity.User) (entity.User, error) {
 	query := "INSERT INTO users (name, mobile, email, password) values(?, ?, ?, ?)"
 
 	res, err := r.conn.Conn().Exec(query, u.Name, u.Mobile, u.Email, u.Password)
@@ -40,7 +41,7 @@ func (r *DB) Create(u entity.User) (entity.User, error) {
 	return u, nil
 }
 
-func (r *DB) IsMobileUnique(mobile string) (bool, error) {
+func (r *DB) IsMobileUnique(ctx context.Context, mobile string) (bool, error) {
 	var exists bool
 
 	err := r.conn.Conn().
@@ -60,7 +61,7 @@ func (r *DB) IsMobileUnique(mobile string) (bool, error) {
 	return false, nil
 }
 
-func (r *DB) GetByMobile(mobile string) (entity.User, error) {
+func (r *DB) GetByMobile(ctx context.Context, mobile string) (entity.User, error) {
 	query := "SELECT * FROM users WHERE mobile = ?"
 	row := r.conn.Conn().QueryRow(query, mobile)
 
@@ -80,7 +81,7 @@ func (r *DB) GetByMobile(mobile string) (entity.User, error) {
 	return user, nil
 }
 
-func (r *DB) GetByID(id uint64) (entity.User, error) {
+func (r *DB) GetByID(ctx context.Context, id uint64) (entity.User, error) {
 	query := "SELECT * FROM users WHERE id = ?"
 	row := r.conn.Conn().QueryRow(query, id)
 

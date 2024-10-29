@@ -1,15 +1,16 @@
 package taskusecase
 
 import (
+	"context"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 )
 
 type Repository interface {
-	Create(u entity.Task) (entity.Task, error)
-	GetByID(id uint64) (entity.Task, error)
-	GetAllByUserID(userID uint64) ([]entity.Task, error)
-	IsExistsUser(id uint64) (bool, error)
+	Create(ctx context.Context, u entity.Task) (entity.Task, error)
+	GetByID(ctx context.Context, id uint64) (entity.Task, error)
+	GetAllByUserID(ctx context.Context, userID uint64) ([]entity.Task, error)
+	IsExistsUser(ctx context.Context, id uint64) (bool, error)
 	// etc
 }
 
