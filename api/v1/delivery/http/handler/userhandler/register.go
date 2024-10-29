@@ -54,7 +54,7 @@ func (u *UserHandler) Register(c echo.Context) error {
 	}
 
 	// Usage Use-case
-	resp, err := u.userInteractor.Register(req)
+	resp, err := u.userInteractor.Register(c.Request().Context(), req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())

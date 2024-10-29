@@ -1,4 +1,4 @@
-package authservice
+package authusecase
 
 import (
 	"time"
@@ -16,75 +16,75 @@ type Config struct {
 	RefreshTokenExpiryTime time.Duration `mapstructure:"refresh_token_expire_duration"`
 }
 
-type AuthInteractor struct {
+type Interactor struct {
 	config Config
 	token  *token.Token
 }
 
-// var _ userservice.AuthGenerator = (*AuthInteractor)(nil) // Commented, because it happens import cycle.
+// var _ userservice.AuthGenerator = (*Interactor)(nil) // Commented, because it happens import cycle.
 
-func New(config Config, token *token.Token) *AuthInteractor {
-	return &AuthInteractor{config: config, token: token}
+func New(config Config, token *token.Token) *Interactor {
+	return &Interactor{config: config, token: token}
 }
 
-func (a AuthInteractor) CreateAccessToken(
+func (i Interactor) CreateAccessToken(
 	req userauthservicedto.CreateTokenRequest,
 ) (userauthservicedto.CreateTokenResponse, error) {
-	at, err := a.token.CreateAccessToken(
+	at, err := i.token.CreateAccessToken(
 		req.User.ID,
-		a.config.AccessTokenSecret,
-		a.config.AccessTokenSubject,
-		a.config.AccessTokenExpiryTime,
+		i.config.AccessTokenSecret,
+		i.config.AccessTokenSubject,
+		i.config.AccessTokenExpiryTime,
 	)
 
 	return userauthservicedto.CreateTokenResponse{Token: at}, err
 }
 
-func (a AuthInteractor) CreateRefreshToken(
+func (i Interactor) CreateRefreshToken(
 	req userauthservicedto.CreateTokenRequest,
 ) (userauthservicedto.CreateTokenResponse, error) {
-	rt, err := a.token.CreateRefreshToken(
+	rt, err := i.token.CreateRefreshToken(
 		req.User.ID,
-		a.config.RefreshTokenSecret,
-		a.config.RefreshTokenSubject,
-		a.config.RefreshTokenExpiryTime,
+		i.config.RefreshTokenSecret,
+		i.config.RefreshTokenSubject,
+		i.config.RefreshTokenExpiryTime,
 	)
 
 	return userauthservicedto.CreateTokenResponse{Token: rt}, err
 }
 
-func (a AuthInteractor) IsAuthorized(requestToken string, secret string) (bool, error) {
-	return a.token.IsAuthorized(requestToken, secret)
+func (i Interactor) IsAuthorized(requestToken string, secret string) (bool, error) {
+	return i.token.IsAuthorized(requestToken, secret)
 }
 
-func (a AuthInteractor) ExtractIDFromAccessToken(
+func (i Interactor) ExtractIDFromAccessToken(
 	req userauthservicedto.ExtractIDFromTokenRequest,
 ) (userauthservicedto.ExtractIDFromTokenResponse, error) {
-	et, err := a.token.ParseToken(req.Token, a.config.AccessTokenSecret)
+	et, err := i.token.ParseToken(req.Token, i.config.AccessTokenSecret)
 
 	return userauthservicedto.ExtractIDFromTokenResponse{
 		UserID: et.UserID,
 	}, err
 }
 
-func (a AuthInteractor) ExtractIDFromRefreshToken(
+func (i Interactor) ExtractIDFromRefreshToken(
 	req userauthservicedto.ExtractIDFromTokenRequest,
 ) (userauthservicedto.ExtractIDFromTokenResponse, error) {
-	et, err := a.token.ParseToken(req.Token, a.config.RefreshTokenSecret)
+	et, err := i.token.ParseToken(req.Token, i.config.RefreshTokenSecret)
 
 	return userauthservicedto.ExtractIDFromTokenResponse{
 		UserID: et.UserID,
 	}, err
 }
 
-func (a AuthInteractor) ParseAccessToken(requestToken string) (Claims, error) {
-	claims, err := a.token.ParseToken(requestToken, a.config.AccessTokenSecret)
+func (i Interactor) ParseAccessToken(requestToken string) (Claims, error) {
+	claims, err := i.token.ParseToken(requestToken, i.config.AccessTokenSecret)
 
 	return Claims(*claims), err
 }
 
-func (a AuthInteractor) ParseRefreshToken(requestToken string) (Claims, error) {
-	claims, err := a.token.ParseToken(requestToken, a.config.RefreshTokenSecret)
+func (i Interactor) ParseRefreshToken(requestToken string) (Claims, error) {
+	claims, err := i.token.ParseToken(requestToken, i.config.RefreshTokenSecret)
 
 	return Claims(*claims), err
 }

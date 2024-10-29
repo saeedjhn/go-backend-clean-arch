@@ -1,4 +1,4 @@
-package taskservice
+package taskusecase
 
 const (
 	_opTaskServiceCreate = "taskservice_create"

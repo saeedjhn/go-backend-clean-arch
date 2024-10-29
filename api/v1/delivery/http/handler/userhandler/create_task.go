@@ -54,7 +54,7 @@ func (u *UserHandler) CreateTask(c echo.Context) error {
 	}
 
 	// Usage Use-case
-	resp, err := u.userInteractor.CreateTask(req)
+	resp, err := u.userInteractor.CreateTask(c.Request().Context(), req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())

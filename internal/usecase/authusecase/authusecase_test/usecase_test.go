@@ -1,10 +1,10 @@
-package authservice_test
+package authusecase_test
 
 import (
 	"testing"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/service/authservice"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
@@ -12,7 +12,7 @@ import (
 )
 
 func TestCreateToken(t *testing.T) {
-	config := authservice.Config{
+	config := authusecase.Config{
 		AccessTokenSecret:      "TOKENSECRET",
 		RefreshTokenSecret:     "REFRESHSECRET",
 		AccessTokenSubject:     "as",
@@ -31,7 +31,7 @@ func TestCreateToken(t *testing.T) {
 		UpdatedAt: time.Time{},
 	}
 
-	ai := authservice.New(config, token.New())
+	ai := authusecase.New(config, token.New())
 
 	at, _ := ai.CreateAccessToken(userauthservicedto.CreateTokenRequest{User: u})
 	t.Log(at)

@@ -9,24 +9,24 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/token"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/taskrepository/mysqltask"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/userrespository/mysqluser"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/service/authservice"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/service/taskservice"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/service/userservice"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/taskusecase"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/userusecase"
 )
 
-type Provider struct {
-	AuthSvc *authservice.AuthInteractor
-	UserSvc *userservice.UserInteractor
-	TaskSvc *taskservice.TaskInteractor
+type Usecase struct {
+	AuthIntr *authusecase.Interactor
+	UserIntr *userusecase.Interactor
+	TaskIntr *taskusecase.Interactor
 }
 
-func NewProvider(
+func NewUsecase(
 	cfg *configs.Config,
 	logger *logger.Logger,
 	rds redis.DB,
 	mySQLDB mysql.DB,
 	pqDB pq.DB,
-) *Provider {
+) *Usecase {
 	// Repositories
 	taskRepo := mysqltask.New(mySQLDB)
 	userRepo := mysqluser.New(mySQLDB)
@@ -34,15 +34,14 @@ func NewProvider(
 	// Dependencies
 	token := token.New()
 
-	// Provider
-	// Provider-oriented - inject service to another service
-	taskSvc := taskservice.New(cfg, taskRepo)
-	authSvc := authservice.New(cfg.Auth, token)
-	userSvc := userservice.New(cfg, authSvc, taskSvc, userRepo)
+	// Usecase
+	taskIntr := taskusecase.New(cfg, taskRepo)
+	authIntr := authusecase.New(cfg.Auth, token)
+	userIntr := userusecase.New(cfg, authIntr, taskIntr, userRepo)
 
-	return &Provider{
-		AuthSvc: authSvc,
-		UserSvc: userSvc,
-		TaskSvc: taskSvc,
+	return &Usecase{
+		AuthIntr: authIntr,
+		UserIntr: userIntr,
+		TaskIntr: taskIntr,
 	}
 }

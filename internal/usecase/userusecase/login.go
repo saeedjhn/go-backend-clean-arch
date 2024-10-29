@@ -1,6 +1,7 @@
-package userservice
+package userusecase
 
 import (
+	"context"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
@@ -10,8 +11,8 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
-func (u *UserInteractor) Login(req userdto.LoginRequest) (userdto.LoginResponse, error) {
-	user, err := u.repository.GetByMobile(req.Mobile)
+func (i *Interactor) Login(ctx context.Context, req userdto.LoginRequest) (userdto.LoginResponse, error) {
+	user, err := i.repository.GetByMobile(req.Mobile)
 	if err != nil {
 		return userdto.LoginResponse{}, err
 	}
@@ -33,14 +34,14 @@ func (u *UserInteractor) Login(req userdto.LoginRequest) (userdto.LoginResponse,
 		UpdatedAt: user.UpdatedAt,
 	}}
 
-	accessToken, err := u.authInteractor.CreateAccessToken(dto)
+	accessToken, err := i.authIntr.CreateAccessToken(dto)
 	if err != nil {
 		return userdto.LoginResponse{}, richerror.New(_opUserServiceLogin).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).
 			WithKind(kind.KindStatusInternalServerError)
 	}
 
-	refreshToken, err := u.authInteractor.CreateRefreshToken(dto)
+	refreshToken, err := i.authIntr.CreateRefreshToken(dto)
 	if err != nil {
 		return userdto.LoginResponse{}, richerror.New(_opUserServiceLogin).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).

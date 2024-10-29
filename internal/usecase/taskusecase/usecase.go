@@ -1,4 +1,4 @@
-package taskservice
+package taskusecase
 
 import (
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
@@ -13,18 +13,18 @@ type Repository interface {
 	// etc
 }
 
-type TaskInteractor struct {
+type Interactor struct {
 	config     *configs.Config
 	repository Repository
 }
 
-// var _ taskhandler.Interactor = (*TaskInteractor)(nil) // Commented, because it happens import cycle.
+// var _ taskhandler.Interactor = (*Interactor)(nil) // Commented, because it happens import cycle.
 
 func New(
 	config *configs.Config,
 	repository Repository,
-) *TaskInteractor {
-	return &TaskInteractor{
+) *Interactor {
+	return &Interactor{
 		config:     config,
 		repository: repository,
 	}

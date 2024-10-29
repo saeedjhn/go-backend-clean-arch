@@ -5,6 +5,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http/handler/userhandler"
 	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http/middleware"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/presenter/httppresenter"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/validator/uservalidator"
 )
 
@@ -15,9 +16,12 @@ func New(
 	// Validator
 	validator := uservalidator.New(app.Config)
 
+	// Presenter
+	present := httppresenter.New()
+
 	// Handler
 	//handler := userhandler.New(app, validator, userSvc)
-	handler := userhandler.New(app, validator, app.Provider.UserSvc)
+	handler := userhandler.New(app, present, validator, app.Usecase.UserIntr)
 
 	usersGroup := group.Group("/users")
 	{
@@ -34,7 +38,7 @@ func New(
 
 		protectedRouter := usersGroup.Group("")
 		//protectedRouter.Use(middleware.Auth(app.Config.Auth, authSvc))
-		protectedRouter.Use(middleware.Auth(app.Config.Auth, app.Provider.AuthSvc))
+		protectedRouter.Use(middleware.Auth(app.Config.Auth, present, app.Usecase.AuthIntr))
 		{
 			protectedRouter.GET("/profile", handler.Profile)
 			protectedRouter.POST("/:id/tasks", handler.CreateTask, middleware.CheckIsValidUserID)

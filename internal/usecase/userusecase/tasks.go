@@ -1,14 +1,15 @@
-package userservice
+package userusecase
 
 import (
+	"context"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 )
 
-func (u *UserInteractor) Tasks(req userdto.TasksRequest) (userdto.TasksResponse, error) {
+func (i *Interactor) Tasks(ctx context.Context, req userdto.TasksRequest) (userdto.TasksResponse, error) {
 	dto := usertaskservicedto.TasksUserRequest{UserID: req.ID}
 
-	tasksUser, err := u.taskInteractor.TasksUser(dto)
+	tasksUser, err := i.taskIntr.TasksUser(ctx, dto)
 	if err != nil {
 		return userdto.TasksResponse{}, err
 	}

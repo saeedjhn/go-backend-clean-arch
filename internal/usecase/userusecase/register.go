@@ -1,6 +1,7 @@
-package userservice
+package userusecase
 
 import (
+	"context"
 	"errors"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
@@ -10,8 +11,8 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/security/bcrypt"
 )
 
-func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.RegisterResponse, error) {
-	isUnique, err := u.repository.IsMobileUnique(req.Mobile)
+func (i *Interactor) Register(ctx context.Context, req userdto.RegisterRequest) (userdto.RegisterResponse, error) {
+	isUnique, err := i.repository.IsMobileUnique(req.Mobile)
 	if err != nil {
 		return userdto.RegisterResponse{}, err
 	}
@@ -32,7 +33,7 @@ func (u *UserInteractor) Register(req userdto.RegisterRequest) (userdto.Register
 	encryptedPass, _ := bcrypt.Generate(req.Password, bcrypt.DefaultCost) // Check err
 	user.Password = encryptedPass
 
-	createdUser, err := u.repository.Create(user)
+	createdUser, err := i.repository.Create(user)
 	if err != nil {
 		return userdto.RegisterResponse{}, err
 	}

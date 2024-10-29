@@ -1,12 +1,13 @@
-package userservice
+package userusecase
 
 import (
+	"context"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 )
 
-func (u *UserInteractor) CreateTask(req userdto.CreateTaskRequest) (userdto.CreateTaskResponse, error) {
+func (i *Interactor) CreateTask(ctx context.Context, req userdto.CreateTaskRequest) (userdto.CreateTaskResponse, error) {
 	dto := usertaskservicedto.CreateTaskRequest{
 		UserID:      req.UserID,
 		Title:       req.Title,
@@ -14,7 +15,7 @@ func (u *UserInteractor) CreateTask(req userdto.CreateTaskRequest) (userdto.Crea
 		Status:      entity.Pending,
 	}
 
-	createdTask, err := u.taskInteractor.Create(dto)
+	createdTask, err := i.taskIntr.Create(ctx, dto)
 	if err != nil {
 		return userdto.CreateTaskResponse{}, err
 	}

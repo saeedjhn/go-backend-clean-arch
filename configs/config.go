@@ -8,7 +8,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/mongo"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/mysql"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/service/authservice"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
 )
 
 const (
@@ -60,5 +60,5 @@ type Config struct {
 	Postgres    pq.Config          `mapstructure:"postgres"`
 	Redis       redis.Config       `mapstructure:"redis"`
 	Mongo       mongo.Config       `mapstructure:"mongo"`
-	Auth        authservice.Config `mapstructure:"auth"`
+	Auth        authusecase.Config `mapstructure:"auth"`
 }

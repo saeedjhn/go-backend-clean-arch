@@ -15,7 +15,7 @@ type Application struct {
 	MySQLDB     mysql.DB
 	PostgresDB  pq.DB
 	RedisClient redis.DB
-	Provider    *Provider
+	Usecase     *Usecase
 }
 
 func App(env configs.Env) (*Application, error) {
@@ -49,7 +49,7 @@ func (a *Application) setup() error {
 		return err
 	}
 
-	a.Provider = NewProvider(
+	a.Usecase = NewUsecase(
 		a.Config,
 		a.Logger,
 		a.RedisClient,

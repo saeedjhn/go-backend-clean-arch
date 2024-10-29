@@ -54,7 +54,7 @@ func (u *UserHandler) RefreshToken(c echo.Context) error {
 	}
 
 	// Usage Use-case
-	resp, err := u.userInteractor.RefreshToken(req)
+	resp, err := u.userInteractor.RefreshToken(c.Request().Context(), req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())

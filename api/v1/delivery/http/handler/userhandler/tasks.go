@@ -40,7 +40,7 @@ func (u *UserHandler) Tasks(c echo.Context) error {
 	}
 
 	// Usage Use-case
-	resp, err := u.userInteractor.Tasks(req)
+	resp, err := u.userInteractor.Tasks(c.Request().Context(), req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())

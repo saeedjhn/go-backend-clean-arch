@@ -1,17 +1,18 @@
 package userhandler
 
 import (
+	"context"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 )
 
 type Interactor interface {
-	Register(req userdto.RegisterRequest) (userdto.RegisterResponse, error)
-	Login(req userdto.LoginRequest) (userdto.LoginResponse, error)
-	Profile(req userdto.ProfileRequest) (userdto.ProfileResponse, error)
-	Tasks(req userdto.TasksRequest) (userdto.TasksResponse, error)
-	CreateTask(req userdto.CreateTaskRequest) (userdto.CreateTaskResponse, error)
-	RefreshToken(req userdto.RefreshTokenRequest) (userdto.RefreshTokenResponse, error)
+	Register(ctx context.Context, req userdto.RegisterRequest) (userdto.RegisterResponse, error)
+	Login(ctx context.Context, req userdto.LoginRequest) (userdto.LoginResponse, error)
+	Profile(ctx context.Context, req userdto.ProfileRequest) (userdto.ProfileResponse, error)
+	Tasks(ctx context.Context, req userdto.TasksRequest) (userdto.TasksResponse, error)
+	CreateTask(ctx context.Context, req userdto.CreateTaskRequest) (userdto.CreateTaskResponse, error)
+	RefreshToken(ctx context.Context, req userdto.RefreshTokenRequest) (userdto.RefreshTokenResponse, error)
 }
 
 type Presenter interface {

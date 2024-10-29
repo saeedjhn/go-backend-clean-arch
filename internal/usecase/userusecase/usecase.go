@@ -1,18 +1,19 @@
-package userservice
+package userusecase
 
 import (
+	"context"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 )
 
-type TaskGenerator interface {
-	Create(dto usertaskservicedto.CreateTaskRequest) (usertaskservicedto.CreateTaskResponse, error)
-	TasksUser(dto usertaskservicedto.TasksUserRequest) (usertaskservicedto.TasksUserResponse, error)
+type TaskInteractor interface {
+	Create(ctx context.Context, dto usertaskservicedto.CreateTaskRequest) (usertaskservicedto.CreateTaskResponse, error)
+	TasksUser(ctx context.Context, dto usertaskservicedto.TasksUserRequest) (usertaskservicedto.TasksUserResponse, error)
 }
 
-type AuthGenerator interface {
+type AuthInteractor interface {
 	CreateAccessToken(dto userauthservicedto.CreateTokenRequest) (userauthservicedto.CreateTokenResponse, error)
 	CreateRefreshToken(dto userauthservicedto.CreateTokenRequest) (userauthservicedto.CreateTokenResponse, error)
 	ExtractIDFromRefreshToken(
@@ -27,25 +28,25 @@ type Repository interface {
 	GetByID(id uint64) (entity.User, error)
 }
 
-type UserInteractor struct {
-	config         *configs.Config
-	authInteractor AuthGenerator
-	taskInteractor TaskGenerator
-	repository     Repository
+type Interactor struct {
+	config     *configs.Config
+	authIntr   AuthInteractor
+	taskIntr   TaskInteractor
+	repository Repository
 }
 
-// var _ userhandler.Interactor = (*UserInteractor)(nil) // Commented, because it happens import cycle.
+// var _ userhandler.Interactor = (*Interactor)(nil) // Commented, because it happens import cycle.
 
 func New(
 	config *configs.Config,
-	authInteractor AuthGenerator,
-	taskInteractor TaskGenerator,
+	authIntr AuthInteractor,
+	taskIntr TaskInteractor,
 	repository Repository,
-) *UserInteractor {
-	return &UserInteractor{
-		config:         config,
-		authInteractor: authInteractor,
-		taskInteractor: taskInteractor,
-		repository:     repository,
+) *Interactor {
+	return &Interactor{
+		config:     config,
+		authIntr:   authIntr,
+		taskIntr:   taskIntr,
+		repository: repository,
 	}
 }

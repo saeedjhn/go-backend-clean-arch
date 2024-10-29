@@ -7,7 +7,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/service/authservice"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
@@ -15,9 +15,9 @@ import (
 const _lenValidAuthorizationKeyFromHeader = 2
 
 func Auth(
-	config authservice.Config,
+	config authusecase.Config,
 	present *httppresenter.Presenter,
-	authInteractor *authservice.AuthInteractor,
+	authInteractor *authusecase.Interactor,
 ) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {

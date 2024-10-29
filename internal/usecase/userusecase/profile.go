@@ -1,11 +1,12 @@
-package userservice
+package userusecase
 
 import (
+	"context"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 )
 
-func (u *UserInteractor) Profile(req userdto.ProfileRequest) (userdto.ProfileResponse, error) {
-	user, err := u.repository.GetByID(req.ID)
+func (i *Interactor) Profile(ctx context.Context, req userdto.ProfileRequest) (userdto.ProfileResponse, error) {
+	user, err := i.repository.GetByID(req.ID)
 	if err != nil {
 		return userdto.ProfileResponse{}, err
 	}

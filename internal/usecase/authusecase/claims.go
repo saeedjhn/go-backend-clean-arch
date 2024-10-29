@@ -1,4 +1,4 @@
-package authservice
+package authusecase
 
 import (
 	"github.com/golang-jwt/jwt/v5"

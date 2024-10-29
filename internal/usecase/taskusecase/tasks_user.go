@@ -1,13 +1,15 @@
-package taskservice
+package taskusecase
 
 import (
+	"context"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
 )
 
-func (t *TaskInteractor) TasksUser(
+func (i *Interactor) TasksUser(
+	ctx context.Context,
 	req usertaskservicedto.TasksUserRequest,
 ) (usertaskservicedto.TasksUserResponse, error) {
-	tasks, err := t.repository.GetAllByUserID(req.UserID)
+	tasks, err := i.repository.GetAllByUserID(req.UserID)
 	if err != nil {
 		return usertaskservicedto.TasksUserResponse{}, err
 	}

@@ -1,6 +1,7 @@
-package taskservice
+package taskusecase
 
 import (
+	"context"
 	"errors"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
@@ -9,7 +10,8 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
 )
 
-func (t *TaskInteractor) Create(
+func (i *Interactor) Create(
+	ctx context.Context,
 	req usertaskservicedto.CreateTaskRequest,
 ) (usertaskservicedto.CreateTaskResponse, error) {
 	task := entity.Task{
@@ -19,7 +21,7 @@ func (t *TaskInteractor) Create(
 		Status:      req.Status,
 	}
 
-	isExistsUser, err := t.repository.IsExistsUser(req.UserID)
+	isExistsUser, err := i.repository.IsExistsUser(req.UserID)
 	if err != nil {
 		return usertaskservicedto.CreateTaskResponse{}, err
 	}
@@ -31,7 +33,7 @@ func (t *TaskInteractor) Create(
 			WithKind(kind.KindStatusBadRequest)
 	}
 
-	createdTask, err := t.repository.Create(task)
+	createdTask, err := i.repository.Create(task)
 	if err != nil {
 		return usertaskservicedto.CreateTaskResponse{}, err
 	}

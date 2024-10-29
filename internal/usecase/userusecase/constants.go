@@ -1,4 +1,4 @@
-package userservice
+package userusecase
 
 const (
 	_opUserServiceRegister     = "userservice_Register"

@@ -9,8 +9,8 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/service/taskservice"
-	mockstest "github.com/saeedjhn/go-backend-clean-arch/internal/service/taskservice/mocks_test"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/taskusecase"
+	mockstest "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/taskusecase/mocks_test"
 )
 
 func TestCreate(t *testing.T) {
@@ -19,7 +19,7 @@ func TestCreate(t *testing.T) {
 
 	mockRepository := mockstest.NewMockRepository(ctrl)
 
-	service := taskservice.New(mockRepository)
+	service := taskusecase.New(mockRepository)
 
 	createTask := entity.Task{
 		UserID:      1,
