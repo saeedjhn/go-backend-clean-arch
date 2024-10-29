@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"github.com/saeedjhn/go-backend-clean-arch/internal/presenter/httppresenter"
 	"net/http"
 	"strings"
 
@@ -13,7 +14,11 @@ import (
 
 const _lenValidAuthorizationKeyFromHeader = 2
 
-func Auth(config authservice.Config, authInteractor *authservice.AuthInteractor) echo.MiddlewareFunc {
+func Auth(
+	config authservice.Config,
+	present *httppresenter.Presenter,
+	authInteractor *authservice.AuthInteractor,
+) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			authHeader := c.Request().Header.Get("Authorization")
@@ -25,26 +30,38 @@ func Auth(config authservice.Config, authInteractor *authservice.AuthInteractor)
 				if authorized {
 					claims, errParse := authInteractor.ParseAccessToken(authToken)
 					if errParse != nil {
-						return c.JSON(http.StatusUnauthorized, echo.Map{
-							"status":  false,
-							"message": message.ErrorMsg401UnAuthorized,
-							"errors":  nil,
-						})
+						return c.JSON(http.StatusUnauthorized, present.ErrorWithMSG(
+							message.ErrorMsg401UnAuthorized,
+							errParse,
+						))
+						//return c.JSON(http.StatusUnauthorized, echo.Map{
+						//	"status":  false,
+						//	"message": message.ErrorMsg401UnAuthorized,
+						//	"errors":  nil,
+						//})
 					}
 					claim.SetClaimsFromEchoContext(c, configs.AuthMiddlewareContextKey, claims)
 					return next(c)
 				}
-				return c.JSON(http.StatusUnauthorized, echo.Map{
-					"status":  false,
-					"message": message.ErrorMsg401UnAuthorized,
-					"errors":  err.Error(),
-				})
+				return c.JSON(http.StatusUnauthorized, present.ErrorWithMSG(
+					message.ErrorMsg401UnAuthorized,
+					err,
+				))
+				//return c.JSON(http.StatusUnauthorized, echo.Map{
+				//	"status":  false,
+				//	"message": message.ErrorMsg401UnAuthorized,
+				//	"errors":  err.Error(),
+				//})
 			}
-			return c.JSON(http.StatusUnauthorized, echo.Map{
-				"status":  false,
-				"message": message.ErrorMsg401UnAuthorized,
-				"errors":  nil,
-			})
+			return c.JSON(http.StatusUnauthorized, present.ErrorWithMSG(
+				message.ErrorMsg401UnAuthorized,
+				nil,
+			))
+			//return c.JSON(http.StatusUnauthorized, echo.Map{
+			//	"status":  false,
+			//	"message": message.ErrorMsg401UnAuthorized,
+			//	"errors":  nil,
+			//})
 		}
 	}
 }

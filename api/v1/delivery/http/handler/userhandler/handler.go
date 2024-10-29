@@ -14,6 +14,13 @@ type Interactor interface {
 	RefreshToken(req userdto.RefreshTokenRequest) (userdto.RefreshTokenResponse, error)
 }
 
+type Presenter interface {
+	Success(data interface{}) map[string]interface{}
+	SuccessWithMSG(msg string, data interface{}) map[string]interface{}
+	Error(err error) (int, map[string]interface{})
+	ErrorWithMSG(msg string, err error) map[string]interface{}
+}
+
 type Validator interface {
 	ValidateRegisterRequest(req userdto.RegisterRequest) (map[string]string, error)
 	ValidateLoginRequest(req userdto.LoginRequest) (map[string]string, error)
@@ -24,17 +31,20 @@ type Validator interface {
 
 type UserHandler struct {
 	app            *bootstrap.Application
+	present        Presenter
 	userValidator  Validator
 	userInteractor Interactor
 }
 
 func New(
 	app *bootstrap.Application,
+	present Presenter,
 	userValidator Validator,
 	userInteractor Interactor,
 ) *UserHandler {
 	return &UserHandler{
 		app:            app,
+		present:        present,
 		userValidator:  userValidator,
 		userInteractor: userInteractor,
 	}
