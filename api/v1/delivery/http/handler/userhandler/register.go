@@ -13,7 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (u *UserHandler) Register(c echo.Context) error {
+func (h *Handler) Register(c echo.Context) error {
 	// Bind
 	req := userdto.RegisterRequest{}
 	if err := c.Bind(&req); err != nil {
@@ -27,7 +27,7 @@ func (u *UserHandler) Register(c echo.Context) error {
 	}
 
 	// Validation
-	if fieldsErrs, err := u.userValidator.ValidateRegisterRequest(req); err != nil {
+	if fieldsErrs, err := h.vld.ValidateRegisterRequest(req); err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
@@ -54,12 +54,12 @@ func (u *UserHandler) Register(c echo.Context) error {
 	}
 
 	// Usage Use-case
-	resp, err := u.userInteractor.Register(c.Request().Context(), req)
+	resp, err := h.userIntr.Register(c.Request().Context(), req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		u.app.Logger.Set().Named("users").Error("register", zap.Any("error", err.Error()))
+		h.app.Logger.Set().Named("users").Error("register", zap.Any("error", err.Error()))
 
 		return echo.NewHTTPError(code,
 			echo.Map{

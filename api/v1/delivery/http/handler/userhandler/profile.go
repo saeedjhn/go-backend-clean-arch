@@ -1,29 +1,47 @@
 package userhandler
 
 import (
-	"net/http"
-
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/httpstatus"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/presenter/httppresenter"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 	"go.uber.org/zap"
+	"net/http"
 )
 
-func (u *UserHandler) Profile(c echo.Context) error {
+func (h *Handler) Profile(c echo.Context) error {
 	// Give claims
 	claims := claim.GetClaimsFromEchoContext[authusecase.Claims](c, configs.AuthMiddlewareContextKey)
 
 	// Usage Use-case
-	resp, err := u.userInteractor.Profile(c.Request().Context(), userdto.ProfileRequest{ID: claims.UserID})
+	resp, err := h.userIntr.Profile(
+		c.Request().Context(), userdto.ProfileRequest{ID: claims.UserID},
+	)
 	if err != nil {
-		code, errResp := u.present.Error(err)
+		richErr, _ := richerror.Analysis(err)
+		code := httpstatus.FromKind(richErr.Kind())
 
-		u.app.Logger.Set().Named("users").Error("profile", zap.Any("error", err.Error()))
+		h.app.Logger.Set().Named("users").Error("profile", zap.Any("error", err.Error()))
 
-		return echo.NewHTTPError(code, errResp)
+		return echo.NewHTTPError(code,
+			echo.Map{
+				"status":  false,
+				"message": richErr.Message(),
+				"errors":  richErr.Error(),
+			})
 	}
 
-	return c.JSON(http.StatusOK, u.present.Success(resp))
+	return c.JSON(http.StatusOK, httppresenter.New(
+		httppresenter.WithData(resp.User),
+	).ToMap())
+
+	//return c.JSON(http.StatusOK, httppresenter.New().WithData(resp).ToMap())
+
+	//return c.JSON(http.StatusOK, h.present.WithData(resp))
+
+	//return c.JSON(http.StatusOK, h.present.Ok(resp))
 }

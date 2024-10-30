@@ -13,7 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (u *UserHandler) Login(c echo.Context) error {
+func (h *Handler) Login(c echo.Context) error {
 	// Bind
 	req := userdto.LoginRequest{}
 	if err := c.Bind(&req); err != nil {
@@ -21,13 +21,13 @@ func (u *UserHandler) Login(c echo.Context) error {
 			echo.Map{
 				"status":  false,
 				"message": message.ErrorMsg400BadRequest,
-				"errors":  bind.CheckErrorFromBind(err).Error(),
-			},
-		)
+				"errors":  bind.CheckErrorFromBind(err),
+			})
 	}
 
 	// Validation
-	if fieldsErrs, err := u.userValidator.ValidateLoginRequest(req); err != nil {
+	//if fieldsErrs, err := h.vld.ValidateLoginRequest(req); err != nil {
+	if fieldsErrs, err := h.vld.ValidateLoginRequest(req); err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
@@ -36,8 +36,7 @@ func (u *UserHandler) Login(c echo.Context) error {
 				"status":  false,
 				"message": richErr.Message(),
 				"errors":  fieldsErrs,
-			},
-		)
+			})
 	}
 
 	// Sanitize
@@ -54,12 +53,12 @@ func (u *UserHandler) Login(c echo.Context) error {
 	}
 
 	// Usage Use-case
-	resp, err := u.userInteractor.Login(c.Request().Context(), req)
+	resp, err := h.userIntr.Login(c.Request().Context(), req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		u.app.Logger.Set().Named("users").Error("login", zap.Any("error", err.Error()))
+		h.app.Logger.Set().Named("users").Error("login", zap.Any("error", err.Error()))
 
 		return echo.NewHTTPError(code,
 			echo.Map{

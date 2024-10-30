@@ -13,7 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (u *UserHandler) RefreshToken(c echo.Context) error {
+func (h *Handler) RefreshToken(c echo.Context) error {
 	// Bind
 	req := userdto.RefreshTokenRequest{}
 	if err := c.Bind(&req); err != nil {
@@ -27,7 +27,7 @@ func (u *UserHandler) RefreshToken(c echo.Context) error {
 	}
 
 	// Validation
-	if fieldsErrs, err := u.userValidator.ValidateRefreshTokenRequest(req); err != nil {
+	if fieldsErrs, err := h.vld.ValidateRefreshTokenRequest(req); err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
@@ -54,12 +54,12 @@ func (u *UserHandler) RefreshToken(c echo.Context) error {
 	}
 
 	// Usage Use-case
-	resp, err := u.userInteractor.RefreshToken(c.Request().Context(), req)
+	resp, err := h.userIntr.RefreshToken(c.Request().Context(), req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		u.app.Logger.Set().Named("users").Error("refresh-token", zap.Any("error", err.Error()))
+		h.app.Logger.Set().Named("users").Error("refresh-token", zap.Any("error", err.Error()))
 
 		return echo.NewHTTPError(code,
 			echo.Map{

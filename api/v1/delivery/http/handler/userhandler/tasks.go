@@ -13,7 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (u *UserHandler) Tasks(c echo.Context) error {
+func (h *Handler) Tasks(c echo.Context) error {
 	// Bind
 	req := userdto.TasksRequest{}
 	if err := c.Bind(&req); err != nil {
@@ -40,12 +40,12 @@ func (u *UserHandler) Tasks(c echo.Context) error {
 	}
 
 	// Usage Use-case
-	resp, err := u.userInteractor.Tasks(c.Request().Context(), req)
+	resp, err := h.userIntr.Tasks(c.Request().Context(), req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		u.app.Logger.Set().Named("users").Error("tasks", zap.Any("error", err.Error()))
+		h.app.Logger.Set().Named("users").Error("tasks", zap.Any("error", err.Error()))
 
 		return echo.NewHTTPError(code,
 			echo.Map{
