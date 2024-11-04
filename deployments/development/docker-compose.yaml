@@ -5,14 +5,14 @@ services:
   app-dev:
     container_name: go-backend-clean-arch_app-dev
     build:
-      context: ..
-      dockerfile: ./deployments/Dockerfile
+      context: ../..
+      dockerfile: deployments/development/Dockerfile
       target: dev # For Development
     ports:
       - "8000:8000"
       - "50000:50000"
     volumes:
-      - ../:/app # important (- ./:/app)
+      - ../../:/app # important (- ./:/app)
     networks:
       - go-backend-clean-arch_network
     depends_on:
