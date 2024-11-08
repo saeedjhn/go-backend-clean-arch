@@ -1,9 +1,8 @@
-version: '3.8'
-
 services:
   ####################### APPLICATION #######################
-  app-dev:
+  app:
     container_name: go-backend-clean-arch_app-dev
+    image: go-backend-clean-arch_app:0.1.0-dev
     build:
       context: ../..
       dockerfile: deployments/development/Dockerfile
@@ -32,13 +31,10 @@ services:
   mysqldb:
     container_name: go-backend-clean-arch_mysqldb
     image: mysql:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: backend_db
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: 123456
+    env_file:
+      - .env
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT}:${MYSQL_PORT}"
     volumes:
       - mysql:/var/lib/mysql
     restart: always
@@ -50,12 +46,10 @@ services:
     #  psqldb:
     #    container_name: go-backend-clean-arch_psqldb
     #    image: postgres:latest
-    #    environment:
-    #      POSTGRES_USER: admin
-    #      POSTGRES_PASSWORD: 123456
-    #      POSTGRES_DB: backend_db
+    #    env_file:
+    #      - .env
     #    ports:
-    #      - "5001:5432"
+    #      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     #    volumes:
     #      - psql:/var/lib/psql/data
     #    restart: always
@@ -97,12 +91,14 @@ services:
   redis:
     container_name: go-backend-clean-arch_redis
     image: redis:latest
+    env_file:
+      - .env
     command: redis-server --loglevel warning --protected-mode no --save "" --appendonly no
     #    command: [ "redis-server", "/etc/redis/redis.conf" ]
     volumes:
       - redis:/var/lib/redis/data
     ports:
-      - "5003:6379"
+      - "${REDIS_PORT}:${REDIS_PORT}"
     networks:
       - go-backend-clean-arch_network
 

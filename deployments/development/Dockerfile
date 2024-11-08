@@ -1,4 +1,4 @@
-FROM golang:latest AS builder
+FROM golang:1.23.2 AS builder
 
 ENV PROJECT_DIR=/app \
     BUILD_DIR=/build \
@@ -23,7 +23,7 @@ COPY . .
 RUN go install github.com/air-verse/air@latest
 
 # For Development
-FROM golang:alpine3.19 AS dev
+FROM golang:1.23.2-alpine3.20 AS dev
 
 ENV PROJECT_DIR=/app \
     BUILD_DIR=/build \
