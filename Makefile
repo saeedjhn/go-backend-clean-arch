@@ -41,13 +41,13 @@ test/cover:
 	go test -v -race -buildvcs -coverprofile=/tmp/coverage.out ./...
 	go tool cover -html=/tmp/coverage.out # -html, func, etc...
 
-## up: Startup / Build services from docker-compose and air for live reloading
-.PHONY: up
-up:
+## development-up: Startup / Build services from docker-compose and air for live reloading
+.PHONY: development-up
+development-up:
 	@echo
 	@echo " > Startup / Build services from docker-compose and air for live reloading"
 	@echo
-	@docker-compose -f deployments/docker-compose.yaml up
+	@docker-compose -f deployments/development/docker-compose.yaml up
 
 ## Build: Build services from docker-compose
 .PHONY: build
