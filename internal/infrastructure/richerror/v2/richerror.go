@@ -4,10 +4,11 @@ import (
 	"errors"
 	"github.com/rotisserie/eris"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
-	"sync"
+	"maps"
 )
 
 type SourceType string
+type Op string
 
 const (
 	Pointer   SourceType = "pointer"
@@ -15,40 +16,54 @@ const (
 	Header    SourceType = "header"
 )
 
-// The singleton instance and a sync.Once to ensure it's only created once
-var instance *RichError
-var once sync.Once
+var metaMap = make(map[string]interface{})
 
 type RichError struct {
-	kind    kind.Kind // Status
-	source  map[SourceType]string
-	meta    map[string]interface{} // meta
-	rootErr error
-	wrapErr error
+	op     Op
+	kind   kind.Kind
+	source map[SourceType]string
+	meta   map[string]interface{}
+	rErr   error
+	wErr   error
 }
 
 func New() *RichError {
-	once.Do(func() {
-		instance = &RichError{
-			source: make(map[SourceType]string),
-			meta:   make(map[string]interface{}),
-		}
-	})
-
-	return instance
+	return &RichError{
+		source: make(map[SourceType]string),
+		meta:   make(map[string]interface{}),
+	}
 }
 
-func (r *RichError) WithErr(msg string) *RichError {
-	e := eris.New(msg)
-
-	r.rootErr = e
-	r.wrapErr = e
+func (r *RichError) WithOp(op Op) *RichError {
+	r.op = op
 
 	return r
 }
 
-func (r *RichError) WithWrapperErr(msg string) *RichError {
-	r.wrapErr = eris.Wrap(r.wrapErr, msg)
+func (r *RichError) WithErr(err error) *RichError {
+	r.rErr = err
+	//r.wErr = eris.New(err.Error())
+
+	return r
+}
+
+func (r *RichError) WithWrapErr(err error, msg string) *RichError {
+	if err == nil || r.rErr != nil {
+		return r
+	}
+
+	var re *RichError
+	ie := err
+
+	r.rErr = err
+	if errors.As(err, &re) {
+
+		if re.wErr != nil {
+			ie = re.wErr
+		}
+	}
+
+	r.wErr = eris.Wrap(ie, msg)
 
 	return r
 }
@@ -60,9 +75,10 @@ func (r *RichError) WithKind(kind kind.Kind) *RichError {
 }
 
 func (r *RichError) WithMeta(meta map[string]interface{}) *RichError {
-	for k, v := range meta {
-		r.meta[k] = v
-	}
+	//for k, v := range meta {
+	//	r.meta[k] = v
+	//}
+	maps.Copy(r.meta, meta)
 
 	return r
 }
@@ -74,35 +90,79 @@ func (r *RichError) WithSource(t SourceType, v string) *RichError {
 }
 
 func (r *RichError) WithTrace(pretty bool) *RichError {
-
-	r.meta["trace"] = eris.ToJSON(r.wrapErr, pretty)
+	r.meta["trace"] = eris.ToJSON(r.wErr, pretty)
 
 	return r
 }
 
-func (r *RichError) Error() string {
-	return r.rootErr.Error()
-}
+func (r *RichError) Op() Op {
+	if len(r.op) != 0 {
+		return r.op
+	}
 
-func (r *RichError) ErrorWithWrap() string {
-	return eris.ToCustomString(r.wrapErr, eris.NewDefaultStringFormat(eris.FormatOptions{
-		InvertOutput: true, // Invert order to show latest errors first
-	}))
+	var re *RichError
+
+	if errors.As(r.rErr, &re) {
+		return re.Op()
+	}
+
+	return ""
 }
 
 func (r *RichError) Kind() kind.Kind {
-	return r.kind
+	if r.kind != 0 {
+		return r.kind
+	}
+
+	var re *RichError
+
+	if errors.As(r.rErr, &re) {
+		return re.Kind()
+	}
+
+	return 0
 }
 
 func (r *RichError) Meta() map[string]interface{} {
-	meta := r.meta
-	r.meta = make(map[string]interface{})
+	var re *RichError
 
-	return meta
+	maps.Copy(metaMap, r.meta)
+
+	if errors.As(r.rErr, &re) {
+		maps.Copy(metaMap, re.meta)
+
+		return re.Meta()
+	}
+
+	return metaMap
 }
 
 func (r *RichError) Source() map[SourceType]string {
-	return r.source
+	if len(r.source) != 0 {
+		return r.source
+	}
+
+	var re *RichError
+
+	if errors.As(r.rErr, &re) {
+		return re.Source()
+	}
+
+	return nil
+}
+
+func (r *RichError) Error() string {
+	if r.rErr != nil {
+		return r.rErr.Error()
+	}
+
+	return "nil"
+}
+
+func (r *RichError) ErrorWithWrap() string {
+	return eris.ToCustomString(r.wErr, eris.NewDefaultStringFormat(eris.FormatOptions{
+		InvertOutput: true, // Invert order to show latest errors first
+	}))
 }
 
 func Analysis(err error) *RichError {
@@ -110,11 +170,12 @@ func Analysis(err error) *RichError {
 
 	if errors.As(err, &re) {
 		return &RichError{
-			rootErr: re.rootErr,
-			wrapErr: re.wrapErr,
-			kind:    re.Kind(),
-			source:  re.Source(),
-			meta:    re.Meta(),
+			op:     re.Op(),
+			kind:   re.Kind(),
+			source: re.Source(),
+			meta:   re.Meta(),
+			rErr:   re.rErr,
+			wErr:   re.wErr,
 		}
 	}
 

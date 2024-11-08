@@ -2,7 +2,6 @@ package richerror_test
 
 import (
 	"errors"
-	"github.com/kr/pretty"
 	"github.com/rotisserie/eris"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror/v2"
@@ -12,32 +11,47 @@ import (
 
 func TestRich(t *testing.T) {
 	t.Log("Test Rich")
+	e := errors.New("database: row not found")
 
-	richerror.New().
+	r1 := richerror.New().
 		WithOp("OPERATION").
-		WithErr("BAD-REQUEST").
-		WithWrapperErr(errors.New("external error: database").Error()).
+		//WithErr(e).
+		WithWrapErr(e, "repository - record not found").
 		WithKind(kind.KindStatusBadRequest).
 		WithMeta(map[string]interface{}{
 			"timestamp": "2024-10-30T12:00:00Z",
 		}).
 		WithSource(richerror.Pointer, "username")
-	//WithTrace()
 
-	//pretty.Log(r)
+	r2 := richerror.New().
+		WithWrapErr(r1, "usecase - error wrapper with repository").
+		WithMeta(map[string]interface{}{
+			"query": "QUERY",
+		})
 
-	rr := richerror.New().
-		//WithErr("new-error").
-		WithWrapperErr(errors.New("external3 error: database").Error()).
-		WithTrace(true)
+	r3 := richerror.New().
+		//WithErr(errors.New("AAAA")).
+		WithWrapErr(r2, "handler - error wrapper with usecase").
+		WithMeta(map[string]interface{}{
+			"db": "DB",
+		}).
+		WithTrace(false)
 
-	a := richerror.Analysis(rr)
+	prettyprint.PrettyPrintData(r3.Op())
+	prettyprint.PrettyPrintData(r3.Kind())
+	prettyprint.PrettyPrintData(r3.Source())
+	prettyprint.PrettyPrintData(r3.ErrorWithWrap())
+	prettyprint.PrettyPrintData(r3.Error())
+	prettyprint.PrettyPrintData(r3.Meta())
 
-	//prettyprint.PrettyPrintData(rr)
-
-	pretty.Log(
-		a,
-	)
+	//
+	//a := richerror.Analysis(r2)
+	//
+	//prettyprint.PrettyPrintData(a)
+	//
+	//pretty.Log(
+	//	a,
+	//)
 
 }
 
