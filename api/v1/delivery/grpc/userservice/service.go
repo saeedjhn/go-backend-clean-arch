@@ -19,21 +19,15 @@ type Interactor interface {
 	RefreshToken(ctx context.Context, req userdto.RefreshTokenRequest) (userdto.RefreshTokenResponse, error)
 }
 
-type Presenter interface {
-	ProfileResponse(resp userdto.ProfileResponse) *pb.ProfileResponse
-	Error(err error) error
-}
-
 var _ pb.UserServiceServer = (*Service)(nil)
 
 type Service struct {
 	pb.UserServiceServer
-	present        Presenter
-	userInteractor Interactor
+	userIntr Interactor
 }
 
-func New(present Presenter, itr Interactor) *Service {
-	return &Service{present: present, userInteractor: itr}
+func New(itr Interactor) *Service {
+	return &Service{userIntr: itr}
 }
 
 func (u Service) Create(ctx context.Context, req *pb.CreateRequest) (*pb.User, error) {
@@ -47,13 +41,14 @@ func (u Service) Get(ctx context.Context, req *pb.GetRequest) (*pb.User, error) 
 }
 
 func (u Service) Profile(ctx context.Context, req *pb.ProfileRequest) (*pb.ProfileResponse, error) {
-	resp, err := u.userInteractor.Profile(ctx, usermapper.MapProfileRequestFromProtobuf(req))
+	r := usermapper.MapProfileRequestFromProtobuf(req)
 
+	resp, err := u.userIntr.Profile(ctx, r)
 	if err != nil {
-		return &pb.ProfileResponse{}, u.present.Error(err)
+		return &pb.ProfileResponse{}, err
 	}
 
-	return u.present.ProfileResponse(resp), nil
+	return usermapper.MapProfileResponseToProtobuf(resp), nil
 }
 
 func (u Service) Update(ctx context.Context, req *pb.UpdateRequest) (*pb.User, error) {
