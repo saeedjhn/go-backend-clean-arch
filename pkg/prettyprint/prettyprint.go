@@ -2,15 +2,15 @@ package prettyprint
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 )
 
 func PrettyPrintData(data interface{}) {
 	// Convert data to pretty-printed JSON.
 	if prettyOutput, err := json.MarshalIndent(data, "", "  "); err == nil {
-		fmt.Println(string(prettyOutput))
+		log.Println(string(prettyOutput))
 	} else {
-		// Handle error
-		fmt.Println("*****")
+		log.Println("don`t convert data to pretty-printed")
+		log.Printf("%#v", data)
 	}
 }

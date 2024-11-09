@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/presenter/httppresenter"
 	"net/http"
 	"strings"
 
@@ -16,7 +15,6 @@ const _lenValidAuthorizationKeyFromHeader = 2
 
 func Auth(
 	config authusecase.Config,
-	present *httppresenter.Presenter,
 	authInteractor *authusecase.Interactor,
 ) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
@@ -30,38 +28,26 @@ func Auth(
 				if authorized {
 					claims, errParse := authInteractor.ParseAccessToken(authToken)
 					if errParse != nil {
-						return c.JSON(http.StatusUnauthorized, present.ErrorWithMSG(
-							message.ErrorMsg401UnAuthorized,
-							errParse,
-						))
-						//return c.JSON(http.StatusUnauthorized, echo.Map{
-						//	"status":  false,
-						//	"message": message.ErrorMsg401UnAuthorized,
-						//	"errors":  nil,
-						//})
+						return c.JSON(http.StatusUnauthorized, echo.Map{
+							"status":  false,
+							"message": message.ErrorMsg401UnAuthorized,
+							"errors":  nil,
+						})
 					}
 					claim.SetClaimsFromEchoContext(c, configs.AuthMiddlewareContextKey, claims)
 					return next(c)
 				}
-				return c.JSON(http.StatusUnauthorized, present.ErrorWithMSG(
-					message.ErrorMsg401UnAuthorized,
-					err,
-				))
-				//return c.JSON(http.StatusUnauthorized, echo.Map{
-				//	"status":  false,
-				//	"message": message.ErrorMsg401UnAuthorized,
-				//	"errors":  err.Error(),
-				//})
+				return c.JSON(http.StatusUnauthorized, echo.Map{
+					"status":  false,
+					"message": message.ErrorMsg401UnAuthorized,
+					"errors":  err.Error(),
+				})
 			}
-			return c.JSON(http.StatusUnauthorized, present.ErrorWithMSG(
-				message.ErrorMsg401UnAuthorized,
-				nil,
-			))
-			//return c.JSON(http.StatusUnauthorized, echo.Map{
-			//	"status":  false,
-			//	"message": message.ErrorMsg401UnAuthorized,
-			//	"errors":  nil,
-			//})
+			return c.JSON(http.StatusUnauthorized, echo.Map{
+				"status":  false,
+				"message": message.ErrorMsg401UnAuthorized,
+				"errors":  nil,
+			})
 		}
 	}
 }

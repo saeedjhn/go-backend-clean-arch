@@ -45,7 +45,6 @@ message User {
   string name = 2;
   string mobile = 3;
   string email = 4;
-  string password = 5;
   google.protobuf.Timestamp createdAt = 6;
   google.protobuf.Timestamp updatedAt = 7;
 }
