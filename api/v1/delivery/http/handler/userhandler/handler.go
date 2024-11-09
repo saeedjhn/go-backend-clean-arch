@@ -18,7 +18,7 @@ type Interactor interface {
 
 type Validator interface {
 	ValidateRegisterRequest(req userdto.RegisterRequest) (map[string]string, error)
-	ValidateLoginRequest(req userdto.LoginRequest) (map[string]interface{}, error)
+	ValidateLoginRequest(req userdto.LoginRequest) (map[string]string, error)
 	ValidateProfileRequest(req userdto.ProfileRequest) (map[string]string, error)
 	ValidateCreateTaskRequest(req userdto.CreateTaskRequest) (map[string]string, error)
 	ValidateRefreshTokenRequest(req userdto.RefreshTokenRequest) (map[string]string, error)
