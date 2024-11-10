@@ -56,5 +56,5 @@ func handleRequest() *ErrorWrapper {
 func main() {
 	errWrapper := handleRequest()
 
-	prettyprint.PrettyPrintData(errWrapper.ErrorTrace())
+	prettyprint.Log(errWrapper.ErrorTrace())
 }

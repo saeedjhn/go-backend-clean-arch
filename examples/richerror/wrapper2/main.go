@@ -68,5 +68,5 @@ func main() {
 	ee := NewAppError().WithWrapErr(e, "msg1")
 	eee := NewAppError().WithWrapErr(ee, "msg2")
 
-	prettyprint.PrettyPrintData(eee.StackTrace())
+	prettyprint.Log(eee.StackTrace())
 }

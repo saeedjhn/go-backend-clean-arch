@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func PrettyPrintData(data interface{}) {
+func Log(data interface{}) {
 	// Convert data to pretty-printed JSON.
 	if prettyOutput, err := json.MarshalIndent(data, "", "  "); err == nil {
 		log.Println(string(prettyOutput))

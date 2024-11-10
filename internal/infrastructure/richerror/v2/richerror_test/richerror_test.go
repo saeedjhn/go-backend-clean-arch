@@ -37,17 +37,17 @@ func TestRich(t *testing.T) {
 		}).
 		WithTrace(false)
 
-	prettyprint.PrettyPrintData(r3.Op())
-	prettyprint.PrettyPrintData(r3.Kind())
-	prettyprint.PrettyPrintData(r3.Source())
-	prettyprint.PrettyPrintData(r3.ErrorWithWrap())
-	prettyprint.PrettyPrintData(r3.Error())
-	prettyprint.PrettyPrintData(r3.Meta())
+	prettyprint.Log(r3.Op())
+	prettyprint.Log(r3.Kind())
+	prettyprint.Log(r3.Source())
+	prettyprint.Log(r3.ErrorWithWrap())
+	prettyprint.Log(r3.Error())
+	prettyprint.Log(r3.Meta())
 
 	//
 	//a := richerror.Analysis(r2)
 	//
-	//prettyprint.PrettyPrintData(a)
+	//prettyprint.Log(a)
 	//
 	//pretty.Log(
 	//	a,
@@ -62,5 +62,5 @@ func TestEris(t *testing.T) {
 	//eee := eris.WithWrapErr(ee, "handler failed to handle request")
 
 	//t.Error(eee)
-	prettyprint.PrettyPrintData(eris.ToJSON(ee, true))
+	prettyprint.Log(eris.ToJSON(ee, true))
 }
