@@ -1,10 +1,10 @@
 package authusecase
 
 import (
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/token"
 	"time"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/token"
 )
 
 type Config struct {

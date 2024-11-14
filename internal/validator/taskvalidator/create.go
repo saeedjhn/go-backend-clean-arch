@@ -2,11 +2,11 @@ package taskvalidator
 
 import (
 	"errors"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/taskdto"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
 )
 
 func (v Validator) ValidateCreateRequest(req taskdto.CreateRequest) (map[string]string, error) {

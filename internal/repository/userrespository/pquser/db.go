@@ -1,7 +1,7 @@
 package pquser
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
 )
 
 type DB struct {

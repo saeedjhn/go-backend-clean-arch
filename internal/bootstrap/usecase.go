@@ -2,16 +2,16 @@ package bootstrap
 
 import (
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/logger"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/cache/redis"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/mysql"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/token"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/taskrepository/mysqltask"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/userrespository/mysqluser"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/taskusecase"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/userusecase"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/logger"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/token"
 )
 
 type Usecase struct {

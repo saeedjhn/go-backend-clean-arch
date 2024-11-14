@@ -1,14 +1,14 @@
 package userhandler
 
 import (
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/bind"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/sanitize"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/bind"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/httpstatus"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/sanitize"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 	"go.uber.org/zap"
 )

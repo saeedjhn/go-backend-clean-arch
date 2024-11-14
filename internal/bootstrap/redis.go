@@ -2,12 +2,11 @@ package bootstrap
 
 import (
 	"fmt"
-
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/cache/redis"
+	redis2 "github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 )
 
-func NewRedisClient(c redis.Config) (redis.DB, error) {
-	db := redis.New(c)
+func NewRedisClient(c redis2.Config) (redis2.DB, error) {
+	db := redis2.New(c)
 
 	if err := db.ConnectTo(); err != nil {
 		return nil, err
@@ -16,7 +15,7 @@ func NewRedisClient(c redis.Config) (redis.DB, error) {
 	return db, nil
 }
 
-func CloseRedisClient(db redis.DB) error {
+func CloseRedisClient(db redis2.DB) error {
 	if err := db.Client().Close(); err != nil {
 		return fmt.Errorf("don`t close redis client connection: %w", err)
 	}

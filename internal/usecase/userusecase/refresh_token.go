@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
 func (i *Interactor) RefreshToken(ctx context.Context, req userdto.RefreshTokenRequest) (userdto.RefreshTokenResponse, error) {

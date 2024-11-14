@@ -2,12 +2,11 @@ package bootstrap
 
 import (
 	"fmt"
-
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/db/pq"
+	pq2 "github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
 )
 
-func NewPostgresConnection(c pq.Config) (pq.DB, error) {
-	db := pq.New(c)
+func NewPostgresConnection(c pq2.Config) (pq2.DB, error) {
+	db := pq2.New(c)
 
 	if err := db.ConnectTo(); err != nil {
 		return nil, err
@@ -16,7 +15,7 @@ func NewPostgresConnection(c pq.Config) (pq.DB, error) {
 	return db, nil
 }
 
-func ClosePostgresConnection(db pq.DB) error {
+func ClosePostgresConnection(db pq2.DB) error {
 	if err := db.Conn().Close(); err != nil {
 		return fmt.Errorf("don`t close pq connection: %w", err)
 	}

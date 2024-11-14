@@ -3,11 +3,11 @@ package taskusecase
 import (
 	"context"
 	"errors"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/kind"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
 )
 
 func (i *Interactor) Create(

@@ -1,7 +1,9 @@
 package bootstrap
 
-import "github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/logger"
+import (
+	logger2 "github.com/saeedjhn/go-backend-clean-arch/pkg/logger"
+)
 
-func NewLogger(c logger.Config) *logger.Logger {
-	return logger.New(c)
+func NewLogger(c logger2.Config) *logger2.Logger {
+	return logger2.New(c)
 }

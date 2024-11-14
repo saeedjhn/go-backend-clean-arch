@@ -1,9 +1,8 @@
 package redisuser
 
 import (
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 	"log"
-
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/persistance/cache/redis"
 )
 
 type DB struct {

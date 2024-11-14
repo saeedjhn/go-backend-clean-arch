@@ -4,11 +4,11 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/httpstatus"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/infrastructure/richerror"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/presenter/httppresenter"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 	"go.uber.org/zap"
 	"net/http"
 )
