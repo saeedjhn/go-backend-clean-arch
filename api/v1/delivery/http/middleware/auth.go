@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 	"net/http"
 	"strings"
 
@@ -26,7 +27,10 @@ func Auth(
 				authToken := t[1]
 				authorized, err := authInteractor.IsAuthorized(authToken, config.AccessTokenSecret)
 				if authorized {
-					claims, errParse := authInteractor.ParseAccessToken(authToken)
+					claims, errParse := authInteractor.ParseToken(userauthservicedto.ParseTokenRequest{
+						Secret: config.AccessTokenSecret,
+						Token:  authToken,
+					})
 					if errParse != nil {
 						return c.JSON(http.StatusUnauthorized, echo.Map{
 							"status":  false,

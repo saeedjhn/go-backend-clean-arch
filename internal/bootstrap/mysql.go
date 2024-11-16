@@ -2,11 +2,11 @@ package bootstrap
 
 import (
 	"fmt"
-	mysql2 "github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 )
 
-func NewMysqlConnection(c mysql2.Config) (mysql2.DB, error) {
-	db := mysql2.New(c)
+func NewMysqlConnection(c mysql.Config) (*mysql.Mysql, error) {
+	db := mysql.New(c)
 
 	if err := db.ConnectTo(); err != nil {
 		return nil, err
@@ -15,7 +15,7 @@ func NewMysqlConnection(c mysql2.Config) (mysql2.DB, error) {
 	return db, nil
 }
 
-func CloseMysqlConnection(db mysql2.DB) error {
+func CloseMysqlConnection(db *mysql.Mysql) error {
 	if err := db.Conn().Close(); err != nil {
 		return fmt.Errorf("don`t close mysql connection: %w", err)
 	}

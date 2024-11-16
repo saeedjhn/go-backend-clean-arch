@@ -4,14 +4,11 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/taskrepository/mysqltask"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/userrespository/mysqluser"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/userrespository/redisuser"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/taskusecase"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/userusecase"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/logger"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/token"
 )
 
 type Usecase struct {
@@ -23,21 +20,26 @@ type Usecase struct {
 func NewUsecase(
 	cfg *configs.Config,
 	logger *logger.Logger,
-	rds redis.DB,
-	mySQLDB mysql.DB,
-	pqDB pq.DB,
+	cache Cache,
+	db DB,
 ) *Usecase {
 	// Repositories
-	taskRepo := mysqltask.New(mySQLDB)
-	userRepo := mysqluser.New(mySQLDB)
+	taskRepo := mysqltask.New(db.MySQL)
+	userRepo := mysqluser.New(db.MySQL)
+	userRdsRepo := redisuser.New(cache.Redis) // Or userInMemRepo := inmemoryuser.New(cache.InMem)
 
 	// Dependencies
-	token := token.New()
 
 	// Usecase
 	taskIntr := taskusecase.New(cfg, taskRepo)
-	authIntr := authusecase.New(cfg.Auth, token)
-	userIntr := userusecase.New(cfg, authIntr, taskIntr, userRepo)
+	authIntr := authusecase.New(cfg.Auth)
+	userIntr := userusecase.New(
+		cfg,
+		authIntr,
+		taskIntr,
+		userRdsRepo,
+		userRepo,
+	)
 
 	return &Usecase{
 		AuthIntr: authIntr,
