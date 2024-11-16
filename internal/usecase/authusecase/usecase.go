@@ -1,7 +1,8 @@
 package authusecase
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/token"
+	"fmt"
+	"github.com/golang-jwt/jwt/v5"
 	"time"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
@@ -18,73 +19,150 @@ type Config struct {
 
 type Interactor struct {
 	config Config
-	token  *token.Token
+	//token  *token.Token
 }
 
 // var _ userservice.AuthGenerator = (*Interactor)(nil) // Commented, because it happens import cycle.
 
-func New(config Config, token *token.Token) *Interactor {
-	return &Interactor{config: config, token: token}
+func New(config Config) *Interactor {
+	return &Interactor{config: config}
 }
 
 func (i Interactor) CreateAccessToken(
 	req userauthservicedto.CreateTokenRequest,
 ) (userauthservicedto.CreateTokenResponse, error) {
-	at, err := i.token.CreateAccessToken(
-		req.User.ID,
-		i.config.AccessTokenSecret,
-		i.config.AccessTokenSubject,
-		i.config.AccessTokenExpiryTime,
-	)
+	claims := Claims{
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject: req.Subject,
+			//ExpiresAt: jwt.NewNumericDate(time.Now().Add(a.config.AccessTokenExpiryTime * time.Second)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(req.ExpireTime)),
+		},
+		UserID: req.User.ID,
+		// any more property for response to user (name, family, role, etc...)
+	}
 
-	return userauthservicedto.CreateTokenResponse{Token: at}, err
+	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// tokenString, err := accessToken.SignedString([]byte(a.config.AccessTokenSecret))
+	tokenString, err := accessToken.SignedString([]byte(req.Secret))
+	if err != nil {
+		return userauthservicedto.CreateTokenResponse{}, err
+	}
+
+	return userauthservicedto.CreateTokenResponse{Token: tokenString}, err
 }
 
 func (i Interactor) CreateRefreshToken(
 	req userauthservicedto.CreateTokenRequest,
 ) (userauthservicedto.CreateTokenResponse, error) {
-	rt, err := i.token.CreateRefreshToken(
-		req.User.ID,
-		i.config.RefreshTokenSecret,
-		i.config.RefreshTokenSubject,
-		i.config.RefreshTokenExpiryTime,
-	)
+	//rt, err := i.token.CreateRefreshToken(
+	//	req.User.ID,
+	//	i.config.RefreshTokenSecret,
+	//	i.config.RefreshTokenSubject,
+	//	i.config.RefreshTokenExpiryTime,
+	//)
+	claims := Claims{
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject: req.Subject,
+			//ExpiresAt: jwt.NewNumericDate(time.Now().Add(a.config.AccessTokenExpiryTime * time.Second)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(req.ExpireTime)),
+		},
+		UserID: req.User.ID,
+		// any more property for response to user (name, family, role, etc...)
+	}
 
-	return userauthservicedto.CreateTokenResponse{Token: rt}, err
+	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// tokenString, err := accessToken.SignedString([]byte(a.config.AccessTokenSecret))
+	tokenString, err := accessToken.SignedString([]byte(req.Secret))
+	if err != nil {
+		return userauthservicedto.CreateTokenResponse{}, err
+	}
+
+	return userauthservicedto.CreateTokenResponse{Token: tokenString}, err
 }
 
 func (i Interactor) IsAuthorized(requestToken string, secret string) (bool, error) {
-	return i.token.IsAuthorized(requestToken, secret)
+	_, err := jwt.Parse(requestToken, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(secret), nil
+	})
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
-func (i Interactor) ExtractIDFromAccessToken(
-	req userauthservicedto.ExtractIDFromTokenRequest,
-) (userauthservicedto.ExtractIDFromTokenResponse, error) {
-	et, err := i.token.ParseToken(req.Token, i.config.AccessTokenSecret)
+func (i Interactor) ParseToken(req userauthservicedto.ParseTokenRequest) (userauthservicedto.ParseTokenResponse[*Claims], error) {
+	token, err := jwt.ParseWithClaims(
+		req.Token,
+		&Claims{},
+		func(_ *jwt.Token) (interface{}, error) {
+			return []byte(req.Secret), nil // secret is accessTokenSecret or refreshTokenSecret_
+		},
+	)
+	if err != nil {
+		return userauthservicedto.ParseTokenResponse[*Claims]{}, err
+	}
 
-	return userauthservicedto.ExtractIDFromTokenResponse{
-		UserID: et.UserID,
-	}, err
+	claims, ok := token.Claims.(*Claims)
+	if ok && token.Valid {
+		return userauthservicedto.ParseTokenResponse[*Claims]{Claims: claims}, nil
+	}
+
+	return userauthservicedto.ParseTokenResponse[*Claims]{}, err
 }
 
-func (i Interactor) ExtractIDFromRefreshToken(
-	req userauthservicedto.ExtractIDFromTokenRequest,
-) (userauthservicedto.ExtractIDFromTokenResponse, error) {
-	et, err := i.token.ParseToken(req.Token, i.config.RefreshTokenSecret)
-
-	return userauthservicedto.ExtractIDFromTokenResponse{
-		UserID: et.UserID,
-	}, err
-}
-
-func (i Interactor) ParseAccessToken(requestToken string) (Claims, error) {
-	claims, err := i.token.ParseToken(requestToken, i.config.AccessTokenSecret)
-
-	return Claims(*claims), err
-}
-
-func (i Interactor) ParseRefreshToken(requestToken string) (Claims, error) {
-	claims, err := i.token.ParseToken(requestToken, i.config.RefreshTokenSecret)
-
-	return Claims(*claims), err
-}
+//func (i Interactor) ParseAccessToken(requestToken string) (*Claims, error) {
+//	// https://pkg.go.dev/github.com/golang-jwt/jwt/v5#example-ParseWithClaims-CustomClaimsType
+//	// token, err := jwt.Parse(requestToken, func(t *jwt.Token) (interface{}, error) {
+//	//	if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+//	//		return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+//	//	}
+//	//	return []byte(secret), nil // secret is accessTokenSecret or refreshTokenSecret_
+//	// })
+//
+//	token, err := jwt.ParseWithClaims(
+//		requestToken,
+//		&Claims{},
+//		func(_ *jwt.Token) (interface{}, error) {
+//			return []byte(i.config.AccessTokenSecret), nil // secret is accessTokenSecret or refreshTokenSecret_
+//		},
+//	)
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	claims, ok := token.Claims.(*Claims)
+//	if ok && token.Valid {
+//		return claims, nil
+//	}
+//	return nil, err
+//}
+//
+//func (i Interactor) ParseRefreshToken(requestToken string) (*Claims, error) {
+//	// https://pkg.go.dev/github.com/golang-jwt/jwt/v5#example-ParseWithClaims-CustomClaimsType
+//	// token, err := jwt.Parse(requestToken, func(t *jwt.Token) (interface{}, error) {
+//	//	if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+//	//		return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+//	//	}
+//	//	return []byte(secret), nil // secret is accessTokenSecret or refreshTokenSecret_
+//	// })
+//
+//	token, err := jwt.ParseWithClaims(
+//		requestToken,
+//		&Claims{},
+//		func(_ *jwt.Token) (interface{}, error) {
+//			return []byte(i.config.RefreshTokenSecret), nil // secret is accessTokenSecret or refreshTokenSecret_
+//		},
+//	)
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	claims, ok := token.Claims.(*Claims)
+//	if ok && token.Valid {
+//		return claims, nil
+//	}
+//	return nil, err
+//}

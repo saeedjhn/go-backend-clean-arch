@@ -10,16 +10,19 @@ import (
 )
 
 func (i *Interactor) RefreshToken(ctx context.Context, req userdto.RefreshTokenRequest) (userdto.RefreshTokenResponse, error) {
-	dto := userauthservicedto.ExtractIDFromTokenRequest{Token: req.RefreshToken}
+	dto := userauthservicedto.ParseTokenRequest{
+		Secret: i.config.Auth.RefreshTokenSecret,
+		Token:  req.RefreshToken,
+	}
 
-	id, err := i.authIntr.ExtractIDFromRefreshToken(dto)
+	resp, err := i.authIntr.ParseToken(dto)
 	if err != nil {
 		return userdto.RefreshTokenResponse{}, richerror.New(_opUserServiceRefreshToken).WithErr(err).
 			WithMessage(message.ErrorMsg403Forbidden).
 			WithKind(kind.KindStatusBadRequest)
 	}
 
-	user, err := i.repository.GetByID(ctx, id.UserID)
+	user, err := i.repository.GetByID(ctx, resp.Claims.UserID)
 	if err != nil {
 		return userdto.RefreshTokenResponse{}, err
 	}

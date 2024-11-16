@@ -1,7 +1,6 @@
 package authusecase_test
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/token"
 	"testing"
 	"time"
 
@@ -31,19 +30,11 @@ func TestCreateToken(t *testing.T) {
 		UpdatedAt: time.Time{},
 	}
 
-	ai := authusecase.New(config, token.New())
+	ai := authusecase.New(config)
 
 	at, _ := ai.CreateAccessToken(userauthservicedto.CreateTokenRequest{User: u})
 	t.Log(at)
 
-	t.Log(ai.ExtractIDFromAccessToken(struct{ Token string }{Token: at.Token}))
-
-	t.Log(ai.ParseAccessToken(at.Token))
-
 	rt, _ := ai.CreateRefreshToken(userauthservicedto.CreateTokenRequest{User: u})
 	t.Log(rt)
-
-	t.Log(ai.ExtractIDFromRefreshToken(struct{ Token string }{Token: rt.Token}))
-
-	t.Log(ai.ParseRefreshToken(rt.Token))
 }
