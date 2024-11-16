@@ -51,12 +51,14 @@ func New(
 	config *configs.Config,
 	authIntr AuthInteractor,
 	taskIntr TaskInteractor,
+	cache Cache,
 	repository Repository,
 ) *Interactor {
 	return &Interactor{
 		config:     config,
 		authIntr:   authIntr,
 		taskIntr:   taskIntr,
+		cache:      cache,
 		repository: repository,
 	}
 }

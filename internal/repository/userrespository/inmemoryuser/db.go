@@ -1,16 +1,16 @@
-package redisuser
+package inmemoryuser
 
 import (
 	"context"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/inmemory"
 	"time"
 )
 
 type DB struct {
-	conn *redis.Redis
+	conn *inmemory.InMemory
 }
 
-func New(conn *redis.Redis) *DB {
+func New(conn *inmemory.InMemory) *DB {
 	return &DB{conn: conn}
 }
 
