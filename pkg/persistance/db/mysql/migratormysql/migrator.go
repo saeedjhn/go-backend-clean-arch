@@ -2,7 +2,7 @@ package migratormysql
 
 import (
 	"fmt"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 	"log"
 
 	migrate "github.com/rubenv/sql-migrate"
@@ -11,7 +11,7 @@ import (
 const dialect = "mysql"
 
 type Migrator struct {
-	conn       pq.DB
+	conn       *mysql.Mysql
 	dialect    string
 	migrations *migrate.FileMigrationSource
 }
@@ -19,7 +19,7 @@ type Migrator struct {
 // TODO - set migration table name
 // TODO - add limit to Up and Down method
 
-func New(conn pq.DB, absolutePath string) Migrator {
+func New(conn *mysql.Mysql, absolutePath string) Migrator {
 	// Read migrations from a folder:
 	migrations := &migrate.FileMigrationSource{
 		Dir: absolutePath,

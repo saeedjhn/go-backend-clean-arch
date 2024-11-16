@@ -13,12 +13,12 @@ import (
 )
 
 type DB struct {
-	conn mysql.DB
+	conn *mysql.Mysql
 }
 
 //var _ userservice.Repository = (*DB)(nil)
 
-func New(conn mysql.DB) *DB {
+func New(conn *mysql.Mysql) *DB {
 	return &DB{
 		conn: conn,
 	}

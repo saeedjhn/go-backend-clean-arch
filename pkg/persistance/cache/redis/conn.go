@@ -7,16 +7,10 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-type DB interface {
-	Client() *redis.Client
-}
-
 type Redis struct {
 	config Config
 	db     *redis.Client
 }
-
-var _ DB = (*Redis)(nil)
 
 func New(config Config) *Redis {
 	return &Redis{config: config}

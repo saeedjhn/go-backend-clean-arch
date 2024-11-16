@@ -11,7 +11,7 @@ import (
 const dialect = "postgres"
 
 type Migrator struct {
-	conn       pq.DB
+	conn       *pq.Postgres
 	dialect    string
 	migrations *migrate.FileMigrationSource
 }
@@ -19,7 +19,7 @@ type Migrator struct {
 // TODO - set migration table name
 // TODO - add limit to Up and Down method
 
-func New(conn pq.DB, absolutePath string) Migrator {
+func New(conn *pq.Postgres, absolutePath string) Migrator {
 	// Read migrations from a folder:
 	migrations := &migrate.FileMigrationSource{
 		Dir: absolutePath,

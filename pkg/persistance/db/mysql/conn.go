@@ -9,16 +9,10 @@ import (
 
 const _driverName = "mysql"
 
-type DB interface {
-	Conn() *sql.DB
-}
-
 type Mysql struct {
 	config Config
 	db     *sql.DB
 }
-
-var _ DB = (*Mysql)(nil)
 
 func New(config Config) *Mysql {
 	return &Mysql{config: config}
@@ -26,8 +20,8 @@ func New(config Config) *Mysql {
 
 func (m *Mysql) ConnectTo() error {
 	var err error
-
 	uri := fmt.Sprintf("%s:%s@(%s:%s)/%s?parseTime=true",
+
 		m.config.Username, m.config.Password, m.config.Host, m.config.Port, m.config.Database)
 
 	m.db, err = sql.Open(_driverName, uri)

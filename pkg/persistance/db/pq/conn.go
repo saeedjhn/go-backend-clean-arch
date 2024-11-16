@@ -9,16 +9,10 @@ import (
 
 const _driverName = "postgres"
 
-type DB interface {
-	Conn() *sql.DB
-}
-
 type Postgres struct {
 	config Config
 	db     *sql.DB
 }
-
-var _ DB = (*Postgres)(nil)
 
 func New(config Config) *Postgres {
 	return &Postgres{config: config}

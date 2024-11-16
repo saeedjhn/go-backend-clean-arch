@@ -5,10 +5,10 @@ import (
 )
 
 type DB struct {
-	conn pq.DB
+	conn *pq.Postgres
 }
 
-func New(conn pq.DB) *DB {
+func New(conn *pq.Postgres) *DB {
 	return &DB{
 		conn: conn,
 	}
