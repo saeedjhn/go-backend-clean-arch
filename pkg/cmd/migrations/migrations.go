@@ -2,10 +2,10 @@ package migrations
 
 import (
 	"flag"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql/migratormysql"
 	"log"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql/migratormysql"
 )
 
 const (
@@ -52,7 +52,7 @@ func HandleFlag(app *bootstrap.Application, up, down, rollback bool) error {
 
 func Up(app *bootstrap.Application) error {
 	// Mysql
-	migratorMysql := migratormysql.New(app.MySQLDB, mysqlDIR)
+	migratorMysql := migratormysql.New(app.DB.MySQL, mysqlDIR)
 	if err := migratorMysql.Up(); err != nil {
 		return err
 	}
@@ -60,7 +60,7 @@ func Up(app *bootstrap.Application) error {
 	return nil
 
 	// Pq
-	// migratorPq := migratorpq.New(app.PostgresDB, pqDIR)
+	// migratorPq := migratorpq.New(app.Postgres, pqDIR)
 	// migratorPq.Up()
 
 	// Etc
@@ -68,7 +68,7 @@ func Up(app *bootstrap.Application) error {
 
 func Down(app *bootstrap.Application) error {
 	// Mysql
-	migratorMysql := migratormysql.New(app.MySQLDB, mysqlDIR)
+	migratorMysql := migratormysql.New(app.DB.MySQL, mysqlDIR)
 	if err := migratorMysql.Down(); err != nil {
 		return err
 	}
@@ -76,7 +76,7 @@ func Down(app *bootstrap.Application) error {
 	return nil
 
 	// Pq
-	// migratorPq := migratorpq.New(app.PostgresDB, pqDIR)
+	// migratorPq := migratorpq.New(app.Postgres, pqDIR)
 	// migratorPq.Down()
 
 	// Etc
@@ -84,7 +84,7 @@ func Down(app *bootstrap.Application) error {
 
 func Rollback(app *bootstrap.Application) error {
 	// Mysql
-	migratorMysql := migratormysql.New(app.MySQLDB, mysqlDIR)
+	migratorMysql := migratormysql.New(app.DB.MySQL, mysqlDIR)
 	if err := migratorMysql.Down(); err != nil {
 		return err
 	}
@@ -96,7 +96,7 @@ func Rollback(app *bootstrap.Application) error {
 	return nil
 
 	// Pq
-	// migratorPq := migratorpq.New(app.PostgresDB, pqDIR)
+	// migratorPq := migratorpq.New(app.Postgres, pqDIR)
 	// migratorPq.Down()
 	// migratorPq.Up()
 
