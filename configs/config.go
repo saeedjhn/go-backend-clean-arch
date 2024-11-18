@@ -1,20 +1,27 @@
 package configs
 
 import (
+	"time"
+
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/logger"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mongo"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
-	"time"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
 )
+
+type Env string
 
 const (
 	Development Env = "development"
 	Production  Env = "production"
 )
+
+func (e Env) String() string {
+	return string(e)
+}
 
 type Application struct {
 	Env                     Env           `mapstructure:"env"`
@@ -49,6 +56,10 @@ type CORS struct {
 	AllowCredentials bool     `mapstructure:"allow_credentials"`
 }
 
+type Register struct {
+	Debug bool `mapstructure:"debug"`
+}
+
 type Config struct {
 	Application Application        `mapstructure:"application"`
 	Pprof       Pprof              `mapstructure:"pprof"`
@@ -61,4 +72,5 @@ type Config struct {
 	Redis       redis.Config       `mapstructure:"redis"`
 	Mongo       mongo.Config       `mapstructure:"mongo"`
 	Auth        authusecase.Config `mapstructure:"auth"`
+	Register    Register           `mapstructure:"register"`
 }

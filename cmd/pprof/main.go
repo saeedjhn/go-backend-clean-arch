@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
+	"flag"
 	"log"
 	"net/http"
 	_ "net/http/pprof" // #nosec G108
 	"os"
 	"os/signal"
+	"path/filepath"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
@@ -14,8 +16,44 @@ import (
 )
 
 func main() {
+	var (
+		env      string
+		confPath string
+		fileExt  string
+	)
+
+	// Parse command-line flag for environment mode with default value as development
+	flag.StringVar(&env, "env", configs.Development.String(), "environment mode, e.g., -env development")
+	flag.StringVar(&confPath, "conf", "deployments/development", "config path, e.g., -conf deployments/development")
+	flag.StringVar(&fileExt, "ext", "yml", "file extension, e.g., -ext yml")
+	flag.Parse()
+
+	log.Println("Environment mode:", env)
+
+	// Get the current working directory
+	workingDir, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Error getting current working directory: %v", err)
+	}
+
+	log.Println("Working Directory:", workingDir)
+
+	filesWithExt, err := configs.CollectFilesWithExt(workingDir, confPath, fileExt)
+	if err != nil {
+		log.Fatalf(
+			"Unexpected error while loading configuration files from directory: %s. Error: %v",
+			filepath.Join(workingDir, confPath),
+			err,
+		)
+	}
 	// Bootstrap
-	app, err := bootstrap.App(configs.Development)
+	app, err := bootstrap.App(configs.Option{
+		Prefix:      "",
+		Delimiter:   "",
+		Separator:   "",
+		FilePath:    filesWithExt,
+		CallbackEnv: nil,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
