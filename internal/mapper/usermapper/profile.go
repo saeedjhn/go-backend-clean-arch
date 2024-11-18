@@ -1,10 +1,11 @@
 package usermapper
 
 import (
+	"strconv"
+
 	pb "github.com/saeedjhn/go-backend-clean-arch/api/v1/proto/user/gen"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"strconv"
 )
 
 func MapProfileRequestFromHTTP() {

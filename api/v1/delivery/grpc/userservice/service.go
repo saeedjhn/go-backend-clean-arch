@@ -2,6 +2,7 @@ package userservice
 
 import (
 	"context"
+
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/mapper/usermapper"
@@ -66,7 +67,7 @@ func (u Service) List(empty *empty.Empty, g grpc.ServerStreamingServer[pb.User])
 	panic("implement me")
 }
 
-func (u Service) mustEmbedUnimplementedUserServiceServer() {
-	//TODO implement me
-	panic("implement me")
-}
+//func (u Service) mustEmbedUnimplementedUserServiceServer() {
+//	//TODO implement me
+//	panic("implement me")
+//}

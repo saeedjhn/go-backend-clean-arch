@@ -1,25 +1,25 @@
-package mockstest_test
+package mockstest
 
 import (
+	"context"
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
-
 	"github.com/golang/mock/gomock"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/taskusecase"
-	mockstest "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/taskusecase/mocks_test"
+	"github.com/stretchr/testify/require"
 )
 
 func TestCreate(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockRepository := mockstest.NewMockRepository(ctrl)
+	mockRepository := NewMockRepository(ctrl)
 
-	service := taskusecase.New(mockRepository)
+	service := taskusecase.New(&configs.Config{}, mockRepository)
 
 	createTask := entity.Task{
 		UserID:      1,
@@ -38,10 +38,10 @@ func TestCreate(t *testing.T) {
 		UpdatedAt:   time.Time{},
 	}
 
-	mockRepository.EXPECT().Create(createTask).Return(createdTask, nil)
-	mockRepository.EXPECT().IsExistsUser(createTask.UserID).Return(true, nil)
+	mockRepository.EXPECT().Create(context.Background(), createTask).Return(createdTask, nil)
+	mockRepository.EXPECT().IsExistsUser(context.Background(), createTask.UserID).Return(true, nil)
 
-	task, err := service.Create(usertaskservicedto.CreateTaskRequest{
+	task, err := service.Create(context.Background(), usertaskservicedto.CreateTaskRequest{
 		UserID:      createTask.UserID,
 		Title:       createTask.Title,
 		Description: createTask.Description,

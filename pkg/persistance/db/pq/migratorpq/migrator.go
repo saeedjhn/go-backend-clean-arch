@@ -2,8 +2,9 @@ package migratorpq
 
 import (
 	"fmt"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
 	"log"
+
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
 
 	migrate "github.com/rubenv/sql-migrate"
 )

@@ -1,8 +1,9 @@
 package pq_test
 
 import (
-	pq2 "github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
 	"testing"
+
+	pq2 "github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
 )
 
 func TestConn(t *testing.T) {

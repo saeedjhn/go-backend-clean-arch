@@ -1,8 +1,9 @@
 package bcrypt_test
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/security/bcrypt"
 	"testing"
+
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/security/bcrypt"
 )
 
 func TestBcrypt(t *testing.T) {

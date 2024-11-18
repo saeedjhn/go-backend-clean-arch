@@ -2,8 +2,9 @@ package richerror
 
 import (
 	"errors"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"strings"
+
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 
 	"github.com/rotisserie/eris"
 )

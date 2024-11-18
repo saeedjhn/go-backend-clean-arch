@@ -23,6 +23,8 @@ mockgen -source=foo.go [other options]
 
 *********************************************************************************
 run mockgen for task service:
-> taskservice git:(master) ✗ mockgen -source=service.go -destination=mocks/service_mock.go -package=mocks
+> taskservice git:(master) ✗ mockgen -source=usecase.go -destination=mocks/usecase_mock.go -package=mocks_test
+notice: Change package name: mocks_test -> mockstest
+ 
 > run service_mock_test.go
 *********************************************************************************

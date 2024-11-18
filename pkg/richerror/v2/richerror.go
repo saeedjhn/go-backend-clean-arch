@@ -2,9 +2,10 @@ package richerror
 
 import (
 	"errors"
+	"maps"
+
 	"github.com/rotisserie/eris"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
-	"maps"
 )
 
 type SourceType string

@@ -2,9 +2,9 @@ package userhandler
 
 import (
 	"context"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/presenter/httppresenter"
 )
 
 type Interactor interface {
@@ -26,7 +26,6 @@ type Validator interface {
 
 type Handler struct {
 	app      *bootstrap.Application
-	present  httppresenter.IPresenter
 	vld      Validator
 	userIntr Interactor
 }

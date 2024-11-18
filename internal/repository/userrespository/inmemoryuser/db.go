@@ -2,8 +2,9 @@ package inmemoryuser
 
 import (
 	"context"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/inmemory"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/inmemory"
 )
 
 type DB struct {

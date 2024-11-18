@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	"fmt"
+
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/inmemory"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 )

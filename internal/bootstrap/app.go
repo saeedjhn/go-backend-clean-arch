@@ -20,16 +20,16 @@ type DB struct {
 }
 
 type Application struct {
-	Config  *configs.Config
-	EnvMode configs.Env
-	Logger  *logger.Logger
-	Cache   Cache
-	DB      DB
-	Usecase *Usecase
+	Config       *configs.Config
+	ConfigOption configs.Option
+	Logger       *logger.Logger
+	Cache        Cache
+	DB           DB
+	Usecase      *Usecase
 }
 
-func App(env configs.Env) (*Application, error) {
-	a := &Application{EnvMode: env}
+func App(configOption configs.Option) (*Application, error) {
+	a := &Application{ConfigOption: configOption}
 
 	if err := a.setup(); err != nil {
 		return nil, err
@@ -41,7 +41,7 @@ func App(env configs.Env) (*Application, error) {
 func (a *Application) setup() error {
 	var err error
 
-	if a.Config, err = ConfigLoad(a.EnvMode); err != nil {
+	if a.Config, err = ConfigLoad(a.ConfigOption); err != nil {
 		return err
 	}
 

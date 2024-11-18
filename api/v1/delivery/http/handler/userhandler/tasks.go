@@ -1,11 +1,12 @@
 package userhandler
 
 import (
+	"net/http"
+
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/bind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/sanitize"
-	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"

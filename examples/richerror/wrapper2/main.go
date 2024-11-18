@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+
 	"github.com/rotisserie/eris"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/prettyprint"
 )

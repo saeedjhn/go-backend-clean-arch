@@ -2,8 +2,9 @@ package redisuser
 
 import (
 	"context"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 )
 
 type DB struct {

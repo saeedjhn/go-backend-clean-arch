@@ -1,9 +1,10 @@
 package sanitize_test
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/sanitize"
 	"log"
 	"testing"
+
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/sanitize"
 )
 
 type Status string

@@ -1,8 +1,9 @@
 package mysql_test
 
 import (
-	mysql2 "github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 	"testing"
+
+	mysql2 "github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 )
 
 func TestConn(t *testing.T) {

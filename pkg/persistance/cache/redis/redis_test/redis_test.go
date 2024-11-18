@@ -2,9 +2,10 @@ package redis_test
 
 import (
 	"context"
-	redis2 "github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 	"testing"
 	"time"
+
+	redis2 "github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 )
 
 func TestRedis(t *testing.T) {

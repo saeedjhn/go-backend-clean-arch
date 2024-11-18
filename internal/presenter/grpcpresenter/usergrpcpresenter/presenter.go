@@ -2,10 +2,11 @@ package usergrpcpresenter
 
 import (
 	"fmt"
+	"strconv"
+
 	pb "github.com/saeedjhn/go-backend-clean-arch/api/v1/proto/user/gen"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"strconv"
 )
 
 type Presenter struct {

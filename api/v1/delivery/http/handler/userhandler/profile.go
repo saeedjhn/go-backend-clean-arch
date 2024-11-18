@@ -1,6 +1,8 @@
 package userhandler
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
@@ -10,7 +12,6 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 func (h *Handler) Profile(c echo.Context) error {

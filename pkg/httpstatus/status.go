@@ -1,8 +1,9 @@
 package httpstatus //nolint:cyclop // the average complexity for the package httpstatus is 24.000000, max is 10.000000
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"net/http"
+
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 )
 
 func FromKind(k kind.Kind) int {

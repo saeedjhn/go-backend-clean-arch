@@ -2,12 +2,13 @@ package userusecase
 
 import (
 	"context"
+	"time"
+
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
-	"time"
 )
 
 type TaskInteractor interface {

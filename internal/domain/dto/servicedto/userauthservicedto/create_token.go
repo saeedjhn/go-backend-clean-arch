@@ -1,8 +1,9 @@
 package userauthservicedto
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 )
 
 type CreateTokenRequest struct {

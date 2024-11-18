@@ -3,6 +3,7 @@ package userusecase
 import (
 	"context"
 	"errors"
+
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/security/bcrypt"

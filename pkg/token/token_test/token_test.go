@@ -1,9 +1,10 @@
 package token_test
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/token"
 	"testing"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/token"
 )
 
 const (

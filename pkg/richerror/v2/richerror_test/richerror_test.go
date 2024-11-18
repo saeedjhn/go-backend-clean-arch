@@ -2,18 +2,19 @@ package richerror_test
 
 import (
 	"errors"
+	"testing"
+
 	"github.com/rotisserie/eris"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/prettyprint"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror/v2"
-	"testing"
 )
 
 func TestRich(t *testing.T) {
 	t.Log("Test Rich")
 	e := errors.New("database: row not found")
 
-	r1 := richerror.richerror.New().
+	r1 := richerror.New().
 		WithOp("OPERATION").
 		//WithErr(e).
 		WithWrapErr(e, "repository - record not found").

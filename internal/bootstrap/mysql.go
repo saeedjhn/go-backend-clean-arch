@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	"fmt"
+
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 )
 

@@ -2,8 +2,9 @@ package migratormysql
 
 import (
 	"fmt"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 	"log"
+
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 
 	migrate "github.com/rubenv/sql-migrate"
 )
