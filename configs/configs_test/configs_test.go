@@ -7,11 +7,11 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 )
 
-func TestSource(t *testing.T) {
-	wDir, err := os.Getwd()
+func TestCollectFilesWithExt(t *testing.T) {
+	workingDir, err := os.Getwd()
 	if err != nil {
 		t.Fatalf("Error getting current working directory: %v", err)
 	}
 
-	t.Log(configs.CollectFilesWithExt(wDir, "", "yml"))
+	t.Log(configs.CollectFilesWithExt(workingDir, "yml"))
 }

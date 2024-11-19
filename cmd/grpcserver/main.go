@@ -37,7 +37,10 @@ func main() {
 
 	log.Println("Working Directory:", workingDir)
 
-	filesWithExt, err := configs.CollectFilesWithExt(workingDir, confPath, fileExt)
+	filesWithExt, err := configs.CollectFilesWithExt(
+		filepath.Join(workingDir, confPath),
+		fileExt,
+	)
 	if err != nil {
 		log.Fatalf(
 			"Unexpected error while loading configuration files from directory: %s. Error: %v",

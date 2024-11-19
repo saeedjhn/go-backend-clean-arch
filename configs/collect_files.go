@@ -3,16 +3,13 @@ package configs
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 )
 
 func CollectFilesWithExt(
-	baseDir,
-	subDir,
+	dirPath,
 	ext string,
 ) ([]string, error) {
-	dirPath := filepath.Join(baseDir, subDir)
 
 	entries, err := os.ReadDir(dirPath)
 	if err != nil {
