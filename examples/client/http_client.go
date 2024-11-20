@@ -11,6 +11,7 @@ type HTTPClient struct {
 	addr   string
 	Header map[string]string
 	Params map[string]string
+	Paths  map[string]string
 	client *resty.Client
 }
 
@@ -20,6 +21,8 @@ func NewHTTPClient(addr string) *HTTPClient {
 		Header: map[string]string{
 			"Content-Type": "application/json",
 		},
+		Params: make(map[string]string),
+		Paths:  make(map[string]string),
 		client: resty.New(),
 	}
 }
@@ -30,14 +33,26 @@ func (c *HTTPClient) WithHeader(m map[string]string) *HTTPClient {
 	return c
 }
 
+func (c *HTTPClient) WithParam(key, value string) *HTTPClient {
+	c.Params[key] = value
+
+	return c
+}
+
 func (c *HTTPClient) WithParams(m map[string]string) *HTTPClient {
 	c.Params = m
 
 	return c
 }
 
-func (c *HTTPClient) WithParam(key, value string) *HTTPClient {
-	c.Params[key] = value
+func (c *HTTPClient) WithPath(key, value string) *HTTPClient {
+	c.Paths[key] = value
+
+	return c
+}
+
+func (c *HTTPClient) WithPathParams(m map[string]string) *HTTPClient {
+	c.Paths = m
 
 	return c
 }
@@ -58,6 +73,10 @@ func (c *HTTPClient) Get(ctx context.Context, req Request) (Response, error) {
 
 	if len(c.Params) != 0 {
 		r.SetQueryParams(c.Params)
+	}
+
+	if len(c.Paths) != 0 {
+		r.SetPathParams(c.Paths)
 	}
 
 	resp, err := r.Get(c.addr)

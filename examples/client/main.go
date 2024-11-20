@@ -24,9 +24,10 @@ type Client interface {
 }
 
 func main() {
-	addr := "https://jsonplaceholder.typicode.com/posts"
+	addr := "https://jsonplaceholder.typicode.com/posts/{postId}"
 
 	client := NewHTTPClient(addr)
+	client.WithPath("postId", "1")
 	resp, err := client.Get(context.Background(), Request{})
 	if err != nil {
 		log.Fatalf("Error client: %v", err)
