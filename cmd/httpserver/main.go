@@ -98,7 +98,7 @@ func main() {
 	app.Logger.Set().Named("Main").Info("Received.Interrupt.Signal.For.Shutting.Down.Gracefully")
 
 	// Close Redis client connection during shutdown
-	defer func(app *bootstrap.Application) {
+	func(app *bootstrap.Application) {
 		err = app.CloseRedisClientConnection()
 		if err != nil {
 			app.Logger.Set().Named("Main").Error("Close.Redis.Connection", zap.Error(err))
@@ -106,7 +106,7 @@ func main() {
 	}(app)
 
 	// Close MySQL connection during shutdown
-	defer func(app *bootstrap.Application) {
+	func(app *bootstrap.Application) {
 		err = app.CloseMysqlConnection()
 		if err != nil {
 			app.Logger.Set().Named("Main").Error("Close.Mysql.Connection", zap.Error(err))

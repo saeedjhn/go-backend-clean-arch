@@ -81,14 +81,14 @@ func main() {
 		}
 	}()
 
-	defer func(app *bootstrap.Application) {
+	func(app *bootstrap.Application) {
 		err = app.CloseRedisClientConnection()
 		if err != nil {
 			app.Logger.Set().Named("Main").Error("Close.Redis.Connection", zap.Error(err))
 		}
 	}(app)
 
-	defer func(app *bootstrap.Application) {
+	func(app *bootstrap.Application) {
 		err = app.CloseMysqlConnection()
 		if err != nil {
 			app.Logger.Set().Named("Main").Error("Close.Mysql.Connection", zap.Error(err))
