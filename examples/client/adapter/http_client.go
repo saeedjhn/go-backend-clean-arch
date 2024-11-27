@@ -1,10 +1,13 @@
-package main
+package adapter
 
 import (
 	"context"
 	"fmt"
-	"github.com/go-resty/resty/v2"
+	"github.com/saeedjhn/go-backend-clean-arch/examples/client/dto"
 	"maps"
+	"strconv"
+
+	"github.com/go-resty/resty/v2"
 )
 
 type HTTPClient struct {
@@ -57,8 +60,8 @@ func (c *HTTPClient) WithPathParams(m map[string]string) *HTTPClient {
 	return c
 }
 
-func (c *HTTPClient) Get(ctx context.Context, req Request) (Response, error) {
-	var rs Response
+func (c *HTTPClient) FetchByID(ctx context.Context, req dto.Request) (dto.Response, error) {
+	var rs dto.Response
 
 	r := c.client.R().
 		SetContext(ctx).
@@ -75,9 +78,7 @@ func (c *HTTPClient) Get(ctx context.Context, req Request) (Response, error) {
 		r.SetQueryParams(c.Params)
 	}
 
-	if len(c.Paths) != 0 {
-		r.SetPathParams(c.Paths)
-	}
+	r.SetPathParam("postId", strconv.FormatUint(req.ID, 10))
 
 	resp, err := r.Get(c.addr)
 
