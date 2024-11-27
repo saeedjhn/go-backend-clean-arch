@@ -1,1 +1,40 @@
-build
+# Ignore version control directories
+.git/
+.gitignore
+
+# Ignore dependency files
+vendor/
+
+# Ignore build, logs and cache directories
+**/build/
+build/
+dist/
+.tmp/
+**/logs/
+logs/
+
+# Ignore configuration files
+.env.*
+*.local
+
+# Ignore editor and IDE specific files
+*.swp
+*.swo
+*.idea/
+.vscode/
+*.bak
+*.tmp
+*.log
+
+# Ignore coverage reports
+coverage/
+*.lcov
+
+# Ignore test files
+*_test.go
+tests/
+test/
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
