@@ -1,7 +1,6 @@
 package userhandler //nolint:dupl // 1-79 lines are duplicate
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/bind"
@@ -24,7 +23,6 @@ func (h *Handler) Login(c echo.Context) error {
 
 	defer span.End()
 
-	log.Println(ctx)
 	// Bind
 	req := userdto.LoginRequest{}
 	if err := c.Bind(&req); err != nil {
@@ -64,7 +62,7 @@ func (h *Handler) Login(c echo.Context) error {
 	}
 
 	// Usage Use-case
-	resp, err := h.userIntr.Login(c.Request().Context(), req)
+	resp, err := h.userIntr.Login(ctx, req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())

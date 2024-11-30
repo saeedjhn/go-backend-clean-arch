@@ -16,8 +16,12 @@ func New(
 	validator := uservalidator.New(app.Config)
 
 	// Handler
-	//handler := userhandler.New(app, validator, userSvc)
-	handler := userhandler.New(app, validator, app.Usecase.UserIntr)
+	handler := userhandler.New(
+		app,
+		app.Trc,
+		validator,
+		app.Usecase.UserIntr,
+	)
 
 	usersGroup := group.Group("/users")
 	{
@@ -33,7 +37,7 @@ func New(
 		}
 
 		protectedRouter := usersGroup.Group("")
-		//protectedRouter.Use(middleware.Auth(app.Config.Auth, authSvc))
+		// protectedRouter.Use(middleware.Auth(app.Config.Auth, authSvc))
 		protectedRouter.Use(middleware.Auth(app.Config.Auth, app.Usecase.AuthIntr))
 		{
 			protectedRouter.GET("/profile", handler.Profile)

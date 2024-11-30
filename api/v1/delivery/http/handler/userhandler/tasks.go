@@ -15,6 +15,14 @@ import (
 )
 
 func (h *Handler) Tasks(c echo.Context) error {
+	// Tracer
+	ctx, span := h.trc.Span(
+		c.Request().Context(), "HTTP POST tasks",
+	)
+	span.SetAttributes(attributes(c))
+
+	defer span.End()
+
 	// Bind
 	req := userdto.TasksRequest{}
 	if err := c.Bind(&req); err != nil {
@@ -41,7 +49,7 @@ func (h *Handler) Tasks(c echo.Context) error {
 	}
 
 	// Usage Use-case
-	resp, err := h.userIntr.Tasks(c.Request().Context(), req)
+	resp, err := h.userIntr.Tasks(ctx, req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())

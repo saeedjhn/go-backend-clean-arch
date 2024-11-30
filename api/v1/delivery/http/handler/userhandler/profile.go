@@ -15,12 +15,20 @@ import (
 )
 
 func (h *Handler) Profile(c echo.Context) error {
+	// Tracer
+	ctx, span := h.trc.Span(
+		c.Request().Context(), "HTTP POST profile",
+	)
+	span.SetAttributes(attributes(c))
+
+	defer span.End()
+
 	// Give claims
 	claims := claim.GetClaimsFromEchoContext[authusecase.Claims](c, configs.AuthMiddlewareContextKey)
 
 	// Usage Use-case
 	resp, err := h.userIntr.Profile(
-		c.Request().Context(), userdto.ProfileRequest{ID: claims.UserID},
+		ctx, userdto.ProfileRequest{ID: claims.UserID},
 	)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
@@ -40,9 +48,9 @@ func (h *Handler) Profile(c echo.Context) error {
 		httppresenter.WithData(resp.User),
 	).ToMap())
 
-	//return c.JSON(http.StatusOK, httppresenter.New().WithData(resp).ToMap())
+	// return c.JSON(http.StatusOK, httppresenter.New().WithData(resp).ToMap())
 
-	//return c.JSON(http.StatusOK, h.present.WithData(resp))
+	// return c.JSON(http.StatusOK, h.present.WithData(resp))
 
-	//return c.JSON(http.StatusOK, h.present.Ok(resp))
+	// return c.JSON(http.StatusOK, h.present.Ok(resp))
 }

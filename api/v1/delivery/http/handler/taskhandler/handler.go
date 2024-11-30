@@ -2,6 +2,7 @@ package taskhandler
 
 import (
 	"context"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract/tracercontract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
@@ -25,17 +26,20 @@ type Validator interface {
 
 type Handler struct {
 	app      *bootstrap.Application
+	trc      tracercontract.Tracer
 	vld      Validator
 	taskIntr Interactor
 }
 
 func New(
 	app *bootstrap.Application,
+	trc tracercontract.Tracer,
 	validator Validator,
 	taskInteractor Interactor,
 ) *Handler {
 	return &Handler{
 		app:      app,
+		trc:      trc,
 		vld:      validator,
 		taskIntr: taskInteractor,
 	}

@@ -13,13 +13,18 @@ func New(app *bootstrap.Application, group *echo.Group) {
 	validator := taskvalidator.New()
 
 	// Handler
-	//handler := taskhandler.New(app, validator, taskSvc)
-	handler := taskhandler.New(app, validator, app.Usecase.TaskIntr)
+	handler := taskhandler.New(
+		app,
+		app.Trc,
+		validator,
+		app.Usecase.TaskIntr,
+	)
 
 	tasksGroup := group.Group("/tasks")
 
 	protectedRouter := tasksGroup.Group("")
-	//protectedRouter.Use(middleware.Auth(app.Config.Auth, authSvc))
+
+	// protectedRouter.Use(middleware.Auth(app.Config.Auth, authSvc))
 	protectedRouter.Use(middleware.Auth(app.Config.Auth, app.Usecase.AuthIntr))
 	{
 		protectedRouter.POST("/", handler.Create)

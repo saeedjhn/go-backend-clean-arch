@@ -15,6 +15,14 @@ import (
 )
 
 func (h *Handler) RefreshToken(c echo.Context) error {
+	// Tracer
+	ctx, span := h.trc.Span(
+		c.Request().Context(), "HTTP POST refresh-token",
+	)
+	span.SetAttributes(attributes(c))
+
+	defer span.End()
+
 	// Bind
 	req := userdto.RefreshTokenRequest{}
 	if err := c.Bind(&req); err != nil {
@@ -55,7 +63,7 @@ func (h *Handler) RefreshToken(c echo.Context) error {
 	}
 
 	// Usage Use-case
-	resp, err := h.userIntr.RefreshToken(c.Request().Context(), req)
+	resp, err := h.userIntr.RefreshToken(ctx, req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())

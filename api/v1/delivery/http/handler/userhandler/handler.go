@@ -35,13 +35,13 @@ type Handler struct {
 
 func New(
 	app *bootstrap.Application,
-	tracer tracercontract.Tracer,
+	trc tracercontract.Tracer,
 	userValidator Validator,
 	userInteractor Interactor,
 ) *Handler {
 	return &Handler{
 		app:      app,
-		trc:      tracer,
+		trc:      trc,
 		vld:      userValidator,
 		userIntr: userInteractor,
 	}
