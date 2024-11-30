@@ -2,6 +2,7 @@ package contract
 
 import (
 	"context"
+
 	"github.com/saeedjhn/go-backend-clean-arch/examples/client/dto"
 )
 

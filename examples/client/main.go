@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+
 	"github.com/saeedjhn/go-backend-clean-arch/examples/client/adapter"
 	"github.com/saeedjhn/go-backend-clean-arch/examples/client/contract"
 	"github.com/saeedjhn/go-backend-clean-arch/examples/client/dto"
-	"log"
 )
 
 // type PresenceClient interface {

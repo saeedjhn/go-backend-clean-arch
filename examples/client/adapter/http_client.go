@@ -3,9 +3,10 @@ package adapter
 import (
 	"context"
 	"fmt"
-	"github.com/saeedjhn/go-backend-clean-arch/examples/client/dto"
 	"maps"
 	"strconv"
+
+	"github.com/saeedjhn/go-backend-clean-arch/examples/client/dto"
 
 	"github.com/go-resty/resty/v2"
 )
