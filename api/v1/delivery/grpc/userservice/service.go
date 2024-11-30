@@ -3,7 +3,7 @@ package userservice
 import (
 	"context"
 
-	"github.com/golang/protobuf/ptypes/empty"
+	"github.com/golang/protobuf/ptypes/empty" //nolint:gomodguard // nothing
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/mapper/usermapper"
 	"google.golang.org/grpc"
@@ -31,13 +31,13 @@ func New(itr Interactor) *Service {
 	return &Service{userIntr: itr}
 }
 
-func (u Service) Create(ctx context.Context, req *pb.CreateRequest) (*pb.User, error) {
-	//TODO implement me
+func (u Service) Create(_ context.Context, _ *pb.CreateRequest) (*pb.User, error) {
+	// TODO implement me
 	panic("implement me")
 }
 
-func (u Service) Get(ctx context.Context, req *pb.GetRequest) (*pb.User, error) {
-	//TODO implement me
+func (u Service) Get(_ context.Context, _ *pb.GetRequest) (*pb.User, error) {
+	// TODO implement me
 	panic("implement me")
 }
 
@@ -52,22 +52,22 @@ func (u Service) Profile(ctx context.Context, req *pb.ProfileRequest) (*pb.Profi
 	return usermapper.MapProfileResponseToProtobuf(resp), nil
 }
 
-func (u Service) Update(ctx context.Context, req *pb.UpdateRequest) (*pb.User, error) {
-	//TODO implement me
+func (u Service) Update(_ context.Context, _ *pb.UpdateRequest) (*pb.User, error) {
+	// TODO implement me
 	panic("implement me")
 }
 
-func (u Service) Delete(ctx context.Context, req *pb.DeleteRequest) (*empty.Empty, error) {
-	//TODO implement me
+func (u Service) Delete(_ context.Context, _ *pb.DeleteRequest) (*empty.Empty, error) {
+	// TODO implement me
 	panic("implement me")
 }
 
-func (u Service) List(empty *empty.Empty, g grpc.ServerStreamingServer[pb.User]) error {
-	//TODO implement me
+func (u Service) List(_ *empty.Empty, _ grpc.ServerStreamingServer[pb.User]) error {
+	// TODO implement me
 	panic("implement me")
 }
 
-//func (u Service) mustEmbedUnimplementedUserServiceServer() {
-//	//TODO implement me
-//	panic("implement me")
-//}
+// func (u Service) mustEmbedUnimplementedUserServiceServer() {
+// TODO implement me
+// 	panic("implement me")
+// }

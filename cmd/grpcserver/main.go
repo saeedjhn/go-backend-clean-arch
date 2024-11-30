@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"log"
 	"os"
@@ -74,13 +75,20 @@ func main() {
 
 	// Start server
 	server := grpc.New(app)
-
 	go func() {
 		if err = server.Run(); err != nil {
 			app.Logger.Set().Named("Main").Fatal("Server.GRPC.Run", zap.Error(err))
 		}
 	}()
 
+	// Wait for termination signal (e.g., Ctrl+C)
+	<-quit
+
+	// Graceful shutdown logic
+	ctxWithTimeout, cancel := context.WithTimeout(context.Background(), app.Config.Application.GracefulShutdownTimeout)
+	defer cancel()
+
+	// Close Redis client connection during shutdown
 	func(app *bootstrap.Application) {
 		err = app.CloseRedisClientConnection()
 		if err != nil {
@@ -88,12 +96,21 @@ func main() {
 		}
 	}(app)
 
+	// Close MySQL connection during shutdown
 	func(app *bootstrap.Application) {
 		err = app.CloseMysqlConnection()
 		if err != nil {
 			app.Logger.Set().Named("Main").Error("Close.Mysql.Connection", zap.Error(err))
 		}
 	}(app)
+
+	// Shutdown tracer during shutdown
+	func(ctx context.Context, app *bootstrap.Application) {
+		err = app.ShutdownTracer(ctx)
+		if err != nil {
+			app.Logger.Set().Named("Main").Error("Shutdown.Tracer", zap.Error(err))
+		}
+	}(ctxWithTimeout, app)
 
 	// app.ClosePostgresqlConnection() // Or etc..
 

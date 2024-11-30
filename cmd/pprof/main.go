@@ -49,7 +49,8 @@ func main() {
 			err,
 		)
 	}
-	// Bootstrap
+
+	// Bootstrap the application with the provided configuration options.
 	app, err := bootstrap.App(configs.Option{
 		Prefix:      "",
 		Delimiter:   "",
@@ -58,13 +59,17 @@ func main() {
 		CallbackEnv: nil,
 	})
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to bootstrap the application: %v", err)
 	}
 
-	// Log
-	app.Logger.Set().Named("main").Info("config", zap.Any("config", app.Config))
+	// Log the application configuration at startup
+	app.Logger.Set().Named("Main").Info("Config", zap.Any("config", app.Config))
 
-	// Prof
+	// Set up signal handling for graceful shutdown (e.g., SIGINT, SIGTERM)
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt) // more SIGX (SIGINT, SIGTERM, etc)
+
+	// Start PPROF server in a goroutine
 	go func() {
 		mux := http.NewServeMux()
 		server := http.Server{
@@ -84,22 +89,26 @@ func main() {
 			ConnContext:                  nil,
 		}
 
-		log.Printf("Server Pprof is starting on %server", app.Config.Pprof.Port)
+		log.Printf("Server PPROF is starting on: %s", app.Config.Pprof.Port)
 
 		if err = server.ListenAndServe(); err != nil {
 			log.Fatal(err)
 		}
 	}()
 
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, os.Interrupt) // more SIGX (SIGINT, SIGTERM, etc)
+	// Wait for termination signal (e.g., Ctrl+C)
 	<-quit
 
-	ctx := context.Background()
-	ctxWithTimeout, cancel := context.WithTimeout(ctx, app.Config.Application.GracefulShutdownTimeout)
+	// Graceful shutdown logic
+	ctxWithTimeout, cancel := context.WithTimeout(context.Background(), app.Config.Application.GracefulShutdownTimeout)
 	defer cancel()
 
 	log.Println("received interrupt signal, shutting down gracefully..")
 
+	// Optionally, close connections
+
+	// Wait until graceful shutdown is complete
 	<-ctxWithTimeout.Done()
+
+	// Optionally, log or perform any last steps after shutdown completes
 }

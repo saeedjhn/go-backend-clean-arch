@@ -95,8 +95,8 @@ func main() {
 	go func() {
 		// Code for Pprof server setup goes here (if necessary)
 	}()
-
 	// Wait for termination signal (e.g., Ctrl+C)
+
 	<-quit
 
 	// Graceful shutdown logic
@@ -126,6 +126,14 @@ func main() {
 			app.Logger.Set().Named("Main").Error("Close.Mysql.Connection", zap.Error(err))
 		}
 	}(app)
+
+	// Shutdown tracer during shutdown
+	func(ctx context.Context, app *bootstrap.Application) {
+		err = app.ShutdownTracer(ctx)
+		if err != nil {
+			app.Logger.Set().Named("Main").Error("Shutdown.Tracer", zap.Error(err))
+		}
+	}(ctxWithTimeout, app)
 
 	// Optionally, close PostgreSQL or other database connections
 

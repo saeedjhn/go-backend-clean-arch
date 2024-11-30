@@ -113,6 +113,14 @@ func main() {
 		}
 	}(app)
 
+	// Shutdown tracer during shutdown
+	func(ctx context.Context, app *bootstrap.Application) {
+		err = app.ShutdownTracer(ctx)
+		if err != nil {
+			app.Logger.Set().Named("Main").Error("Shutdown.Tracer", zap.Error(err))
+		}
+	}(ctxWithTimeout, app)
+
 	// Optionally, close PostgreSQL or other database connections
 
 	// Wait until graceful shutdown is complete

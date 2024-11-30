@@ -3,6 +3,8 @@ package userhandler
 import (
 	"context"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract/tracercontract"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 )
@@ -26,17 +28,20 @@ type Validator interface {
 
 type Handler struct {
 	app      *bootstrap.Application
+	trc      tracercontract.Tracer
 	vld      Validator
 	userIntr Interactor
 }
 
 func New(
 	app *bootstrap.Application,
+	tracer tracercontract.Tracer,
 	userValidator Validator,
 	userInteractor Interactor,
 ) *Handler {
 	return &Handler{
 		app:      app,
+		trc:      tracer,
 		vld:      userValidator,
 		userIntr: userInteractor,
 	}
