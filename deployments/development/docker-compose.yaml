@@ -93,12 +93,28 @@ services:
     image: redis:latest
     env_file:
       - .env
-    command: redis-server --loglevel warning --protected-mode no --save "" --appendonly no
-    #    command: [ "redis-server", "/etc/redis/redis.conf" ]
+    command: redis-server --loglevel warning --save 60 1 --requirepass "password123"
     volumes:
       - redis:/var/lib/redis/data
     ports:
       - "${REDIS_PORT}:${REDIS_PORT}"
+    networks:
+      - go-backend-clean-arch_network
+
+  ####################### JAEGER #######################
+  jaeger:
+    container_name: go-backend-clean-arch_jaeger
+    restart: always
+    image: jaegertracing/all-in-one:1.63.0
+    env_file:
+      - .env
+    ports:
+      - "16686:16686"   # Jaeger UI port
+      - "14268:14268"   # accept jaeger.thrift directly from clients
+      - "14250:14250"   # accept model.proto
+      - "4317:4317"     # accept OpenTelemetry Protocol (OTLP) over gRPC
+      - "4318:4318"     # accept OpenTelemetry Protocol (OTLP) over HTTP
+    #      - "9411:9411"     # Zipkin compatible endpoint (optional)
     networks:
       - go-backend-clean-arch_network
 

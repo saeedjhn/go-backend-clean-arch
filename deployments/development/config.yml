@@ -79,3 +79,11 @@ auth:
   refresh_subject: "rs"
   access_token_expire_duration: "7h"
   refresh_token_expire_duration: "120h"
+
+tracer:
+  endpoint: "go-backend-clean-arch_jaeger:4318"
+  app_host: "localhost"
+  app_port: 8000
+  app_name: "go-backend-clean-arch"
+  app_version: "0.1"
+  app_env: "development"

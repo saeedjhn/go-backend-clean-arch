@@ -1,7 +1,10 @@
 package bootstrap
 
 import (
+	"context"
+
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract/tracercontract"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/logger"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/inmemory"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
@@ -22,6 +25,7 @@ type DB struct {
 type Application struct {
 	Config       *configs.Config
 	ConfigOption configs.Option
+	Trc          tracercontract.Tracer
 	Logger       *logger.Logger
 	Cache        Cache
 	DB           DB
@@ -46,6 +50,10 @@ func (a *Application) setup() error {
 	}
 
 	if a.DB.MySQL, err = NewMysqlConnection(a.Config.Mysql); err != nil {
+		return err
+	}
+
+	if a.Trc, err = NewTracer(a.Config.Tracer); err != nil {
 		return err
 	}
 
@@ -77,6 +85,10 @@ func (a *Application) CloseMysqlConnection() error {
 
 func (a *Application) CloseRedisClientConnection() error {
 	return CloseRedisClient(a.Cache.Redis)
+}
+
+func (a *Application) ShutdownTracer(ctx context.Context) error {
+	return ShutdownTracer(ctx, a.Trc)
 }
 
 // func (a *Application) ClosePostgresqlConnection() error {

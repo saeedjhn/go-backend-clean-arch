@@ -3,6 +3,8 @@ package configs
 import (
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/oteltracer"
+
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/logger"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mongo"
@@ -66,6 +68,7 @@ type Config struct {
 	HTTPServer  HTTPServer         `mapstructure:"http_server"`
 	GRPCServer  GRPCServer         `mapstructure:"grpc_server"`
 	CORS        CORS               `mapstructure:"cors"`
+	Tracer      oteltracer.Config  `mapstructure:"tracer"`
 	Logger      logger.Config      `mapstructure:"logger"`
 	Mysql       mysql.Config       `mapstructure:"mysql"`
 	Postgres    pq.Config          `mapstructure:"postgres"`
