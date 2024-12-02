@@ -1,12 +1,12 @@
 services:
   ####################### APPLICATION #######################
   app:
-    container_name: go-backend-clean-arch_app-dev
     image: go-backend-clean-arch_app:0.1.0-dev
     build:
       context: ../..
-      dockerfile: deployments/development/Dockerfile
       target: dev # For Development
+      dockerfile: deployments/development/Dockerfile
+    container_name: go-backend-clean-arch_app-dev
     ports:
       - "8000:8000"
       - "50000:50000"
@@ -16,10 +16,7 @@ services:
       - go-backend-clean-arch_network
     depends_on:
       - mysqldb
-      #      - psqldb
-      #      - mongodb
       - redis
-
 
       #  app-prod:
       #    build:
@@ -27,49 +24,49 @@ services:
       #      dockerfile: ./deployments/Dockerfile
       #      target: prod # For Production
 
-      ######################## MYSQL ########################
+  ######################## MYSQL ########################
   mysqldb:
-    container_name: go-backend-clean-arch_mysqldb
     image: mysql:latest
+    container_name: go-backend-clean-arch_mysqldb
     env_file:
       - .env
+    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
     ports:
       - "${MYSQL_PORT}:${MYSQL_PORT}"
     volumes:
       - mysql:/var/lib/mysql
-    restart: always
-    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
     networks:
       - go-backend-clean-arch_network
+    restart: always
 
-    ####################### POSTGRES #######################
-    #  psqldb:
-    #    container_name: go-backend-clean-arch_psqldb
-    #    image: postgres:latest
-    #    env_file:
-    #      - .env
-    #    ports:
-    #      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
-    #    volumes:
-    #      - psql:/var/lib/psql/data
-    #    restart: always
-    #    networks:
-    #      - go-backend-clean-arch_network
+  ####################### POSTGRES #######################
+  #  psqldb:
+  #    image: postgres:latest
+  #    container_name: go-backend-clean-arch_psqldb
+  #    env_file:
+  #      - .env
+  #    ports:
+  #      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+  #    volumes:
+  #      - psql:/var/lib/psql/data
+  #    networks:
+  #      - go-backend-clean-arch_network
+  #    restart: always
 
-    ####################### MONOGO #######################
+  ####################### MONOGO #######################
   #  mongodb:
-  #    container_name: go-backend-clean-arch_mongodb
   #    image: mongo:latest
+  #    container_name: go-backend-clean-arch_mongodb
   #    environment:
   #      MONGO_INITDB_ROOT_USERNAME: admin
   #      MONGO_INITDB_ROOT_PASSWORD: 123456
   #    ports:
   #      - "27017:27017"
   #    volumes:
-  #      - mongodb-data:/data/db
-  #    restart: unless-stopped
+  #      - mongo:/data/db
   #    networks:
   #      - go-backend-clean-arch_network
+  #    restart: unless-stopped
 
   ####################### PGADMIN #######################
   #  pgadmin:
@@ -83,14 +80,14 @@ services:
   #      - "5002:80"
   #    networks:
   #      - go-backend-clean-arch_network
-  #    restart: unless-stopped
   #    depends_on:
   #      - psqldb
+  #    restart: unless-stopped
 
   ####################### REDIS #######################
   redis:
-    container_name: go-backend-clean-arch_redis
     image: redis:latest
+    container_name: go-backend-clean-arch_redis
     env_file:
       - .env
     command: redis-server --loglevel warning --save 60 1 --requirepass "password123"
@@ -103,9 +100,8 @@ services:
 
   ####################### JAEGER #######################
   jaeger:
-    container_name: go-backend-clean-arch_jaeger
-    restart: always
     image: jaegertracing/all-in-one:1.63.0
+    container_name: go-backend-clean-arch_jaeger
     env_file:
       - .env
     ports:
@@ -117,14 +113,108 @@ services:
     #      - "9411:9411"     # Zipkin compatible endpoint (optional)
     networks:
       - go-backend-clean-arch_network
+    restart: always
+
+  ####################### SETUP-ELK #######################
+  setup-elk:
+    build:
+      context: elk/setup/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    container_name: go-backend-clean-arch_setup-elk
+    init: true
+    environment:
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+      FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
+    volumes:
+      - ./elk/setup/entrypoint.sh:/entrypoint.sh:ro,Z
+      - ./elk/setup/helpers.sh:/helpers.sh:ro,Z
+      - ./elk/setup/roles:/roles:ro,Z
+      - setup-elk:/state:Z
+    networks:
+      - go-backend-clean-arch_network
+    depends_on:
+      - elasticsearch
+
+  ####################### ELASTICSEARCH #######################
+  elasticsearch:
+    build:
+      context: elk/elasticsearch/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    container_name: go-backend-clean-arch_elasticsearch
+    environment:
+      node.name: elasticsearch
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      discovery.type: single-node
+    volumes:
+      - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
+      - elasticsearch:/usr/share/elasticsearch/data:Z
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - go-backend-clean-arch_network
+    restart: unless-stopped
+
+  ######################## KIBANA ########################
+  kibana:
+    build:
+      context: elk/kibana/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    container_name: go-backend-clean-arch_kibana
+    environment:
+      KIBANA_SYSTEM_USERNAME: ${KIBANA_SYSTEM_USERNAME:-}
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+    volumes:
+      - ./elk/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+      - elasticsearch:/usr/share/kibana/data:Z
+    ports:
+      - "5601:5601"
+    networks:
+      - go-backend-clean-arch_network
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+  ######################## FILEBEAT ########################
+  filebeat:
+    build:
+      context: elk/filebeat/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    container_name: go-backend-clean-arch_filebeat
+    user: root
+    environment:
+      FILEBEAT_INTERNAL_USERNAME: ${FILEBEAT_INTERNAL_USERNAME:-}
+      FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
+      BEATS_SYSTEM_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
+    command:
+      - -e
+      - --strict.perms=false
+    volumes:
+      - ./elk/filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./../../logs:/var/log/filebeat/go-backend-clean-arch/logs
+      #- ../prod/filebeatlogs:/var/log/filebeat/service:ro
+      - filebeat:/var/log/filebeat
+      - filebeat:/app:ro
+    networks:
+      - go-backend-clean-arch_network
+    depends_on:
+      - elasticsearch
 
 volumes:
   mysql:
-  #  psql:
-  #  mongodb-data:
-  #  pgadmin:
   redis:
-  logs:
+  filebeat:
+  elasticsearch:
+  setup-elk:
+  #  psql:
+  #  mongo:
+  #  pgadmin:
 
 
 networks:
