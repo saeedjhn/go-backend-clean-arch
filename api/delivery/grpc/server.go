@@ -2,9 +2,8 @@ package grpc
 
 import (
 	"fmt"
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/grpc/userservice"
 	"net"
-
-	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/grpc/userservice"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"google.golang.org/grpc/reflection"

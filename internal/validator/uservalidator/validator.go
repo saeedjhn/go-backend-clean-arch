@@ -1,7 +1,7 @@
 package uservalidator
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http/handler/userhandler"
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler/userhandler"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 )
 

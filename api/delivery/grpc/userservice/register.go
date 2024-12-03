@@ -1,7 +1,7 @@
 package userservice
 
 import (
-	pb "github.com/saeedjhn/go-backend-clean-arch/api/v1/proto/user/gen"
+	pb "github.com/saeedjhn/go-backend-clean-arch/api/proto/user/gen"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"google.golang.org/grpc"
 )

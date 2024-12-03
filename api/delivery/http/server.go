@@ -2,11 +2,11 @@ package http
 
 import (
 	"fmt"
+	myMiddleware "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/middleware"
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	myMiddleware "github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http/middleware"
-	"github.com/saeedjhn/go-backend-clean-arch/api/v1/delivery/http/router"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"go.uber.org/zap"
 )
