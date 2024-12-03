@@ -1,5 +1,5 @@
 services:
-  ####################### APPLICATION #######################
+  ####################### APPLICATION ##################################################################################
   app:
     image: go-backend-clean-arch_app:0.1.0-dev
     build:
@@ -24,6 +24,7 @@ services:
       #      dockerfile: ./deployments/Dockerfile
       #      target: prod # For Production
 
+  ####################### SETUP-DB #####################################################################################
   ######################## MYSQL ########################
   mysqldb:
     image: mysql:latest
@@ -97,6 +98,7 @@ services:
       - "${REDIS_PORT}:${REDIS_PORT}"
     networks:
       - go-backend-clean-arch_network
+  ####################### END SETUP-DB #################################################################################
 
   ####################### JAEGER #######################
   jaeger:
@@ -115,7 +117,7 @@ services:
       - go-backend-clean-arch_network
     restart: always
 
-  ####################### SETUP-ELK #######################
+  ####################### SETUP-ELK ####################################################################################
   setup-elk:
     build:
       context: elk/setup/
@@ -205,6 +207,7 @@ services:
       - go-backend-clean-arch_network
     depends_on:
       - elasticsearch
+  ####################### END SETUP-ELK ################################################################################
 
 volumes:
   mysql:
