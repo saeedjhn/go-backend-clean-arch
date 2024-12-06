@@ -12,7 +12,6 @@ import (
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
-	"go.uber.org/zap"
 )
 
 func main() {
@@ -50,20 +49,29 @@ func main() {
 		)
 	}
 
-	// Bootstrap the application with the provided configuration options.
-	app, err := bootstrap.App(configs.Option{
+	// Initialize configuration options to specify how the configuration should be loaded.
+	cfgOption := configs.Option{
 		Prefix:      "",
 		Delimiter:   "",
 		Separator:   "",
 		FilePath:    filesWithExt,
 		CallbackEnv: nil,
-	})
+	}
+
+	// Attempt to load the configuration using the specified options.
+	config, err := configs.Load(cfgOption)
+	if err != nil {
+		log.Fatalf("Error loading configuration with option '%v': %v", cfgOption, err)
+	}
+
+	// Bootstrap the application with the provided configuration options.
+	app, err := bootstrap.App(config)
 	if err != nil {
 		log.Fatalf("failed to bootstrap the application: %v", err)
 	}
 
 	// Log the application configuration at startup
-	app.Logger.Set().Named("Main").Info("Config", zap.Any("config", app.Config))
+	app.Logger.Infow("Config", "config", app.Config)
 
 	// Set up signal handling for graceful shutdown (e.g., SIGINT, SIGTERM)
 	quit := make(chan os.Signal, 1)
@@ -100,10 +108,14 @@ func main() {
 	<-quit
 
 	// Graceful shutdown logic
-	ctxWithTimeout, cancel := context.WithTimeout(context.Background(), app.Config.Application.GracefulShutdownTimeout)
+	ctxWithTimeout, cancel := context.WithTimeout(
+		context.Background(),
+		app.Config.Application.GracefulShutdownTimeout,
+	)
 	defer cancel()
 
-	log.Println("received interrupt signal, shutting down gracefully..")
+	// Log received interrupt signal and shutting down gracefully
+	app.Logger.Info("Received.Interrupt.Signal.For.Shutting.Down.Gracefully")
 
 	// Optionally, close connections
 

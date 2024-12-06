@@ -11,7 +11,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
-	"go.uber.org/zap"
 )
 
 func (h *Handler) Login(c echo.Context) error {
@@ -67,7 +66,7 @@ func (h *Handler) Login(c echo.Context) error {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		h.app.Logger.Set().Named("users").Error("login", zap.Any("error", err.Error()))
+		h.app.Logger.Errorf("Error.Login: %v", err)
 
 		return echo.NewHTTPError(code,
 			echo.Map{

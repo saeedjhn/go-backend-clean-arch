@@ -2,13 +2,13 @@ package bootstrap
 
 import (
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/taskrepository/mysqltask"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/userrespository/mysqluser"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/userrespository/redisuser"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/taskusecase"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/userusecase"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/logger"
 )
 
 type Usecase struct {
@@ -19,7 +19,7 @@ type Usecase struct {
 
 func NewUsecase(
 	cfg *configs.Config,
-	logger *logger.Logger,
+	_ contract.Logger,
 	cache Cache,
 	db DB,
 ) *Usecase {

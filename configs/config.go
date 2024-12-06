@@ -3,9 +3,10 @@ package configs
 import (
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/oteltracer"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/logger"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mongo"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
@@ -46,9 +47,12 @@ type HTTPServer struct {
 }
 
 type GRPCServer struct {
-	Network string        `mapstructure:"network"`
-	Port    string        `mapstructure:"port"`
-	Timeout time.Duration `mapstructure:"timeout"`
+	Network           string        `mapstructure:"network"`
+	Port              string        `mapstructure:"port"`
+	MaxConnectionIdle time.Duration `mapstructure:"max_connection_idle"`
+	Timeout           time.Duration `mapstructure:"timeout"`
+	MaxConnectionAge  time.Duration `mapstructure:"max_connection_age"`
+	Time              time.Duration `mapstructure:"time"`
 }
 
 type CORS struct {
@@ -63,17 +67,17 @@ type Register struct {
 }
 
 type Config struct {
-	Application Application        `mapstructure:"application"`
-	Pprof       Pprof              `mapstructure:"pprof"`
-	HTTPServer  HTTPServer         `mapstructure:"http_server"`
-	GRPCServer  GRPCServer         `mapstructure:"grpc_server"`
-	CORS        CORS               `mapstructure:"cors"`
-	Tracer      oteltracer.Config  `mapstructure:"tracer"`
-	Logger      logger.Config      `mapstructure:"logger"`
-	Mysql       mysql.Config       `mapstructure:"mysql"`
-	Postgres    pq.Config          `mapstructure:"postgres"`
-	Redis       redis.Config       `mapstructure:"redis"`
-	Mongo       mongo.Config       `mapstructure:"mongo"`
-	Auth        authusecase.Config `mapstructure:"auth"`
-	Register    Register           `mapstructure:"register"`
+	Application Application           `mapstructure:"application"`
+	Pprof       Pprof                 `mapstructure:"pprof"`
+	HTTPServer  HTTPServer            `mapstructure:"http_server"`
+	GRPCServer  GRPCServer            `mapstructure:"grpc_server"`
+	CORS        CORS                  `mapstructure:"cors"`
+	Tracer      oteltracer.Config     `mapstructure:"tracer"`
+	Logger      jsonfilelogger.Config `mapstructure:"logger"`
+	Mysql       mysql.Config          `mapstructure:"mysql"`
+	Postgres    pq.Config             `mapstructure:"postgres"`
+	Redis       redis.Config          `mapstructure:"redis"`
+	Mongo       mongo.Config          `mapstructure:"mongo"`
+	Auth        authusecase.Config    `mapstructure:"auth"`
+	Register    Register              `mapstructure:"register"`
 }

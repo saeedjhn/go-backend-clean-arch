@@ -11,7 +11,6 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
-	"go.uber.org/zap"
 )
 
 func (h *Handler) Profile(c echo.Context) error {
@@ -34,7 +33,7 @@ func (h *Handler) Profile(c echo.Context) error {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		h.app.Logger.Set().Named("users").Error("profile", zap.Any("error", err.Error()))
+		h.app.Logger.Errorf("Error.Profile: %v", err)
 
 		return echo.NewHTTPError(code,
 			echo.Map{

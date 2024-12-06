@@ -21,7 +21,10 @@ cors:
 grpc_server:
   network: "tcp"
   port: 50000
-  timeout: "5s"
+  max_connection_idle: "5m" # Purpose: Closes idle connections after 5 minutes of inactivity.
+  timeout: "30s" # Purpose: Waits up to 20 seconds for the client to respond to a Keepalive probe before considering the connection dead.
+  max_connection_age: "2h" # Purpose: Forces the connection to be refreshed after 2 hours, regardless of its state (active or idle).
+  time: "1m" # Purpose: Sends a Keepalive probe every 1 minute to check the health of the connection.
 
 pprof:
   port: 8001
@@ -31,12 +34,16 @@ pprof:
   idle_timeout: "120s"
 
 logger:
-  filename: "./logs/log.json"
+  file_path: "logs"
   max_size: 10
   max_backups: 10
   max_age: 30
   local_time: true
   compress: true
+  console: true
+  enable_caller: true
+  enable_stack_trace: true
+  level: "debug"
 
 mysql:
   host: go-backend-clean-arch_mysqldb

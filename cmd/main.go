@@ -14,7 +14,6 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/cmd/migrations"
-	"go.uber.org/zap"
 )
 
 func main() {
@@ -52,24 +51,33 @@ func main() {
 		)
 	}
 
-	// Bootstrap the application with the provided configuration options.
-	app, err := bootstrap.App(configs.Option{
+	// Initialize configuration options to specify how the configuration should be loaded.
+	cfgOption := configs.Option{
 		Prefix:      "",
 		Delimiter:   "",
 		Separator:   "",
 		FilePath:    filesWithExt,
 		CallbackEnv: nil,
-	})
+	}
+
+	// Attempt to load the configuration using the specified options.
+	config, err := configs.Load(cfgOption)
+	if err != nil {
+		log.Fatalf("Error loading configuration with option '%v': %v", cfgOption, err)
+	}
+
+	// Bootstrap the application with the provided configuration options.
+	app, err := bootstrap.App(config)
 	if err != nil {
 		log.Fatalf("failed to bootstrap the application: %v", err)
 	}
 
 	// Log the application configuration at startup
-	app.Logger.Set().Named("Main").Info("Config", zap.Any("config", app.Config))
+	app.Logger.Infow("Config", "config", app.Config)
 
 	// Run database migrations
 	if err = migrations.Up(app); err != nil {
-		app.Logger.Set().Named("Main").Fatal("Migrations.Up", zap.Error(err))
+		app.Logger.Fatalf("Migrations.Up: %v", err)
 	}
 
 	// Set up signal handling for graceful shutdown (e.g., SIGINT, SIGTERM)
@@ -80,7 +88,7 @@ func main() {
 	hs := http.New(app)
 	go func() {
 		if err = hs.Run(); err != nil {
-			app.Logger.Set().Named("Main").Fatal("Server.HTTP.Run", zap.Error(err))
+			app.Logger.Fatalf("Server.HTTP.Run: %v", err)
 		}
 	}()
 
@@ -88,7 +96,7 @@ func main() {
 	gs := grpc.New(app)
 	go func() {
 		if err = gs.Run(); err != nil {
-			app.Logger.Set().Named("Main").Fatal("Server.GRPC.Run", zap.Error(err))
+			app.Logger.Fatalf("Server.GRPC.Run: %v", err)
 		}
 	}()
 
@@ -98,43 +106,41 @@ func main() {
 	}()
 	// Wait for termination signal (e.g., Ctrl+C)
 
+	// Wait for termination signal (e.g., Ctrl+C)
 	<-quit
 
 	// Graceful shutdown logic
-	ctxWithTimeout, cancel := context.WithTimeout(context.Background(), app.Config.Application.GracefulShutdownTimeout)
+	ctxWithTimeout, cancel := context.WithTimeout(
+		context.Background(),
+		app.Config.Application.GracefulShutdownTimeout,
+	)
 	defer cancel()
 
 	// Shutdown HTTP server gracefully
 	if err = hs.Router.Shutdown(ctxWithTimeout); err != nil {
-		app.Logger.Set().Named("Main").Error("Server.HTTP.Shutdown", zap.Error(err))
+		app.Logger.Errorf("Server.HTTP.Shutdown: %v", err)
 	}
 
 	// Log received interrupt signal and shutting down gracefully
-	app.Logger.Set().Named("Main").Info("Received.Interrupt.Signal.For.Shutting.Down.Gracefully")
+	app.Logger.Info("Received.Interrupt.Signal.For.Shutting.Down.Gracefully")
 
 	// Close Redis client connection during shutdown
-	func(app *bootstrap.Application) {
-		err = app.CloseRedisClientConnection()
-		if err != nil {
-			app.Logger.Set().Named("Main").Error("Close.Redis.Connection", zap.Error(err))
-		}
-	}(app)
+
+	if err = app.CloseRedisClientConnection(); err != nil {
+		app.Logger.Errorf("Close.Redis.Connection: %v", err)
+	}
 
 	// Close MySQL connection during shutdown
-	func(app *bootstrap.Application) {
-		err = app.CloseMysqlConnection()
-		if err != nil {
-			app.Logger.Set().Named("Main").Error("Close.Mysql.Connection", zap.Error(err))
-		}
-	}(app)
+
+	if err = app.CloseMysqlConnection(); err != nil {
+		app.Logger.Errorf("Close.Mysql.Connection: %v", err)
+	}
 
 	// Shutdown tracer during shutdown
-	func(ctx context.Context, app *bootstrap.Application) {
-		err = app.ShutdownTracer(ctx)
-		if err != nil {
-			app.Logger.Set().Named("Main").Error("Shutdown.Tracer", zap.Error(err))
-		}
-	}(ctxWithTimeout, app)
+
+	if err = app.ShutdownTracer(ctxWithTimeout); err != nil {
+		app.Logger.Errorf("Shutdown.Tracer: %v", err)
+	}
 
 	// Optionally, close PostgreSQL or other database connections
 

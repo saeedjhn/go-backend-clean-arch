@@ -9,7 +9,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
-	"go.uber.org/zap"
 )
 
 type Server struct {
@@ -59,19 +58,33 @@ func (s Server) Run() error {
 				errMsg = request.Error.Error()
 			}
 
-			s.App.Logger.Set().Named("HTTP.Server").Info("Request",
-				zap.String("request_id", request.RequestID),
-				zap.String("host", request.Host),
-				zap.String("content-length", request.ContentLength),
-				zap.String("protocol", request.Protocol),
-				zap.String("method", request.Method),
-				zap.Duration("latency", request.Latency),
-				zap.String("error", errMsg),
-				zap.String("remote_ip", request.RemoteIP),
-				zap.Int64("response_size", request.ResponseSize),
-				zap.String("uri", request.URI),
-				zap.Int("status", request.Status),
-			)
+			s.App.Logger.Infow("HTTP", "Request", map[string]interface{}{
+				"request_id":     request.RequestID,
+				"host":           request.Host,
+				"content-length": request.ContentLength,
+				"protocol":       request.Protocol,
+				"method":         request.Method,
+				"latency":        request.Latency,
+				"error":          errMsg,
+				"remote_ip":      request.RemoteIP,
+				"response_size":  request.ResponseSize,
+				"uri":            request.URI,
+				"status":         request.Status,
+			})
+
+			// s.App.Logger.Set().Named("HTTP.Server").Info("Request",
+			// 	zap.String("request_id", request.RequestID),
+			// 	zap.String("host", request.Host),
+			// 	zap.String("content-length", request.ContentLength),
+			// 	zap.String("protocol", request.Protocol),
+			// 	zap.String("method", request.Method),
+			// 	zap.Duration("latency", request.Latency),
+			// 	zap.String("error", errMsg),
+			// 	zap.String("remote_ip", request.RemoteIP),
+			// 	zap.Int64("response_size", request.ResponseSize),
+			// 	zap.String("uri", request.URI),
+			// 	zap.Int("status", request.Status),
+			// )
 
 			return nil
 		},
@@ -82,7 +95,7 @@ func (s Server) Run() error {
 
 	address := fmt.Sprintf(":%s", s.App.Config.HTTPServer.Port)
 
-	s.App.Logger.Set().Named("Server").Info("Start.Router", zap.Any("Server.Config", s.App.Config.HTTPServer))
+	s.App.Logger.Infow("Start.HTTP.Router", "Server.HTTP.Config", s.App.Config.HTTPServer)
 
 	return s.Router.Start(address)
 }

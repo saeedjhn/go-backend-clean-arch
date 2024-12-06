@@ -6,7 +6,6 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/logger"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/inmemory"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
@@ -24,17 +23,17 @@ type DB struct {
 }
 
 type Application struct {
-	Config       *configs.Config
-	ConfigOption configs.Option
-	Trc          contract.Tracer
-	Logger       *logger.Logger
-	Cache        Cache
-	DB           DB
-	Usecase      *Usecase
+	Config *configs.Config
+	// ConfigOption configs.Option
+	Trc     contract.Tracer
+	Logger  contract.Logger
+	Cache   Cache
+	DB      DB
+	Usecase *Usecase
 }
 
-func App(configOption configs.Option) (*Application, error) {
-	a := &Application{ConfigOption: configOption}
+func App(config *configs.Config) (*Application, error) {
+	a := &Application{Config: config}
 
 	if err := a.setup(); err != nil {
 		return nil, err
@@ -46,9 +45,9 @@ func App(configOption configs.Option) (*Application, error) {
 func (a *Application) setup() error {
 	var err error
 
-	if a.Config, err = ConfigLoad(a.ConfigOption); err != nil {
-		return err
-	}
+	// if a.Config, err = ConfigLoad(a.ConfigOption); err != nil {
+	// 	return err
+	// }
 
 	if a.DB.MySQL, err = NewMysqlConnection(a.Config.Mysql); err != nil {
 		return err
@@ -58,7 +57,7 @@ func (a *Application) setup() error {
 		return err
 	}
 
-	a.Logger = NewLogger(a.Config.Logger)
+	a.Logger = NewLogger(a.Config.Application, a.Config.Logger)
 
 	if a.DB.Postgres, err = NewPostgresConnection(a.Config.Postgres); err != nil {
 		return err
