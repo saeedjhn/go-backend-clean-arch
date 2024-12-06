@@ -3,7 +3,7 @@ package http
 import (
 	"fmt"
 
-	myMiddleware "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/middleware"
+	myMiddleware "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/middleware" //nolint:typecheck // nothing
 	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router"
 
 	"github.com/labstack/echo/v4"
@@ -39,7 +39,7 @@ func (s Server) Run() error {
 		AllowHeaders:     s.App.Config.CORS.AllowHeaders,
 		AllowCredentials: s.App.Config.CORS.AllowCredentials,
 	}))
-	s.Router.Use(myMiddleware.Logger(s.App))
+	s.Router.Use(myMiddleware.Logger(s.App.Logger))
 
 	// Router Setup
 	router.Setup(s.App, s.Router)

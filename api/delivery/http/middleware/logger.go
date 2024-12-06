@@ -3,10 +3,10 @@ package middleware
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 )
 
-func Logger(app *bootstrap.Application) echo.MiddlewareFunc {
+func Logger(logger contract.Logger) echo.MiddlewareFunc {
 	return middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
 		LogURI:           true,
 		LogStatus:        true,
@@ -25,7 +25,7 @@ func Logger(app *bootstrap.Application) echo.MiddlewareFunc {
 				errMsg = request.Error.Error()
 			}
 
-			app.Logger.Infow("HTTP", "Request", map[string]interface{}{
+			logger.Infow("HTTP", "Request", map[string]interface{}{
 				"request_id":     request.RequestID,
 				"host":           request.Host,
 				"content-length": request.ContentLength,
