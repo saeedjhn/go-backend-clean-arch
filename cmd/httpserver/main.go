@@ -3,11 +3,12 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http"
 	"log"
 	"os"
 	"os/signal"
 	"path/filepath"
+
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"

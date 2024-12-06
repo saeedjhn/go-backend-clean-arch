@@ -7,6 +7,7 @@ type Config struct {
 	MaxAge     int    `mapstructure:"max_age"`
 	LocalTime  bool   `mapstructure:"local_time"`
 	Compress   bool   `mapstructure:"compress"`
+	Encoding   string `mapstructure:"encoding"`
 }
 
 /* for example:

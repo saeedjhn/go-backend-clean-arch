@@ -3,14 +3,14 @@ package oteltracer
 import (
 	"fmt"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract/tracercontract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/trace"
 )
 
-var _ tracercontract.Span = (*Span)(nil)
+var _ contract.Span = (*Span)(nil)
 
 // Span wraps a trace.Span and provides additional utility methods
 // to manage and enrich the span with attributes, events, and errors.

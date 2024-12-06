@@ -2,6 +2,7 @@ package userservice
 
 import (
 	"context"
+
 	"github.com/saeedjhn/go-backend-clean-arch/api/proto/user/gen"
 
 	"github.com/golang/protobuf/ptypes/empty" //nolint:gomodguard // nothing

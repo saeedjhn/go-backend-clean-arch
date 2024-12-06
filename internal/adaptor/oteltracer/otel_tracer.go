@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract/tracercontract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 
@@ -18,7 +18,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-var _ tracercontract.Tracer = (*OpenTelemetry)(nil)
+var _ contract.Tracer = (*OpenTelemetry)(nil)
 
 // OpenTelemetry encapsulates the OpenTelemetry components required for distributed tracing.
 // It provides a tracer instance for span creation and a tracer provider for managing lifecycle and configurations.
@@ -84,7 +84,7 @@ func (o *OpenTelemetry) Configure() error {
 func (o *OpenTelemetry) Span(
 	ctx context.Context,
 	name string,
-) (context.Context, tracercontract.Span) {
+) (context.Context, contract.Span) {
 	ctx, span := o.tracer.Start(ctx, name) //nolint:spancheck // nothing
 
 	return ctx, NewSpan(span) //nolint:spancheck // nothing
@@ -171,21 +171,21 @@ func createTraceProvider(cfg Config, exp sdktrace.SpanExporter) *sdktrace.Tracer
 			semconv.ServiceVersionKey.Float64(cfg.AppVersion), // Service version
 			// Deployment environment (e.g., development, staging, production)
 			semconv.DeploymentEnvironmentKey.String(cfg.AppEnv),
-			// semconv.ServiceInstanceIDKey.String(_cfg.InstanceID), // Instance ID (useful for scaling scenarios)
+			// semconv.ServiceInstanceIDKey.Value(_cfg.InstanceID), // Instance ID (useful for scaling scenarios)
 
 			// Network information
 			semconv.NetHostNameKey.String(cfg.AppHost), // ServiceHost name
 			semconv.NetHostPortKey.Int(cfg.AppPort),    // ServicePort number
 
 			// Dependency information
-			// attribute.String("database", "PostgreSQL"), // Database in use
-			// attribute.String("queue", "RabbitMQ"), // Message queue in use
-			// attribute.String("cache", "Redis"), // Cache system in use
+			// attribute.Value("database", "PostgreSQL"), // Database in use
+			// attribute.Value("queue", "RabbitMQ"), // Message queue in use
+			// attribute.Value("cache", "Redis"), // Cache system in use
 
 			// Other identifiers
-			// attribute.String("team", "backend"), // Team responsible for the service
-			// attribute.String("repository_url", "https://github.com/your-repo/service-name"), // Code repository URL
-			// attribute.String("language", "Go"),                                              // Programming language
+			// attribute.Value("team", "backend"), // Team responsible for the service
+			// attribute.Value("repository_url", "https://github.com/your-repo/service-name"), // Code repository URL
+			// attribute.Value("language", "Go"),                                              // Programming language
 		)),
 	)
 

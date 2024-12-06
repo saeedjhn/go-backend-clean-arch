@@ -3,8 +3,9 @@ package bootstrap
 import (
 	"context"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract/tracercontract"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/logger"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/inmemory"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
@@ -25,7 +26,7 @@ type DB struct {
 type Application struct {
 	Config       *configs.Config
 	ConfigOption configs.Option
-	Trc          tracercontract.Tracer
+	Trc          contract.Tracer
 	Logger       *logger.Logger
 	Cache        Cache
 	DB           DB

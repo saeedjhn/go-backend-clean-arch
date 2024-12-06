@@ -1,4 +1,4 @@
-package tracercontract
+package contract
 
 import (
 	"context"
