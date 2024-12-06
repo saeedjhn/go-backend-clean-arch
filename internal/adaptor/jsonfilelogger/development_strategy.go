@@ -11,11 +11,11 @@ import (
 )
 
 type DevelopmentStrategy struct {
-	cfg Config
+	config Config
 }
 
-func NewDevelopmentStrategy(cfg Config) *DevelopmentStrategy {
-	return &DevelopmentStrategy{cfg: cfg}
+func NewDevelopmentStrategy(config Config) *DevelopmentStrategy {
+	return &DevelopmentStrategy{config: config}
 }
 
 func (d *DevelopmentStrategy) CreateLogger() *zap.Logger {
@@ -38,7 +38,8 @@ func (d *DevelopmentStrategy) CreateLogger() *zap.Logger {
 
 func (d *DevelopmentStrategy) generateLogFilename() string {
 	fileName := fmt.Sprintf(
-		"log_%s_%d.log",
+		"%s/log_%s_%d.log",
+		d.config.FilePath,
 		time.Now().Format("2006-01-02_15-04-05"),
 		time.Now().Unix(),
 	)
@@ -49,11 +50,11 @@ func (d *DevelopmentStrategy) generateLogFilename() string {
 func (d *DevelopmentStrategy) createLogWriter(fileName string) zapcore.WriteSyncer {
 	writer := zapcore.AddSync(&lumberjack.Logger{
 		Filename:   fileName,
-		MaxSize:    d.cfg.MaxSize,    // megabytes
-		MaxBackups: d.cfg.MaxBackups, // megabytes
-		MaxAge:     d.cfg.MaxAge,     // days
-		LocalTime:  d.cfg.LocalTime,  // T/F
-		Compress:   d.cfg.Compress,   // T/F
+		MaxSize:    d.config.MaxSize,    // megabytes
+		MaxBackups: d.config.MaxBackups, // megabytes
+		MaxAge:     d.config.MaxAge,     // days
+		LocalTime:  d.config.LocalTime,  // T/F
+		Compress:   d.config.Compress,   // T/F
 	})
 
 	return writer
@@ -67,6 +68,7 @@ func (d *DevelopmentStrategy) createEncoderConfig() zapcore.EncoderConfig {
 	encoderCfg.TimeKey = "TS"
 	encoderCfg.NameKey = "NAME"
 	encoderCfg.MessageKey = "MESSAGE"
+	encoderCfg.StacktraceKey = "STACK_TRACE"
 
 	return encoderCfg
 }
@@ -86,7 +88,7 @@ func (d *DevelopmentStrategy) createCore(
 		),
 	)
 
-	if d.cfg.Console {
+	if d.config.Console {
 		zapCore = append(zapCore,
 			zapcore.NewCore(
 				defaultEncoder, zapcore.AddSync(os.Stdout), zap.NewAtomicLevelAt(d.getLoggerLevel()),
@@ -102,10 +104,10 @@ func (d *DevelopmentStrategy) createCore(
 func (d *DevelopmentStrategy) createOption() []zap.Option {
 	var zapOption []zap.Option
 
-	if d.cfg.EnableCaller {
+	if d.config.EnableCaller {
 		zapOption = append(zapOption, zap.AddCaller(), zap.AddCallerSkip(1))
 	}
-	if d.cfg.EnableStacktrace {
+	if d.config.EnableStacktrace {
 		zapOption = append(zapOption, zap.AddStacktrace(zapcore.ErrorLevel))
 	}
 
@@ -123,7 +125,7 @@ func (d *DevelopmentStrategy) getLoggerLevel() zapcore.Level {
 		"fatal":  zapcore.FatalLevel,
 	}
 
-	level, exist := loggerLevelMap[d.cfg.Level]
+	level, exist := loggerLevelMap[d.config.Level]
 	if !exist {
 		return zapcore.DebugLevel
 	}

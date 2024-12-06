@@ -23,13 +23,15 @@ func (l *L) SetStrategy(strategy EnvironmentStrategy) {
 	l.envStrategy = strategy
 }
 
-func (l *L) Configure() {
+func (l *L) Configure() *L {
 	strategy := l.getStrategy()
 	l.sugar = strategy.Sugar()
 
 	if err := l.sugar.Sync(); err != nil && !errors.Is(err, os.ErrInvalid) {
 		l.sugar.Error(err)
 	}
+
+	return l
 }
 
 func (l *L) Debug(args ...interface{}) {
