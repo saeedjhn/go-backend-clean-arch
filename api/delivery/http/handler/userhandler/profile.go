@@ -33,8 +33,6 @@ func (h *Handler) Profile(c echo.Context) error {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		h.app.Logger.Errorf("Error.Profile: %v", err)
-
 		return echo.NewHTTPError(code,
 			echo.Map{
 				"status":  false,

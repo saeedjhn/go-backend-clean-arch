@@ -40,6 +40,7 @@ func Auth(
 						})
 					}
 					claim.SetClaimsFromEchoContext(c, configs.AuthMiddlewareContextKey, claims)
+
 					return next(c)
 				}
 				return c.JSON(http.StatusUnauthorized, echo.Map{

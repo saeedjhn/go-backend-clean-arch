@@ -66,8 +66,6 @@ func (h *Handler) Login(c echo.Context) error {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		h.app.Logger.Errorf("Error.Login: %v", err)
-
 		return echo.NewHTTPError(code,
 			echo.Map{
 				"status":  false,

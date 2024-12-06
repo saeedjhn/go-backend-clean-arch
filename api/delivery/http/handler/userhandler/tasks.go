@@ -53,8 +53,6 @@ func (h *Handler) Tasks(c echo.Context) error {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		h.app.Logger.Errorf("Error.Tasks: %v", err)
-
 		return echo.NewHTTPError(code,
 			echo.Map{
 				"status":  false,

@@ -39,56 +39,7 @@ func (s Server) Run() error {
 		AllowHeaders:     s.App.Config.CORS.AllowHeaders,
 		AllowCredentials: s.App.Config.CORS.AllowCredentials,
 	}))
-
-	s.Router.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
-		LogURI:           true,
-		LogStatus:        true,
-		LogHost:          true,
-		LogRemoteIP:      true,
-		LogRequestID:     true,
-		LogMethod:        true,
-		LogContentLength: true,
-		LogResponseSize:  true,
-		LogLatency:       true,
-		LogError:         true,
-		LogProtocol:      true,
-		LogValuesFunc: func(_ echo.Context, request middleware.RequestLoggerValues) error {
-			errMsg := ""
-			if request.Error != nil {
-				errMsg = request.Error.Error()
-			}
-
-			s.App.Logger.Infow("HTTP", "Request", map[string]interface{}{
-				"request_id":     request.RequestID,
-				"host":           request.Host,
-				"content-length": request.ContentLength,
-				"protocol":       request.Protocol,
-				"method":         request.Method,
-				"latency":        request.Latency,
-				"error":          errMsg,
-				"remote_ip":      request.RemoteIP,
-				"response_size":  request.ResponseSize,
-				"uri":            request.URI,
-				"status":         request.Status,
-			})
-
-			// s.App.Logger.Set().Named("HTTP.Server").Info("Request",
-			// 	zap.String("request_id", request.RequestID),
-			// 	zap.String("host", request.Host),
-			// 	zap.String("content-length", request.ContentLength),
-			// 	zap.String("protocol", request.Protocol),
-			// 	zap.String("method", request.Method),
-			// 	zap.Duration("latency", request.Latency),
-			// 	zap.String("error", errMsg),
-			// 	zap.String("remote_ip", request.RemoteIP),
-			// 	zap.Int64("response_size", request.ResponseSize),
-			// 	zap.String("uri", request.URI),
-			// 	zap.Int("status", request.Status),
-			// )
-
-			return nil
-		},
-	}))
+	s.Router.Use(myMiddleware.Logger(s.App))
 
 	// Router Setup
 	router.Setup(s.App, s.Router)

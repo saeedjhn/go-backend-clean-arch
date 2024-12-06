@@ -67,8 +67,6 @@ func (h *Handler) Register(c echo.Context) error {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())
 
-		h.app.Logger.Errorf("Error.Register: %v", err)
-
 		return echo.NewHTTPError(code,
 			echo.Map{
 				"status":  false,
