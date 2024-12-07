@@ -25,15 +25,17 @@ func (i *Interactor) Login(ctx context.Context, req userdto.LoginRequest) (userd
 			WithKind(kind.KindStatusBadRequest)
 	}
 
-	dto := userauthservicedto.CreateTokenRequest{User: entity.User{
-		ID:        user.ID,
-		Name:      user.Name,
-		Mobile:    user.Mobile,
-		Email:     user.Email,
-		Password:  user.Password,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
-	}}
+	dto := userauthservicedto.CreateTokenRequest{
+		User: entity.User{
+			ID:        user.ID,
+			Name:      user.Name,
+			Mobile:    user.Mobile,
+			Email:     user.Email,
+			Password:  user.Password,
+			CreatedAt: user.CreatedAt,
+			UpdatedAt: user.UpdatedAt,
+		},
+	}
 
 	accessToken, err := i.authIntr.CreateAccessToken(dto)
 	if err != nil {
@@ -58,7 +60,7 @@ func (i *Interactor) Login(ctx context.Context, req userdto.LoginRequest) (userd
 			CreatedAt: user.CreatedAt,
 			UpdatedAt: user.UpdatedAt,
 		}, // Or
-		//User: user.ToUserInfoDTO(),
+		// User: user.ToUserInfoDTO(),
 		Token: userdto.Token{
 			AccessToken:  accessToken.Token,
 			RefreshToken: refreshToken.Token,

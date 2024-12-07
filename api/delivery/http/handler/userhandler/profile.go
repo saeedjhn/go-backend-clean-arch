@@ -8,7 +8,6 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/presenter/httppresenter"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
@@ -23,7 +22,7 @@ func (h *Handler) Profile(c echo.Context) error {
 	defer span.End()
 
 	// Give claims
-	claims := claim.GetClaimsFromEchoContext[authusecase.Claims](c, configs.AuthMiddlewareContextKey)
+	claims, _ := c.Get(configs.AuthMiddlewareContextKey).(*authusecase.Claims)
 
 	// Usage Use-case
 	resp, err := h.userIntr.Profile(

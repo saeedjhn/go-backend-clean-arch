@@ -24,8 +24,7 @@ func New(app *bootstrap.Application, group *echo.Group) {
 
 	protectedRouter := tasksGroup.Group("")
 
-	// protectedRouter.Use(middleware.Auth(app.Config.Auth, authSvc))
-	protectedRouter.Use(middleware.Auth(app.Config.Auth, app.Usecase.AuthIntr))
+	protectedRouter.Use(middleware.Auth(app.Usecase.AuthIntr))
 	{
 		protectedRouter.POST("/", handler.Create)
 		protectedRouter.GET("/:id", handler.FindOne)

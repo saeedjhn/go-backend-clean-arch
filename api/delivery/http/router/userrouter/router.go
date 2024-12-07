@@ -3,7 +3,7 @@ package userrouter
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler/userhandler"
-	middleware2 "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/middleware"
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/middleware"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/validator/uservalidator"
 )
@@ -37,11 +37,10 @@ func New(
 		}
 
 		protectedRouter := usersGroup.Group("")
-		// protectedRouter.Use(middleware.Auth(app.Config.Auth, authSvc))
-		protectedRouter.Use(middleware2.Auth(app.Config.Auth, app.Usecase.AuthIntr))
+		protectedRouter.Use(middleware.Auth(app.Usecase.AuthIntr))
 		{
 			protectedRouter.GET("/profile", handler.Profile)
-			protectedRouter.POST("/:id/tasks", handler.CreateTask, middleware2.CheckIsValidUserID)
+			protectedRouter.POST("/:id/tasks", handler.CreateTask, middleware.CheckIsValidUserID)
 			protectedRouter.GET("/:id/tasks", handler.Tasks)
 		}
 	}

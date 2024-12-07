@@ -10,7 +10,10 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
-func (i *Interactor) RefreshToken(ctx context.Context, req userdto.RefreshTokenRequest) (userdto.RefreshTokenResponse, error) {
+func (i *Interactor) RefreshToken(
+	ctx context.Context,
+	req userdto.RefreshTokenRequest,
+) (userdto.RefreshTokenResponse, error) {
 	dto := userauthservicedto.ParseTokenRequest{
 		Secret: i.config.Auth.RefreshTokenSecret,
 		Token:  req.RefreshToken,

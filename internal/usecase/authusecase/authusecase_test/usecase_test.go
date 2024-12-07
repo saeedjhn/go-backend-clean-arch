@@ -20,7 +20,7 @@ func TestCreateToken(t *testing.T) {
 		RefreshTokenExpiryTime: 120 * time.Hour,
 	}
 
-	u := entity.User{
+	user := entity.User{
 		ID:        7,
 		Name:      "John",
 		Mobile:    "09111111111",
@@ -30,11 +30,19 @@ func TestCreateToken(t *testing.T) {
 		UpdatedAt: time.Time{},
 	}
 
-	ai := authusecase.New(config)
+	auth := authusecase.New(config)
 
-	at, _ := ai.CreateAccessToken(userauthservicedto.CreateTokenRequest{User: u})
-	t.Log(at)
+	accessToken, _ := auth.CreateAccessToken(userauthservicedto.CreateTokenRequest{
+		User: user,
+	})
+	t.Log(accessToken)
 
-	rt, _ := ai.CreateRefreshToken(userauthservicedto.CreateTokenRequest{User: u})
-	t.Log(rt)
+	// refreshToken, _ := auth.CreateRefreshToken(userauthservicedto.CreateTokenRequest{User: user})
+	// t.Log(refreshToken)
+
+	isAuthorized, err := auth.IsAuthorized(accessToken.Token, config.AccessTokenSecret)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(isAuthorized)
 }
