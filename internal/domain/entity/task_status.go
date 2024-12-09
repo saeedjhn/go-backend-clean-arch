@@ -9,25 +9,25 @@ desirable default behavior.
 type TaskStatus uint8
 
 const (
-	Pending TaskStatus = iota + 1
-	InProgress
-	Completed
+	TaskPending TaskStatus = iota + 1
+	TaskInProgress
+	TaskCompleted
 )
 
 const (
-	PendingStr    = "pending"
-	InProgressStr = "in_progress"
-	CompletedStr  = "completed"
+	TaskPendingStr    = "pending"
+	TaskInProgressStr = "in_progress"
+	TaskCompletedStr  = "completed"
 )
 
 func (s TaskStatus) String() string {
 	switch s {
-	case Pending:
-		return PendingStr
-	case InProgress:
-		return InProgressStr
-	case Completed:
-		return CompletedStr
+	case TaskPending:
+		return TaskPendingStr
+	case TaskInProgress:
+		return TaskInProgressStr
+	case TaskCompleted:
+		return TaskCompletedStr
 	}
 
 	return ""
@@ -35,12 +35,12 @@ func (s TaskStatus) String() string {
 
 func MapToTaskStatus(status string) TaskStatus {
 	switch status {
-	case PendingStr:
-		return Pending
-	case InProgressStr:
-		return InProgress
-	case CompletedStr:
-		return Completed
+	case TaskPendingStr:
+		return TaskPending
+	case TaskInProgressStr:
+		return TaskInProgress
+	case TaskCompletedStr:
+		return TaskCompleted
 	}
 
 	return TaskStatus(0)

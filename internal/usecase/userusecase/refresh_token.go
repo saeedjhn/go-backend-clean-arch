@@ -2,8 +2,8 @@ package userusecase
 
 import (
 	"context"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
@@ -14,33 +14,28 @@ func (i *Interactor) RefreshToken(
 	ctx context.Context,
 	req userdto.RefreshTokenRequest,
 ) (userdto.RefreshTokenResponse, error) {
-	dto := userauthservicedto.ParseTokenRequest{
-		Secret: i.config.Auth.RefreshTokenSecret,
-		Token:  req.RefreshToken,
-	}
-
-	resp, err := i.authIntr.ParseToken(dto)
+	resp, err := i.authIntr.ParseToken(i.config.Auth.RefreshTokenSecret, req.RefreshToken)
 	if err != nil {
 		return userdto.RefreshTokenResponse{}, richerror.New(_opUserServiceRefreshToken).WithErr(err).
 			WithMessage(message.ErrorMsg403Forbidden).
 			WithKind(kind.KindStatusBadRequest)
 	}
 
-	user, err := i.repository.GetByID(ctx, resp.Claims.UserID)
+	user, err := i.repository.GetByID(ctx, resp.UserID)
 	if err != nil {
 		return userdto.RefreshTokenResponse{}, err
 	}
 
-	dto2 := userauthservicedto.CreateTokenRequest{User: user}
+	authenticable := entity.Authenticable{ID: user.ID}
 
-	accessToken, err := i.authIntr.CreateAccessToken(dto2)
+	accessToken, err := i.authIntr.CreateAccessToken(authenticable)
 	if err != nil {
 		return userdto.RefreshTokenResponse{}, richerror.New(_opUserServiceRefreshToken).WithErr(err).
 			WithMessage(message.ErrorMsg400BadRequest).
 			WithKind(kind.KindStatusBadRequest)
 	}
 
-	refreshToken, err := i.authIntr.CreateRefreshToken(dto2)
+	refreshToken, err := i.authIntr.CreateRefreshToken(authenticable)
 	if err != nil {
 		return userdto.RefreshTokenResponse{}, richerror.New(_opUserServiceRefreshToken).WithErr(err).
 			WithMessage(message.ErrorMsg400BadRequest).
@@ -48,7 +43,9 @@ func (i *Interactor) RefreshToken(
 	}
 
 	return userdto.RefreshTokenResponse{
-		AccessToken:  accessToken.Token,
-		RefreshToken: refreshToken.Token,
+		Tokens: userdto.Tokens{
+			AccessToken:  accessToken,
+			RefreshToken: refreshToken,
+		},
 	}, nil
 }

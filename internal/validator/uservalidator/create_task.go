@@ -2,15 +2,15 @@ package uservalidator
 
 import (
 	"errors"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/taskdto"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 )
 
-func (v Validator) ValidateCreateTaskRequest(req userdto.CreateTaskRequest) (map[string]string, error) {
+func (v Validator) ValidateCreateTaskRequest(req taskdto.CreateRequest) (map[string]string, error) {
 	if err := validation.ValidateStruct(&req,
 		validation.Field(&req.Title,
 			validation.Required,

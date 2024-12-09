@@ -36,7 +36,6 @@ func NewUsecase(
 	userIntr := userusecase.New(
 		cfg,
 		authIntr,
-		taskIntr,
 		userRdsRepo,
 		userRepo,
 	)

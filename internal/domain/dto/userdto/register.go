@@ -7,5 +7,5 @@ type RegisterRequest struct {
 }
 
 type RegisterResponse struct {
-	User UserInfo `json:"user_info"`
+	Data UserInfo `json:"data"`
 }

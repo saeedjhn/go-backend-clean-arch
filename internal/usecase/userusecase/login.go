@@ -3,7 +3,6 @@ package userusecase
 import (
 	"context"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
@@ -25,26 +24,16 @@ func (i *Interactor) Login(ctx context.Context, req userdto.LoginRequest) (userd
 			WithKind(kind.KindStatusBadRequest)
 	}
 
-	dto := userauthservicedto.CreateTokenRequest{
-		User: entity.User{
-			ID:        user.ID,
-			Name:      user.Name,
-			Mobile:    user.Mobile,
-			Email:     user.Email,
-			Password:  user.Password,
-			CreatedAt: user.CreatedAt,
-			UpdatedAt: user.UpdatedAt,
-		},
-	}
+	authenticable := entity.Authenticable{ID: user.ID}
 
-	accessToken, err := i.authIntr.CreateAccessToken(dto)
+	accessToken, err := i.authIntr.CreateAccessToken(authenticable)
 	if err != nil {
 		return userdto.LoginResponse{}, richerror.New(_opUserServiceLogin).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).
 			WithKind(kind.KindStatusInternalServerError)
 	}
 
-	refreshToken, err := i.authIntr.CreateRefreshToken(dto)
+	refreshToken, err := i.authIntr.CreateRefreshToken(authenticable)
 	if err != nil {
 		return userdto.LoginResponse{}, richerror.New(_opUserServiceLogin).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).
@@ -52,7 +41,7 @@ func (i *Interactor) Login(ctx context.Context, req userdto.LoginRequest) (userd
 	}
 
 	return userdto.LoginResponse{
-		User: userdto.UserInfo{
+		Data: userdto.UserInfo{
 			ID:        user.ID,
 			Name:      user.Name,
 			Mobile:    user.Mobile,
@@ -60,10 +49,10 @@ func (i *Interactor) Login(ctx context.Context, req userdto.LoginRequest) (userd
 			CreatedAt: user.CreatedAt,
 			UpdatedAt: user.UpdatedAt,
 		}, // Or
-		// User: user.ToUserInfoDTO(),
-		Token: userdto.Token{
-			AccessToken:  accessToken.Token,
-			RefreshToken: refreshToken.Token,
+		// Data: user.ToUserInfoDTO(),
+		Tokens: userdto.Tokens{
+			AccessToken:  accessToken,
+			RefreshToken: refreshToken,
 		},
 	}, nil
 }

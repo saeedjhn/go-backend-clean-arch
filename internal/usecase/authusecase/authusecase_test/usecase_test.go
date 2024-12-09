@@ -6,7 +6,6 @@ import (
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 )
 
@@ -32,12 +31,10 @@ func TestCreateToken(t *testing.T) {
 
 	auth := authusecase.New(config)
 
-	accessToken, _ := auth.CreateAccessToken(userauthservicedto.CreateTokenRequest{
-		User: user,
-	})
+	accessToken, _ := auth.CreateAccessToken(entity.Authenticable{ID: user.ID})
 	t.Log(accessToken)
 
-	// refreshToken, _ := auth.CreateRefreshToken(userauthservicedto.CreateTokenRequest{User: user})
+	// refreshToken, _ := auth.CreateRefreshToken(userauthservicedto.CreateTokenRequest{Data: user})
 	// t.Log(refreshToken)
 
 	isAuthorized, err := auth.IsAuthorized(accessToken.Token, config.AccessTokenSecret)

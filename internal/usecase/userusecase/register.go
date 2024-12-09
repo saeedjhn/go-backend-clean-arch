@@ -40,7 +40,7 @@ func (i *Interactor) Register(ctx context.Context, req userdto.RegisterRequest) 
 	}
 
 	return userdto.RegisterResponse{
-		User: userdto.UserInfo{
+		Data: userdto.UserInfo{
 			ID:        createdUser.ID,
 			Name:      createdUser.Name,
 			Mobile:    createdUser.Mobile,
@@ -48,6 +48,6 @@ func (i *Interactor) Register(ctx context.Context, req userdto.RegisterRequest) 
 			CreatedAt: createdUser.CreatedAt,
 			UpdatedAt: createdUser.UpdatedAt,
 		}, // Or
-		//User: createdUser.ToUserInfoDTO(),
+		// Data: createdUser.ToUserInfoDTO(),
 	}, nil
 }

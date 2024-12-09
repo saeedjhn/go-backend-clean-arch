@@ -7,7 +7,7 @@ import (
 )
 
 func Register(app *bootstrap.Application, gs grpc.ServiceRegistrar) {
-	us := New(app.Usecase.UserIntr)
+	us := New(app.Usecase.UserIntr, app.Usecase.TaskIntr)
 
 	pb.RegisterUserServiceServer(gs, us)
 }

@@ -1,6 +1,8 @@
 package userhandler //nolint:dupl // 1-79 lines are duplicate
 
 import (
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/taskdto"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 	"net/http"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/bind"
@@ -9,7 +11,6 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/sanitize"
 
 	"github.com/labstack/echo/v4"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
@@ -23,7 +24,7 @@ func (h *Handler) CreateTask(c echo.Context) error {
 	defer span.End()
 
 	// Bind
-	req := userdto.CreateTaskRequest{}
+	req := taskdto.CreateRequest{}
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest,
 			echo.Map{
@@ -33,6 +34,7 @@ func (h *Handler) CreateTask(c echo.Context) error {
 			},
 		)
 	}
+	req.UserID = claim.GetClaimsFromEchoContext(c).UserID
 
 	// Validation
 	if fieldsErrs, err := h.vld.ValidateCreateTaskRequest(req); err != nil {
@@ -62,7 +64,7 @@ func (h *Handler) CreateTask(c echo.Context) error {
 	}
 
 	// Usage Use-case
-	resp, err := h.userIntr.CreateTask(ctx, req)
+	resp, err := h.taskIntr.Create(ctx, req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())

@@ -1,6 +1,7 @@
 package userhandler
 
 import (
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/taskdto"
 	"net/http"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/bind"
@@ -9,7 +10,6 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/sanitize"
 
 	"github.com/labstack/echo/v4"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
@@ -23,7 +23,7 @@ func (h *Handler) Tasks(c echo.Context) error {
 	defer span.End()
 
 	// Bind
-	req := userdto.TasksRequest{}
+	req := taskdto.FindAllByUserIDRequest{}
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest,
 			echo.Map{
@@ -48,7 +48,7 @@ func (h *Handler) Tasks(c echo.Context) error {
 	}
 
 	// Usage Use-case
-	resp, err := h.userIntr.Tasks(ctx, req)
+	resp, err := h.taskIntr.FindAllByUserID(ctx, req)
 	if err != nil {
 		richErr, _ := richerror.Analysis(err)
 		code := httpstatus.FromKind(richErr.Kind())

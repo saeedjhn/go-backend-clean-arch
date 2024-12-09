@@ -19,12 +19,12 @@ func New() *Presenter {
 
 func (p Presenter) ProfileResponse(resp userdto.ProfileResponse) *pb.ProfileResponse {
 	return &pb.ProfileResponse{User: &pb.User{
-		Id:        strconv.FormatUint(resp.User.ID, 10),
-		Name:      resp.User.Name,
-		Mobile:    resp.User.Mobile,
-		Email:     resp.User.Email,
-		CreatedAt: timestamppb.New(resp.User.CreatedAt),
-		UpdatedAt: timestamppb.New(resp.User.UpdatedAt),
+		Id:        strconv.FormatUint(resp.Data.ID, 10),
+		Name:      resp.Data.Name,
+		Mobile:    resp.Data.Mobile,
+		Email:     resp.Data.Email,
+		CreatedAt: timestamppb.New(resp.Data.CreatedAt),
+		UpdatedAt: timestamppb.New(resp.Data.UpdatedAt),
 	}}
 }
 

@@ -2,11 +2,10 @@ package authusecase
 
 import (
 	"fmt"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-
-	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 )
 
 type Config struct {
@@ -29,45 +28,45 @@ func New(config Config) *Interactor {
 }
 
 func (i Interactor) CreateAccessToken(
-	req userauthservicedto.CreateTokenRequest,
-) (userauthservicedto.CreateTokenResponse, error) {
+	req entity.Authenticable,
+) (string, error) {
 	claims := Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject:   i.Config.AccessTokenSubject,
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(i.Config.AccessTokenExpiryTime)),
 		},
-		UserID: req.User.ID,
+		UserID: req.ID,
 		// any more property for response to user (name, family, role, etc...)
 	}
 
 	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := accessToken.SignedString([]byte(i.Config.AccessTokenSecret))
 	if err != nil {
-		return userauthservicedto.CreateTokenResponse{}, err
+		return "", err
 	}
 
-	return userauthservicedto.CreateTokenResponse{Token: tokenString}, err
+	return tokenString, err
 }
 
 func (i Interactor) CreateRefreshToken(
-	req userauthservicedto.CreateTokenRequest,
-) (userauthservicedto.CreateTokenResponse, error) {
+	req entity.Authenticable,
+) (string, error) {
 	claims := Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject:   i.Config.RefreshTokenSubject,
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(i.Config.RefreshTokenExpiryTime)),
 		},
-		UserID: req.User.ID,
+		UserID: req.ID,
 		// any more property for response to user (name, family, role, etc...)
 	}
 
 	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := accessToken.SignedString([]byte(i.Config.RefreshTokenSecret))
 	if err != nil {
-		return userauthservicedto.CreateTokenResponse{}, err
+		return "", err
 	}
 
-	return userauthservicedto.CreateTokenResponse{Token: tokenString}, err
+	return tokenString, err
 }
 
 func (i Interactor) IsAuthorized(requestToken string, secret string) (bool, error) {
@@ -83,24 +82,22 @@ func (i Interactor) IsAuthorized(requestToken string, secret string) (bool, erro
 	return true, nil
 }
 
-func (i Interactor) ParseToken(
-	req userauthservicedto.ParseTokenRequest,
-) (userauthservicedto.ParseTokenResponse[*Claims], error) {
+func (i Interactor) ParseToken(secret, requestToken string) (*Claims, error) {
 	token, err := jwt.ParseWithClaims(
-		req.Token,
+		requestToken,
 		&Claims{},
 		func(_ *jwt.Token) (interface{}, error) {
-			return []byte(req.Secret), nil // secret is accessTokenSecret or refreshTokenSecret_
+			return []byte(secret), nil // secret is accessTokenSecret or refreshTokenSecret_
 		},
 	)
 	if err != nil {
-		return userauthservicedto.ParseTokenResponse[*Claims]{}, err
+		return nil, err
 	}
 
 	claims, ok := token.Claims.(*Claims)
 	if ok && token.Valid {
-		return userauthservicedto.ParseTokenResponse[*Claims]{Claims: claims}, nil
+		return claims, nil
 	}
 
-	return userauthservicedto.ParseTokenResponse[*Claims]{}, err
+	return nil, err
 }

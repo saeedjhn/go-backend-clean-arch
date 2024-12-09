@@ -3,32 +3,27 @@ package taskusecase
 import (
 	"context"
 	"errors"
-
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/taskdto"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
-
-	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/usertaskservicedto"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 )
 
-func (i *Interactor) Create(
-	ctx context.Context,
-	req usertaskservicedto.CreateTaskRequest,
-) (usertaskservicedto.CreateTaskResponse, error) {
+func (i *Interactor) Create(ctx context.Context, req taskdto.CreateRequest) (taskdto.CreateResponse, error) {
 	task := entity.Task{
 		UserID:      req.UserID,
 		Title:       req.Title,
 		Description: req.Description,
-		Status:      req.Status,
+		Status:      entity.TaskPending,
 	}
 
 	isExistsUser, err := i.repository.IsExistsUser(ctx, req.UserID)
 	if err != nil {
-		return usertaskservicedto.CreateTaskResponse{}, err
+		return taskdto.CreateResponse{}, err
 	}
 
 	if !isExistsUser {
-		return usertaskservicedto.CreateTaskResponse{}, richerror.New(_opTaskServiceCreate).
+		return taskdto.CreateResponse{}, richerror.New(_opTaskServiceCreate).
 			WithErr(errors.New(_errMsgUserNotFound)).
 			WithMessage(_errMsgUserNotFound).
 			WithKind(kind.KindStatusBadRequest)
@@ -36,8 +31,16 @@ func (i *Interactor) Create(
 
 	createdTask, err := i.repository.Create(ctx, task)
 	if err != nil {
-		return usertaskservicedto.CreateTaskResponse{}, err
+		return taskdto.CreateResponse{}, err
 	}
 
-	return usertaskservicedto.CreateTaskResponse{Task: createdTask}, nil
+	return taskdto.CreateResponse{Data: taskdto.TaskInfo{
+		ID:          createdTask.ID,
+		UserID:      createdTask.UserID,
+		Title:       createdTask.Title,
+		Description: createdTask.Description,
+		Status:      createdTask.Status,
+		CreatedAt:   createdTask.CreatedAt,
+		UpdatedAt:   createdTask.UpdatedAt,
+	}}, nil
 }

@@ -21,6 +21,7 @@ func New(
 		app.Trc,
 		validator,
 		app.Usecase.UserIntr,
+		app.Usecase.TaskIntr,
 	)
 
 	usersGroup := group.Group("/users")
@@ -41,7 +42,7 @@ func New(
 		{
 			protectedRouter.GET("/profile", handler.Profile)
 			protectedRouter.POST("/:id/tasks", handler.CreateTask, middleware.CheckIsValidUserID)
-			protectedRouter.GET("/:id/tasks", handler.Tasks)
+			protectedRouter.GET("/:id/tasks", handler.Tasks, middleware.CheckIsValidUserID)
 		}
 	}
 }

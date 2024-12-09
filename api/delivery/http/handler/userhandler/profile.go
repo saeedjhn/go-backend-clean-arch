@@ -1,13 +1,12 @@
 package userhandler
 
 import (
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/presenter/httppresenter"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
@@ -22,7 +21,7 @@ func (h *Handler) Profile(c echo.Context) error {
 	defer span.End()
 
 	// Give claims
-	claims, _ := c.Get(configs.AuthMiddlewareContextKey).(*authusecase.Claims)
+	claims := claim.GetClaimsFromEchoContext(c)
 
 	// Usage Use-case
 	resp, err := h.userIntr.Profile(
@@ -41,7 +40,7 @@ func (h *Handler) Profile(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, httppresenter.New(
-		httppresenter.WithData(resp.User),
+		httppresenter.WithData(resp.Data),
 	).ToMap())
 
 	// return c.JSON(http.StatusOK, httppresenter.New().WithData(resp).ToMap())

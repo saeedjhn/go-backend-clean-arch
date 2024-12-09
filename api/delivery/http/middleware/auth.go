@@ -4,28 +4,24 @@ import (
 	mw "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/servicedto/userauthservicedto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
 )
 
 func Auth(
-	interactor *authusecase.Interactor,
+	authInteractor *authusecase.Interactor,
 ) echo.MiddlewareFunc {
 	return mw.WithConfig(mw.Config{
 		ContextKey: configs.AuthMiddlewareContextKey,
-		SigningKey: []byte(interactor.Config.AccessTokenSecret),
+		SigningKey: []byte(authInteractor.Config.AccessTokenSecret),
 		// TODO  - as sign method string to config
 		SigningMethod: "HS256",
 		ParseTokenFunc: func(_ echo.Context, auth string) (interface{}, error) {
-			parseTokenResp, err := interactor.ParseToken(userauthservicedto.ParseTokenRequest{
-				Secret: interactor.Config.AccessTokenSecret,
-				Token:  auth,
-			})
+			claims, err := authInteractor.ParseToken(authInteractor.Config.AccessTokenSecret, auth)
 			if err != nil {
 				return nil, err
 			}
 
-			return parseTokenResp.Claims, nil
+			return claims, nil
 		},
 	})
 }

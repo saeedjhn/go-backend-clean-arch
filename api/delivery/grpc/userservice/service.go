@@ -2,8 +2,8 @@ package userservice
 
 import (
 	"context"
-
 	"github.com/saeedjhn/go-backend-clean-arch/api/proto/user/gen"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/taskdto"
 
 	"github.com/golang/protobuf/ptypes/empty" //nolint:gomodguard // nothing
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
@@ -11,24 +11,28 @@ import (
 	"google.golang.org/grpc"
 )
 
-type Interactor interface {
+type UserInteractor interface {
 	Register(ctx context.Context, req userdto.RegisterRequest) (userdto.RegisterResponse, error)
 	Login(ctx context.Context, req userdto.LoginRequest) (userdto.LoginResponse, error)
 	Profile(ctx context.Context, req userdto.ProfileRequest) (userdto.ProfileResponse, error)
-	Tasks(ctx context.Context, req userdto.TasksRequest) (userdto.TasksResponse, error)
-	CreateTask(ctx context.Context, req userdto.CreateTaskRequest) (userdto.CreateTaskResponse, error)
 	RefreshToken(ctx context.Context, req userdto.RefreshTokenRequest) (userdto.RefreshTokenResponse, error)
+}
+
+type TaskInteractor interface {
+	Create(ctx context.Context, req taskdto.CreateRequest) (taskdto.CreateResponse, error)
+	FindAllByUserID(ctx context.Context, req taskdto.FindAllByUserIDRequest) (taskdto.FindAllByUserIDResponse, error)
 }
 
 var _ gen.UserServiceServer = (*Service)(nil)
 
 type Service struct {
 	gen.UserServiceServer
-	userIntr Interactor
+	userIntr UserInteractor
+	taskIntr TaskInteractor
 }
 
-func New(itr Interactor) *Service {
-	return &Service{userIntr: itr}
+func New(userInteractor UserInteractor, taskInteractor TaskInteractor) *Service {
+	return &Service{userIntr: userInteractor, taskIntr: taskInteractor}
 }
 
 func (u Service) Create(_ context.Context, _ *gen.CreateRequest) (*gen.User, error) {

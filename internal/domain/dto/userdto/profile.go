@@ -5,5 +5,5 @@ type ProfileRequest struct {
 }
 
 type ProfileResponse struct {
-	User UserInfo `json:"user"`
+	Data UserInfo `json:"data"`
 }

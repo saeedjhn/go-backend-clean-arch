@@ -83,18 +83,18 @@ func WithExtension(key string, ex interface{}) func(*Presenter) {
 	}
 }
 
-//httppresenter.New(
-//httppresenter.WithData(resp.User),
-//httppresenter.WithMeta(map[string]interface{}{"execution_duration": 3 * time.Microsecond}),
-//httppresenter.WithExtension("status", map[string]interface{}{
-//"uptime":           "172800",
-//"last_maintenance": "2024-10-28T15:30:00Z",
-//"load": map[string]interface{}{
-//"cpu":    "65%",
-//"memory": "75%",
-//},
-//}),
-//).ToMap()
+// httppresenter.New(
+// httppresenter.WithData(resp.Data),
+// httppresenter.WithMeta(map[string]interface{}{"execution_duration": 3 * time.Microsecond}),
+// httppresenter.WithExtension("status", map[string]interface{}{
+// "uptime":           "172800",
+// "last_maintenance": "2024-10-28T15:30:00Z",
+// "load": map[string]interface{}{
+// "cpu":    "65%",
+// "memory": "75%",
+// },
+// }),
+// ).ToMap()
 
 // type IPresenter interface {
 //	WithData(data interface{}) *Presenter
@@ -105,54 +105,54 @@ func WithExtension(key string, ex interface{}) func(*Presenter) {
 //	SuccessWithMSG(msg string, data interface{}) map[string]interface{}
 //	Error(err error) (int, map[string]interface{})
 //	ErrorWithMSG(msg string, err error) map[string]interface{}
-//}
+// }
 //
-//type Presenter struct {
+// type Presenter struct {
 //	resource map[string]interface{}
-//}
+// }
 //
-//func New() *Presenter {
+// func New() *Presenter {
 //	return &Presenter{resource: make(map[string]interface{})}
-//}
+// }
 //
-//func (p *Presenter) WithData(data interface{}) *Presenter {
+// func (p *Presenter) WithData(data interface{}) *Presenter {
 //	p.resource["data"] = data
 //
 //	return p
-//}
+// }
 //
-//func (p *Presenter) WithMeta(m map[string]interface{}) *Presenter {
+// func (p *Presenter) WithMeta(m map[string]interface{}) *Presenter {
 //	p.resource["meta"] = m
 //
 //	return p
-//}
+// }
 //
-//func (p *Presenter) WithExtention(key string, ex map[string]interface{}) *Presenter {
+// func (p *Presenter) WithExtention(key string, ex map[string]interface{}) *Presenter {
 //	p.resource[key] = ex
 //
 //	return p
-//}
+// }
 //
-//func (p *Presenter) ToMap() map[string]interface{} {
+// func (p *Presenter) ToMap() map[string]interface{} {
 //	return p.resource
-//}
+// }
 //
-//func (p *Presenter) Ok(data interface{}) map[string]interface{} {
+// func (p *Presenter) Ok(data interface{}) map[string]interface{} {
 //	return map[string]interface{}{
 //		"status": true,
 //		"data":   data,
 //	}
-//}
+// }
 //
-//func (p *Presenter) SuccessWithMSG(msg string, data interface{}) map[string]interface{} {
+// func (p *Presenter) SuccessWithMSG(msg string, data interface{}) map[string]interface{} {
 //	return map[string]interface{}{
 //		"status":  true,
 //		"message": msg,
 //		"data":    data,
 //	}
-//}
+// }
 //
-//func (p *Presenter) Error(err error) (int, map[string]interface{}) {
+// func (p *Presenter) Error(err error) (int, map[string]interface{}) {
 //	richErr, _ := richerror.Analysis(err)
 //	code := httpstatus.FromKind(richErr.Kind())
 //
@@ -165,12 +165,12 @@ func WithExtension(key string, ex interface{}) func(*Presenter) {
 //		"message": richErr.Message(),
 //		"errors":  errs,
 //	}
-//}
+// }
 //
-//func (p *Presenter) ErrorWithMSG(msg string, err error) map[string]interface{} {
+// func (p *Presenter) ErrorWithMSG(msg string, err error) map[string]interface{} {
 //	return map[string]interface{}{
 //		"status":  false,
 //		"message": msg,
 //		"errors":  err.Error(),
 //	}
-//}
+// }

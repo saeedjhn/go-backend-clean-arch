@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"log"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
@@ -17,7 +18,7 @@ type DB struct {
 	conn *mysql.Mysql
 }
 
-//var _ taskservice.Repository = (*DB)(nil)
+// var _ taskservice.Repository = (*DB)(nil)
 
 func New(conn *mysql.Mysql) *DB {
 	return &DB{
@@ -30,6 +31,8 @@ func (r *DB) Create(ctx context.Context, t entity.Task) (entity.Task, error) {
 
 	res, err := r.conn.Conn().Exec(query, t.UserID, t.Title, t.Description, t.Status)
 	if err != nil {
+		log.Println(err)
+
 		return entity.Task{},
 			richerror.New(_opMysqlTaskCreate).WithErr(err).
 				WithMessage(message.ErrorMsg500InternalServerError).
