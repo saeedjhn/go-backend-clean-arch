@@ -209,6 +209,20 @@ services:
   #      - elasticsearch
   ####################### END SETUP-ELK ################################################################################
 
+  ####################### SETUP-MONITORING ####################################################################################
+  ######################## Prometheus ########################
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: go-backend-clean-arch_prometheus
+    ports:
+      - "9000:9090"  # Prometheus Web UI
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - go-backend-clean-arch_network
+    restart: always
+
+
 volumes:
   mysql:
   redis:

@@ -33,14 +33,6 @@ type Application struct {
 	GracefulShutdownTimeout time.Duration `mapstructure:"graceful_shutdown_timeout"`
 }
 
-type Pprof struct {
-	Port              string        `mapstructure:"port"`
-	ReadTimeout       time.Duration `mapstructure:"read_timeout"`
-	ReadHeaderTimeout time.Duration `mapstructure:"read_header_timeout"`
-	WriteTimeout      time.Duration `mapstructure:"write_timeout"`
-	IdleTimeout       time.Duration `mapstructure:"idle_timeout"`
-}
-
 type HTTPServer struct {
 	Port    string        `mapstructure:"port"`
 	Timeout time.Duration `mapstructure:"timeout"`
@@ -55,6 +47,14 @@ type GRPCServer struct {
 	Time              time.Duration `mapstructure:"time"`
 }
 
+type Pprof struct {
+	Port              string        `mapstructure:"port"`
+	ReadTimeout       time.Duration `mapstructure:"read_timeout"`
+	ReadHeaderTimeout time.Duration `mapstructure:"read_header_timeout"`
+	WriteTimeout      time.Duration `mapstructure:"write_timeout"`
+	IdleTimeout       time.Duration `mapstructure:"idle_timeout"`
+}
+
 type CORS struct {
 	AllowOrigins     []string `mapstructure:"allow_origins"`
 	AllowMethods     []string `mapstructure:"allow_methods"`
@@ -62,15 +62,11 @@ type CORS struct {
 	AllowCredentials bool     `mapstructure:"allow_credentials"`
 }
 
-type Register struct {
-	Debug bool `mapstructure:"debug"`
-}
-
 type Config struct {
 	Application Application           `mapstructure:"application"`
-	Pprof       Pprof                 `mapstructure:"pprof"`
 	HTTPServer  HTTPServer            `mapstructure:"http_server"`
 	GRPCServer  GRPCServer            `mapstructure:"grpc_server"`
+	Pprof       Pprof                 `mapstructure:"pprof"`
 	CORS        CORS                  `mapstructure:"cors"`
 	Tracer      oteltracer.Config     `mapstructure:"tracer"`
 	Logger      jsonfilelogger.Config `mapstructure:"logger"`
@@ -79,5 +75,4 @@ type Config struct {
 	Redis       redis.Config          `mapstructure:"redis"`
 	Mongo       mongo.Config          `mapstructure:"mongo"`
 	Auth        authusecase.Config    `mapstructure:"auth"`
-	Register    Register              `mapstructure:"register"`
 }

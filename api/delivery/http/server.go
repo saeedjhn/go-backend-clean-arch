@@ -2,6 +2,8 @@ package http
 
 import (
 	"fmt"
+	"github.com/labstack/echo-contrib/echoprometheus"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
 
 	myMiddleware "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/middleware" //nolint:typecheck // nothing
 	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router"
@@ -40,6 +42,7 @@ func (s Server) Run() error {
 		AllowCredentials: s.App.Config.CORS.AllowCredentials,
 	}))
 	s.Router.Use(myMiddleware.Logger(s.App.Logger))
+	s.Router.Use(echoprometheus.NewMiddleware(configs.PrometheusSubSytemName))
 
 	// Router Setup
 	router.Setup(s.App, s.Router)
