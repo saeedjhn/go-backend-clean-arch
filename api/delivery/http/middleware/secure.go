@@ -10,9 +10,9 @@ const _HSTSMaxAgeOneYear = 31536000
 func Secure() echo.MiddlewareFunc {
 	return middleware.SecureWithConfig(middleware.SecureConfig{
 		Skipper:               nil,
-		CSPReportOnly:         false,
-		HSTSPreloadEnabled:    false,
-		ReferrerPolicy:        "",
+		CSPReportOnly:         true,                              // dev: true, prod: false
+		HSTSPreloadEnabled:    false,                             // HTTP Strict Transport Security, HTTP: false, HTTPS: true
+		ReferrerPolicy:        "strict-origin-when-cross-origin", // default: no-referrer
 		XSSProtection:         "1; mode=block",
 		ContentTypeNosniff:    "true",
 		XFrameOptions:         "DENY",
