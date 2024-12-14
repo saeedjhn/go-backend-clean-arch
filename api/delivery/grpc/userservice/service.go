@@ -2,6 +2,7 @@ package userservice
 
 import (
 	"context"
+
 	"github.com/saeedjhn/go-backend-clean-arch/api/proto/user/gen"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/taskdto"
 
@@ -53,6 +54,7 @@ func (u Service) Profile(ctx context.Context, req *gen.ProfileRequest) (*gen.Pro
 		return &gen.ProfileResponse{}, err
 	}
 
+	// return resp.ToProtobuf(), nil
 	return usermapper.MapProfileResponseToProtobuf(resp), nil
 }
 

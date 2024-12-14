@@ -7,6 +7,14 @@ import (
 )
 
 func (h *Handler) Create(c echo.Context) error {
+	// Tracer
+	_, span := h.trc.Span(
+		c.Request().Context(), "HTTP POST create",
+	)
+	span.SetAttributes(attributes(c))
+
+	defer span.End()
+
 	return c.JSON(http.StatusCreated, echo.Map{
 		"status":  true,
 		"message": "CREATE",

@@ -2,6 +2,7 @@ package http
 
 import (
 	"fmt"
+
 	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 

@@ -1,9 +1,10 @@
 package middleware
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 	"net/http"
 	"strconv"
+
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"

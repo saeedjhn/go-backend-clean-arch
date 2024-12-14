@@ -37,7 +37,7 @@ func TestCreateToken(t *testing.T) {
 	// refreshToken, _ := auth.CreateRefreshToken(userauthservicedto.CreateTokenRequest{Data: user})
 	// t.Log(refreshToken)
 
-	isAuthorized, err := auth.IsAuthorized(accessToken.Token, config.AccessTokenSecret)
+	isAuthorized, err := auth.IsAuthorized(accessToken, config.AccessTokenSecret)
 	if err != nil {
 		t.Fatal(err)
 	}

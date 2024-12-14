@@ -68,7 +68,6 @@ func (s *Span) SetStatus(code uint32, description string) {
 // RecordError records an error on the span, optionally with attributes.
 // Attributes can be provided as one or more maps of key-value pairs.
 // This is useful for adding context to the error being recorded.
-
 func (s *Span) RecordError(err error, attrs ...map[string]interface{}) {
 	if len(attrs) != 0 {
 		otelAttrs := s.convertToOtelAttributes(attrs)
@@ -93,9 +92,7 @@ func (s *Span) End(enableStackTrace ...bool) {
 	s.span.End(trace.WithStackTrace(stackTraceEnabled))
 }
 
-// convertToOtelAttributes converts a slice of attribute maps into a slice
-// of OpenTelemetry KeyValue attributes. This is used internally to transform
-// generic attributes into a format compatible with OpenTelemetry.
+// convertToOtelAttributes converts a slice of attribute maps into a slice of OpenTelemetry KeyValue attributes.
 func (s *Span) convertToOtelAttributes(attrs []map[string]interface{}) []attribute.KeyValue {
 	otelAttrs := make([]attribute.KeyValue, 0, len(attrs))
 

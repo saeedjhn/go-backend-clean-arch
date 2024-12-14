@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 // Design a route planning system that supports different algorithms like shortest distance, least traffic, or fastest time.
 
 type RoutePlanningAlgorithm interface {
@@ -41,23 +39,22 @@ func (r *RoutePlanner) PlanRoute(source, destination string) []string {
 	return r.routePlanningAlgorithm.FindRoute(source, destination)
 }
 
-func main() {
-	routePlanner := &RoutePlanner{}
-
-	shortestDistance := &ShortestDistance{}
-	leastTraffic := &LeastTraffic{}
-	fastestTime := &FastestTime{}
-
-	source := "A"
-	destination := "B"
-
-	routePlanner.SetRoutePlanningAlgorithm(shortestDistance)
-	fmt.Println("Shortest Distance Route:", routePlanner.PlanRoute(source, destination))
-
-	routePlanner.SetRoutePlanningAlgorithm(leastTraffic)
-	fmt.Println("Least Traffic Route:", routePlanner.PlanRoute(source, destination))
-
-	routePlanner.SetRoutePlanningAlgorithm(fastestTime)
-	fmt.Println("Fastest Time Route:", routePlanner.PlanRoute(source, destination))
-
-}
+// func main() {
+// 	routePlanner := &RoutePlanner{}
+//
+// 	shortestDistance := &ShortestDistance{}
+// 	leastTraffic := &LeastTraffic{}
+// 	fastestTime := &FastestTime{}
+//
+// 	source := "A"
+// 	destination := "B"
+//
+// 	routePlanner.SetRoutePlanningAlgorithm(shortestDistance)
+// 	fmt.Println("Shortest Distance Route:", routePlanner.PlanRoute(source, destination))
+//
+// 	routePlanner.SetRoutePlanningAlgorithm(leastTraffic)
+// 	fmt.Println("Least Traffic Route:", routePlanner.PlanRoute(source, destination))
+//
+// 	routePlanner.SetRoutePlanningAlgorithm(fastestTime)
+// 	fmt.Println("Fastest Time Route:", routePlanner.PlanRoute(source, destination))
+// }

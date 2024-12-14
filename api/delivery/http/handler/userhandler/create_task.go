@@ -1,9 +1,10 @@
 package userhandler //nolint:dupl // 1-79 lines are duplicate
 
 import (
+	"net/http"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/taskdto"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
-	"net/http"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/bind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"

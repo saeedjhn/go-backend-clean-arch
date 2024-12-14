@@ -1,8 +1,9 @@
 package userhandler
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 	"net/http"
+
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"

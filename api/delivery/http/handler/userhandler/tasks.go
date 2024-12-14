@@ -1,8 +1,9 @@
 package userhandler
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/taskdto"
 	"net/http"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/taskdto"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/bind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"

@@ -6,15 +6,6 @@ type DialogueReciter interface {
 	Recite()
 }
 
-func main() {
-	newToy := NewToy(SpiderMan{})
-	newToy.PerformDialogue()
-	newToy.SetSuperHero(SuperMan{})
-	newToy.PerformDialogue()
-	newToy.SetSuperHero(BatMan{})
-	newToy.PerformDialogue()
-}
-
 type Toy struct {
 	DialogueReciter DialogueReciter
 }
@@ -53,3 +44,12 @@ func (sum BatMan) Recite() {
 	log.Println("It's not who I am underneath, " +
 		"but what I do that defines me!")
 }
+
+// func main() {
+// 	newToy := NewToy(SpiderMan{})
+// 	newToy.PerformDialogue()
+// 	newToy.SetSuperHero(SuperMan{})
+// 	newToy.PerformDialogue()
+// 	newToy.SetSuperHero(BatMan{})
+// 	newToy.PerformDialogue()
+// }

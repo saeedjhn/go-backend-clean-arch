@@ -2,8 +2,9 @@ package authusecase
 
 import (
 	"fmt"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 
 	"github.com/golang-jwt/jwt/v5"
 )

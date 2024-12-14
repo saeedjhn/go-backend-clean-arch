@@ -22,8 +22,6 @@ const (
 	// The value of this enum is only relevant to the internals
 	// of the Go SDK.
 	Ok Code = 2
-
-	maxCode = 3
 )
 
 // Code is an 32-bit representation of a status state.

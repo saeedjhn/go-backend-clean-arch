@@ -30,13 +30,6 @@ type OpenTelemetry struct {
 }
 
 // New creates a new instance of OpenTelemetry with the provided configuration.
-//
-// Parameters:
-// - cfg: The configuration containing settings for OpenTelemetry, including service name, OTLP endpoint, and
-// other options.
-//
-// Returns:
-// - *OpenTelemetry: An unconfigured OpenTelemetry instance, ready for setup.
 func New(cfg Config) *OpenTelemetry {
 	return &OpenTelemetry{
 		cfg:            cfg,
@@ -46,14 +39,6 @@ func New(cfg Config) *OpenTelemetry {
 }
 
 // Configure initializes the OpenTelemetry by setting up the tracer provider and exporter.
-//
-// This method validates the configuration, creates an OTLP exporter, and configures the tracer provider
-// with the appropriate settings. The returned instance is fully functional for tracing operations.
-//
-// Parameters: None.
-//
-// Returns:
-// - error: An error if the configuration or initialization fails, such as missing endpoints or exporter setup issues.
 func (o *OpenTelemetry) Configure() error {
 	if len(o.cfg.Endpoint) == 0 {
 		return ErrOTLPEndpointRequired
@@ -73,14 +58,6 @@ func (o *OpenTelemetry) Configure() error {
 }
 
 // Span creates and starts a new span with the specified name and attributes.
-//
-// Parameters:
-// - ctx: The context to associate with the span.
-// - name: The name of the span.
-//
-// Returns:
-// - context.Context: The context associated with the span.
-// - trace.Span: The created span instance.
 func (o *OpenTelemetry) Span(
 	ctx context.Context,
 	name string,
@@ -91,12 +68,6 @@ func (o *OpenTelemetry) Span(
 }
 
 // Shutdown gracefully shuts down the tracer provider and flushes any remaining spans to the exporter.
-//
-// Parameters:
-// - ctx: The context for managing the shutdown operation.
-//
-// Returns:
-// - error: An error if the shutdown operation fails.
 func (o *OpenTelemetry) Shutdown(ctx context.Context) error {
 	if o.tracer == nil {
 		return nil // No tracer initialized, no need to shut down
@@ -114,14 +85,6 @@ func (o *OpenTelemetry) Shutdown(ctx context.Context) error {
 }
 
 // createExporter initializes an OpenTelemetry SpanExporter based on the provided configuration.
-// It supports both HTTP and gRPC exporters, depending on the specified endpoint.
-//
-// Parameters:
-// - cfg: Configuration containing the OTLP endpoint details.
-//
-// Returns:
-// - sdktrace.SpanExporter: The initialized span exporter.
-// - error: An error if exporter creation fails.
 func createExporter(cfg Config) (*otlptrace.Exporter, error) {
 	var (
 		// exp sdktrace.SpanExporter
@@ -154,14 +117,6 @@ func createExporter(cfg Config) (*otlptrace.Exporter, error) {
 }
 
 // createTraceProvider initializes a TracerProvider with the given exporter and configuration.
-// The TracerProvider is responsible for managing tracers and exporting spans.
-//
-// Parameters:
-// - cfg: Configuration containing service details and attributes.
-// - exp: The span exporter to use.
-//
-// Returns:
-// - *sdktrace.TracerProvider: The initialized tracer provider.
 func createTraceProvider(cfg Config, exp sdktrace.SpanExporter) *sdktrace.TracerProvider {
 	provider := sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(exp),

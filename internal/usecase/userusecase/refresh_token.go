@@ -2,6 +2,7 @@ package userusecase
 
 import (
 	"context"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"

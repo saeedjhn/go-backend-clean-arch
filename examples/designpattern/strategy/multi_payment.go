@@ -9,7 +9,8 @@ type PaymentMethod interface {
 }
 
 type CreditCard struct {
-	name, cardNumber string
+	// name string
+	cardNumber string
 }
 
 func (c *CreditCard) Pay(amount float64) string {
@@ -54,24 +55,24 @@ func (s *ShoppingCart) Checkout() string {
 	return s.paymentMethod.Pay(total)
 }
 
-func main() {
-	shoppingCart := &ShoppingCart{
-		items: []Item{
-			{"Laptop", 1500},
-			{"Smartphone", 1000},
-		},
-	}
-
-	creditCard := &CreditCard{"Chidozie C. Okafor", "4111-1111-1111-1111"}
-	paypal := &PayPal{"chidosiky2015@gmail.com"}
-	cryptocurrency := &Cryptocurrency{"0xAbcDe1234FghIjKlMnOp"}
-
-	shoppingCart.SetPaymentMethod(creditCard)
-	fmt.Println(shoppingCart.Checkout())
-
-	shoppingCart.SetPaymentMethod(paypal)
-	fmt.Println(shoppingCart.Checkout())
-
-	shoppingCart.SetPaymentMethod(cryptocurrency)
-	fmt.Println(shoppingCart.Checkout())
-}
+// func main() {
+// 	shoppingCart := &ShoppingCart{
+// 		items: []Item{
+// 			{"Laptop", 1500},
+// 			{"Smartphone", 1000},
+// 		},
+// 	}
+//
+// 	creditCard := &CreditCard{"Chidozie C. Okafor", "4111-1111-1111-1111"}
+// 	paypal := &PayPal{"chidosiky2015@gmail.com"}
+// 	cryptocurrency := &Cryptocurrency{"0xAbcDe1234FghIjKlMnOp"}
+//
+// 	shoppingCart.SetPaymentMethod(creditCard)
+// 	fmt.Println(shoppingCart.Checkout())
+//
+// 	shoppingCart.SetPaymentMethod(paypal)
+// 	fmt.Println(shoppingCart.Checkout())
+//
+// 	shoppingCart.SetPaymentMethod(cryptocurrency)
+// 	fmt.Println(shoppingCart.Checkout())
+// }
