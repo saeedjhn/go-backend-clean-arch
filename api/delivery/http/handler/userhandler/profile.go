@@ -1,13 +1,13 @@
 package userhandler
 
 import (
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 	"net/http"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/dto/userdto"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/presenter/httppresenter"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
@@ -40,13 +40,9 @@ func (h *Handler) Profile(c echo.Context) error {
 			})
 	}
 
-	return c.JSON(http.StatusOK, httppresenter.New(
-		httppresenter.WithData(resp.Data),
-	).ToMap())
-
-	// return c.JSON(http.StatusOK, httppresenter.New().WithData(resp).ToMap())
-
-	// return c.JSON(http.StatusOK, h.present.WithData(resp))
-
-	// return c.JSON(http.StatusOK, h.present.Ok(resp))
+	return c.JSON(http.StatusOK, echo.Map{
+		"status":  true,
+		"message": message.Msg200Ok,
+		"data":    resp,
+	})
 }
