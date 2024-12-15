@@ -1,4 +1,4 @@
-package adapter
+package main
 
 import (
 	"context"
@@ -6,12 +6,10 @@ import (
 	"maps"
 	"strconv"
 
-	"github.com/saeedjhn/go-backend-clean-arch/examples/client/dto"
-
 	"github.com/go-resty/resty/v2"
 )
 
-type HTTPClient struct {
+type HTTPAdaptor struct {
 	addr   string
 	Header map[string]string
 	Params map[string]string
@@ -19,8 +17,8 @@ type HTTPClient struct {
 	client *resty.Client
 }
 
-func NewHTTPClient(addr string) *HTTPClient {
-	return &HTTPClient{
+func NewHTTPAdaptor(addr string) *HTTPAdaptor {
+	return &HTTPAdaptor{
 		addr: addr,
 		Header: map[string]string{
 			"Content-Type": "application/json",
@@ -31,38 +29,38 @@ func NewHTTPClient(addr string) *HTTPClient {
 	}
 }
 
-func (c *HTTPClient) WithHeader(m map[string]string) *HTTPClient {
+func (c *HTTPAdaptor) WithHeader(m map[string]string) *HTTPAdaptor {
 	maps.Copy(c.Header, m)
 
 	return c
 }
 
-func (c *HTTPClient) WithParam(key, value string) *HTTPClient {
+func (c *HTTPAdaptor) WithParam(key, value string) *HTTPAdaptor {
 	c.Params[key] = value
 
 	return c
 }
 
-func (c *HTTPClient) WithParams(m map[string]string) *HTTPClient {
+func (c *HTTPAdaptor) WithParams(m map[string]string) *HTTPAdaptor {
 	c.Params = m
 
 	return c
 }
 
-func (c *HTTPClient) WithPath(key, value string) *HTTPClient {
+func (c *HTTPAdaptor) WithPath(key, value string) *HTTPAdaptor {
 	c.Paths[key] = value
 
 	return c
 }
 
-func (c *HTTPClient) WithPathParams(m map[string]string) *HTTPClient {
+func (c *HTTPAdaptor) WithPathParams(m map[string]string) *HTTPAdaptor {
 	c.Paths = m
 
 	return c
 }
 
-func (c *HTTPClient) FetchByID(ctx context.Context, req dto.Request) (dto.Response, error) {
-	var rs dto.Response
+func (c *HTTPAdaptor) FetchByID(ctx context.Context, req Request) (Response, error) {
+	var rs Response
 
 	r := c.client.R().
 		SetContext(ctx).

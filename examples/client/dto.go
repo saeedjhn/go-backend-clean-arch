@@ -1,4 +1,4 @@
-package dto
+package main
 
 type Request struct {
 	ID uint64

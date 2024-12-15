@@ -4,10 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-
-	"github.com/saeedjhn/go-backend-clean-arch/examples/client/adapter"
-	"github.com/saeedjhn/go-backend-clean-arch/examples/client/contract"
-	"github.com/saeedjhn/go-backend-clean-arch/examples/client/dto"
 )
 
 // type PresenceClient interface {
@@ -15,17 +11,17 @@ import (
 // }
 
 type Service struct {
-	client contract.Client
+	client Client
 }
 
-func New(client contract.Client) *Service {
+func New(client Client) *Service {
 	return &Service{client: client}
 }
 
-func (s Service) GetByID(ctx context.Context, req dto.Request) (dto.Response, error) {
+func (s Service) GetByID(ctx context.Context, req Request) (Response, error) {
 	resp, err := s.client.FetchByID(ctx, req)
 	if err != nil {
-		return dto.Response{}, fmt.Errorf("error from client: %w", err)
+		return Response{}, fmt.Errorf("error from client: %w", err)
 	}
 
 	return resp, nil
@@ -34,10 +30,10 @@ func (s Service) GetByID(ctx context.Context, req dto.Request) (dto.Response, er
 func main() {
 	addr := "https://jsonplaceholder.typicode.com/posts/{postId}"
 
-	client := adapter.NewHTTPClient(addr)
+	client := NewHTTPAdaptor(addr)
 	// client.WithPath("postId", "1")
 
-	req := dto.Request{ID: 1}
+	req := Request{ID: 1}
 	svc := New(client)
 	resp, err := svc.GetByID(context.Background(), req)
 	if err != nil {
