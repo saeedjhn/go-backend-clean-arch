@@ -38,14 +38,14 @@ func (s Server) Run() error {
 	s.Router.Use(echoprometheus.NewMiddleware(configs.PrometheusSubSytemName))
 	s.Router.Use(myMiddleware.CORS(s.App.Config.CORS))
 	s.Router.Use(myMiddleware.Secure())
-	s.Router.Use(myMiddleware.Logger(s.App.Logger))
+	s.Router.Use(myMiddleware.Logger(s.App, configs.LoggerExcludePath))
 
 	// Router Setup
 	router.Setup(s.App, s.Router)
 
 	address := fmt.Sprintf(":%s", s.App.Config.HTTPServer.Port)
 
-	s.App.Logger.Infow("Start.HTTP.Router", "Server.HTTP.Config", s.App.Config.HTTPServer)
+	s.App.Logger.Infow("Server.HTTP.Start", "config", s.App.Config.HTTPServer)
 
 	return s.Router.Start(address)
 }

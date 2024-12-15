@@ -73,11 +73,11 @@ func main() {
 	}
 
 	// Log the application configuration at startup
-	app.Logger.Infow("Config", "config", app.Config)
+	app.Logger.Infow("App.Startup.Config", "config", app.Config)
 
 	// Run database migrations
 	if err = migrations.Up(app); err != nil {
-		app.Logger.Fatalf("Migrations.Up: %v", err)
+		app.Logger.Fatalf("DB.Migrations.Up: %v", err)
 	}
 
 	// Set up signal handling for graceful shutdown (e.g., SIGINT, SIGTERM)
@@ -122,7 +122,7 @@ func main() {
 	}
 
 	// Log received interrupt signal and shutting down gracefully
-	app.Logger.Info("Received.Interrupt.Signal.For.Shutting.Down.Gracefully")
+	app.Logger.Info("App.Shutdown.Gracefully - Received interrupt signal, shutting down gracefully")
 
 	// Close Redis client connection during shutdown
 

@@ -71,7 +71,7 @@ func main() {
 	}
 
 	// Log the application configuration at startup
-	app.Logger.Infow("Config", "config", app.Config)
+	app.Logger.Infow("App.Startup.Config", "config", app.Config)
 
 	// Set up signal handling for graceful shutdown (e.g., SIGINT, SIGTERM)
 	quit := make(chan os.Signal, 1)
@@ -96,11 +96,10 @@ func main() {
 			BaseContext:                  nil,
 			ConnContext:                  nil,
 		}
-
-		log.Printf("Server PPROF is starting on: %s", app.Config.Pprof.Port)
+		app.Logger.Infof("Server.PPROF.Starting - Starting PPROF server on port: %s", app.Config.Pprof.Port)
 
 		if err = server.ListenAndServe(); err != nil {
-			log.Fatal(err)
+			app.Logger.Fatalf("Server.PPROF.ListenAndServe - Failed to start PPROF server: %v", err)
 		}
 	}()
 
@@ -115,7 +114,7 @@ func main() {
 	defer cancel()
 
 	// Log received interrupt signal and shutting down gracefully
-	app.Logger.Info("Received.Interrupt.Signal.For.Shutting.Down.Gracefully")
+	app.Logger.Info("App.Shutdown.Gracefully - Received interrupt signal, shutting down gracefully")
 
 	// Optionally, close connections
 

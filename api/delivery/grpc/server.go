@@ -41,7 +41,7 @@ func (s Server) Run() error {
 		)
 	}
 
-	s.app.Logger.Infow("Start.GRPC.Server", "Config", s.app.Config.GRPCServer)
+	s.app.Logger.Infow("Server.GRPC.Start", "config", s.app.Config.GRPCServer)
 
 	gs := grpc.NewServer(grpc.KeepaliveParams(keepalive.ServerParameters{
 		MaxConnectionIdle: s.app.Config.GRPCServer.MaxConnectionIdle,
