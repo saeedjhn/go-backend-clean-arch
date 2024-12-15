@@ -23,8 +23,7 @@ type DB struct {
 }
 
 type Application struct {
-	Config *configs.Config
-	// ConfigOption configs.Option
+	Config  *configs.Config
 	Trc     contract.Tracer
 	Logger  contract.Logger
 	Cache   Cache

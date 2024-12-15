@@ -75,11 +75,5 @@ func (h *Handler) Register(c echo.Context) error {
 			})
 	}
 
-	return c.JSON(http.StatusCreated,
-		echo.Map{
-			"status":  true,
-			"message": message.MsgUserRegisterSuccessfully,
-			"data":    resp,
-		},
-	)
+	return c.JSON(http.StatusCreated, resp)
 }

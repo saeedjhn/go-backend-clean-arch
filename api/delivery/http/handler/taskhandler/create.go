@@ -15,9 +15,5 @@ func (h *Handler) Create(c echo.Context) error {
 
 	defer span.End()
 
-	return c.JSON(http.StatusCreated, echo.Map{
-		"status":  true,
-		"message": "CREATE",
-		"data":    "",
-	})
+	return c.JSON(http.StatusCreated, echo.Map{"data": ""})
 }

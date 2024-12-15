@@ -62,11 +62,5 @@ func (h *Handler) Tasks(c echo.Context) error {
 			})
 	}
 
-	return c.JSON(http.StatusOK,
-		echo.Map{
-			"status":  true,
-			"message": message.MsgUserGetAllTaskSuccessfully,
-			"data":    resp,
-		},
-	)
+	return c.JSON(http.StatusOK, resp)
 }

@@ -75,11 +75,5 @@ func (h *Handler) RefreshToken(c echo.Context) error {
 			})
 	}
 
-	return c.JSON(http.StatusOK,
-		echo.Map{
-			"status":  true,
-			"message": message.MsgUserGetRefreshTokenSuccessfully,
-			"data":    resp,
-		},
-	)
+	return c.JSON(http.StatusOK, resp)
 }

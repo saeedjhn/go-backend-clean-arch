@@ -74,11 +74,5 @@ func (h *Handler) Login(c echo.Context) error {
 			})
 	}
 
-	return c.JSON(http.StatusOK,
-		echo.Map{
-			"status":  true,
-			"message": message.MsgUserLoginSuccessfully,
-			"data":    resp,
-		},
-	)
+	return c.JSON(http.StatusOK, resp)
 }

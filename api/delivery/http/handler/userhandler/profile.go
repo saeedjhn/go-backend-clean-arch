@@ -1,7 +1,6 @@
 package userhandler
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 	"net/http"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
@@ -40,9 +39,5 @@ func (h *Handler) Profile(c echo.Context) error {
 			})
 	}
 
-	return c.JSON(http.StatusOK, echo.Map{
-		"status":  true,
-		"message": message.Msg200Ok,
-		"data":    resp,
-	})
+	return c.JSON(http.StatusOK, resp)
 }
