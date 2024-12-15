@@ -18,23 +18,25 @@ type Usecase struct {
 }
 
 func NewUsecase(
-	cfg *configs.Config,
+	config *configs.Config,
 	_ contract.Logger,
+	trc contract.Tracer,
 	cache Cache,
 	db DB,
 ) *Usecase {
 	// Repositories
 	taskRepo := mysqltask.New(db.MySQL)
-	userRepo := mysqluser.New(db.MySQL)
+	userRepo := mysqluser.New(trc, db.MySQL)
 	userRdsRepo := redisuser.New(cache.Redis) // Or userInMemRepo := inmemoryuser.New(cache.InMem)
 
 	// Dependencies
 
 	// Usecase
-	taskIntr := taskusecase.New(cfg, taskRepo)
-	authIntr := authusecase.New(cfg.Auth)
+	taskIntr := taskusecase.New(config, taskRepo)
+	authIntr := authusecase.New(config.Auth)
 	userIntr := userusecase.New(
-		cfg,
+		config,
+		trc,
 		authIntr,
 		userRdsRepo,
 		userRepo,

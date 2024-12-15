@@ -7,6 +7,7 @@ import (
 type Span interface {
 	End(enableStackTrace ...bool)
 	SetAttributes(attrs map[string]interface{})
+	SetAttribute(key, value string)
 	AddEvent(name string, attrs ...map[string]interface{})
 	SetName(name string)
 	SetStatus(code uint32, description string)

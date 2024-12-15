@@ -12,6 +12,13 @@ import (
 )
 
 func (i *Interactor) Login(ctx context.Context, req userdto.LoginRequest) (userdto.LoginResponse, error) {
+	ctx, span := i.trc.Span(ctx, "Login")
+	span.SetAttributes(map[string]interface{}{
+		"usecase.name":    "Login",
+		"usecase.request": req,
+	})
+	defer span.End()
+
 	user, err := i.repository.GetByMobile(ctx, req.Mobile)
 	if err != nil {
 		return userdto.LoginResponse{}, err

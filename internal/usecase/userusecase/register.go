@@ -13,6 +13,13 @@ import (
 )
 
 func (i *Interactor) Register(ctx context.Context, req userdto.RegisterRequest) (userdto.RegisterResponse, error) {
+	ctx, span := i.trc.Span(ctx, "Register")
+	span.SetAttributes(map[string]interface{}{
+		"usecase.name":    "Register",
+		"usecase.request": req,
+	})
+	defer span.End()
+
 	isUnique, err := i.repository.IsMobileUnique(ctx, req.Mobile)
 	if err != nil {
 		return userdto.RegisterResponse{}, err

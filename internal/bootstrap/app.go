@@ -24,8 +24,8 @@ type DB struct {
 
 type Application struct {
 	Config  *configs.Config
-	Trc     contract.Tracer
 	Logger  contract.Logger
+	Trc     contract.Tracer
 	Cache   Cache
 	DB      DB
 	Usecase *Usecase
@@ -71,6 +71,7 @@ func (a *Application) setup() error {
 	a.Usecase = NewUsecase(
 		a.Config,
 		a.Logger,
+		a.Trc,
 		a.Cache,
 		a.DB,
 	)

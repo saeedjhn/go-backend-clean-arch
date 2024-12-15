@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
@@ -14,19 +15,30 @@ import (
 )
 
 type DB struct {
+	trc  contract.Tracer
 	conn *mysql.Mysql
 }
 
-//var _ userservice.Repository = (*DB)(nil)
+// var _ userservice.Repository = (*DB)(nil)
 
-func New(conn *mysql.Mysql) *DB {
+func New(trc contract.Tracer, conn *mysql.Mysql) *DB {
 	return &DB{
+		trc:  trc,
 		conn: conn,
 	}
 }
 
 func (r *DB) Create(ctx context.Context, u entity.User) (entity.User, error) {
+	ctx, span := r.trc.Span(ctx, "DB Create")
+	span.SetAttributes(map[string]interface{}{
+		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO
+		"db.operation": "INSERT", // SELECT, INSERT, UPDATE, DELETE
+	})
+	defer span.End()
+
 	query := "INSERT INTO users (name, mobile, email, password) values(?, ?, ?, ?)"
+
+	span.SetAttribute("db.query", query)
 
 	res, err := r.conn.Conn().Exec(query, u.Name, u.Mobile, u.Email, u.Password)
 	if err != nil {
@@ -43,10 +55,20 @@ func (r *DB) Create(ctx context.Context, u entity.User) (entity.User, error) {
 }
 
 func (r *DB) IsMobileUnique(ctx context.Context, mobile string) (bool, error) {
+	ctx, span := r.trc.Span(ctx, "DB IsMobileUnique")
+	span.SetAttributes(map[string]interface{}{
+		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO
+		"db.operation": "SELECT", // SELECT, INSERT, UPDATE, DELETE
+	})
+	defer span.End()
+
 	var exists bool
 
+	query := "select exists(select 1 from users where mobile = ?)"
 	err := r.conn.Conn().
-		QueryRow(`select exists(select 1 from users where mobile = ?)`, mobile).Scan(&exists)
+		QueryRow(query, mobile).Scan(&exists)
+
+	span.SetAttribute("db.query", query)
 
 	if err != nil {
 		return false,
@@ -63,8 +85,17 @@ func (r *DB) IsMobileUnique(ctx context.Context, mobile string) (bool, error) {
 }
 
 func (r *DB) GetByMobile(ctx context.Context, mobile string) (entity.User, error) {
+	ctx, span := r.trc.Span(ctx, "DB GetByMobile")
+	span.SetAttributes(map[string]interface{}{
+		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO
+		"db.operation": "SELECT", // SELECT, INSERT, UPDATE, DELETE
+	})
+	defer span.End()
+
 	query := "SELECT * FROM users WHERE mobile = ?"
 	row := r.conn.Conn().QueryRow(query, mobile)
+
+	span.SetAttribute("db.query", query)
 
 	user, err := scanUser(row)
 	if err != nil {
@@ -83,8 +114,17 @@ func (r *DB) GetByMobile(ctx context.Context, mobile string) (entity.User, error
 }
 
 func (r *DB) GetByID(ctx context.Context, id uint64) (entity.User, error) {
+	ctx, span := r.trc.Span(ctx, "DB GetByID")
+	span.SetAttributes(map[string]interface{}{
+		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO
+		"db.operation": "SELECT", // SELECT, INSERT, UPDATE, DELETE
+	})
+	defer span.End()
+
 	query := "SELECT * FROM users WHERE id = ?"
 	row := r.conn.Conn().QueryRow(query, id)
+
+	span.SetAttribute("db.query", query)
 
 	user, err := scanUser(row)
 	if err != nil {

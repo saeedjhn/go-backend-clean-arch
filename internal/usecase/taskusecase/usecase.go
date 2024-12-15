@@ -16,7 +16,7 @@ type Repository interface {
 }
 
 type Interactor struct {
-	config     *configs.Config
+	cfg        *configs.Config
 	repository Repository
 }
 
@@ -27,7 +27,7 @@ func New(
 	repository Repository,
 ) *Interactor {
 	return &Interactor{
-		config:     config,
+		cfg:        config,
 		repository: repository,
 	}
 }

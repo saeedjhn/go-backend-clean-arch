@@ -7,6 +7,13 @@ import (
 )
 
 func (i *Interactor) Profile(ctx context.Context, req userdto.ProfileRequest) (userdto.ProfileResponse, error) {
+	ctx, span := i.trc.Span(ctx, "Profile")
+	span.SetAttributes(map[string]interface{}{
+		"usecase.name":    "Profile",
+		"usecase.request": req,
+	})
+	defer span.End()
+
 	user, err := i.repository.GetByID(ctx, req.ID)
 	if err != nil {
 		return userdto.ProfileResponse{}, err

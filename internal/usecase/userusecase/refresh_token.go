@@ -15,7 +15,14 @@ func (i *Interactor) RefreshToken(
 	ctx context.Context,
 	req userdto.RefreshTokenRequest,
 ) (userdto.RefreshTokenResponse, error) {
-	resp, err := i.authIntr.ParseToken(i.config.Auth.RefreshTokenSecret, req.RefreshToken)
+	ctx, span := i.trc.Span(ctx, "RefreshToken")
+	span.SetAttributes(map[string]interface{}{
+		"usecase.name":    "RefreshToken",
+		"usecase.request": req,
+	})
+	defer span.End()
+
+	resp, err := i.authIntr.ParseToken(i.cfg.Auth.RefreshTokenSecret, req.RefreshToken)
 	if err != nil {
 		return userdto.RefreshTokenResponse{}, richerror.New(_opUserServiceRefreshToken).WithErr(err).
 			WithMessage(message.ErrorMsg403Forbidden).

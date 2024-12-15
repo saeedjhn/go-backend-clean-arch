@@ -2,6 +2,7 @@ package userusecase
 
 import (
 	"context"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 	"time"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
@@ -29,7 +30,8 @@ type Cache interface {
 }
 
 type Interactor struct {
-	config     *configs.Config
+	cfg        *configs.Config
+	trc        contract.Tracer
 	authIntr   AuthInteractor
 	cache      Cache
 	repository Repository
@@ -38,13 +40,15 @@ type Interactor struct {
 // var _ userhandler.Interactor = (*Interactor)(nil) // Commented, because it happens import cycle.
 
 func New(
-	config *configs.Config,
+	cfg *configs.Config,
+	trc contract.Tracer,
 	authIntr AuthInteractor,
 	cache Cache,
 	repository Repository,
 ) *Interactor {
 	return &Interactor{
-		config:     config,
+		cfg:        cfg,
+		trc:        trc,
 		authIntr:   authIntr,
 		cache:      cache,
 		repository: repository,

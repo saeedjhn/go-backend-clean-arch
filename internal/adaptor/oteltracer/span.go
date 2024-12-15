@@ -23,6 +23,13 @@ func NewSpan(span trace.Span) *Span {
 	return &Span{span: span}
 }
 
+// SetAttribute set attribute on the span.
+// Attribute are passed as key-value pair and converted
+// into OpenTelemetry-compatible attribute.
+func (s *Span) SetAttribute(key, value string) {
+	s.span.SetAttributes(attribute.String(key, value))
+}
+
 // SetAttributes sets multiple attributes on the span.
 // Attributes are passed as a map of key-value pairs and are converted
 // into OpenTelemetry-compatible attributes.
