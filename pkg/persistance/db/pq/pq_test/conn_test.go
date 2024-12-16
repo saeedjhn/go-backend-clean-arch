@@ -3,11 +3,11 @@ package pq_test
 import (
 	"testing"
 
-	pq2 "github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
 )
 
 func TestConn(t *testing.T) {
-	cfg := pq2.Config{
+	cfg := pq.Config{
 		Host:            "localhost", // usage docker: hostName(container name)
 		Port:            "5001",      // usage docker: postName(5342)
 		Username:        "admin",
@@ -19,7 +19,7 @@ func TestConn(t *testing.T) {
 		ConnMaxLiftTime: 5,
 	}
 
-	pq := pq2.New(cfg)
+	pq := pq.New(cfg)
 	if err := pq.ConnectTo(); err != nil {
 		t.Fatal(err)
 	}

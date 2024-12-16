@@ -33,7 +33,7 @@ func main() {
 	client := NewHTTPAdaptor(addr)
 	// client.WithPath("postId", "1")
 
-	req := Request{ID: 1}
+	req := Request{ID: 1000}
 	svc := New(client)
 	resp, err := svc.GetByID(context.Background(), req)
 	if err != nil {

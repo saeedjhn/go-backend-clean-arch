@@ -28,8 +28,8 @@ func (h *Handler) Profile(c echo.Context) error {
 		ctx, userdto.ProfileRequest{ID: claims.UserID},
 	)
 	if err != nil {
-		richErr, _ := richerror.Analysis(err)
-		code := httpstatus.FromKind(richErr.Kind())
+		richErr := richerror.Analysis(err)
+		code := httpstatus.MapkindToHTTPStatusCode(richErr.Kind())
 
 		return echo.NewHTTPError(code,
 			echo.Map{

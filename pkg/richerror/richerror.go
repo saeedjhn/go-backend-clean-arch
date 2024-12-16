@@ -2,11 +2,8 @@ package richerror
 
 import (
 	"errors"
-	"strings"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
-
-	"github.com/rotisserie/eris"
 )
 
 type Op string
@@ -17,7 +14,6 @@ type RichError struct {
 	message      string
 	kind         kind.Kind
 	meta         map[string]interface{}
-	stackTrace   map[string]interface{}
 }
 
 func (e RichError) Op() Op {
@@ -50,18 +46,12 @@ func (e RichError) Meta() map[string]interface{} {
 	return e.meta
 }
 
-func (e RichError) StackTrace() map[string]interface{} {
-	return e.stackTrace
-}
-
 func (e RichError) Get() map[string]interface{} {
 	return map[string]interface{}{
-		"op":          e.Op(),
-		"error":       e.Error(),
-		"message":     e.Message(),
-		"kind":        e.Kind(),
-		"meta":        e.Meta(),
-		"stack_trace": e.StackTrace(),
+		"op":      e.Op(),
+		"error":   e.Error(),
+		"message": e.Message(),
+		"kind":    e.Kind(),
 	}
 }
 
@@ -99,21 +89,6 @@ func (r BuilderError) WithKind(kind kind.Kind) BuilderError {
 
 func (r BuilderError) WithMeta(meta map[string]interface{}) BuilderError {
 	r.meta = meta
-
-	return r
-}
-
-func (r BuilderError) WithStackTrace(message ...string) BuilderError {
-	var msgForEris string
-
-	if len(message) == 0 {
-		msgForEris = r.message
-	} else {
-		msgForEris = strings.Join(message, " ")
-	}
-
-	stackErr := eris.ToJSON(eris.New(msgForEris), true)
-	r.stackTrace = stackErr
 
 	return r
 }
@@ -204,23 +179,20 @@ func (r BuilderError) Build() RichError {
 	return r.RichError
 }
 
-func Analysis(err error) (RichError, error) {
-	var richError BuilderError
-	switch {
-	case errors.As(err, &richError):
-		var re BuilderError
-		errors.As(err, &re)
+func Analysis(err error) RichError {
+	var richErr BuilderError
 
+	switch {
+	case errors.As(err, &richErr):
 		return RichError{
-			op:           re.Op(),
-			wrappedError: re.WrappedError(),
-			message:      re.Message(),
-			kind:         re.Kind(),
-			meta:         re.Meta(),
-			stackTrace:   re.StackTrace(),
-		}, nil
+			op:           richErr.Op(),
+			wrappedError: richErr.WrappedError(),
+			message:      richErr.Message(),
+			kind:         richErr.Kind(),
+			meta:         richErr.Meta(),
+		}
 
 	default:
-		return RichError{}, err
+		return RichError{}
 	}
 }

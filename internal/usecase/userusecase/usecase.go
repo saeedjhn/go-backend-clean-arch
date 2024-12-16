@@ -2,8 +2,9 @@ package userusecase
 
 import (
 	"context"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/domain/entity"

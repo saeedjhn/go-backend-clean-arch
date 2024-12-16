@@ -4,13 +4,13 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
+	"encoding/base64"
 	"errors"
 	"fmt"
 )
 
 type Either int
 
-// either 16, 24, or 32 bytes to select.
 const (
 	Either16 Either = 16
 	Either24 Either = 24
@@ -25,54 +25,78 @@ func New(secretKey string) *CryptAES {
 	return &CryptAES{secretKey: secretKey}
 }
 
-func (a *CryptAES) Encrypt(plainText string) (string, error) {
-	s, err := a.checkSecretKeyLen()
-	if err != nil {
-		return s, err
+func (c *CryptAES) SetSecret(secret string) *CryptAES {
+	c.secretKey = secret
+
+	return c
+}
+
+func (c *CryptAES) GetSecret() string {
+	return c.secretKey
+}
+
+func (c *CryptAES) Encrypt(plainText string) (string, error) {
+	if err := c.checkSecretKeyLen(); err != nil {
+		return "", err
 	}
 
-	newCipher, err := aes.NewCipher([]byte(a.secretKey))
+	// Create AES cipher
+	newCipher, err := aes.NewCipher([]byte(c.secretKey))
 	if err != nil {
 		return "", fmt.Errorf("failed to create AES cipher: %w", err)
 	}
 
+	// Create GCM cipher mode
 	gcm, err := cipher.NewGCM(newCipher)
 	if err != nil {
 		return "", fmt.Errorf("failed to create GCM cipher: %w", err)
 	}
 
-	// Generate a 12-byte nonce for GCM.
+	// Generate c secure random nonce
 	nonce := make([]byte, gcm.NonceSize())
-	_, err = rand.Read(nonce)
-	if err != nil {
+	if _, err = rand.Read(nonce); err != nil {
 		return "", fmt.Errorf("failed to generate random nonce: %w", err)
 	}
 
-	// Append nonce to ciphertext.
+	// Encrypt the plaintext and prepend the nonce
 	ciphertext := gcm.Seal(nonce, nonce, []byte(plainText), nil)
 
-	return string(ciphertext), nil
+	return base64.StdEncoding.EncodeToString(ciphertext), nil
 }
 
-func (a *CryptAES) Decrypt(cipherText string) (string, error) {
-	newCipher, err := aes.NewCipher([]byte(a.secretKey))
+func (c *CryptAES) Decrypt(cipherText string) (string, error) {
+	cipherData, err := base64.StdEncoding.DecodeString(cipherText)
+	if err != nil {
+		return "", fmt.Errorf("failed to decode Base64: %w", err)
+	}
+
+	// Create AES cipher
+	newCipher, err := aes.NewCipher([]byte(c.secretKey))
 	if err != nil {
 		return "", fmt.Errorf("failed to create AES cipher: %w", err)
 	}
 
+	// Create GCM cipher mode
 	gcm, err := cipher.NewGCM(newCipher)
 	if err != nil {
 		return "", fmt.Errorf("failed to create GCM cipher: %w", err)
 	}
 
 	nonceSize := gcm.NonceSize()
-	if len(cipherText) < nonceSize {
+	if len(cipherData) < nonceSize {
 		return "", errors.New("ciphertext is too short to contain nonce and data")
 	}
 
-	nonce, ciphertext := cipherText[:nonceSize], cipherText[nonceSize:]
+	// Extract nonce and ciphertext
+	nonce, ciphertext := cipherData[:nonceSize], cipherData[nonceSize:]
 
-	plaintext, err := gcm.Open(nil, []byte(nonce), []byte(ciphertext), nil)
+	// Verify nonce length
+	if len(nonce) != nonceSize {
+		return "", fmt.Errorf("invalid nonce length: expected %d, got %d", nonceSize, len(nonce))
+	}
+
+	// Decrypt the ciphertext
+	plaintext, err := gcm.Open(nil, nonce, ciphertext, nil) // #nosec G407
 	if err != nil {
 		return "", fmt.Errorf("failed to decrypt ciphertext: %w", err)
 	}
@@ -80,18 +104,18 @@ func (a *CryptAES) Decrypt(cipherText string) (string, error) {
 	return string(plaintext), nil
 }
 
-func (a *CryptAES) checkSecretKeyLen() (string, error) {
-	switch Either(len(a.secretKey)) {
+func (c *CryptAES) checkSecretKeyLen() error {
+	switch Either(len(c.secretKey)) {
 	case Either16, Either24, Either32:
+		// Valid key lengths
 	default:
-		return "", fmt.Errorf(
+		return fmt.Errorf(
 			"invalid key length: got %d, expected one of %d, %d, or %d bytes",
-			len(a.secretKey),
+			len(c.secretKey),
 			Either16,
 			Either24,
 			Either32,
 		)
 	}
-
-	return "", nil
+	return nil
 }

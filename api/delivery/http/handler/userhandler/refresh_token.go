@@ -36,8 +36,8 @@ func (h *Handler) RefreshToken(c echo.Context) error {
 
 	// Validation
 	if fieldsErrs, err := h.vld.ValidateRefreshTokenRequest(req); err != nil {
-		richErr, _ := richerror.Analysis(err)
-		code := httpstatus.FromKind(richErr.Kind())
+		richErr := richerror.Analysis(err)
+		code := httpstatus.MapkindToHTTPStatusCode(richErr.Kind())
 
 		return echo.NewHTTPError(code,
 			echo.Map{
@@ -64,8 +64,8 @@ func (h *Handler) RefreshToken(c echo.Context) error {
 	// Usage Use-case
 	resp, err := h.userIntr.RefreshToken(ctx, req)
 	if err != nil {
-		richErr, _ := richerror.Analysis(err)
-		code := httpstatus.FromKind(richErr.Kind())
+		richErr := richerror.Analysis(err)
+		code := httpstatus.MapkindToHTTPStatusCode(richErr.Kind())
 
 		return echo.NewHTTPError(code,
 			echo.Map{

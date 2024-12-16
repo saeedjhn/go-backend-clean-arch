@@ -6,7 +6,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 )
 
-func FromKind(k kind.Kind) int {
+func MapkindToHTTPStatusCode(k kind.Kind) int {
 	switch k { //nolint:exhaustive // missing cases in switch of type kind.Kind
 	case kind.KindStatusContinue:
 		return http.StatusContinue

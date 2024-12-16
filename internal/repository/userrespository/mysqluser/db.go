@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
@@ -29,7 +30,7 @@ func New(trc contract.Tracer, conn *mysql.Mysql) *DB {
 }
 
 func (r *DB) Create(ctx context.Context, u entity.User) (entity.User, error) {
-	ctx, span := r.trc.Span(ctx, "DB Create")
+	_, span := r.trc.Span(ctx, "DB Create")
 	span.SetAttributes(map[string]interface{}{
 		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO
 		"db.operation": "INSERT", // SELECT, INSERT, UPDATE, DELETE
@@ -55,7 +56,7 @@ func (r *DB) Create(ctx context.Context, u entity.User) (entity.User, error) {
 }
 
 func (r *DB) IsMobileUnique(ctx context.Context, mobile string) (bool, error) {
-	ctx, span := r.trc.Span(ctx, "DB IsMobileUnique")
+	_, span := r.trc.Span(ctx, "DB IsMobileUnique")
 	span.SetAttributes(map[string]interface{}{
 		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO
 		"db.operation": "SELECT", // SELECT, INSERT, UPDATE, DELETE
@@ -85,7 +86,7 @@ func (r *DB) IsMobileUnique(ctx context.Context, mobile string) (bool, error) {
 }
 
 func (r *DB) GetByMobile(ctx context.Context, mobile string) (entity.User, error) {
-	ctx, span := r.trc.Span(ctx, "DB GetByMobile")
+	_, span := r.trc.Span(ctx, "DB GetByMobile")
 	span.SetAttributes(map[string]interface{}{
 		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO
 		"db.operation": "SELECT", // SELECT, INSERT, UPDATE, DELETE
@@ -114,7 +115,7 @@ func (r *DB) GetByMobile(ctx context.Context, mobile string) (entity.User, error
 }
 
 func (r *DB) GetByID(ctx context.Context, id uint64) (entity.User, error) {
-	ctx, span := r.trc.Span(ctx, "DB GetByID")
+	_, span := r.trc.Span(ctx, "DB GetByID")
 	span.SetAttributes(map[string]interface{}{
 		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO
 		"db.operation": "SELECT", // SELECT, INSERT, UPDATE, DELETE

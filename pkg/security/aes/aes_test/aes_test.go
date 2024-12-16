@@ -11,7 +11,7 @@ const _secret = "LKJKGKJHLJKLNGRWKLoolhsl"
 func TestAES(t *testing.T) {
 	cryptAES := aes.New(_secret)
 
-	encrypt, err := cryptAES.Encrypt("1234556")
+	encrypt, err := cryptAES.Encrypt("123456")
 	if err != nil {
 		t.Fatal(err)
 	}
