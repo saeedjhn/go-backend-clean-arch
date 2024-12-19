@@ -9,7 +9,7 @@ import (
 
 	grpcrecovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpcprometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
-	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/grpc/userservice"
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/grpc/user"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/reflection"
@@ -58,7 +58,7 @@ func (s Server) Run() error {
 	)
 
 	// Register xxxServiceServer
-	userservice.Register(s.app, gs)
+	user.Register(s.app, gs)
 
 	grpcprometheus.Register(gs)
 

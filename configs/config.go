@@ -12,7 +12,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authusecase"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
 )
 
 type Env string
@@ -74,5 +74,5 @@ type Config struct {
 	Postgres    pq.Config             `mapstructure:"postgres"`
 	Redis       redis.Config          `mapstructure:"redis"`
 	Mongo       mongo.Config          `mapstructure:"mongo"`
-	Auth        authusecase.Config    `mapstructure:"auth"`
+	Auth        auth.Config           `mapstructure:"auth"`
 }

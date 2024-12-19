@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	mysqlDIR = "./internal/repository/migrations/mysqlmigration"
-	pqDir    = "./internal/repository/migrations/pqmigration"
+	mysqlDIR = "./internal/repository/migrations/mysql"
+	pqDir    = "./internal/repository/migrations/pq"
 )
 
 const (

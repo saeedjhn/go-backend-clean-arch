@@ -2,10 +2,10 @@ package router
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router/healthcheckrouter"
-	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router/prometheusrouter"
-	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router/taskrouter"
-	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router/userrouter"
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router/healthcheck"
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router/prometheus"
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router/task"
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router/user"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 )
 
@@ -15,8 +15,8 @@ func Setup(
 ) {
 	routerGroup := echo.Group("") // Parent
 
-	userrouter.New(app, routerGroup)
-	taskrouter.New(app, routerGroup)
-	prometheusrouter.New(app, routerGroup)
-	healthcheckrouter.New(app, routerGroup)
+	user.New(app, routerGroup)
+	task.New(app, routerGroup)
+	prometheus.New(app, routerGroup)
+	healthcheck.New(app, routerGroup)
 }
