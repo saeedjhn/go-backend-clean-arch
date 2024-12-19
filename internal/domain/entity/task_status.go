@@ -14,7 +14,7 @@ const (
 	TaskCompleted  = TaskStatus("completed")
 )
 
-var _taskStatusStrings = map[TaskStatus]string{
+var _taskStatusStrings = map[TaskStatus]string{ //nolint:gochecknoglobals // nothing
 	TaskPending:    "pending",
 	TaskInProgress: "in_progress",
 	TaskCompleted:  "completed",
@@ -29,43 +29,3 @@ func (t TaskStatus) IsValid() bool {
 
 	return ok
 }
-
-// type TaskStatus uint
-
-// const (
-// 	TaskPending TaskStatus = iota + 1
-// 	TaskInProgress
-// 	TaskCompleted
-// )
-
-// const (
-// 	TaskPendingStr    = "pending"
-// 	TaskInProgressStr = "in_progress"
-// 	TaskCompletedStr  = "completed"
-// )
-
-// func (s TaskStatus) String() string {
-// 	switch s {
-// 	case TaskPending:
-// 		return TaskPendingStr
-// 	case TaskInProgress:
-// 		return TaskInProgressStr
-// 	case TaskCompleted:
-// 		return TaskCompletedStr
-// 	}
-//
-// 	return ""
-// }
-
-// func MapToTaskStatus(status string) TaskStatus {
-// 	switch status {
-// 	case TaskPendingStr:
-// 		return TaskPending
-// 	case TaskInProgressStr:
-// 		return TaskInProgress
-// 	case TaskCompletedStr:
-// 		return TaskCompleted
-// 	}
-//
-// 	return TaskStatus(0)
-// }
