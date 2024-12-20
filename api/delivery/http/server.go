@@ -4,13 +4,15 @@ import (
 	"fmt"
 
 	"github.com/labstack/echo-contrib/echoprometheus"
+	"github.com/labstack/echo/v4/middleware"
+	healthcheckhandler "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler/healthcheck"
+	prometheushandler "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler/prometheus"
+	usertaskhandler "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler/user/task"
+	userhandler "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler/user/user"
+	mymiddleware "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/middleware"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 
-	myMiddleware "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/middleware" //nolint:typecheck // nothing
-	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/router"
-
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 )
 
@@ -31,21 +33,37 @@ func New(
 func (s Server) Run() error {
 	s.Router.Debug = s.App.Config.Application.Debug
 
-	// Global Middleware Setup
-	s.Router.Use(myMiddleware.Timeout(s.App.Config.HTTPServer.Timeout))
-	s.Router.Use(middleware.Recover())
-	s.Router.Use(middleware.RequestID())
-	s.Router.Use(echoprometheus.NewMiddleware(configs.PrometheusSubSytemName))
-	s.Router.Use(myMiddleware.CORS(s.App.Config.CORS))
-	s.Router.Use(myMiddleware.Secure())
-	s.Router.Use(myMiddleware.Logger(s.App, configs.LoggerExcludePath))
+	s.RegisterMiddleware()
 
-	// Router Setup
-	router.Setup(s.App, s.Router)
+	s.RegisterRoutes()
 
 	address := fmt.Sprintf(":%s", s.App.Config.HTTPServer.Port)
 
 	s.App.Logger.Infow("Server.HTTP.Start", "config", s.App.Config.HTTPServer)
 
 	return s.Router.Start(address)
+}
+
+func (s Server) RegisterMiddleware() {
+	s.Router.Use(middleware.Recover())
+	s.Router.Use(middleware.RequestID())
+	s.Router.Use(echoprometheus.NewMiddleware(configs.PrometheusSubSytemName))
+	s.Router.Use(mymiddleware.Timeout(s.App.Config.HTTPServer.Timeout))
+	s.Router.Use(mymiddleware.CORS(s.App.Config.CORS))
+	s.Router.Use(mymiddleware.Secure())
+	s.Router.Use(mymiddleware.Logger(s.App, configs.LoggerExcludePath))
+}
+
+func (s Server) RegisterRoutes() {
+	userH := userhandler.New(s.App.Trc, s.App.Usecase.AuthIntr, s.App.Usecase.UserIntr)
+	userH.SetRoutes(s.Router)
+
+	usertaskH := usertaskhandler.New(s.App.Trc, s.App.Usecase.AuthIntr, s.App.Usecase.TaskIntr)
+	usertaskH.SetRoutes(s.Router)
+
+	prometheusH := prometheushandler.New()
+	prometheusH.SetRoutes(s.Router)
+
+	healthcheckH := healthcheckhandler.New()
+	healthcheckH.SetRoutes(s.Router)
 }

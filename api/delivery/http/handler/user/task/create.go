@@ -1,8 +1,9 @@
-package user //nolint:dupl // 1-79 lines are duplicate
+package task //nolint:dupl // 1-79 lines are duplicate
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 	"net/http"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 
@@ -15,16 +16,14 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 )
 
-func (h *Handler) CreateTask(c echo.Context) error {
-	// Tracer
+func (h *Handler) Create(c echo.Context) error {
 	ctx, span := h.trc.Span(
-		c.Request().Context(), "HTTP POST create-task",
+		c.Request().Context(), "HTTP POST create",
 	)
 	span.SetAttributes(attributes(c))
 
 	defer span.End()
 
-	// Bind
 	req := task.CreateRequest{}
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest,
@@ -37,21 +36,6 @@ func (h *Handler) CreateTask(c echo.Context) error {
 	}
 	req.UserID = claim.GetClaimsFromEchoContext(c).UserID
 
-	// Validation
-	if fieldsErrs, err := h.vld.ValidateCreateTaskRequest(req); err != nil {
-		richErr := richerror.Analysis(err)
-		code := httpstatus.MapkindToHTTPStatusCode(richErr.Kind())
-
-		return echo.NewHTTPError(code,
-			echo.Map{
-				"status":  false,
-				"message": richErr.Message(),
-				"errors":  fieldsErrs,
-			},
-		)
-	}
-
-	// Sanitize
 	err := sanitize.New().
 		SetPolicy(sanitize.StrictPolicy).
 		Struct(&req)
@@ -64,11 +48,17 @@ func (h *Handler) CreateTask(c echo.Context) error {
 			})
 	}
 
-	// Usage Use-case
 	resp, err := h.taskIntr.Create(ctx, req)
 	if err != nil {
 		richErr := richerror.Analysis(err)
 		code := httpstatus.MapkindToHTTPStatusCode(richErr.Kind())
+
+		if resp.FieldErrors != nil {
+			return c.JSON(code, echo.Map{
+				"message": richErr.Message(),
+				"errors":  resp.FieldErrors,
+			})
+		}
 
 		return echo.NewHTTPError(code,
 			echo.Map{

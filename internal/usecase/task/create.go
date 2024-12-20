@@ -3,6 +3,7 @@ package task
 import (
 	"context"
 	"errors"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
@@ -35,7 +36,7 @@ func (i *Interactor) Create(ctx context.Context, req task.CreateRequest) (task.C
 		return task.CreateResponse{}, err
 	}
 
-	return task.CreateResponse{Data: task.TaskInfo{
+	return task.CreateResponse{Data: task.Data{
 		ID:          createdTask.ID,
 		UserID:      createdTask.UserID,
 		Title:       createdTask.Title,

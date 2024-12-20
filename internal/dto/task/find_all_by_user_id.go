@@ -5,5 +5,6 @@ type FindAllByUserIDRequest struct {
 }
 
 type FindAllByUserIDResponse struct {
-	Data []TaskInfo `json:"data"`
+	Data        []Data            `json:"data"`
+	FieldErrors map[string]string `json:"field_errors,omitempty"`
 }

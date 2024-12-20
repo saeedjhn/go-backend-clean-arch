@@ -2,7 +2,7 @@ package user
 
 import "time"
 
-type UserInfo struct {
+type Data struct {
 	ID        uint64    `json:"id"`
 	Name      string    `json:"name"`
 	Mobile    string    `json:"mobile"`

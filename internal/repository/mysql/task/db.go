@@ -4,8 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	entity2 "github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	"log"
+
+	entity2 "github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"

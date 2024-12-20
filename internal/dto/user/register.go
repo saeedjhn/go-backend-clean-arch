@@ -7,5 +7,6 @@ type RegisterRequest struct {
 }
 
 type RegisterResponse struct {
-	Data UserInfo `json:"data"`
+	Data        Data              `json:"data"`
+	FieldErrors map[string]string `json:"field_errors,omitempty"`
 }

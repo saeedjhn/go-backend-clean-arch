@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
@@ -18,6 +19,10 @@ func (i *Interactor) Login(ctx context.Context, req user.LoginRequest) (user.Log
 		"usecase.request": req,
 	})
 	defer span.End()
+
+	if fieldsErrs, err := i.vld.ValidateLoginRequest(req); err != nil {
+		return user.LoginResponse{FieldErrors: fieldsErrs}, err
+	}
 
 	u, err := i.repository.GetByMobile(ctx, req.Mobile)
 	if err != nil {
@@ -48,7 +53,7 @@ func (i *Interactor) Login(ctx context.Context, req user.LoginRequest) (user.Log
 	}
 
 	return user.LoginResponse{
-		Data: user.UserInfo{
+		Data: user.Data{
 			ID:        u.ID,
 			Name:      u.Name,
 			Mobile:    u.Mobile,

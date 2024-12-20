@@ -2,8 +2,9 @@ package auth
 
 import (
 	"fmt"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
 	"github.com/golang-jwt/jwt/v5"
 )

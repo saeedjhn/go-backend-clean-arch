@@ -8,15 +8,15 @@ import (
 )
 
 func Auth(
-	authInteractor *auth.Interactor,
+	authIntr *auth.Interactor,
 ) echo.MiddlewareFunc {
 	return mw.WithConfig(mw.Config{
 		ContextKey: configs.AuthMiddlewareContextKey,
-		SigningKey: []byte(authInteractor.Config.AccessTokenSecret),
+		SigningKey: []byte(authIntr.Config.AccessTokenSecret),
 		// TODO  - as sign method string to config
 		SigningMethod: "HS256",
 		ParseTokenFunc: func(_ echo.Context, auth string) (interface{}, error) {
-			claims, err := authInteractor.ParseToken(authInteractor.Config.AccessTokenSecret, auth)
+			claims, err := authIntr.ParseToken(authIntr.Config.AccessTokenSecret, auth)
 			if err != nil {
 				return nil, err
 			}

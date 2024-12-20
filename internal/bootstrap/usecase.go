@@ -3,18 +3,19 @@ package bootstrap
 import (
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
-	task2 "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/task"
-	user2 "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/user"
-	user3 "github.com/saeedjhn/go-backend-clean-arch/internal/repository/redis/user"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/task"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user"
+	mysqltask "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/task"
+	mysqluser "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/user"
+	redisuser "github.com/saeedjhn/go-backend-clean-arch/internal/repository/redis/user"
+	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
+	taskusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/task"
+	userusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user"
+	uservalidator "github.com/saeedjhn/go-backend-clean-arch/internal/validator/user"
 )
 
 type Usecase struct {
-	AuthIntr *auth.Interactor
-	UserIntr *user.Interactor
-	TaskIntr *task.Interactor
+	AuthIntr *authusecase.Interactor
+	UserIntr *userusecase.Interactor
+	TaskIntr *taskusecase.Interactor
 }
 
 func NewUsecase(
@@ -24,22 +25,17 @@ func NewUsecase(
 	cache Cache,
 	db DB,
 ) *Usecase {
-	// Repositories
-	taskRepo := task2.New(db.MySQL)
-	userRepo := user2.New(trc, db.MySQL)
-	userRdsRepo := user3.New(cache.Redis) // Or userInMemRepo := inmemoryuser.New(cache.InMem)
+	var (
+		taskRepo    = mysqltask.New(db.MySQL)
+		userRepo    = mysqluser.New(trc, db.MySQL)
+		userRdsRepo = redisuser.New(cache.Redis) // Or userInMemRepo := inmemoryuser.New(cache.InMem)
+	)
 
-	// Dependencies
-
-	// Usecase
-	taskIntr := task.New(config, taskRepo)
-	authIntr := auth.New(config.Auth)
-	userIntr := user.New(
-		config,
-		trc,
-		authIntr,
-		userRdsRepo,
-		userRepo,
+	var (
+		taskIntr = taskusecase.New(config, taskRepo)
+		authIntr = authusecase.New(config.Auth)
+		userVld  = uservalidator.New(config)
+		userIntr = userusecase.New(config, trc, userVld, authIntr, userRdsRepo, userRepo)
 	)
 
 	return &Usecase{

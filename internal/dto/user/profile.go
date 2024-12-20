@@ -12,7 +12,8 @@ type ProfileRequest struct {
 }
 
 type ProfileResponse struct {
-	Data UserInfo `json:"data"`
+	Data        Data              `json:"data"`
+	FieldErrors map[string]string `json:"field_errors,omitempty"`
 }
 
 func (p ProfileResponse) ToProtobuf() *pb.ProfileResponse {

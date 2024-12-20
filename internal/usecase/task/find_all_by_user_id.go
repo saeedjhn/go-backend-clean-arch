@@ -2,6 +2,7 @@ package task
 
 import (
 	"context"
+
 	task "github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 )
 
@@ -11,9 +12,9 @@ func (i *Interactor) FindAllByUserID(ctx context.Context, req task.FindAllByUser
 		return task.FindAllByUserIDResponse{}, err
 	}
 
-	var data []task.TaskInfo
+	var data []task.Data
 	for _, t := range tasks {
-		data = append(data, task.TaskInfo{
+		data = append(data, task.Data{
 			ID:          t.ID,
 			UserID:      t.UserID,
 			Title:       t.Title,

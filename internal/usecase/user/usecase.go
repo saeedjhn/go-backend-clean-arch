@@ -2,8 +2,12 @@ package user
 
 import (
 	"context"
-	entity2 "github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 
@@ -12,15 +16,17 @@ import (
 )
 
 type AuthInteractor interface {
-	CreateAccessToken(req entity2.Authenticable) (string, error)
-	CreateRefreshToken(req entity2.Authenticable) (string, error)
+	CreateAccessToken(req entity.Authenticable) (string, error)
+	CreateRefreshToken(req entity.Authenticable) (string, error)
 	ParseToken(secret, requestToken string) (*auth.Claims, error)
 }
-type Repository interface {
-	Create(ctx context.Context, u entity2.User) (entity2.User, error)
-	IsMobileUnique(ctx context.Context, mobile string) (bool, error)
-	GetByMobile(ctx context.Context, mobile string) (entity2.User, error)
-	GetByID(ctx context.Context, id uint64) (entity2.User, error)
+
+type Validator interface {
+	ValidateRegisterRequest(req user.RegisterRequest) (map[string]string, error)
+	ValidateLoginRequest(req user.LoginRequest) (map[string]string, error)
+	ValidateProfileRequest(req user.ProfileRequest) (map[string]string, error)
+	ValidateRefreshTokenRequest(req user.RefreshTokenRequest) (map[string]string, error)
+	ValidateCreateTaskRequest(req task.CreateRequest) (map[string]string, error)
 }
 
 type Cache interface {
@@ -30,12 +36,20 @@ type Cache interface {
 	Del(ctx context.Context, key string) (bool, error)
 }
 
+type Repository interface {
+	Create(ctx context.Context, u entity.User) (entity.User, error)
+	IsMobileUnique(ctx context.Context, mobile string) (bool, error)
+	GetByMobile(ctx context.Context, mobile string) (entity.User, error)
+	GetByID(ctx context.Context, id uint64) (entity.User, error)
+}
+
 type Interactor struct {
 	cfg        *configs.Config
 	trc        contract.Tracer
+	vld        Validator
 	authIntr   AuthInteractor
-	cache      Cache
 	repository Repository
+	cache      Cache
 }
 
 // var _ userhandler.Interactor = (*Interactor)(nil) // Commented, because it happens import cycle.
@@ -43,6 +57,7 @@ type Interactor struct {
 func New(
 	cfg *configs.Config,
 	trc contract.Tracer,
+	vld Validator,
 	authIntr AuthInteractor,
 	cache Cache,
 	repository Repository,
@@ -50,6 +65,7 @@ func New(
 	return &Interactor{
 		cfg:        cfg,
 		trc:        trc,
+		vld:        vld,
 		authIntr:   authIntr,
 		cache:      cache,
 		repository: repository,

@@ -1,8 +1,9 @@
 package user
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 	"strconv"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
 	pb "github.com/saeedjhn/go-backend-clean-arch/api/proto/user/gen"
 

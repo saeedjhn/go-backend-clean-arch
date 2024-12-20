@@ -2,6 +2,7 @@ package user
 
 import (
 	"errors"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"

@@ -8,8 +8,9 @@ This allows you to test your code in isolation and control the environment more 
 
 import (
 	"errors"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 )
 
 const (

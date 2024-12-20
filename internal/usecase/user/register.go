@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"errors"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
@@ -18,6 +19,10 @@ func (i *Interactor) Register(ctx context.Context, req user.RegisterRequest) (us
 		"usecase.request": req,
 	})
 	defer span.End()
+
+	if fieldsErrs, err := i.vld.ValidateRegisterRequest(req); err != nil {
+		return user.RegisterResponse{FieldErrors: fieldsErrs}, err
+	}
 
 	isUnique, err := i.repository.IsMobileUnique(ctx, req.Mobile)
 	if err != nil {
@@ -46,7 +51,7 @@ func (i *Interactor) Register(ctx context.Context, req user.RegisterRequest) (us
 	}
 
 	return user.RegisterResponse{
-		Data: user.UserInfo{
+		Data: user.Data{
 			ID:        createdUser.ID,
 			Name:      createdUser.Name,
 			Mobile:    createdUser.Mobile,

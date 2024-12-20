@@ -1,8 +1,9 @@
-package user
+package task
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 	"net/http"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/bind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
@@ -34,7 +35,6 @@ func (h *Handler) Tasks(c echo.Context) error {
 		)
 	}
 
-	// Sanitize
 	err := sanitize.New().
 		SetPolicy(sanitize.StrictPolicy).
 		Struct(&req)
@@ -47,11 +47,17 @@ func (h *Handler) Tasks(c echo.Context) error {
 			})
 	}
 
-	// Usage Use-case
 	resp, err := h.taskIntr.FindAllByUserID(ctx, req)
 	if err != nil {
 		richErr := richerror.Analysis(err)
 		code := httpstatus.MapkindToHTTPStatusCode(richErr.Kind())
+
+		if resp.FieldErrors != nil {
+			return c.JSON(code, echo.Map{
+				"message": richErr.Message(),
+				"errors":  resp.FieldErrors,
+			})
+		}
 
 		return echo.NewHTTPError(code,
 			echo.Map{

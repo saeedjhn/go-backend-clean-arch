@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 )
 
@@ -18,7 +19,7 @@ func (i *Interactor) Profile(ctx context.Context, req user.ProfileRequest) (user
 		return user.ProfileResponse{}, err
 	}
 
-	return user.ProfileResponse{Data: user.UserInfo{
+	return user.ProfileResponse{Data: user.Data{
 		ID:        u.ID,
 		Name:      u.Name,
 		Mobile:    u.Mobile,

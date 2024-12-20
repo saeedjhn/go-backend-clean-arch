@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
@@ -20,6 +21,10 @@ func (i *Interactor) RefreshToken(
 		"usecase.request": req,
 	})
 	defer span.End()
+
+	if fieldsErrs, err := i.vld.ValidateRefreshTokenRequest(req); err != nil {
+		return user.RefreshTokenResponse{FieldErrors: fieldsErrs}, err
+	}
 
 	resp, err := i.authIntr.ParseToken(i.cfg.Auth.RefreshTokenSecret, req.RefreshToken)
 	if err != nil {

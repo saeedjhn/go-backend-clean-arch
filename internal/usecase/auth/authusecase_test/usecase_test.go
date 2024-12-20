@@ -1,9 +1,10 @@
 package authusecase_test
 
 import (
-	entity2 "github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	"testing"
 	"time"
+
+	entity2 "github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
 )
