@@ -19,7 +19,8 @@ func Logger(app *bootstrap.Application, excludePath string) echo.MiddlewareFunc 
 		LogLatency:       true,
 		LogError:         true,
 		LogProtocol:      true,
-		LogValuesFunc: func(ctx echo.Context, request middleware.RequestLoggerValues) error {
+		LogUserAgent:     true,
+		LogValuesFunc: func(_ echo.Context, request middleware.RequestLoggerValues) error {
 			if request.URI == excludePath {
 				return nil
 			}
@@ -40,7 +41,7 @@ func Logger(app *bootstrap.Application, excludePath string) echo.MiddlewareFunc 
 				"remote_ip":      request.RemoteIP,
 				"user_agent":     request.UserAgent,
 				"host":           request.Host,
-				"request_id":     request.RequestID,
+				"request_id":     request.RequestID, // TODO: To fix the issue with RequestID not being logged properly
 				"protocol":       request.Protocol,
 				"latency":        request.Latency,
 				"error":          errMsg,

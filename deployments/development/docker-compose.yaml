@@ -222,6 +222,23 @@ services:
       - go-backend-clean-arch_network
     restart: always
 
+  ####################### END-MONITORING ####################################################################################
+
+  ####################### SETUP-API GATEWAY ####################################################################################
+  nginx:
+    build:
+      context: .
+    image: nginx:alpine
+    container_name: go-backend-clean-arch_nginx
+    ports:
+      - "${NGINX_HTTP_PORT}:${NGINX_HTTP_PORT}"
+    #      - "${NGINX_HTTPS_PORT}:${NGINX_HTTPS_PORT}"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - go-backend-clean-arch_network
+    depends_on:
+      - app
 
 volumes:
   mysql:

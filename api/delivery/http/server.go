@@ -17,16 +17,24 @@ import (
 )
 
 type Server struct {
-	App    *bootstrap.Application
-	Router *echo.Echo
+	App                *bootstrap.Application
+	Router             *echo.Echo
+	userHandler        *userhandler.Handler
+	userTaskHandler    *usertaskhandler.Handler
+	prometheusHandler  *prometheushandler.Handler
+	healthcheckHandler *healthcheckhandler.Handler
 }
 
 func New(
 	app *bootstrap.Application,
 ) *Server {
 	return &Server{
-		App:    app,
-		Router: echo.New(),
+		App:                app,
+		Router:             echo.New(),
+		userHandler:        userhandler.New(app.Trc, app.Usecase.AuthIntr, app.Usecase.UserIntr),
+		userTaskHandler:    usertaskhandler.New(app.Trc, app.Usecase.AuthIntr, app.Usecase.TaskIntr),
+		prometheusHandler:  prometheushandler.New(),
+		healthcheckHandler: healthcheckhandler.New(),
 	}
 }
 
@@ -55,15 +63,8 @@ func (s Server) RegisterMiddleware() {
 }
 
 func (s Server) RegisterRoutes() {
-	userH := userhandler.New(s.App.Trc, s.App.Usecase.AuthIntr, s.App.Usecase.UserIntr)
-	userH.SetRoutes(s.Router)
-
-	usertaskH := usertaskhandler.New(s.App.Trc, s.App.Usecase.AuthIntr, s.App.Usecase.TaskIntr)
-	usertaskH.SetRoutes(s.Router)
-
-	prometheusH := prometheushandler.New()
-	prometheusH.SetRoutes(s.Router)
-
-	healthcheckH := healthcheckhandler.New()
-	healthcheckH.SetRoutes(s.Router)
+	s.userHandler.SetRoutes(s.Router)
+	s.userTaskHandler.SetRoutes(s.Router)
+	s.prometheusHandler.SetRoutes(s.Router)
+	s.healthcheckHandler.SetRoutes(s.Router)
 }
