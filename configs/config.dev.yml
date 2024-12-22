@@ -41,6 +41,7 @@ logger:
   local_time: true
   compress: true
   console: true
+  file: false
   enable_caller: true
   enable_stack_trace: true
   level: "debug"

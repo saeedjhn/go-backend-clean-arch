@@ -73,13 +73,24 @@ func (d *ProductionStrategy) createCore(
 	writer zapcore.WriteSyncer,
 ) zapcore.Core {
 	var zapCore []zapcore.Core
-	zapCore = append(zapCore,
-		zapcore.NewCore(
-			defaultEncoder, writer, zap.NewAtomicLevelAt(d.getLoggerLevel()),
-		),
-	)
+
+	if d.config.File {
+		zapCore = append(zapCore,
+			zapcore.NewCore(
+				defaultEncoder, writer, zap.NewAtomicLevelAt(d.getLoggerLevel()),
+			),
+		)
+	}
 
 	if d.config.Console {
+		zapCore = append(zapCore,
+			zapcore.NewCore(
+				defaultEncoder, zapcore.AddSync(os.Stdout), zap.NewAtomicLevelAt(d.getLoggerLevel()),
+			),
+		)
+	}
+
+	if !d.config.Console && !d.config.File {
 		zapCore = append(zapCore,
 			zapcore.NewCore(
 				defaultEncoder, zapcore.AddSync(os.Stdout), zap.NewAtomicLevelAt(d.getLoggerLevel()),

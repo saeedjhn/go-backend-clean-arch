@@ -8,6 +8,7 @@ type Config struct {
 	LocalTime        bool   `mapstructure:"local_time"`
 	Compress         bool   `mapstructure:"compress"`
 	Console          bool   `mapstructure:"console"`
+	File             bool   `mapstructure:"file"`
 	EnableCaller     bool   `mapstructure:"enable_caller"`
 	EnableStacktrace bool   `mapstructure:"enable_stack_trace"`
 	Level            string `mapstructure:"level"`
