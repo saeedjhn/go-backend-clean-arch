@@ -27,13 +27,16 @@ func (e Env) String() string {
 }
 
 type Application struct {
-	Env                     Env           `mapstructure:"env"`
+	Name                    string        `mapstructure:"name"`
+	Version                 string        `mapstructure:"version"`
 	Debug                   bool          `mapstructure:"debug"`
+	Env                     Env           `mapstructure:"env"`
 	EntropyPassword         float64       `mapstructure:"entropy_password"`
 	GracefulShutdownTimeout time.Duration `mapstructure:"graceful_shutdown_timeout"`
 }
 
 type HTTPServer struct {
+	Host    string        `mapstructure:"host"`
 	Port    string        `mapstructure:"port"`
 	Timeout time.Duration `mapstructure:"timeout"`
 }
