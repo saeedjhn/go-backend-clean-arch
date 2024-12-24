@@ -33,5 +33,5 @@ func (v Validator) ValidateProfileRequest(req user.ProfileRequest) (map[string]s
 			WithKind(kind.KindStatusUnprocessableEntity)
 	}
 
-	return map[string]string{}, nil
+	return nil, nil //nolint:nilnil // return both the `nil` error and invalid value: use a sentinel error instead (nilnil)
 }

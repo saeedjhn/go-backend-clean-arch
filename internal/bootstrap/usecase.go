@@ -34,7 +34,7 @@ func NewUsecase(
 	var (
 		taskIntr = taskusecase.New(config, taskRepo)
 		authIntr = authusecase.New(config.Auth)
-		userVld  = uservalidator.New(config)
+		userVld  = uservalidator.New(config.Application.EntropyPassword)
 		userIntr = userusecase.New(config, trc, userVld, authIntr, userRdsRepo, userRepo)
 	)
 

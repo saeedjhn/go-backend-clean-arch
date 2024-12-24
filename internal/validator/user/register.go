@@ -25,7 +25,7 @@ func (v Validator) ValidateRegisterRequest(req user.RegisterRequest) (map[string
 		validation.Field(&req.Password,
 			validation.Required,
 			validation.Length(_passMinLen, _passMaxLen),
-			validation.By(isSecurePassword(v.config.Application.EntropyPassword))),
+			validation.By(isSecurePassword(v.entropyPassword))),
 	); err != nil {
 		var fieldErrors = make(map[string]string)
 
@@ -44,7 +44,7 @@ func (v Validator) ValidateRegisterRequest(req user.RegisterRequest) (map[string
 			WithKind(kind.KindStatusUnprocessableEntity)
 	}
 
-	return map[string]string{}, nil
+	return nil, nil //nolint:nilnil // return both the `nil` error and invalid value: use a sentinel error instead (nilnil)
 }
 
 func isSecurePassword(entropy float64) func(value interface{}) error {

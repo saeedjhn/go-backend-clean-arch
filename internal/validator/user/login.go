@@ -19,7 +19,8 @@ func (v Validator) ValidateLoginRequest(req user.LoginRequest) (map[string]strin
 
 		validation.Field(&req.Password,
 			validation.Required,
-			validation.Length(_passMinLen, _passMaxLen)),
+			// validation.Length(_passMinLen, _passMaxLen)
+		),
 	); err != nil {
 		var fieldErrors = make(map[string]string)
 
@@ -38,5 +39,5 @@ func (v Validator) ValidateLoginRequest(req user.LoginRequest) (map[string]strin
 			WithKind(kind.KindStatusUnprocessableEntity)
 	}
 
-	return map[string]string{}, nil
+	return nil, nil //nolint:nilnil // return both the `nil` error and invalid value: use a sentinel error instead (nilnil)
 }
