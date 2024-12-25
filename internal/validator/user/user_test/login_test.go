@@ -1,22 +1,21 @@
 package user_test
 
 import (
-	"github.com/stretchr/testify/require"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 
 	userdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 	uservld "github.com/saeedjhn/go-backend-clean-arch/internal/validator/user"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
-func TestValidateLoginRequest(t *testing.T) {
+func Test_ValidateLoginRequest(t *testing.T) {
 	t.Parallel()
 
 	entropyPassword := float64(80)
 	validator := uservld.New(entropyPassword)
 
-	t.Run("Empty.Mobile", func(t *testing.T) {
+	t.Run("EmptyMobileField_ReturnsMobileFieldError", func(t *testing.T) {
 		t.Parallel()
 
 		req := userdto.LoginRequest{
@@ -31,7 +30,7 @@ func TestValidateLoginRequest(t *testing.T) {
 		assert.Contains(t, fieldsErr, "mobile")
 	})
 
-	t.Run("Empty.Password", func(t *testing.T) {
+	t.Run("EmptyPasswordField_ReturnsPasswordFieldError", func(t *testing.T) {
 		t.Parallel()
 
 		req := userdto.LoginRequest{
@@ -46,7 +45,7 @@ func TestValidateLoginRequest(t *testing.T) {
 		assert.Contains(t, fieldsErr, "password")
 	})
 
-	t.Run("Empty.Mobile.And.Password", func(t *testing.T) {
+	t.Run("EmptyMobileAndPasswordFields_ReturnsMobileAndPasswordErrors", func(t *testing.T) {
 		t.Parallel()
 
 		req := userdto.LoginRequest{
@@ -62,7 +61,7 @@ func TestValidateLoginRequest(t *testing.T) {
 		assert.Contains(t, fieldsErr, "password")
 	})
 
-	t.Run("Invalid.Mobile.Len", func(t *testing.T) {
+	t.Run("InvalidMobileLength_ReturnsMobileFieldError", func(t *testing.T) {
 		t.Parallel()
 
 		req := userdto.LoginRequest{
@@ -77,7 +76,7 @@ func TestValidateLoginRequest(t *testing.T) {
 		assert.Contains(t, fieldsErr, "mobile")
 	})
 
-	t.Run("Valid.Input", func(t *testing.T) {
+	t.Run("ValidInput_ReturnsNoErrors", func(t *testing.T) {
 		t.Parallel()
 
 		req := userdto.LoginRequest{
@@ -89,6 +88,5 @@ func TestValidateLoginRequest(t *testing.T) {
 
 		assert.NoError(t, err)
 		assert.Nil(t, fieldsErr)
-		// assert.Equal(t, fieldsErr, map[string]string{})
 	})
 }
