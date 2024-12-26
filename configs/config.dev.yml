@@ -28,6 +28,7 @@ grpc_server:
   timeout: "30s" # Purpose: Waits up to 20 seconds for the client to respond to a Keepalive probe before considering the connection dead.
   max_connection_age: "2h" # Purpose: Forces the connection to be refreshed after 2 hours, regardless of its state (active or idle).
   time: "1m" # Purpose: Sends a Keepalive probe every 1 minute to check the health of the connection.
+  max_connection_age_grace: "60s" # Purpose: server waits 60 second for any active RPCs to finish before forcibly closing the connection
 
 pprof:
   port: 8001

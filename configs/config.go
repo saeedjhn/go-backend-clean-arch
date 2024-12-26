@@ -42,12 +42,13 @@ type HTTPServer struct {
 }
 
 type GRPCServer struct {
-	Network           string        `mapstructure:"network"`
-	Port              string        `mapstructure:"port"`
-	MaxConnectionIdle time.Duration `mapstructure:"max_connection_idle"`
-	Timeout           time.Duration `mapstructure:"timeout"`
-	MaxConnectionAge  time.Duration `mapstructure:"max_connection_age"`
-	Time              time.Duration `mapstructure:"time"`
+	Network               string        `mapstructure:"network"`
+	Port                  string        `mapstructure:"port"`
+	MaxConnectionIdle     time.Duration `mapstructure:"max_connection_idle"`
+	Timeout               time.Duration `mapstructure:"timeout"`
+	MaxConnectionAge      time.Duration `mapstructure:"max_connection_age"`
+	Time                  time.Duration `mapstructure:"time"`
+	MaxConnectionAgeGrace time.Duration `mapstructure:"max_connection_age_grace"`
 }
 
 type Pprof struct {

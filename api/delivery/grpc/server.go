@@ -44,10 +44,11 @@ func (s Server) Run() error {
 	s.app.Logger.Infow("Server.GRPC.Start", "config", s.app.Config.GRPCServer)
 
 	gs := grpc.NewServer(grpc.KeepaliveParams(keepalive.ServerParameters{
-		MaxConnectionIdle: s.app.Config.GRPCServer.MaxConnectionIdle,
-		Timeout:           s.app.Config.GRPCServer.Timeout,
-		MaxConnectionAge:  s.app.Config.GRPCServer.MaxConnectionAge,
-		Time:              s.app.Config.GRPCServer.Timeout,
+		MaxConnectionIdle:     s.app.Config.GRPCServer.MaxConnectionIdle,
+		Timeout:               s.app.Config.GRPCServer.Timeout,
+		MaxConnectionAge:      s.app.Config.GRPCServer.MaxConnectionAge,
+		Time:                  s.app.Config.GRPCServer.Timeout,
+		MaxConnectionAgeGrace: s.app.Config.GRPCServer.MaxConnectionAgeGrace,
 	}),
 		grpc.UnaryInterceptor(intercep.Logger),
 		grpc.ChainUnaryInterceptor(
