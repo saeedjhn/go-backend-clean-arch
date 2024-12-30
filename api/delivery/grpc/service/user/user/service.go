@@ -3,7 +3,6 @@ package user
 import (
 	"context"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
 	"github.com/golang/protobuf/ptypes/empty" //nolint:gomodguard // nothing
@@ -19,21 +18,15 @@ type UserInteractor interface {
 	RefreshToken(ctx context.Context, req user.RefreshTokenRequest) (user.RefreshTokenResponse, error)
 }
 
-type TaskInteractor interface {
-	Create(ctx context.Context, req task.CreateRequest) (task.CreateResponse, error)
-	FindAllByUserID(ctx context.Context, req task.FindAllByUserIDRequest) (task.FindAllByUserIDResponse, error)
-}
-
 var _ gen.UserServiceServer = (*Service)(nil)
 
 type Service struct {
 	gen.UserServiceServer
 	userIntr UserInteractor
-	taskIntr TaskInteractor
 }
 
-func New(userInteractor UserInteractor, taskInteractor TaskInteractor) *Service {
-	return &Service{userIntr: userInteractor, taskIntr: taskInteractor}
+func New(userInteractor UserInteractor) *Service {
+	return &Service{userIntr: userInteractor}
 }
 
 func (u Service) Create(_ context.Context, _ *gen.CreateRequest) (*gen.User, error) {

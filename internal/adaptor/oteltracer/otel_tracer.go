@@ -121,9 +121,9 @@ func createTraceProvider(cfg Config, exp sdktrace.SpanExporter) *sdktrace.Tracer
 	provider := sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(exp),
 		sdktrace.WithResource(resource.NewWithAttributes(
-			semconv.SchemaURL,                                 // OpenTelemetry schema URL
-			semconv.ServiceNameKey.String(cfg.AppName),        // Service name
-			semconv.ServiceVersionKey.Float64(cfg.AppVersion), // Service version
+			semconv.SchemaURL,                                // OpenTelemetry schema URL
+			semconv.ServiceNameKey.String(cfg.AppName),       // Service name
+			semconv.ServiceVersionKey.String(cfg.AppVersion), // Service version
 			// Deployment environment (e.g., development, staging, production)
 			semconv.DeploymentEnvironmentKey.String(cfg.AppEnv),
 			// semconv.ServiceInstanceIDKey.Value(_cfg.InstanceID), // Instance ID (useful for scaling scenarios)
