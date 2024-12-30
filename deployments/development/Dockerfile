@@ -39,6 +39,9 @@ WORKDIR $PROJECT_DIR
 # COPY --from=builder target source
 COPY --from=builder $PROJECT_DIR .
 
+# Copy the Go modules cache from the builder stage to the development stage
+COPY --from=builder /go/pkg/mod /go/pkg/mod
+
 # Copy air binary from Go bin in builder stage
 COPY --from=builder /go/bin/air /usr/local/bin/air
 

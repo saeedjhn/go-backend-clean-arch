@@ -19,4 +19,5 @@ scrape_configs:
     scrape_interval: 15s
     #    metrics_path: path/metrics
     static_configs:
-      - targets: [ 'host.docker.internal:8000' ]
+      #      - targets: [ 'host.docker.internal:8000' ]
+      - targets: [ 'go-backend-clean-arch_app-dev:8000' ]

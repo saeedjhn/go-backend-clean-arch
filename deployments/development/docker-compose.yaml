@@ -8,8 +8,8 @@ services:
       dockerfile: deployments/development/Dockerfile
     container_name: go-backend-clean-arch_app-dev
     ports:
-      - "8000:8000"
-      - "50000:50000"
+      - "${APP_HTTP_PORT}:${APP_HTTP_PORT}"
+      - "${APP_GRPC_PORT}:${APP_GRPC_PORT}"
     volumes:
       - ../../:/app # important (- ./:/app)
     networks:
@@ -27,7 +27,7 @@ services:
   ####################### SETUP-DB #####################################################################################
   ######################## MYSQL ########################
   mysqldb:
-    image: mysql:latest
+    image: mysql:9.1.0
     container_name: go-backend-clean-arch_mysqldb
     env_file:
       - .env
@@ -87,7 +87,7 @@ services:
 
   ####################### REDIS #######################
   redis:
-    image: redis:latest
+    image: redis:7.4.1
     container_name: go-backend-clean-arch_redis
     env_file:
       - .env
@@ -102,7 +102,7 @@ services:
 
   ####################### JAEGER #######################
   jaeger:
-    image: jaegertracing/all-in-one:1.63.0
+    image: jaegertracing/all-in-one:1.64.0
     container_name: go-backend-clean-arch_jaeger
     env_file:
       - .env
@@ -118,104 +118,104 @@ services:
     restart: always
 
   ####################### SETUP-ELK ####################################################################################
-  #  setup-elk:
-  #    build:
-  #      context: elk/setup/
-  #      args:
-  #        ELASTIC_VERSION: ${ELASTIC_VERSION}
-  #    container_name: go-backend-clean-arch_setup-elk
-  #    init: true
-  #    environment:
-  #      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
-  #      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
-  #      FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
-  #    volumes:
-  #      - ./elk/setup/entrypoint.sh:/entrypoint.sh:ro,Z
-  #      - ./elk/setup/helpers.sh:/helpers.sh:ro,Z
-  #      - ./elk/setup/roles:/roles:ro,Z
-  #      - setup-elk:/state:Z
-  #    networks:
-  #      - go-backend-clean-arch_network
-  #    depends_on:
-  #      - elasticsearch
+  setup-elk:
+    build:
+      context: elk/setup/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    container_name: go-backend-clean-arch_setup-elk
+    init: true
+    environment:
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+      FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
+    volumes:
+      - ./elk/setup/entrypoint.sh:/entrypoint.sh:ro,Z
+      - ./elk/setup/helpers.sh:/helpers.sh:ro,Z
+      - ./elk/setup/roles:/roles:ro,Z
+      - setup-elk:/state:Z
+    networks:
+      - go-backend-clean-arch_network
+    depends_on:
+      - elasticsearch
 
   ####################### ELASTICSEARCH #######################
-  #  elasticsearch:
-  #    build:
-  #      context: elk/elasticsearch/
-  #      args:
-  #        ELASTIC_VERSION: ${ELASTIC_VERSION}
-  #    container_name: go-backend-clean-arch_elasticsearch
-  #    environment:
-  #      node.name: elasticsearch
-  #      ES_JAVA_OPTS: -Xms512m -Xmx512m
-  #      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
-  #      discovery.type: single-node
-  #    volumes:
-  #      - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
-  #      - elasticsearch:/usr/share/elasticsearch/data:Z
-  #    ports:
-  #      - "9200:9200"
-  #      - "9300:9300"
-  #    networks:
-  #      - go-backend-clean-arch_network
-  #    restart: unless-stopped
+  elasticsearch:
+    build:
+      context: elk/elasticsearch/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    container_name: go-backend-clean-arch_elasticsearch
+    environment:
+      node.name: elasticsearch
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      discovery.type: single-node
+    volumes:
+      - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
+      - elasticsearch:/usr/share/elasticsearch/data:Z
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - go-backend-clean-arch_network
+    restart: unless-stopped
 
   ######################## KIBANA ########################
-  #  kibana:
-  #    build:
-  #      context: elk/kibana/
-  #      args:
-  #        ELASTIC_VERSION: ${ELASTIC_VERSION}
-  #    container_name: go-backend-clean-arch_kibana
-  #    environment:
-  #      KIBANA_SYSTEM_USERNAME: ${KIBANA_SYSTEM_USERNAME:-}
-  #      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
-  #    volumes:
-  #      - ./elk/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
-  #      - elasticsearch:/usr/share/kibana/data:Z
-  #    ports:
-  #      - "5601:5601"
-  #    networks:
-  #      - go-backend-clean-arch_network
-  #    depends_on:
-  #      - elasticsearch
-  #    restart: unless-stopped
+  kibana:
+    build:
+      context: elk/kibana/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    container_name: go-backend-clean-arch_kibana
+    environment:
+      KIBANA_SYSTEM_USERNAME: ${KIBANA_SYSTEM_USERNAME:-}
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+    volumes:
+      - ./elk/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+      - elasticsearch:/usr/share/kibana/data:Z
+    ports:
+      - "${KIBANA_SYSTEM_PORT}:${KIBANA_SYSTEM_PORT}"
+    networks:
+      - go-backend-clean-arch_network
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
 
   ######################## FILEBEAT ########################
-  #  filebeat:
-  #    build:
-  #      context: elk/filebeat/
-  #      args:
-  #        ELASTIC_VERSION: ${ELASTIC_VERSION}
-  #    container_name: go-backend-clean-arch_filebeat
-  #    user: root
-  #    environment:
-  #      FILEBEAT_INTERNAL_USERNAME: ${FILEBEAT_INTERNAL_USERNAME:-}
-  #      FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
-  #      BEATS_SYSTEM_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
-  #    command:
-  #      - -e
-  #      - --strict.perms=false
-  #    volumes:
-  #      - ./elk/filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
-  #      - ./../../logs:/var/log/filebeat/go-backend-clean-arch/logs
-  #      #- ../prod/filebeatlogs:/var/log/filebeat/service:ro
-  #      - filebeat:/var/log/filebeat
-  #      - filebeat:/app:ro
-  #    networks:
-  #      - go-backend-clean-arch_network
-  #    depends_on:
-  #      - elasticsearch
+  filebeat:
+    build:
+      context: elk/filebeat/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    container_name: go-backend-clean-arch_filebeat
+    user: ${FILEBEAT_INTERNAL_USER}
+    environment:
+      FILEBEAT_INTERNAL_USERNAME: ${FILEBEAT_INTERNAL_USERNAME:-}
+      FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
+      BEATS_SYSTEM_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
+    command:
+      - -e
+      - --strict.perms=false
+    volumes:
+      - ./elk/filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./../../logs:/var/log/filebeat/go-backend-clean-arch/logs
+      #- ../prod/filebeatlogs:/var/log/filebeat/service:ro
+      - filebeat:/var/log/filebeat
+      - filebeat:/app:ro
+    networks:
+      - go-backend-clean-arch_network
+    depends_on:
+      - elasticsearch
   ####################### END SETUP-ELK ################################################################################
 
   ####################### SETUP-MONITORING ####################################################################################
   ######################## Prometheus ########################
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.0.1
     container_name: go-backend-clean-arch_prometheus
     ports:
-      - "9000:9090"  # Prometheus Web UI
+      - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}"  # Prometheus Web UI
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
@@ -228,7 +228,7 @@ services:
   nginx:
     build:
       context: .
-    image: nginx:alpine
+    image: nginx:1.27.3-alpine
     container_name: go-backend-clean-arch_nginx
     ports:
       - "${NGINX_HTTP_PORT}:${NGINX_HTTP_PORT}"
