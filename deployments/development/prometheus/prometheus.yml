@@ -15,9 +15,9 @@ scrape_configs:
     static_configs:
       - targets: [ 'otel-collector:9090' ]
 
-  - job_name: app
+  - job_name: 'app'
     scrape_interval: 15s
     #    metrics_path: path/metrics
     static_configs:
       #      - targets: [ 'host.docker.internal:8000' ]
-      - targets: [ 'go-backend-clean-arch_app-dev:8000' ]
+      - targets: [ 'app:8000' ]

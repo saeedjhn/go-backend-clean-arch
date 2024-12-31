@@ -8,7 +8,7 @@ filebeat.inputs:
     enabled: true
     paths:
       # equal to selected path from volumes of filebeat service in docker-compose
-      - "/var/log/filebeat/go-backend-clean-arch/logs/*.log"
+      - "/var/log/filebeat/service/logs/*.log"
       -
     fields:
       service: go-backend-clean-arch
