@@ -13,7 +13,7 @@ Show goroutine usage for project with graphviz
 > make tool/pprof/goroutine
 OR:
 > curl http://localhost:PORT/debug/pprof/goroutine --output fileName.ExtensionName
-> go tool pprof -http=:PORT2 fileName.ExtensionName
+> go tool pprof -http=:PORT fileName.ExtensionName
 
-Serving web UI on http://localhost:PORT2/
-go to http://localhost:PORT2/ui/
+Serving web UI on http://localhost:PORT/
+go to http://localhost:PORT/ui/
