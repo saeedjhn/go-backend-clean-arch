@@ -2,8 +2,9 @@ package grpc
 
 import (
 	"fmt"
-	userservice "github.com/saeedjhn/go-backend-clean-arch/api/delivery/grpc/service/user/user"
 	"net"
+
+	userservice "github.com/saeedjhn/go-backend-clean-arch/api/delivery/grpc/service/user/user"
 
 	grpcctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/grpc/interceptor"

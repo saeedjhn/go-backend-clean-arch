@@ -86,7 +86,7 @@ func Test_ValidateLoginRequest(t *testing.T) {
 
 		fieldsErr, err := validator.ValidateLoginRequest(req)
 
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Nil(t, fieldsErr)
 	})
 }
