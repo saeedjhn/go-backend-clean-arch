@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"sync"
 
 	"github.com/spf13/viper"
 )
+
+var m sync.Mutex
 
 type Option struct {
 	Prefix      string
@@ -18,6 +21,9 @@ type Option struct {
 }
 
 func Load(option Option) (*Config, error) {
+	m.Lock()
+	defer m.Unlock()
+
 	var config = Config{}
 
 	if len(option.FilePath) == 0 {
@@ -40,10 +46,7 @@ func Load(option Option) (*Config, error) {
 	return &config, nil
 }
 
-func CollectFilesWithExt(
-	dirPath,
-	ext string,
-) ([]string, error) {
+func CollectFilesWithExt(dirPath, ext string) ([]string, error) {
 
 	entries, err := os.ReadDir(dirPath)
 	if err != nil {
