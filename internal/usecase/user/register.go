@@ -9,7 +9,6 @@ import (
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/security/bcrypt"
 )
 
 func (i *Interactor) Register(ctx context.Context, req user.RegisterRequest) (user.RegisterResponse, error) {
@@ -42,7 +41,7 @@ func (i *Interactor) Register(ctx context.Context, req user.RegisterRequest) (us
 		Mobile: req.Mobile,
 	}
 
-	encryptedPass, _ := bcrypt.Generate(req.Password, bcrypt.DefaultCost) // Check err
+	encryptedPass, _ := GenerateHash(req.Password) // TODO: usecase>userusecase>register>CheckErrorGenerateHash
 	u.Password = encryptedPass
 
 	createdUser, err := i.repository.Create(ctx, u)

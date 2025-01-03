@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/security/bcrypt"
 	"time"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
@@ -15,12 +16,14 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
 )
 
+//go:generate mockery --name AuthInteractor
 type AuthInteractor interface {
 	CreateAccessToken(req entity.Authenticable) (string, error)
 	CreateRefreshToken(req entity.Authenticable) (string, error)
 	ParseToken(secret, requestToken string) (*auth.Claims, error)
 }
 
+//go:generate mockery --name Validator
 type Validator interface {
 	ValidateRegisterRequest(req user.RegisterRequest) (map[string]string, error)
 	ValidateLoginRequest(req user.LoginRequest) (map[string]string, error)
@@ -29,6 +32,7 @@ type Validator interface {
 	ValidateCreateTaskRequest(req task.CreateRequest) (map[string]string, error)
 }
 
+//go:generate mockery --name Cache
 type Cache interface {
 	Exists(ctx context.Context, key string) (bool, error)
 	Set(ctx context.Context, key string, value interface{}, expireTime time.Duration) error
@@ -36,6 +40,7 @@ type Cache interface {
 	Del(ctx context.Context, key string) (bool, error)
 }
 
+//go:generate mockery --name Repository
 type Repository interface {
 	Create(ctx context.Context, u entity.User) (entity.User, error)
 	IsMobileUnique(ctx context.Context, mobile string) (bool, error)
@@ -70,4 +75,12 @@ func New(
 		cache:      cache,
 		repository: repository,
 	}
+}
+
+func GenerateHash(password string) (string, error) {
+	return bcrypt.Generate(password, bcrypt.Cost(configs.BcryptCost))
+}
+
+func CompareHash(hashedPassword, password string) error {
+	return bcrypt.CompareHashAndSTR(hashedPassword, password)
 }
