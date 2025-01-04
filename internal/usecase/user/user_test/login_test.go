@@ -23,7 +23,7 @@ var (
 		return gp
 	}()
 	correctMobile     = "09123456789"
-	incorrectMobile   = "inValid-mobile"
+	incorrectMobile   = "incorrect-mobile"
 	nonExistentMobile = "123456789"
 )
 

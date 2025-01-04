@@ -1,4 +1,4 @@
-package user
+package doubles
 
 /*
 stubbing is a way to simulate the behavior of some components in your application, typically for the purpose of testing.
@@ -18,11 +18,11 @@ const (
 	_SecondRecordID = 1002
 )
 
-type DBStub struct {
+type StubDB struct {
 	conn map[uint64]entity.User
 }
 
-func NewDBStub() *DBStub {
+func NewStubDB() *StubDB {
 	conn := map[uint64]entity.User{
 		1001: {
 			ID:        _FirstRecordID,
@@ -44,10 +44,10 @@ func NewDBStub() *DBStub {
 		},
 	}
 
-	return &DBStub{conn: conn}
+	return &StubDB{conn: conn}
 }
 
-func (s DBStub) Create(u entity.User) (uint64, error) {
+func (s StubDB) Create(u entity.User) (uint64, error) {
 	s.conn[u.ID] = u
 	exists := s.IsByID(u.ID)
 	if exists {
@@ -57,7 +57,7 @@ func (s DBStub) Create(u entity.User) (uint64, error) {
 	return u.ID, nil
 }
 
-func (s DBStub) GetByID(id uint64) (entity.User, error) {
+func (s StubDB) GetByID(id uint64) (entity.User, error) {
 	user, exists := s.conn[id]
 	if !exists {
 		return entity.User{}, errors.New("user not found")
@@ -66,7 +66,7 @@ func (s DBStub) GetByID(id uint64) (entity.User, error) {
 	return user, nil
 }
 
-func (s DBStub) IsByID(id uint64) bool {
+func (s StubDB) IsByID(id uint64) bool {
 	_, exists := s.conn[id]
 
 	return exists

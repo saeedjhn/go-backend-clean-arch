@@ -52,7 +52,10 @@ func HandleFlag(app *bootstrap.Application, up, down, rollback bool) error {
 
 func Up(app *bootstrap.Application) error {
 	// Mysql
-	migratorMysql := migratormysql.New(app.DB.MySQL, mysqlDIR)
+	migratorMysql := migratormysql.New(app.DB.MySQL, migratormysql.Config{
+		MigrationPath:   mysqlDIR,
+		MigrationDBName: "gorp_migrations",
+	})
 	if err := migratorMysql.Up(); err != nil {
 		return err
 	}
@@ -68,7 +71,10 @@ func Up(app *bootstrap.Application) error {
 
 func Down(app *bootstrap.Application) error {
 	// Mysql
-	migratorMysql := migratormysql.New(app.DB.MySQL, mysqlDIR)
+	migratorMysql := migratormysql.New(app.DB.MySQL, migratormysql.Config{
+		MigrationPath:   mysqlDIR,
+		MigrationDBName: "gorp_migrations",
+	})
 	if err := migratorMysql.Down(); err != nil {
 		return err
 	}
@@ -84,7 +90,10 @@ func Down(app *bootstrap.Application) error {
 
 func Rollback(app *bootstrap.Application) error {
 	// Mysql
-	migratorMysql := migratormysql.New(app.DB.MySQL, mysqlDIR)
+	migratorMysql := migratormysql.New(app.DB.MySQL, migratormysql.Config{
+		MigrationPath:   mysqlDIR,
+		MigrationDBName: "gorp_migrations",
+	})
 	if err := migratorMysql.Down(); err != nil {
 		return err
 	}

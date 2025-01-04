@@ -2,8 +2,9 @@ package user
 
 import (
 	"context"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/security/bcrypt"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/security/bcrypt"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"

@@ -13,11 +13,11 @@ const testdataPath = "testdata"
 const fileExtension = "yml"
 
 var (
-	_configFlag  string //nolint:gochecknoglobals
-	_fileExtFlag string //nolint:gochecknoglobals
+	_configFlag  string //nolint:gochecknoglobals // nothing
+	_fileExtFlag string //nolint:gochecknoglobals // nothing
 )
 
-//nolint:gochecknoinits
+//nolint:gochecknoinits // nothing
 func init() {
 	flag.StringVar(&_configFlag, "config", testdataPath, "config path, e.g., -conf configs")
 	flag.StringVar(&_fileExtFlag, "extension", fileExtension, "The files extension")
