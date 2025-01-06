@@ -53,8 +53,8 @@ func NewDBSingleton(config mysql.Config) (*mysql.Mysql, error) {
 //
 // }
 
-func MigrateDB(config mysql.Config) (func() error, error) {
-	conn, err := NewDBSingleton(config)
+func MigrateDB() (func() error, error) {
+	conn, err := NewDBSingleton(GetDBConfig())
 	if err != nil {
 		return nil, fmt.Errorf("failed to create DB connection: %w", err)
 	}
@@ -76,8 +76,8 @@ func MigrateDB(config mysql.Config) (func() error, error) {
 	}, nil
 }
 
-func SeedDB(config mysql.Config) (func() error, error) {
-	conn, err := NewDBSingleton(config)
+func SeedDB() (func() error, error) {
+	conn, err := NewDBSingleton(GetDBConfig())
 	if err != nil {
 		return nil, fmt.Errorf("failed to create DB connection: %w", err)
 	}

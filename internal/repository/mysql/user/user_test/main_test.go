@@ -26,7 +26,7 @@ func TestMain(m *testing.M) {
 		}
 	}(dbContainer)
 
-	downMigrate, err := setup.MigrateDB(setup.GetDBConfig())
+	downMigrate, err := setup.MigrateDB()
 	if err != nil {
 		log.Panicf("Migration failed: %v", err)
 	}
@@ -36,7 +36,7 @@ func TestMain(m *testing.M) {
 		}
 	}()
 
-	downSeed, err := setup.SeedDB(setup.GetDBConfig())
+	downSeed, err := setup.SeedDB()
 	if err != nil {
 		log.Panicf("Seeding failed: %v", err)
 	}

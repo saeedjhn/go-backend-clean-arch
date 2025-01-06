@@ -10,7 +10,6 @@ import (
 
 	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/grpc"
 	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http"
-
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/cmd/migrations"
@@ -18,18 +17,14 @@ import (
 
 func main() {
 	var (
-		env      string
 		confPath string
 		fileExt  string
 	)
 
 	// Parse command-line flag for environment mode with default value as development
-	flag.StringVar(&env, "env", configs.Development.String(), "environment mode, e.g., -env development")
 	flag.StringVar(&confPath, "conf", "configs", "config path, e.g., -conf configs")
 	flag.StringVar(&fileExt, "ext", "yml", "file extension, e.g., -ext yml")
 	flag.Parse()
-
-	log.Println("Environment mode:", env)
 
 	// Get the current working directory
 	workingDir, err := os.Getwd()

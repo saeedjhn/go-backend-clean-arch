@@ -15,6 +15,8 @@ import (
 
 //go:generate go test -v -race -count=1 -run Test_MysqlUser_GetByMobile
 func Test_MysqlUser_GetByMobile(t *testing.T) {
+	t.Parallel()
+
 	conn, err := setup.NewDBSingleton(setup.GetDBConfig())
 	if err != nil {
 		t.Fatalf("failed to create database connection: %v", err)
@@ -59,6 +61,8 @@ func Test_MysqlUser_GetByMobile(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
 			user, errDB := db.GetByMobile(ctx, tc.mobile)
 
 			if tc.expectedErr != nil {

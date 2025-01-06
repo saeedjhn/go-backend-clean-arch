@@ -16,18 +16,14 @@ import (
 
 func main() {
 	var (
-		env      string
 		confPath string
 		fileExt  string
 	)
 
 	// Parse command-line flag for environment mode with default value as development
-	flag.StringVar(&env, "env", configs.Development.String(), "environment mode, e.g., -env development")
 	flag.StringVar(&confPath, "conf", "deployments/development", "config path, e.g., -conf deployments/development")
 	flag.StringVar(&fileExt, "ext", "yml", "file extension, e.g., -ext yml")
 	flag.Parse()
-
-	log.Println("Environment mode:", env)
 
 	// Get the current working directory
 	workingDir, err := os.Getwd()
