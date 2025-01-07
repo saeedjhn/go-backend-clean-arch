@@ -1,10 +1,10 @@
 package authusecase_test
 
 import (
+	"github.com/golang-jwt/jwt/v5"
 	"testing"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
 	"github.com/stretchr/testify/assert"
@@ -17,25 +17,57 @@ var _config = auth.Config{ //nolint:gochecknoglobals // nothing
 	AccessTokenExpiryTime: time.Minute,
 }
 
-//go:generate go test -count=1 -v ./...
-func TestInteractor_CreateAccessToken(t *testing.T) {
-	t.Parallel()
+type request struct {
+	Secret     string
+	Data       entity.Authenticable
+	ExpireTime time.Duration
+}
 
-	interactor := auth.New(_config)
+//go:generate go test -count=1 -v ./...
+
+//go:generate go test -v -race -count=1 -run Test_AuthInteractor_CreateAccessToken
+func Test_AuthInteractor_CreateAccessToken(t *testing.T) {
+	t.Parallel()
 
 	tests := []struct {
 		name          string
-		req           entity.Authenticable
+		req           request
 		expectedError bool
 	}{
 		{
-			name:          "ValidRequest_TokenGenerated",
-			req:           entity.Authenticable{ID: 1},
-			expectedError: false,
+			name: "NegativeExpireTime_TokenNotGenerated",
+			req: request{
+				Secret:     "secret",
+				Data:       entity.Authenticable{ID: 1},
+				ExpireTime: -time.Second,
+			},
+			expectedError: true,
 		},
 		{
-			name:          "InValidRequest_TokenNotGenerated",
-			req:           entity.Authenticable{ID: 0},
+			name: "ZeroExpireTime_TokenNotGenerated",
+			req: request{
+				Secret:     "secret",
+				Data:       entity.Authenticable{ID: 1},
+				ExpireTime: 0,
+			},
+			expectedError: true,
+		},
+		{
+			name: "EmptySecret_TokenNotGenerated",
+			req: request{
+				Secret:     "",
+				Data:       entity.Authenticable{ID: 1},
+				ExpireTime: 5 * time.Second,
+			},
+			expectedError: true,
+		},
+		{
+			name: "ValidRequest_TokenGenerated",
+			req: request{
+				Secret:     "secret",
+				Data:       entity.Authenticable{ID: 1},
+				ExpireTime: 5 * time.Minute,
+			},
 			expectedError: false,
 		},
 	}
@@ -44,7 +76,11 @@ func TestInteractor_CreateAccessToken(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			token, err := interactor.CreateAccessToken(tc.req)
+			interactor := auth.New(auth.Config{
+				AccessTokenSecret:     tc.req.Secret,
+				AccessTokenExpiryTime: tc.req.ExpireTime,
+			})
+			token, err := interactor.CreateAccessToken(tc.req.Data)
 
 			if tc.expectedError {
 				require.Error(t, err)
@@ -56,7 +92,7 @@ func TestInteractor_CreateAccessToken(t *testing.T) {
 	}
 }
 
-func TestInteractor_IsAuthorized(t *testing.T) {
+func Test_AuthInteractor_IsAuthorized(t *testing.T) {
 	t.Parallel()
 	interactor := auth.New(_config)
 
@@ -107,7 +143,7 @@ func TestInteractor_IsAuthorized(t *testing.T) {
 	}
 }
 
-func TestInteractor_ParseToken(t *testing.T) {
+func Test_AuthInteractor_ParseToken(t *testing.T) {
 	t.Parallel()
 
 	interactor := auth.New(_config)

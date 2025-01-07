@@ -31,6 +31,14 @@ func New(config Config) *Interactor {
 func (i Interactor) CreateAccessToken(
 	req entity.Authenticable,
 ) (string, error) {
+	if len(i.Config.AccessTokenSecret) == 0 {
+		return "", ErrMissingAccessTokenSecret
+	}
+
+	if i.Config.AccessTokenExpiryTime <= 0 {
+		return "", ErrInvalidExpireTime
+	}
+
 	claims := Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject:   i.Config.AccessTokenSubject,
@@ -52,6 +60,14 @@ func (i Interactor) CreateAccessToken(
 func (i Interactor) CreateRefreshToken(
 	req entity.Authenticable,
 ) (string, error) {
+	if len(i.Config.RefreshTokenSecret) == 0 {
+		return "", ErrMissingRefreshTokenSecret
+	}
+
+	if i.Config.RefreshTokenExpiryTime <= 0 {
+		return "", ErrInvalidExpireTime
+	}
+
 	claims := Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject:   i.Config.RefreshTokenSubject,
