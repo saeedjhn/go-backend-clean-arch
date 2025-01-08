@@ -1,9 +1,10 @@
 package authusecase_test
 
 import (
-	"github.com/golang-jwt/jwt/v5"
 	"testing"
 	"time"
+
+	"github.com/golang-jwt/jwt/v5"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
@@ -29,38 +30,13 @@ type request struct {
 func Test_AuthInteractor_CreateAccessToken(t *testing.T) {
 	t.Parallel()
 
+	interactor := auth.New(_config)
+
 	tests := []struct {
 		name          string
 		req           request
 		expectedError bool
 	}{
-		{
-			name: "NegativeExpireTime_TokenNotGenerated",
-			req: request{
-				Secret:     "secret",
-				Data:       entity.Authenticable{ID: 1},
-				ExpireTime: -time.Second,
-			},
-			expectedError: true,
-		},
-		{
-			name: "ZeroExpireTime_TokenNotGenerated",
-			req: request{
-				Secret:     "secret",
-				Data:       entity.Authenticable{ID: 1},
-				ExpireTime: 0,
-			},
-			expectedError: true,
-		},
-		{
-			name: "EmptySecret_TokenNotGenerated",
-			req: request{
-				Secret:     "",
-				Data:       entity.Authenticable{ID: 1},
-				ExpireTime: 5 * time.Second,
-			},
-			expectedError: true,
-		},
 		{
 			name: "ValidRequest_TokenGenerated",
 			req: request{
@@ -76,10 +52,6 @@ func Test_AuthInteractor_CreateAccessToken(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			interactor := auth.New(auth.Config{
-				AccessTokenSecret:     tc.req.Secret,
-				AccessTokenExpiryTime: tc.req.ExpireTime,
-			})
 			token, err := interactor.CreateAccessToken(tc.req.Data)
 
 			if tc.expectedError {

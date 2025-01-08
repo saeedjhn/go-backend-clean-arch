@@ -10,7 +10,6 @@ import (
 	userusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user/user_test/doubles"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user/user_test/mocks"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/security/bcrypt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -34,11 +33,6 @@ func Test_UserInterator_Login_ValidationSection(t *testing.T) {
 	t.Parallel()
 
 	ctx := context.Background()
-
-	config, err := getConfig()
-	if err != nil {
-		t.Fatalf("Error loading configuration: %v", err)
-	}
 
 	testCases := []struct {
 		name           string
@@ -101,7 +95,7 @@ func Test_UserInterator_Login_ValidationSection(t *testing.T) {
 			mockVld.EXPECT().ValidateLoginRequest(tc.req).Return(tc.fieldsErr, tc.expectedError)
 
 			if tc.expectedError == nil {
-				generatePassword, _ := bcrypt.Generate(tc.req.Password, bcrypt.DefaultCost)
+				generatePassword, _ := userusecase.GenerateHash(tc.req.Password)
 
 				mockRepo.On("GetByMobile", ctx, tc.req.Mobile).Return(entity.User{
 					ID:       1,
@@ -109,16 +103,16 @@ func Test_UserInterator_Login_ValidationSection(t *testing.T) {
 					Password: generatePassword,
 				}, nil)
 
-				userFetch, _ := mockRepo.GetByMobile(ctx, tc.req.Mobile)
+				user, _ := mockRepo.GetByMobile(ctx, tc.req.Mobile)
 
-				authenticable := entity.Authenticable{ID: userFetch.ID}
+				authenticable := entity.Authenticable{ID: user.ID}
 
 				mockAuth.On("CreateAccessToken", authenticable).Return("access-token", nil)
 				mockAuth.On("CreateRefreshToken", authenticable).Return("refresh-token", nil)
 			}
 
 			usecase := userusecase.New(
-				config,
+				_myDBConfig,
 				setupTracer(),
 				mockVld,
 				mockAuth,
@@ -136,7 +130,7 @@ func Test_UserInterator_Login_ValidationSection(t *testing.T) {
 				assert.Equal(t, tc.fieldsErr, resp.FieldErrors)
 				assert.ObjectsAreEqualValues(tc.expectedResult, resp)
 			} else {
-				require.NoError(t, err)
+				require.NoError(t, errL)
 			}
 		})
 	}
@@ -147,11 +141,6 @@ func Test_UserInterator_LoginRepositorySection(t *testing.T) {
 	t.Parallel()
 
 	ctx := context.Background()
-
-	config, err := getConfig()
-	if err != nil {
-		t.Fatalf("Error loading configuration: %v", err)
-	}
 
 	testCases := []struct {
 		name string
@@ -224,17 +213,17 @@ func Test_UserInterator_LoginRepositorySection(t *testing.T) {
 			mockRepo.On("GetByMobile", ctx, tc.req.Mobile).
 				Return(tc.repo.user, tc.repo.err)
 
-			userFetch, _ := mockRepo.GetByMobile(ctx, tc.req.Mobile)
+			user, _ := mockRepo.GetByMobile(ctx, tc.req.Mobile)
 
 			if tc.expectedError == nil {
-				authenticable := entity.Authenticable{ID: userFetch.ID}
+				authenticable := entity.Authenticable{ID: user.ID}
 
 				mockAuth.On("CreateAccessToken", authenticable).Return("access-token", nil)
 				mockAuth.On("CreateRefreshToken", authenticable).Return("refresh-token", nil)
 			}
 
 			usecase := userusecase.New(
-				config,
+				_myDBConfig,
 				setupTracer(),
 				mockVld,
 				mockAuth,
@@ -262,11 +251,6 @@ func Test_UserInterator_LoginCreateTokenSection(t *testing.T) {
 	t.Parallel()
 
 	ctx := context.Background()
-
-	config, err := getConfig()
-	if err != nil {
-		t.Fatalf("Error loading configuration: %v", err)
-	}
 
 	testCases := []struct {
 		name           string
@@ -336,9 +320,9 @@ func Test_UserInterator_LoginCreateTokenSection(t *testing.T) {
 			mockVld.EXPECT().ValidateLoginRequest(tc.req).Return(nil, nil)
 
 			mockRepo.On("GetByMobile", ctx, tc.req.Mobile).Return(tc.user, nil)
-			userFetch, _ := mockRepo.GetByMobile(ctx, tc.req.Mobile)
+			user, _ := mockRepo.GetByMobile(ctx, tc.req.Mobile)
 
-			authenticable := entity.Authenticable{ID: userFetch.ID}
+			authenticable := entity.Authenticable{ID: user.ID}
 
 			mockAuth.On("CreateAccessToken", authenticable).Return(tc.accessToken, tc.expectedError)
 			if tc.expectedError == nil {
@@ -346,7 +330,7 @@ func Test_UserInterator_LoginCreateTokenSection(t *testing.T) {
 			}
 
 			usecase := userusecase.New(
-				config,
+				_myDBConfig,
 				setupTracer(),
 				mockVld,
 				mockAuth,

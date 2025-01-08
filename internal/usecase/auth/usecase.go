@@ -31,14 +31,6 @@ func New(config Config) *Interactor {
 func (i Interactor) CreateAccessToken(
 	req entity.Authenticable,
 ) (string, error) {
-	if len(i.Config.AccessTokenSecret) == 0 {
-		return "", ErrMissingAccessTokenSecret
-	}
-
-	if i.Config.AccessTokenExpiryTime <= 0 {
-		return "", ErrInvalidExpireTime
-	}
-
 	claims := Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject:   i.Config.AccessTokenSubject,
@@ -48,26 +40,18 @@ func (i Interactor) CreateAccessToken(
 		// any more property for response to user (name, family, role, etc...)
 	}
 
-	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := accessToken.SignedString([]byte(i.Config.AccessTokenSecret))
+	t := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	ts, err := t.SignedString([]byte(i.Config.AccessTokenSecret))
 	if err != nil {
 		return "", err
 	}
 
-	return tokenString, err
+	return ts, err
 }
 
 func (i Interactor) CreateRefreshToken(
 	req entity.Authenticable,
 ) (string, error) {
-	if len(i.Config.RefreshTokenSecret) == 0 {
-		return "", ErrMissingRefreshTokenSecret
-	}
-
-	if i.Config.RefreshTokenExpiryTime <= 0 {
-		return "", ErrInvalidExpireTime
-	}
-
 	claims := Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject:   i.Config.RefreshTokenSubject,
@@ -77,13 +61,13 @@ func (i Interactor) CreateRefreshToken(
 		// any more property for response to user (name, family, role, etc...)
 	}
 
-	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := accessToken.SignedString([]byte(i.Config.RefreshTokenSecret))
+	t := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	ts, err := t.SignedString([]byte(i.Config.RefreshTokenSecret))
 	if err != nil {
 		return "", err
 	}
 
-	return tokenString, err
+	return ts, err
 }
 
 func (i Interactor) IsAuthorized(requestToken string, secret string) (bool, error) {

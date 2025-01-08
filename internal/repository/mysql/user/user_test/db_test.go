@@ -6,9 +6,11 @@ import (
 	"testing"
 	"time"
 
+	setuptest "github.com/saeedjhn/go-backend-clean-arch/test/setup_test"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	mysqluser "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/user"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/user/user_test/setup"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/user/user_test/doubles"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -17,7 +19,7 @@ import (
 func Test_MysqlUser_GetByMobile(t *testing.T) {
 	t.Parallel()
 
-	conn, err := setup.NewDBSingleton(setup.GetDBConfig())
+	conn, err := setuptest.NewMySQLDB(_myDBConfig)
 	if err != nil {
 		t.Fatalf("failed to create database connection: %v", err)
 	}
@@ -25,7 +27,7 @@ func Test_MysqlUser_GetByMobile(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	db := mysqluser.New(setup.NewTracer(), conn)
+	db := mysqluser.New(doubles.NewDummyTracer(), conn)
 
 	testCases := []struct {
 		name         string
