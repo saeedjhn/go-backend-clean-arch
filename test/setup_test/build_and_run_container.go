@@ -16,6 +16,7 @@ type BuildAndRunContainerOptions struct {
 	Env             DBEnv
 	Exposed         Exposed
 	PortBinding     PortBinding
+	Volumes         []string
 	MaxWaitRetry    time.Duration
 	ExpireInSeconds uint
 }
@@ -84,6 +85,10 @@ func (c *BuildAndRunContainer) Start(fn func() error) error {
 			config.AutoRemove = true // Ensure the container is removed after the test.
 			config.RestartPolicy = docker.RestartPolicy{
 				Name: "no", // Do not automatically restart the container.
+			}
+
+			if len(c.options.Volumes) != 0 {
+				config.Binds = c.options.Volumes
 			}
 		},
 	)

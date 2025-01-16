@@ -25,13 +25,11 @@ func (e RichError) WrappedError() error {
 }
 
 func (e RichError) Error() string {
-	var err RichError
-
-	if errors.As(e.wrappedError, &err) {
+	if e.message == "" && e.wrappedError != nil {
 		return e.wrappedError.Error()
 	}
 
-	return ""
+	return e.message
 }
 
 func (e RichError) Message() string {
