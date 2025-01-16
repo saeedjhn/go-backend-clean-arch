@@ -12,7 +12,6 @@ import (
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/cmd/migrations"
 )
 
 func main() {
@@ -70,11 +69,6 @@ func main() {
 	// Log the application configuration at startup
 	app.Logger.Infow("App.Startup.Config", "config", app.Config)
 
-	// Run database migrations
-	if err = migrations.Up(app); err != nil {
-		app.Logger.Fatalf("DB.Migrations.Up: %v", err)
-	}
-
 	// Set up signal handling for graceful shutdown (e.g., SIGINT, SIGTERM)
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt) // more SIGX (SIGINT, SIGTERM, etc)
@@ -100,17 +94,14 @@ func main() {
 	// Log received interrupt signal and shutting down gracefully
 	app.Logger.Info("App.Shutdown.Gracefully - Received interrupt signal, shutting down gracefully")
 
-	// Close Redis client connection during shutdown
 	if err = app.CloseRedisClientConnection(); err != nil {
 		app.Logger.Errorf("Close.Redis.Connection: %v", err)
 	}
 
-	// Close MySQL connection during shutdown
 	if err = app.CloseMysqlConnection(); err != nil {
 		app.Logger.Errorf("Close.Mysql.Connection: %v", err)
 	}
 
-	// Shutdown tracer during shutdown
 	if err = app.ShutdownTracer(ctxWithTimeout); err != nil {
 		app.Logger.Errorf("Shutdown.Tracer: %v", err)
 	}
