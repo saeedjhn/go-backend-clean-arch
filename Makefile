@@ -1,7 +1,10 @@
-# Default Shell
+# --- Tooling & Variables ----------------------------------------------------------------
 export SHELL := bash
 
-export VERSION := $(shell git describe --tags)
+# Exporting bin folder to the path for makefile
+export PATH   := $(PWD)/scripts/bin:$(PATH)
+
+export VERSION := $(shell git describe --tags 2>/dev/null || echo "v0.1.0")
 export COMMIT :=$(shell git rev-parse HEAD)
 export BRANCH :=$(shell git rev-parse --abbrev-ref HEAD)
 
@@ -9,8 +12,7 @@ export BRANCH :=$(shell git rev-parse --abbrev-ref HEAD)
 export GOBASE := $(shell pwd)
 export GOBUILDBASE := $(shell pwd)/build
 export OSTYPE := $(shell uname -s | tr A-Z a-z)
-# export ARCH := $(shell uname -m)
-export ARCH = amd64
+export ARCH := $(shell uname -m)
 export PROJECTNAME := $(shell basename "$(PWD)")
 export GOFILES := $(wildcard *.go)
 
@@ -26,10 +28,22 @@ export SCHEDULER := $(CMD)/scheduler/main.go
 # Setup the -ldflags option for go build here, interpolate the variable values
 export LDFLAGS := -ldflags "-X main.VERSION=${VERSION} -X main.COMMIT=${COMMIT} -X main.BRANCH=${BRANCH}"
 
+#include ./scripts/help.Makefile
+include ./scripts/tools.Makefile
+
+# ~~~ Development Environment ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#install-deps: scripts/bin/migrate scripts/bin/air scripts/bin/gotestsum scripts/bin/tparse scripts/bin/mockery ## Install Development Dependencies (localy).
+install-deps:
+	@ $(MAKE) scripts/bin/migrate
+	@ $(MAKE) scripts/bin/air
+	@ $(MAKE) scripts/bin/gotestsum
+	@ $(MAKE) scripts/bin/tparse
+	@ $(MAKE) scripts/bin/mockery
+	@ $(MAKE) scripts/bin/golangci-lint
+
 # ==================================================================================== #
 # DEVELOPMENT
 # ==================================================================================== #
-
 ## test: run all tests
 .PHONY: test
 test:
@@ -72,14 +86,6 @@ pprof:
 	@echo " > pprof running"
 	@echo
 	go run ${PPROF}
-
-## watch: Run given command when code changes. e.g; make watch run="echo 'hey'"
-#.PHONY: watch
-#watch:
-#	@echo
-#	@echo " > Run given command when code changes"
-#	@echo
-#	@docker-compose -f deployments/docker-compose.yaml run --rm -p 8000:8000 -v $(CURDIR):/app -w /app app air -c .air.toml
 
 ## run/http: compile and run http server program
 .PHONY: run/httpserver
@@ -151,6 +157,41 @@ go/env:
 go/clean:
 	@echo "  >  Cleaning build cache"
     @GOPATH=$(GOPATH) GOBIN=$(GOBIN) go clean
+
+# ==================================================================================== #
+# DATABASE MIGRATIONS
+# ==================================================================================== #
+MYSQL_USER ?= admin
+MYSQL_PASSWORD ?= password123
+MYSQL_ADDRESS ?= 127.0.0.1:3306
+MYSQL_DATABASE ?= go-backend-clean-arch_db
+MYSQL_DSN := "mysql://$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_ADDRESS))/$(MYSQL_DATABASE)"
+MYSQL_MIGRATION_PATH := "./internal/repository/migrations/mysql"
+
+.PHONY: migrate-force
+migrate-force: $(MIGRATE) ##  Set version V but don't run migration (ignores dirty state).
+	migrate -database $(MYSQL_DSN) -path $(MYSQL_MIGRATION_PATH) version
+	migrate -database $(MYSQL_DSN) -path $(MYSQL_MIGRATION_PATH) force 1
+	@ echo "Set version"
+
+.PHONY: migrate-up
+migrate-up: $(MIGRATE) ## Apply all (or N up) migrations.
+	@ read -p "How many migration you wants to perform (default value: [all]): " N; \
+	migrate  -database $(MYSQL_DSN) -path $(MYSQL_MIGRATION_PATH) up ${NN}
+
+.PHONY: migrate-down
+migrate-down: $(MIGRATE) ## Apply all (or N down) migrations.
+	@ read -p "How many migration you wants to perform (default value: [all]): " N; \
+	migrate  -database $(MYSQL_DSN) -path $(MYSQL_MIGRATION_PATH) down ${NN}
+
+.PHONY: migrate-drop
+migrate-drop: $(MIGRATE) ## Drop everything inside the database.
+	migrate  -database $(MYSQL_DSN) -path $(MYSQL_MIGRATION_PATH) drop
+
+.PHONY: migrate-create
+migrate-create: $(MIGRATE) ## Create a set of up/down migrations with a specified name.
+	@ read -p "Please provide name for the migration: " Name; \
+	migrate create -ext sql -dir $(MYSQL_MIGRATION_PATH) $${Name}
 
 # ==================================================================================== #
 # SCHEDULER
