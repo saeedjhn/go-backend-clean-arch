@@ -16,12 +16,12 @@ import (
 )
 
 type DB struct {
-	conn *mysql.Mysql
+	conn *mysql.DB
 }
 
 // var _ taskservice.Repository = (*DB)(nil)
 
-func New(conn *mysql.Mysql) *DB {
+func New(conn *mysql.DB) *DB {
 	return &DB{
 		conn: conn,
 	}

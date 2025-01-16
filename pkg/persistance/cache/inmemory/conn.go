@@ -4,15 +4,15 @@ import (
 	"errors"
 )
 
-type InMemory struct {
+type DB struct {
 	m map[string]interface{}
 }
 
-func New() *InMemory {
-	return &InMemory{m: make(map[string]interface{})}
+func New() *DB {
+	return &DB{m: make(map[string]interface{})}
 }
 
-func (i *InMemory) Exists(key string) (bool, error) {
+func (i *DB) Exists(key string) (bool, error) {
 	_, ok := i.m[key]
 	if !ok {
 		return false, nil
@@ -21,13 +21,13 @@ func (i *InMemory) Exists(key string) (bool, error) {
 	return true, nil
 }
 
-func (i *InMemory) Set(key string, value interface{}) error {
+func (i *DB) Set(key string, value interface{}) error {
 	i.m[key] = value
 
 	return nil
 }
 
-func (i *InMemory) Get(key string) (interface{}, error) {
+func (i *DB) Get(key string) (interface{}, error) {
 	exists, err := i.Exists(key)
 	if err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func (i *InMemory) Get(key string) (interface{}, error) {
 	return i.m[key], nil
 }
 
-func (i *InMemory) Del(key string) (bool, error) {
+func (i *DB) Del(key string) (bool, error) {
 	exists, err := i.Exists(key)
 	if err != nil {
 		return false, err

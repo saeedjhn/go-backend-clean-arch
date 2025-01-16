@@ -9,16 +9,16 @@ import (
 
 const _driverName = "postgres"
 
-type Postgres struct {
+type DB struct {
 	config Config
 	db     *sql.DB
 }
 
-func New(config Config) *Postgres {
-	return &Postgres{config: config}
+func New(config Config) *DB {
+	return &DB{config: config}
 }
 
-func (p *Postgres) ConnectTo() error {
+func (p *DB) ConnectTo() error {
 	var err error
 
 	uri := fmt.Sprintf("host=%s port=%s userentity=%s password=%s dbname=%s sslmode=%s TimeZone=Asia/Tehran",
@@ -38,6 +38,6 @@ func (p *Postgres) ConnectTo() error {
 	return nil
 }
 
-func (p *Postgres) Conn() *sql.DB {
+func (p *DB) Conn() *sql.DB {
 	return p.db
 }

@@ -8,10 +8,10 @@ import (
 )
 
 type DB struct {
-	conn *inmemory.InMemory
+	conn *inmemory.DB
 }
 
-func New(conn *inmemory.InMemory) *DB {
+func New(conn *inmemory.DB) *DB {
 	return &DB{conn: conn}
 }
 

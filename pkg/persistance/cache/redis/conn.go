@@ -7,16 +7,16 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-type Redis struct {
+type DB struct {
 	config Config
 	db     *redis.Client
 }
 
-func New(config Config) *Redis {
-	return &Redis{config: config}
+func New(config Config) *DB {
+	return &DB{config: config}
 }
 
-func (r *Redis) ConnectTo() error {
+func (r *DB) ConnectTo() error {
 	var err error
 
 	rdb := redis.NewClient(&redis.Options{
@@ -33,6 +33,6 @@ func (r *Redis) ConnectTo() error {
 	return nil
 }
 
-func (r *Redis) Client() *redis.Client {
+func (r *DB) Client() *redis.Client {
 	return r.db
 }

@@ -9,16 +9,16 @@ import (
 
 const _driverName = "mysql"
 
-type Mysql struct {
+type DB struct {
 	config Config
 	db     *sql.DB
 }
 
-func New(config Config) *Mysql {
-	return &Mysql{config: config}
+func New(config Config) *DB {
+	return &DB{config: config}
 }
 
-func (m *Mysql) ConnectTo() error {
+func (m *DB) ConnectTo() error {
 	var err error
 	uri := fmt.Sprintf("%s:%s@(%s:%s)/%s?parseTime=true",
 
@@ -37,6 +37,6 @@ func (m *Mysql) ConnectTo() error {
 	return nil
 }
 
-func (m *Mysql) Conn() *sql.DB {
+func (m *DB) Conn() *sql.DB {
 	return m.db
 }

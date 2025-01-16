@@ -6,7 +6,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 )
 
-func NewMysqlConnection(c mysql.Config) (*mysql.Mysql, error) {
+func NewMysqlConnection(c mysql.Config) (*mysql.DB, error) {
 	db := mysql.New(c)
 
 	if err := db.ConnectTo(); err != nil {
@@ -16,7 +16,7 @@ func NewMysqlConnection(c mysql.Config) (*mysql.Mysql, error) {
 	return db, nil
 }
 
-func CloseMysqlConnection(db *mysql.Mysql) error {
+func CloseMysqlConnection(db *mysql.DB) error {
 	if err := db.Conn().Close(); err != nil {
 		return fmt.Errorf("don`t close mysql connection: %w", err)
 	}

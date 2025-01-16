@@ -6,7 +6,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
 )
 
-func NewPostgresConnection(c pq.Config) (*pq.Postgres, error) {
+func NewPostgresConnection(c pq.Config) (*pq.DB, error) {
 	db := pq.New(c)
 
 	if err := db.ConnectTo(); err != nil {
@@ -16,7 +16,7 @@ func NewPostgresConnection(c pq.Config) (*pq.Postgres, error) {
 	return db, nil
 }
 
-func ClosePostgresConnection(db *pq.Postgres) error {
+func ClosePostgresConnection(db *pq.DB) error {
 	if err := db.Conn().Close(); err != nil {
 		return fmt.Errorf("don`t close pq connection: %w", err)
 	}

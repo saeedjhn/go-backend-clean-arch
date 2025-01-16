@@ -18,7 +18,7 @@ type Config struct {
 
 type Migrator struct {
 	config     Config
-	conn       *mysql.Mysql
+	conn       *mysql.DB
 	dialect    string
 	migrations *migrate.FileMigrationSource
 }
@@ -26,7 +26,7 @@ type Migrator struct {
 // TODO - set migration table name
 // TODO - add limit to Up and Down method
 
-func New(conn *mysql.Mysql, config Config) Migrator {
+func New(conn *mysql.DB, config Config) Migrator {
 	// Read migrations from a folder:
 	migrations := &migrate.FileMigrationSource{
 		Dir: config.MigrationPath,

@@ -13,13 +13,13 @@ import (
 )
 
 type Cache struct {
-	InMem *inmemory.InMemory
-	Redis *redis.Redis
+	InMem *inmemory.DB
+	Redis *redis.DB
 }
 
 type DB struct {
-	MySQL    *mysql.Mysql
-	Postgres *pq.Postgres
+	MySQL    *mysql.DB
+	Postgres *pq.DB
 }
 
 type Application struct {
@@ -92,5 +92,5 @@ func (a *Application) ShutdownTracer(ctx context.Context) error {
 }
 
 // func (a *Application) ClosePostgresqlConnection() error {
-//	return ClosePostgresConnection(a.Postgres)
+//	return ClosePostgresConnection(a.DB)
 // }

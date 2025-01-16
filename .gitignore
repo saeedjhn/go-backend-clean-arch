@@ -3,6 +3,7 @@
 
 # Binaries for programs and plugins
 build/
+scripts/bin/
 *.exe
 *.exe~
 *.dll

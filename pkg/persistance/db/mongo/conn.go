@@ -9,13 +9,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type Mongo struct {
+type DB struct {
 	config Config
 	client *mongo.Client
 	db     *mongo.Database
 }
 
-func New(config Config) *Mongo {
+func New(config Config) *DB {
 	ctx := context.Background()
 
 	// connectionURI := fmt.Sprintf("mongodb://%s:%s/", config.Host, config.Port) // for local machine
@@ -35,13 +35,13 @@ func New(config Config) *Mongo {
 
 	// err = client.Ping(Ctx, nil) if err != nil { log.Fatal(err) }
 
-	return &Mongo{config: config, client: client, db: db}
+	return &DB{config: config, client: client, db: db}
 }
 
-func (m *Mongo) Client() *mongo.Client {
+func (m *DB) Client() *mongo.Client {
 	return m.client
 }
 
-func (m *Mongo) Database() *mongo.Database {
+func (m *DB) Database() *mongo.Database {
 	return m.db
 }

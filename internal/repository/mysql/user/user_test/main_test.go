@@ -28,7 +28,7 @@ const (
 
 var (
 	_myDBConfig mysql.Config            //nolint:gochecknoglobals // nothing
-	_myDB       *mysql.Mysql            //nolint:gochecknoglobals // nothing
+	_myDB       *mysql.DB               //nolint:gochecknoglobals // nothing
 	_configPath = "testdata/config.yml" //nolint:gochecknoglobals // nothing
 
 	migrationPath = "./testdata/migrations" //nolint:gochecknoglobals // nothing

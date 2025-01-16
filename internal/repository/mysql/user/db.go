@@ -18,12 +18,12 @@ import (
 
 type DB struct {
 	trc  contract.Tracer
-	conn *mysql.Mysql
+	conn *mysql.DB
 }
 
 // var _ userservice.Repository = (*DB)(nil)
 
-func New(trc contract.Tracer, conn *mysql.Mysql) *DB {
+func New(trc contract.Tracer, conn *mysql.DB) *DB {
 	return &DB{
 		trc:  trc,
 		conn: conn,

@@ -14,8 +14,8 @@ const (
 )
 
 var (
-	once     sync.Once    //nolint:gochecknoglobals // nothing
-	instance *mysql.Mysql //nolint:gochecknoglobals // nothing
+	once     sync.Once //nolint:gochecknoglobals // nothing
+	instance *mysql.DB //nolint:gochecknoglobals // nothing
 )
 
 type MySQLSeedOptions struct {
@@ -32,7 +32,7 @@ type MySQLMigrateOptions struct {
 	MigrationDBName string
 }
 
-func NewMySQLDB(config mysql.Config) (*mysql.Mysql, error) {
+func NewMySQLDB(config mysql.Config) (*mysql.DB, error) {
 	db := mysql.New(config)
 	if err := db.ConnectTo(); err != nil {
 		return nil, err
@@ -41,7 +41,7 @@ func NewMySQLDB(config mysql.Config) (*mysql.Mysql, error) {
 	return db, nil
 }
 
-func NewMySQLDBSingleton(config mysql.Config) (*mysql.Mysql, error) {
+func NewMySQLDBSingleton(config mysql.Config) (*mysql.DB, error) {
 	var initErr error
 
 	once.Do(func() {
