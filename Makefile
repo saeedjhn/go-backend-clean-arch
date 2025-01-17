@@ -25,6 +25,15 @@ export PPROF := $(CMD)/pprof/main.go
 export MIGRATION := $(CMD)/migrations/main.go
 export SCHEDULER := $(CMD)/scheduler/main.go
 
+MYSQL_USER ?= admin
+MYSQL_PASSWORD ?= password123
+MYSQL_ADDRESS ?= 127.0.0.1:3306
+MYSQL_DATABASE ?= go-backend-clean-arch_db
+MYSQL_DSN := "mysql://$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_ADDRESS))/$(MYSQL_DATABASE)"
+MYSQL_MIGRATION_PATH := "./internal/repository/migrations/mysql"
+
+export TEST_SUMMARIES_FILE ?= test_summaries.out
+
 # Setup the -ldflags option for go build here, interpolate the variable values
 export LDFLAGS := -ldflags "-X main.VERSION=${VERSION} -X main.COMMIT=${COMMIT} -X main.BRANCH=${BRANCH}"
 
@@ -44,6 +53,14 @@ install-deps:
 # ==================================================================================== #
 # DEVELOPMENT
 # ==================================================================================== #
+## tparse: CLI tool for summarizing go test output. Pipe friendly. CI/CD friendly
+.PHONY: tparse
+tparse:
+	set +e; \
+    go test ./... -json > $(TEST_SUMMARIES_FILE); \
+    tparse -all -file=$(TEST_SUMMARIES_FILE); \
+    rm -f $(TEST_SUMMARIES_FILE)
+
 ## test: run all tests
 .PHONY: test
 test:
@@ -161,13 +178,6 @@ go/clean:
 # ==================================================================================== #
 # DATABASE MIGRATIONS
 # ==================================================================================== #
-MYSQL_USER ?= admin
-MYSQL_PASSWORD ?= password123
-MYSQL_ADDRESS ?= 127.0.0.1:3306
-MYSQL_DATABASE ?= go-backend-clean-arch_db
-MYSQL_DSN := "mysql://$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_ADDRESS))/$(MYSQL_DATABASE)"
-MYSQL_MIGRATION_PATH := "./internal/repository/migrations/mysql"
-
 .PHONY: migrate-force
 migrate-force: $(MIGRATE) ##  Set version V but don't run migration (ignores dirty state).
 	migrate -database $(MYSQL_DSN) -path $(MYSQL_MIGRATION_PATH) version
