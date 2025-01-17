@@ -7,7 +7,6 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
@@ -33,7 +32,7 @@ func (i *Interactor) Register(ctx context.Context, req user.RegisterRequest) (us
 			richerror.New(_opUserServiceRegister).
 				WithErr(errors.New(_errMsgMobileIsNotUnique)).
 				WithMessage(_errMsgMobileIsNotUnique).
-				WithKind(kind.KindStatusBadRequest)
+				WithKind(richerror.KindStatusBadRequest)
 	}
 
 	u := entity.User{

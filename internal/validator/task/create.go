@@ -5,7 +5,6 @@ import (
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
@@ -35,7 +34,7 @@ func (v Validator) ValidateCreateRequest(req task.CreateRequest) (map[string]str
 
 		return fieldErrors, richerror.New(_opTaskValidatorValidateCreateRequest).WithErr(err).
 			WithMessage(_errMsgInvalidInput).
-			WithKind(kind.KindStatusUnprocessableEntity)
+			WithKind(richerror.KindStatusUnprocessableEntity)
 	}
 
 	return map[string]string{}, nil

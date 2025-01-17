@@ -8,7 +8,6 @@ import (
 
 	entity2 "github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
@@ -37,7 +36,7 @@ func (r *DB) Create(ctx context.Context, t entity2.Task) (entity2.Task, error) {
 		return entity2.Task{},
 			richerror.New(_opMysqlTaskCreate).WithErr(err).
 				WithMessage(message.ErrorMsg500InternalServerError).
-				WithKind(kind.KindStatusInternalServerError)
+				WithKind(richerror.KindStatusInternalServerError)
 	}
 
 	id, _ := res.LastInsertId()
@@ -55,7 +54,7 @@ func (r *DB) IsExistsUser(ctx context.Context, id uint64) (bool, error) {
 	if err != nil {
 		return false, richerror.New(_opMysqlTaskIsExistsUser).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).
-			WithKind(kind.KindStatusInternalServerError)
+			WithKind(richerror.KindStatusInternalServerError)
 	}
 
 	if exists {
@@ -74,12 +73,12 @@ func (r *DB) GetByID(ctx context.Context, id uint64) (entity2.Task, error) {
 		if errors.Is(err, sql.ErrNoRows) {
 			return entity2.Task{}, richerror.New(_opMysqlTaskGetByID).WithErr(err).
 				WithMessage(_errMsgDBRecordNotFound).
-				WithKind(kind.KindStatusNotFound)
+				WithKind(richerror.KindStatusNotFound)
 		}
 
 		return entity2.Task{}, richerror.New(_opMysqlTaskGetByID).WithErr(err).
 			WithMessage(_errMsgDBCantScanQueryResult).
-			WithKind(kind.KindStatusInternalServerError)
+			WithKind(richerror.KindStatusInternalServerError)
 	}
 
 	return task, nil
@@ -92,7 +91,7 @@ func (r *DB) GetAllByUserID(ctx context.Context, userID uint64) ([]entity2.Task,
 	if err != nil || rows.Err() != nil {
 		return nil, richerror.New(_opMysqlTaskGetAllByUserID).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).
-			WithKind(kind.KindStatusInternalServerError)
+			WithKind(richerror.KindStatusInternalServerError)
 	}
 
 	defer func(rows *sql.Rows) {
@@ -104,12 +103,12 @@ func (r *DB) GetAllByUserID(ctx context.Context, userID uint64) ([]entity2.Task,
 		if errors.Is(err, sql.ErrNoRows) {
 			return []entity2.Task{}, richerror.New(_opMysqlTaskGetByID).WithErr(err).
 				WithMessage(_errMsgDBRecordNotFound).
-				WithKind(kind.KindStatusNotFound)
+				WithKind(richerror.KindStatusNotFound)
 		}
 
 		return nil, richerror.New(_opMysqlTaskGetAllByUserID).WithErr(err).
 			WithMessage(_errMsgDBCantScanQueryResult).
-			WithKind(kind.KindStatusInternalServerError)
+			WithKind(richerror.KindStatusInternalServerError)
 	}
 
 	return tasks, nil
@@ -120,7 +119,7 @@ func (r *DB) GetAll(ctx context.Context) ([]entity2.Task, error) {
 	if err != nil || rows.Err() != nil {
 		return nil, richerror.New(_opMysqlTaskGetAll).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).
-			WithKind(kind.KindStatusInternalServerError)
+			WithKind(richerror.KindStatusInternalServerError)
 	}
 
 	defer func(rows *sql.Rows) {
@@ -132,12 +131,12 @@ func (r *DB) GetAll(ctx context.Context) ([]entity2.Task, error) {
 		if errors.Is(err, sql.ErrNoRows) {
 			return []entity2.Task{}, richerror.New(_opMysqlTaskGetByID).WithErr(err).
 				WithMessage(_errMsgDBRecordNotFound).
-				WithKind(kind.KindStatusNotFound)
+				WithKind(richerror.KindStatusNotFound)
 		}
 
 		return nil, richerror.New(_opMysqlTaskGetAll).WithErr(err).
 			WithMessage(_errMsgDBCantScanQueryResult).
-			WithKind(kind.KindStatusInternalServerError)
+			WithKind(richerror.KindStatusInternalServerError)
 	}
 
 	return tasks, nil

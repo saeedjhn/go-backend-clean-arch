@@ -3,57 +3,57 @@ package httpstatus //nolint:cyclop // the average complexity for the package htt
 import (
 	"net/http"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
-func MapkindToHTTPStatusCode(k kind.Kind) int {
+func MapkindToHTTPStatusCode(k richerror.Kind) int {
 	switch k { //nolint:exhaustive // missing cases in switch of type kind.Kind
-	case kind.KindStatusContinue:
+	case richerror.KindStatusContinue:
 		return http.StatusContinue
-	case kind.KindStatusSwitchingProtocols:
+	case richerror.KindStatusSwitchingProtocols:
 		return http.StatusSwitchingProtocols
-	case kind.KindStatusProcessing:
+	case richerror.KindStatusProcessing:
 		return http.StatusProcessing
-	case kind.KindStatusEarlyHints:
+	case richerror.KindStatusEarlyHints:
 		return http.StatusEarlyHints
 
-	case kind.KindStatusOK:
+	case richerror.KindStatusOK:
 		return http.StatusOK
-	case kind.KindStatusCreated:
+	case richerror.KindStatusCreated:
 		return http.StatusCreated
-	case kind.KindStatusAccepted:
+	case richerror.KindStatusAccepted:
 		return http.StatusAccepted
-	case kind.KindStatusNonAuthoritativeInfo:
+	case richerror.KindStatusNonAuthoritativeInfo:
 		return http.StatusNonAuthoritativeInfo
-	case kind.KindStatusNoContent:
+	case richerror.KindStatusNoContent:
 		return http.StatusNoContent
-	case kind.KindStatusResetContent:
+	case richerror.KindStatusResetContent:
 		return http.StatusResetContent
-	case kind.KindStatusPartialContent:
+	case richerror.KindStatusPartialContent:
 		return http.StatusPartialContent
-	case kind.KindStatusMultiStatus:
+	case richerror.KindStatusMultiStatus:
 		return http.StatusMultiStatus
-	case kind.KindStatusAlreadyReported:
+	case richerror.KindStatusAlreadyReported:
 		return http.StatusAlreadyReported
-	case kind.KindStatusIMUsed:
+	case richerror.KindStatusIMUsed:
 		return http.StatusIMUsed
 
-	case kind.KindStatusBadRequest:
+	case richerror.KindStatusBadRequest:
 		return http.StatusBadRequest
-	case kind.KindStatusUnauthorized:
+	case richerror.KindStatusUnauthorized:
 		return http.StatusUnauthorized
-	case kind.KindStatusPaymentRequired:
+	case richerror.KindStatusPaymentRequired:
 		return http.StatusPaymentRequired
-	case kind.KindStatusForbidden:
+	case richerror.KindStatusForbidden:
 		return http.StatusForbidden
-	case kind.KindStatusNotFound:
+	case richerror.KindStatusNotFound:
 		return http.StatusNotFound
-	case kind.KindStatusConflict:
+	case richerror.KindStatusConflict:
 		return http.StatusConflict
-	case kind.KindStatusUnprocessableEntity:
+	case richerror.KindStatusUnprocessableEntity:
 		return http.StatusUnprocessableEntity
 
-	case kind.KindStatusInternalServerError:
+	case richerror.KindStatusInternalServerError:
 		return http.StatusInternalServerError
 
 	default:

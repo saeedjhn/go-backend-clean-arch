@@ -6,7 +6,6 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
@@ -30,7 +29,7 @@ func (i *Interactor) RefreshToken(
 	if err != nil {
 		return user.RefreshTokenResponse{}, richerror.New(_opUserServiceRefreshToken).WithErr(err).
 			WithMessage(message.ErrorMsg403Forbidden).
-			WithKind(kind.KindStatusBadRequest)
+			WithKind(richerror.KindStatusBadRequest)
 	}
 
 	u, err := i.repository.GetByID(ctx, resp.UserID)
@@ -44,14 +43,14 @@ func (i *Interactor) RefreshToken(
 	if err != nil {
 		return user.RefreshTokenResponse{}, richerror.New(_opUserServiceRefreshToken).WithErr(err).
 			WithMessage(message.ErrorMsg400BadRequest).
-			WithKind(kind.KindStatusBadRequest)
+			WithKind(richerror.KindStatusBadRequest)
 	}
 
 	refreshToken, err := i.authIntr.CreateRefreshToken(authenticable)
 	if err != nil {
 		return user.RefreshTokenResponse{}, richerror.New(_opUserServiceRefreshToken).WithErr(err).
 			WithMessage(message.ErrorMsg400BadRequest).
-			WithKind(kind.KindStatusBadRequest)
+			WithKind(richerror.KindStatusBadRequest)
 	}
 
 	return user.RefreshTokenResponse{

@@ -5,7 +5,6 @@ import (
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
@@ -36,7 +35,7 @@ func (v Validator) ValidateLoginRequest(req user.LoginRequest) (map[string]strin
 
 		return fieldErrors, richerror.New(_opUserValidatorValidateLoginRequest).WithErr(err).
 			WithMessage(_errMsgInvalidInput).
-			WithKind(kind.KindStatusUnprocessableEntity)
+			WithKind(richerror.KindStatusUnprocessableEntity)
 	}
 
 	return nil, nil //nolint:nilnil // return both the `nil` error and invalid value: use a sentinel error instead (nilnil)

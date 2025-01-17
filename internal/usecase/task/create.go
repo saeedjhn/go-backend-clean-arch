@@ -7,7 +7,6 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
@@ -21,7 +20,7 @@ func (i *Interactor) Create(ctx context.Context, req task.CreateRequest) (task.C
 		return task.CreateResponse{}, richerror.New(_opTaskServiceCreate).
 			WithErr(errors.New(_errMsgUserNotFound)).
 			WithMessage(_errMsgUserNotFound).
-			WithKind(kind.KindStatusBadRequest)
+			WithKind(richerror.KindStatusBadRequest)
 	}
 
 	t := entity.Task{

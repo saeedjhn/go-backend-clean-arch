@@ -9,7 +9,6 @@ import (
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
@@ -47,7 +46,7 @@ func (r *DB) Create(ctx context.Context, u entity.User) (entity.User, error) {
 		return entity.User{},
 			richerror.New(_opMysqlUserCreate).WithErr(err).
 				WithMessage(message.ErrorMsg500InternalServerError).
-				WithKind(kind.KindStatusInternalServerError)
+				WithKind(richerror.KindStatusInternalServerError)
 	}
 
 	id, _ := res.LastInsertId()
@@ -76,7 +75,7 @@ func (r *DB) IsMobileUnique(ctx context.Context, mobile string) (bool, error) {
 		return false,
 			richerror.New(_opMysqlUserIsMobileUnique).WithErr(err).
 				WithMessage(message.ErrorMsg500InternalServerError).
-				WithKind(kind.KindStatusInternalServerError)
+				WithKind(richerror.KindStatusInternalServerError)
 	}
 
 	if !exists {
@@ -104,12 +103,12 @@ func (r *DB) GetByMobile(ctx context.Context, mobile string) (entity.User, error
 		if errors.Is(err, sql.ErrNoRows) {
 			return entity.User{}, richerror.New(_opMysqlUserGetByMobile).WithErr(err).
 				WithMessage(_errMsgDBRecordNotFound).
-				WithKind(kind.KindStatusNotFound)
+				WithKind(richerror.KindStatusNotFound)
 		}
 
 		return entity.User{}, richerror.New(_opMysqlUserGetByMobile).WithErr(err).
 			WithMessage(_errMsgDBCantScanQueryResult).
-			WithKind(kind.KindStatusInternalServerError)
+			WithKind(richerror.KindStatusInternalServerError)
 	}
 
 	return user, nil
@@ -133,12 +132,12 @@ func (r *DB) GetByID(ctx context.Context, id uint64) (entity.User, error) {
 		if errors.Is(err, sql.ErrNoRows) {
 			return entity.User{}, richerror.New(_opMysqlUserGetByID).WithErr(err).
 				WithMessage(_errMsgDBRecordNotFound).
-				WithKind(kind.KindStatusNotFound)
+				WithKind(richerror.KindStatusNotFound)
 		}
 
 		return entity.User{}, richerror.New(_opMysqlUserGetByID).WithErr(err).
 			WithMessage(_errMsgDBCantScanQueryResult).
-			WithKind(kind.KindStatusInternalServerError)
+			WithKind(richerror.KindStatusInternalServerError)
 	}
 
 	return user, nil

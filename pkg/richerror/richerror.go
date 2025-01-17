@@ -1,196 +1,177 @@
 package richerror
 
 import (
+	json "encoding/json"
 	"errors"
-
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
+	"sync"
 )
 
+// Op represents the operation where the error occurred.
 type Op string
 
+// RichError is the main implementation of the RichErrorInterface.
 type RichError struct {
 	op           Op
-	wrappedError error
+	kind         Kind
 	message      string
-	kind         kind.Kind
+	wrappedError error
+	syncMap      *sync.Map
 	meta         map[string]interface{}
 }
 
-func (e RichError) Op() Op {
-	return e.op
-}
-
-func (e RichError) WrappedError() error {
-	return e.wrappedError
-}
-
-func (e RichError) Error() string {
-	if e.message == "" && e.wrappedError != nil {
-		return e.wrappedError.Error()
-	}
-
-	return e.message
-}
-
-func (e RichError) Message() string {
-	return e.message
-}
-
-func (e RichError) Kind() kind.Kind {
-	return e.kind
-}
-
-func (e RichError) Meta() map[string]interface{} {
-	return e.meta
-}
-
-func (e RichError) Get() map[string]interface{} {
-	return map[string]interface{}{
-		"op":      e.Op(),
-		"error":   e.Error(),
-		"message": e.Message(),
-		"kind":    e.Kind(),
+// New creates a new RichError.
+func New(op Op) *RichError {
+	return &RichError{
+		op:      op,
+		syncMap: &sync.Map{},
 	}
 }
 
-type BuilderError struct {
-	RichError
+// WithMessage sets the error message.
+func (e *RichError) WithMessage(message string) *RichError {
+	e.message = message
+	return e
 }
 
-func New(op Op) BuilderError {
-	return BuilderError{RichError{op: op}}
+// WithKind sets the error kind.
+func (e *RichError) WithKind(kind Kind) *RichError {
+	e.kind = kind
+	return e
 }
 
-func (r BuilderError) WithOp(op Op) BuilderError {
-	r.op = op
-
-	return r
+// WithErr wraps another error.
+func (e *RichError) WithErr(err error) *RichError {
+	e.wrappedError = err
+	return e
 }
 
-func (r BuilderError) WithErr(err error) BuilderError {
-	r.wrappedError = err
-
-	return r
+// WithMeta adds metadata to the error.
+func (e *RichError) WithMeta(key string, value interface{}) *RichError {
+	e.syncMap.Store(key, value)
+	return e
 }
 
-func (r BuilderError) WithMessage(message string) BuilderError {
-	r.message = message
+// WithTraceID adds a trace ID to the error metadata.
+// func (e *RichError) WithTraceID(traceID string) *RichError {
+// 	e.WithMeta("trace_id", traceID)
+// 	return e
+// }
 
-	return r
-}
-
-func (r BuilderError) WithKind(kind kind.Kind) BuilderError {
-	r.kind = kind
-
-	return r
-}
-
-func (r BuilderError) WithMeta(meta map[string]interface{}) BuilderError {
-	r.meta = meta
-
-	return r
-}
-
-func (r BuilderError) Error() string {
-	if r.message == "" && r.wrappedError != nil {
-		return r.wrappedError.Error()
+// Op returns the operation where the error occurred.
+// It tries to fetch the operation from wrapped errors if not set.
+func (e *RichError) Op() Op {
+	if e.op != "" {
+		return e.op
 	}
 
-	return r.message
-}
-
-func (r BuilderError) Op() Op {
-	if r.op != "" {
-		return r.op
-	}
-
-	var re BuilderError
-	ok := errors.As(r.wrappedError, &re)
-	if !ok {
-		return ""
-	}
-
-	return re.Op()
-}
-
-func (r BuilderError) Kind() kind.Kind {
-	if r.kind != 0 {
-		return r.kind
-	}
-
-	var re BuilderError
-	ok := errors.As(r.wrappedError, &re)
-	if !ok {
-		return 0
-	}
-
-	return re.Kind()
-}
-
-func (r BuilderError) WrappedError() error {
-	if r.wrappedError != nil {
-		return r.wrappedError
-	}
-
-	var re BuilderError
-	ok := errors.As(r.wrappedError, &re)
-	if !ok {
-		return nil
-	}
-
-	return re.WrappedError()
-}
-
-func (r BuilderError) Message() string {
-	if r.message != "" {
-		return r.message
-	}
-
-	var re BuilderError
-	ok := errors.As(r.wrappedError, &re)
-	if ok {
-		return re.Message()
-	}
-
-	if r.wrappedError != nil {
-		return r.wrappedError.Error()
+	var wrapped *RichError
+	if errors.As(e.wrappedError, &wrapped) {
+		return wrapped.Op() // Recursive call
 	}
 
 	return ""
 }
 
-func (r BuilderError) Meta() map[string]interface{} {
-	if len(r.meta) != 0 {
-		return r.meta
+// Kind returns the kind of the error.
+// It checks wrapped errors recursively if the kind is not set.
+func (e *RichError) Kind() Kind {
+	if e.kind != KindUnknown {
+		return e.kind
 	}
 
-	var re BuilderError
-	ok := errors.As(r.wrappedError, &re)
-	if !ok {
-		return make(map[string]interface{})
+	var wrapped *RichError
+	if errors.As(e.wrappedError, &wrapped) {
+		return wrapped.Kind() // Recursive call
 	}
 
-	return re.Meta()
+	return KindUnknown
 }
 
-func (r BuilderError) Build() RichError {
-	return r.RichError
+// Message returns the error message.
+// It falls back to wrapped errors recursively if no message is set.
+func (e *RichError) Message() string {
+	if e.message != "" {
+		return e.message
+	}
+
+	var wrapped *RichError
+	if errors.As(e.wrappedError, &wrapped) {
+		return wrapped.Message() // Recursive call
+	}
+
+	return ""
 }
 
+// Meta aggregates metadata from the current and wrapped errors.
+func (e *RichError) Meta() map[string]interface{} {
+	meta := make(map[string]interface{})
+
+	e.syncMap.Range(func(key, value interface{}) bool {
+		meta[key.(string)] = value
+		return true
+	})
+
+	var wrapped *RichError
+	if errors.As(e.wrappedError, &wrapped) {
+		for k, v := range wrapped.Meta() { // Recursive call
+			if _, exists := meta[k]; !exists {
+				meta[k] = v
+			}
+		}
+	}
+
+	return meta
+}
+
+// Error implements the error interface.
+func (e *RichError) Error() string {
+	if e.message != "" {
+		return e.message
+	}
+
+	if e.wrappedError != nil {
+		return e.wrappedError.Error()
+	}
+
+	return ""
+}
+
+// WrappedError returns the wrapped error.
+func (e *RichError) WrappedError() error {
+	return e.wrappedError
+}
+
+// ToJSON serializes the error to JSON.
+func (e *RichError) ToJSON() (string, error) {
+	data := map[string]interface{}{
+		"op":      e.Op(),
+		"kind":    e.Kind(),
+		"message": e.Message(),
+		"meta":    e.Meta(),
+	}
+
+	if e.wrappedError != nil {
+		data["wrapped_error"] = e.wrappedError.Error()
+	}
+
+	jsonData, err := json.Marshal(data)
+
+	return string(jsonData), err
+}
+
+// Analysis extracts RichError from a generic error.
 func Analysis(err error) RichError {
-	var richErr BuilderError
+	var richErr *RichError
 
-	switch {
-	case errors.As(err, &richErr):
+	if errors.As(err, &richErr) {
 		return RichError{
 			op:           richErr.Op(),
-			wrappedError: richErr.WrappedError(),
-			message:      richErr.Message(),
 			kind:         richErr.Kind(),
+			message:      richErr.Message(),
+			wrappedError: richErr.WrappedError(),
 			meta:         richErr.Meta(),
 		}
-
-	default:
-		return RichError{}
 	}
+
+	return RichError{}
 }

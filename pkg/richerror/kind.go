@@ -1,9 +1,10 @@
-package kind
+package richerror
 
 type Kind int
 
 const (
-	KindStatusContinue Kind = iota + 1
+	KindUnknown Kind = iota
+	KindStatusContinue
 	KindStatusSwitchingProtocols
 	KindStatusProcessing
 	KindStatusEarlyHints

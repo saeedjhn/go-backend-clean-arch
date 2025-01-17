@@ -5,7 +5,6 @@ import (
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/kind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
@@ -31,7 +30,7 @@ func (i *Interactor) Login(ctx context.Context, req user.LoginRequest) (user.Log
 	if err != nil {
 		return user.LoginResponse{}, richerror.New(_opUserServiceLogin).WithErr(err).
 			WithMessage(_errMsgIncorrectPassword).
-			WithKind(kind.KindStatusBadRequest)
+			WithKind(richerror.KindStatusBadRequest)
 	}
 
 	authenticable := entity.Authenticable{ID: u.ID}
@@ -40,14 +39,14 @@ func (i *Interactor) Login(ctx context.Context, req user.LoginRequest) (user.Log
 	if err != nil {
 		return user.LoginResponse{}, richerror.New(_opUserServiceLogin).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).
-			WithKind(kind.KindStatusInternalServerError)
+			WithKind(richerror.KindStatusInternalServerError)
 	}
 
 	refreshToken, err := i.authIntr.CreateRefreshToken(authenticable)
 	if err != nil {
 		return user.LoginResponse{}, richerror.New(_opUserServiceLogin).WithErr(err).
 			WithMessage(message.ErrorMsg500InternalServerError).
-			WithKind(kind.KindStatusInternalServerError)
+			WithKind(richerror.KindStatusInternalServerError)
 	}
 
 	return user.LoginResponse{
