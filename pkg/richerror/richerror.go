@@ -3,7 +3,6 @@ package richerror
 import (
 	json "encoding/json"
 	"errors"
-	"sync"
 )
 
 // Op represents the operation where the error occurred.
@@ -15,15 +14,14 @@ type RichError struct {
 	kind         Kind
 	message      string
 	wrappedError error
-	syncMap      *sync.Map
 	meta         map[string]interface{}
 }
 
 // New creates a new RichError.
 func New(op Op) *RichError {
 	return &RichError{
-		op:      op,
-		syncMap: &sync.Map{},
+		op:   op,
+		meta: make(map[string]interface{}),
 	}
 }
 
@@ -46,8 +44,9 @@ func (e *RichError) WithErr(err error) *RichError {
 }
 
 // WithMeta adds metadata to the error.
-func (e *RichError) WithMeta(key string, value interface{}) *RichError {
-	e.syncMap.Store(key, value)
+// func (e *RichError) WithMeta(key string, value interface{}) *RichError {
+func (e *RichError) WithMeta(meta map[string]interface{}) *RichError {
+	e.meta = meta
 	return e
 }
 
@@ -106,11 +105,6 @@ func (e *RichError) Message() string {
 func (e *RichError) Meta() map[string]interface{} {
 	meta := make(map[string]interface{})
 
-	e.syncMap.Range(func(key, value interface{}) bool {
-		meta[key.(string)] = value
-		return true
-	})
-
 	var wrapped *RichError
 	if errors.As(e.wrappedError, &wrapped) {
 		for k, v := range wrapped.Meta() { // Recursive call
@@ -118,6 +112,10 @@ func (e *RichError) Meta() map[string]interface{} {
 				meta[k] = v
 			}
 		}
+	}
+
+	for k, v := range e.meta {
+		meta[k] = v
 	}
 
 	return meta
