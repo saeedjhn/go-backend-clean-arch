@@ -12,7 +12,7 @@ import (
 
 type Interactor interface {
 	Create(ctx context.Context, req task.CreateRequest) (task.CreateResponse, error)
-	FindAllByUserID(ctx context.Context, req task.FindAllByUserIDRequest) (task.FindAllByUserIDResponse, error)
+	GetAllByUserID(ctx context.Context, req task.GetAllByUserIDRequest) (task.GetByUserIDResponse, error)
 }
 
 type Handler struct {

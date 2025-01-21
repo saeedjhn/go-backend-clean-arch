@@ -50,7 +50,7 @@ func (i *Interactor) Login(ctx context.Context, req user.LoginRequest) (user.Log
 	}
 
 	return user.LoginResponse{
-		Data: user.Data{
+		UserInfo: user.UserInfo{
 			ID:        u.ID,
 			Name:      u.Name,
 			Mobile:    u.Mobile,
@@ -58,7 +58,7 @@ func (i *Interactor) Login(ctx context.Context, req user.LoginRequest) (user.Log
 			CreatedAt: u.CreatedAt,
 			UpdatedAt: u.UpdatedAt,
 		}, // Or
-		// Data: user.ToUserInfoDTO(),
+		// UserInfo: user.ToUserInfoDTO(),
 		Tokens: user.Tokens{
 			AccessToken:  accessToken,
 			RefreshToken: refreshToken,

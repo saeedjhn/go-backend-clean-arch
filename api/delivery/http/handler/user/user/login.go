@@ -3,6 +3,8 @@ package user //nolint:dupl // 1-79 lines are duplicate
 import (
 	"net/http"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/bind"
@@ -24,24 +26,22 @@ func (h *Handler) Login(c echo.Context) error {
 
 	req := user.LoginRequest{}
 	if err := c.Bind(&req); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest,
-			echo.Map{
-				"status":  false,
-				"message": message.ErrorMsg400BadRequest,
-				"errors":  bind.CheckErrorFromBind(err),
-			})
+		return echo.NewHTTPError(
+			http.StatusBadRequest,
+			entity.NewErrorResponse(message.ErrMsg400BadRequest, bind.CheckErrorFromBind(err).Error()).
+				WithMeta(map[string]interface{}{"request": req}),
+		)
 	}
 
 	err := sanitize.New().
 		SetPolicy(sanitize.StrictPolicy).
 		Struct(&req)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest,
-			echo.Map{
-				"status":  false,
-				"message": message.ErrorMsg400BadRequest,
-				"errors":  nil,
-			})
+		return echo.NewHTTPError(
+			http.StatusBadRequest,
+			entity.NewErrorResponse(message.ErrMsg400BadRequest, err.Error()).
+				WithMeta(map[string]interface{}{"request": req}),
+		)
 	}
 
 	resp, err := h.userIntr.Login(ctx, req)
@@ -50,18 +50,17 @@ func (h *Handler) Login(c echo.Context) error {
 		code := httpstatus.MapkindToHTTPStatusCode(richErr.Kind())
 
 		if resp.FieldErrors != nil {
-			return c.JSON(code, echo.Map{
-				"message": richErr.Message(),
-				"errors":  resp.FieldErrors,
-			})
+			return c.JSON(
+				code,
+				entity.NewErrorResponse(richErr.Message(), resp.FieldErrors).WithMeta(richErr.Meta()),
+			)
 		}
 
-		return echo.NewHTTPError(code,
-			echo.Map{
-				"message": richErr.Message(),
-				"errors":  richErr.Error(),
-			})
+		return echo.NewHTTPError(
+			code,
+			entity.NewErrorResponse(richErr.Message(), richErr.Error()).WithMeta(richErr.Meta()),
+		)
 	}
 
-	return c.JSON(http.StatusOK, resp)
+	return c.JSON(http.StatusOK, entity.NewSuccessResponse(message.MsgLoggedIn, resp))
 }

@@ -1,6 +1,8 @@
 package entity
 
-import "maps"
+import (
+	"maps"
+)
 
 type ErrorResponse struct {
 	Success bool                   `json:"Success"`
@@ -21,6 +23,11 @@ func NewErrorResponse(
 }
 
 func (e *ErrorResponse) WithMeta(meta map[string]interface{}) *ErrorResponse {
+	e.Meta = make(map[string]interface{})
+
+	// for k, v := range meta {
+	// 	e.Meta[k] = v
+	// }
 	maps.Copy(e.Meta, meta)
 
 	return e

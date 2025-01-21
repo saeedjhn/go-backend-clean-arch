@@ -28,7 +28,7 @@ func (i *Interactor) RefreshToken(
 	resp, err := i.authIntr.ParseToken(i.cfg.Auth.RefreshTokenSecret, req.RefreshToken)
 	if err != nil {
 		return user.RefreshTokenResponse{}, richerror.New(_opUserServiceRefreshToken).WithErr(err).
-			WithMessage(message.ErrorMsg403Forbidden).
+			WithMessage(message.ErrMsg403Forbidden).
 			WithKind(richerror.KindStatusBadRequest)
 	}
 
@@ -42,14 +42,14 @@ func (i *Interactor) RefreshToken(
 	accessToken, err := i.authIntr.CreateAccessToken(authenticable)
 	if err != nil {
 		return user.RefreshTokenResponse{}, richerror.New(_opUserServiceRefreshToken).WithErr(err).
-			WithMessage(message.ErrorMsg400BadRequest).
+			WithMessage(message.ErrMsg400BadRequest).
 			WithKind(richerror.KindStatusBadRequest)
 	}
 
 	refreshToken, err := i.authIntr.CreateRefreshToken(authenticable)
 	if err != nil {
 		return user.RefreshTokenResponse{}, richerror.New(_opUserServiceRefreshToken).WithErr(err).
-			WithMessage(message.ErrorMsg400BadRequest).
+			WithMessage(message.ErrMsg400BadRequest).
 			WithKind(richerror.KindStatusBadRequest)
 	}
 

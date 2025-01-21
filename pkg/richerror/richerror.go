@@ -123,15 +123,11 @@ func (e *RichError) Meta() map[string]interface{} {
 
 // Error implements the error interface.
 func (e *RichError) Error() string {
-	if e.message != "" {
-		return e.message
-	}
-
 	if e.wrappedError != nil {
 		return e.wrappedError.Error()
 	}
 
-	return ""
+	return e.message
 }
 
 // WrappedError returns the wrapped error.

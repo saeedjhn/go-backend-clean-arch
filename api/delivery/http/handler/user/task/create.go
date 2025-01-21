@@ -29,7 +29,7 @@ func (h *Handler) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest,
 			echo.Map{
 				"status":  false,
-				"message": message.ErrorMsg400BadRequest,
+				"message": message.ErrMsg400BadRequest,
 				"errors":  bind.CheckErrorFromBind(err).Error(),
 			},
 		)
@@ -43,7 +43,7 @@ func (h *Handler) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest,
 			echo.Map{
 				"status":  false,
-				"message": message.ErrorMsg400BadRequest,
+				"message": message.ErrMsg400BadRequest,
 				"errors":  nil,
 			})
 	}

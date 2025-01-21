@@ -20,7 +20,7 @@ func CheckIsValidUserID(next echo.HandlerFunc) echo.HandlerFunc {
 		if id != idFromTokenConvertToSTR {
 			return echo.NewHTTPError(http.StatusBadRequest, echo.Map{
 				"status":  false,
-				"message": message.ErrorMsg401UnAuthorized,
+				"message": message.ErrMsg401UnAuthorized,
 				"errors":  nil,
 			})
 		}

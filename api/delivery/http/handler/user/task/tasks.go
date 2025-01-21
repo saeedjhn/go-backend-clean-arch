@@ -24,12 +24,12 @@ func (h *Handler) Tasks(c echo.Context) error {
 	defer span.End()
 
 	// Bind
-	req := task.FindAllByUserIDRequest{}
+	req := task.GetAllByUserIDRequest{}
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest,
 			echo.Map{
 				"status":  false,
-				"message": message.ErrorMsg400BadRequest,
+				"message": message.ErrMsg400BadRequest,
 				"errors":  bind.CheckErrorFromBind(err).Error(),
 			},
 		)
@@ -42,12 +42,12 @@ func (h *Handler) Tasks(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest,
 			echo.Map{
 				"status":  false,
-				"message": message.ErrorMsg400BadRequest,
+				"message": message.ErrMsg400BadRequest,
 				"errors":  nil,
 			})
 	}
 
-	resp, err := h.taskIntr.FindAllByUserID(ctx, req)
+	resp, err := h.taskIntr.GetAllByUserID(ctx, req)
 	if err != nil {
 		richErr := richerror.Analysis(err)
 		code := httpstatus.MapkindToHTTPStatusCode(richErr.Kind())

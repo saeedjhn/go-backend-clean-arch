@@ -4,20 +4,20 @@ import (
 	"context"
 	"errors"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
+	taskdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
-func (i *Interactor) Create(ctx context.Context, req task.CreateRequest) (task.CreateResponse, error) {
+func (i *Interactor) Create(ctx context.Context, req taskdto.CreateRequest) (taskdto.CreateResponse, error) {
 	isExistsUser, err := i.repository.IsExistsUser(ctx, req.UserID)
 	if err != nil {
-		return task.CreateResponse{}, err
+		return taskdto.CreateResponse{}, err
 	}
 
 	if !isExistsUser {
-		return task.CreateResponse{}, richerror.New(_opTaskServiceCreate).
+		return taskdto.CreateResponse{}, richerror.New(_opTaskServiceCreate).
 			WithErr(errors.New(_errMsgUserNotFound)).
 			WithMessage(_errMsgUserNotFound).
 			WithKind(richerror.KindStatusBadRequest)
@@ -32,10 +32,10 @@ func (i *Interactor) Create(ctx context.Context, req task.CreateRequest) (task.C
 
 	createdTask, err := i.repository.Create(ctx, t)
 	if err != nil {
-		return task.CreateResponse{}, err
+		return taskdto.CreateResponse{}, err
 	}
 
-	return task.CreateResponse{Data: task.Data{
+	return taskdto.CreateResponse{TaskInfo: taskdto.TaskInfo{
 		ID:          createdTask.ID,
 		UserID:      createdTask.UserID,
 		Title:       createdTask.Title,

@@ -1,10 +1,10 @@
 package task
 
-type FindAllByUserIDRequest struct {
+type GetAllByUserIDRequest struct {
 	UserID uint64 `param:"id" json:"user_id"`
 }
 
-type FindAllByUserIDResponse struct {
-	Data        []Data            `json:"data"`
+type GetByUserIDResponse struct {
+	Tasks       []TaskInfo        `json:"tasks"`
 	FieldErrors map[string]string `json:"field_errors,omitempty"`
 }

@@ -24,11 +24,11 @@ func MapProfileRequestFromProtobuf(req *pb.ProfileRequest) user.ProfileRequest {
 
 func MapProfileResponseToProtobuf(resp user.ProfileResponse) *pb.ProfileResponse {
 	return &pb.ProfileResponse{User: &pb.User{
-		Id:        strconv.FormatUint(resp.Data.ID, 10),
-		Name:      resp.Data.Name,
-		Mobile:    resp.Data.Mobile,
-		Email:     resp.Data.Email,
-		CreatedAt: timestamppb.New(resp.Data.CreatedAt),
-		UpdatedAt: timestamppb.New(resp.Data.UpdatedAt),
+		Id:        strconv.FormatUint(resp.UserInfo.ID, 10),
+		Name:      resp.UserInfo.Name,
+		Mobile:    resp.UserInfo.Mobile,
+		Email:     resp.UserInfo.Email,
+		CreatedAt: timestamppb.New(resp.UserInfo.CreatedAt),
+		UpdatedAt: timestamppb.New(resp.UserInfo.UpdatedAt),
 	}}
 }

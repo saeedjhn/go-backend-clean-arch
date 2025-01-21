@@ -8,6 +8,6 @@ type CreateRequest struct {
 }
 
 type CreateResponse struct {
-	Data        Data              `json:"data"`
+	TaskInfo    TaskInfo          `json:"task"`
 	FieldErrors map[string]string `json:"field_errors,omitempty"`
 }

@@ -70,7 +70,7 @@ func Test_UserInterator_Login_ValidationSection(t *testing.T) {
 		fieldsErr:     nil,
 		expectedError: nil,
 		expectedResult: userdto.LoginResponse{
-			Data: userdto.Data{
+			UserInfo: userdto.UserInfo{
 				ID:        1,
 				Name:      "",
 				Mobile:    correctMobile,
@@ -186,7 +186,7 @@ func Test_UserInterator_LoginRepositorySection(t *testing.T) {
 		}, err: nil},
 		expectedError: nil,
 		expectedResult: userdto.LoginResponse{
-			Data: userdto.Data{
+			UserInfo: userdto.UserInfo{
 				ID:        1,
 				Name:      "",
 				Mobile:    correctMobile,
@@ -294,7 +294,7 @@ func Test_UserInterator_LoginCreateTokenSection(t *testing.T) {
 			refreshToken:  "refresh-token",
 			expectedError: nil,
 			expectedResult: userdto.LoginResponse{
-				Data: userdto.Data{
+				UserInfo: userdto.UserInfo{
 					ID:        1,
 					Name:      "",
 					Mobile:    correctMobile,
