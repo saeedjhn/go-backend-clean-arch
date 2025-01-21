@@ -1,4 +1,4 @@
-package message
+package msg
 
 const (
 	Msg300MultipleChoices   = "A link list. The user can select a link and go to that location. Maximum five addresses"

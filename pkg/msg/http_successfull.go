@@ -1,4 +1,4 @@
-package message
+package msg
 
 const (
 	Msg200Ok       = "The request is OK"

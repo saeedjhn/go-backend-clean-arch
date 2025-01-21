@@ -1,4 +1,4 @@
-package message
+package msg
 
 const (
 	ErrMsgSomethingWentWrong = "something went wrong"

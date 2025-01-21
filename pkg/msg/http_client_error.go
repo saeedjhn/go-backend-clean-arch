@@ -1,4 +1,4 @@
-package message
+package msg
 
 const (
 	ErrMsg400BadRequest   = "The request cannot be fulfilled due to bad syntax"

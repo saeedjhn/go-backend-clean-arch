@@ -5,7 +5,7 @@ import (
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
@@ -38,14 +38,14 @@ func (i *Interactor) Login(ctx context.Context, req user.LoginRequest) (user.Log
 	accessToken, err := i.authIntr.CreateAccessToken(authenticable)
 	if err != nil {
 		return user.LoginResponse{}, richerror.New(_opUserServiceLogin).WithErr(err).
-			WithMessage(message.ErrorMsg500InternalServerError).
+			WithMessage(msg.ErrorMsg500InternalServerError).
 			WithKind(richerror.KindStatusInternalServerError)
 	}
 
 	refreshToken, err := i.authIntr.CreateRefreshToken(authenticable)
 	if err != nil {
 		return user.LoginResponse{}, richerror.New(_opUserServiceLogin).WithErr(err).
-			WithMessage(message.ErrorMsg500InternalServerError).
+			WithMessage(msg.ErrorMsg500InternalServerError).
 			WithKind(richerror.KindStatusInternalServerError)
 	}
 

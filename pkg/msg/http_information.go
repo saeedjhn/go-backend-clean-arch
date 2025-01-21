@@ -1,4 +1,4 @@
-package message
+package msg
 
 const (
 	Msg100Continue = "The server has received the request headers, " +

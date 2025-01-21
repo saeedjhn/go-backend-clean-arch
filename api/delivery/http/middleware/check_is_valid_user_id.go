@@ -7,7 +7,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 
 	"github.com/labstack/echo/v4"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
 )
 
 func CheckIsValidUserID(next echo.HandlerFunc) echo.HandlerFunc {
@@ -20,7 +20,7 @@ func CheckIsValidUserID(next echo.HandlerFunc) echo.HandlerFunc {
 		if id != idFromTokenConvertToSTR {
 			return echo.NewHTTPError(http.StatusBadRequest, echo.Map{
 				"status":  false,
-				"message": message.ErrMsg401UnAuthorized,
+				"message": msg.ErrMsg401UnAuthorized,
 				"errors":  nil,
 			})
 		}

@@ -13,7 +13,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/sanitize"
 
 	"github.com/labstack/echo/v4"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
 )
 
 func (h *Handler) Create(c echo.Context) error {
@@ -29,7 +29,7 @@ func (h *Handler) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest,
 			echo.Map{
 				"status":  false,
-				"message": message.ErrMsg400BadRequest,
+				"message": msg.ErrMsg400BadRequest,
 				"errors":  bind.CheckErrorFromBind(err).Error(),
 			},
 		)
@@ -43,7 +43,7 @@ func (h *Handler) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest,
 			echo.Map{
 				"status":  false,
-				"message": message.ErrMsg400BadRequest,
+				"message": msg.ErrMsg400BadRequest,
 				"errors":  nil,
 			})
 	}

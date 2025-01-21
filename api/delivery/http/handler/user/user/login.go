@@ -13,7 +13,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/sanitize"
 
 	"github.com/labstack/echo/v4"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
 )
 
 func (h *Handler) Login(c echo.Context) error {
@@ -28,7 +28,7 @@ func (h *Handler) Login(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(
 			http.StatusBadRequest,
-			entity.NewErrorResponse(message.ErrMsg400BadRequest, bind.CheckErrorFromBind(err).Error()).
+			entity.NewErrorResponse(msg.ErrMsg400BadRequest, bind.CheckErrorFromBind(err).Error()).
 				WithMeta(map[string]interface{}{"request": req}),
 		)
 	}
@@ -39,7 +39,7 @@ func (h *Handler) Login(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusBadRequest,
-			entity.NewErrorResponse(message.ErrMsg400BadRequest, err.Error()).
+			entity.NewErrorResponse(msg.ErrMsg400BadRequest, err.Error()).
 				WithMeta(map[string]interface{}{"request": req}),
 		)
 	}
@@ -62,5 +62,5 @@ func (h *Handler) Login(c echo.Context) error {
 		)
 	}
 
-	return c.JSON(http.StatusOK, entity.NewSuccessResponse(message.MsgLoggedIn, resp))
+	return c.JSON(http.StatusOK, entity.NewSuccessResponse(msg.MsgLoggedIn, resp))
 }

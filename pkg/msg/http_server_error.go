@@ -1,4 +1,4 @@
-package message
+package msg
 
 const (
 	ErrorMsg500InternalServerError = "A generic error message, given when no more specific message is suitable"

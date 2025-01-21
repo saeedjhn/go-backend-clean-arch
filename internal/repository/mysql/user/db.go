@@ -12,7 +12,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
 )
 
 type DB struct {
@@ -45,7 +45,7 @@ func (r *DB) Create(ctx context.Context, u entity.User) (entity.User, error) {
 	if err != nil {
 		return entity.User{},
 			richerror.New(_opMysqlUserCreate).WithErr(err).
-				WithMessage(message.ErrorMsg500InternalServerError).
+				WithMessage(msg.ErrorMsg500InternalServerError).
 				WithKind(richerror.KindStatusInternalServerError)
 	}
 
@@ -74,7 +74,7 @@ func (r *DB) IsMobileUnique(ctx context.Context, mobile string) (bool, error) {
 	if err != nil {
 		return false,
 			richerror.New(_opMysqlUserIsMobileUnique).WithErr(err).
-				WithMessage(message.ErrorMsg500InternalServerError).
+				WithMessage(msg.ErrorMsg500InternalServerError).
 				WithKind(richerror.KindStatusInternalServerError)
 	}
 

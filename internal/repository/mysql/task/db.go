@@ -11,7 +11,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/message"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
 )
 
 type DB struct {
@@ -35,7 +35,7 @@ func (r *DB) Create(ctx context.Context, t entity2.Task) (entity2.Task, error) {
 
 		return entity2.Task{},
 			richerror.New(_opMysqlTaskCreate).WithErr(err).
-				WithMessage(message.ErrorMsg500InternalServerError).
+				WithMessage(msg.ErrorMsg500InternalServerError).
 				WithKind(richerror.KindStatusInternalServerError)
 	}
 
@@ -53,7 +53,7 @@ func (r *DB) IsExistsUser(ctx context.Context, id uint64) (bool, error) {
 
 	if err != nil {
 		return false, richerror.New(_opMysqlTaskIsExistsUser).WithErr(err).
-			WithMessage(message.ErrorMsg500InternalServerError).
+			WithMessage(msg.ErrorMsg500InternalServerError).
 			WithKind(richerror.KindStatusInternalServerError)
 	}
 
@@ -90,7 +90,7 @@ func (r *DB) GetAllByUserID(ctx context.Context, userID uint64) ([]entity2.Task,
 	rows, err := r.conn.Conn().Query(query, userID)
 	if err != nil || rows.Err() != nil {
 		return nil, richerror.New(_opMysqlTaskGetAllByUserID).WithErr(err).
-			WithMessage(message.ErrorMsg500InternalServerError).
+			WithMessage(msg.ErrorMsg500InternalServerError).
 			WithKind(richerror.KindStatusInternalServerError)
 	}
 
@@ -118,7 +118,7 @@ func (r *DB) GetAll(ctx context.Context) ([]entity2.Task, error) {
 	rows, err := r.conn.Conn().Query("SELECT * FROM tasks ORDER BY id DESC ")
 	if err != nil || rows.Err() != nil {
 		return nil, richerror.New(_opMysqlTaskGetAll).WithErr(err).
-			WithMessage(message.ErrorMsg500InternalServerError).
+			WithMessage(msg.ErrorMsg500InternalServerError).
 			WithKind(richerror.KindStatusInternalServerError)
 	}
 
