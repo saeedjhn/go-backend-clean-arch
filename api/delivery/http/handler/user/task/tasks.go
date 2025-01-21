@@ -3,6 +3,8 @@ package task
 import (
 	"net/http"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/bind"
@@ -15,7 +17,6 @@ import (
 )
 
 func (h *Handler) Tasks(c echo.Context) error {
-	// Tracer
 	ctx, span := h.trc.Span(
 		c.Request().Context(), "HTTP POST tasks",
 	)
@@ -23,15 +24,12 @@ func (h *Handler) Tasks(c echo.Context) error {
 
 	defer span.End()
 
-	// Bind
 	req := task.GetAllByUserIDRequest{}
 	if err := c.Bind(&req); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest,
-			echo.Map{
-				"status":  false,
-				"message": msg.ErrMsg400BadRequest,
-				"errors":  bind.CheckErrorFromBind(err).Error(),
-			},
+		return echo.NewHTTPError(
+			http.StatusBadRequest,
+			entity.NewErrorResponse(msg.ErrMsg400BadRequest, bind.CheckErrorFromBind(err).Error()).
+				WithMeta(map[string]interface{}{"request": req}),
 		)
 	}
 
@@ -39,12 +37,11 @@ func (h *Handler) Tasks(c echo.Context) error {
 		SetPolicy(sanitize.StrictPolicy).
 		Struct(&req)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest,
-			echo.Map{
-				"status":  false,
-				"message": msg.ErrMsg400BadRequest,
-				"errors":  nil,
-			})
+		return echo.NewHTTPError(
+			http.StatusBadRequest,
+			entity.NewErrorResponse(msg.ErrMsg400BadRequest, err.Error()).
+				WithMeta(map[string]interface{}{"request": req}),
+		)
 	}
 
 	resp, err := h.taskIntr.GetAllByUserID(ctx, req)
@@ -53,19 +50,17 @@ func (h *Handler) Tasks(c echo.Context) error {
 		code := httpstatus.MapkindToHTTPStatusCode(richErr.Kind())
 
 		if resp.FieldErrors != nil {
-			return c.JSON(code, echo.Map{
-				"message": richErr.Message(),
-				"errors":  resp.FieldErrors,
-			})
+			return echo.NewHTTPError(
+				code,
+				entity.NewErrorResponse(richErr.Message(), resp.FieldErrors).WithMeta(richErr.Meta()),
+			)
 		}
 
-		return echo.NewHTTPError(code,
-			echo.Map{
-				"status":  false,
-				"message": richErr.Message(),
-				"errors":  richErr.Error(),
-			})
+		return echo.NewHTTPError(
+			code,
+			entity.NewErrorResponse(richErr.Message(), richErr.Error()).WithMeta(richErr.Meta()),
+		)
 	}
 
-	return c.JSON(http.StatusOK, resp)
+	return c.JSON(http.StatusOK, entity.NewSuccessResponse(msg.MsgRead, resp))
 }

@@ -3,15 +3,16 @@ package user //nolint:dupl // 1-79 lines are duplicate
 import (
 	"net/http"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
-
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/bind"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/sanitize"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
+
 	"github.com/labstack/echo/v4"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
 func (h *Handler) Register(c echo.Context) error {
@@ -24,12 +25,10 @@ func (h *Handler) Register(c echo.Context) error {
 
 	req := user.RegisterRequest{}
 	if err := c.Bind(&req); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest,
-			echo.Map{
-				"status":  false,
-				"message": msg.ErrMsg400BadRequest,
-				"errors":  bind.CheckErrorFromBind(err).Error(),
-			},
+		return echo.NewHTTPError(
+			http.StatusBadRequest,
+			entity.NewErrorResponse(msg.ErrMsg400BadRequest, bind.CheckErrorFromBind(err).Error()).
+				WithMeta(map[string]interface{}{"request": req}),
 		)
 	}
 
@@ -37,12 +36,11 @@ func (h *Handler) Register(c echo.Context) error {
 		SetPolicy(sanitize.StrictPolicy).
 		Struct(&req)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest,
-			echo.Map{
-				"status":  false,
-				"message": msg.ErrMsg400BadRequest,
-				"errors":  nil,
-			})
+		return echo.NewHTTPError(
+			http.StatusBadRequest,
+			entity.NewErrorResponse(msg.ErrMsg400BadRequest, err.Error()).
+				WithMeta(map[string]interface{}{"request": req}),
+		)
 	}
 
 	resp, err := h.userIntr.Register(ctx, req)
@@ -51,19 +49,17 @@ func (h *Handler) Register(c echo.Context) error {
 		code := httpstatus.MapkindToHTTPStatusCode(richErr.Kind())
 
 		if resp.FieldErrors != nil {
-			return c.JSON(code, echo.Map{
-				"message": richErr.Message(),
-				"errors":  resp.FieldErrors,
-			})
+			return echo.NewHTTPError(
+				code,
+				entity.NewErrorResponse(richErr.Message(), resp.FieldErrors).WithMeta(richErr.Meta()),
+			)
 		}
 
-		return echo.NewHTTPError(code,
-			echo.Map{
-				"status":  false,
-				"message": richErr.Message(),
-				"errors":  richErr.Error(),
-			})
+		return echo.NewHTTPError(
+			code,
+			entity.NewErrorResponse(richErr.Message(), richErr.Error()).WithMeta(richErr.Meta()),
+		)
 	}
 
-	return c.JSON(http.StatusCreated, resp)
+	return c.JSON(http.StatusOK, entity.NewSuccessResponse(msg.MsgRegister, resp))
 }

@@ -3,6 +3,9 @@ package user
 import (
 	"net/http"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
@@ -22,20 +25,23 @@ func (h *Handler) Profile(c echo.Context) error {
 
 	claims := claim.GetClaimsFromEchoContext(c)
 
-	resp, err := h.userIntr.Profile(
-		ctx, user.ProfileRequest{ID: claims.UserID},
-	)
+	resp, err := h.userIntr.Profile(ctx, user.ProfileRequest{ID: claims.UserID})
 	if err != nil {
 		richErr := richerror.Analysis(err)
 		code := httpstatus.MapkindToHTTPStatusCode(richErr.Kind())
 
-		return echo.NewHTTPError(code,
-			echo.Map{
-				"status":  false,
-				"message": richErr.Message(),
-				"errors":  richErr.Error(),
-			})
+		if resp.FieldErrors != nil {
+			return echo.NewHTTPError(
+				code,
+				entity.NewErrorResponse(richErr.Message(), resp.FieldErrors).WithMeta(richErr.Meta()),
+			)
+		}
+
+		return echo.NewHTTPError(
+			code,
+			entity.NewErrorResponse(richErr.Message(), richErr.Error()).WithMeta(richErr.Meta()),
+		)
 	}
 
-	return c.JSON(http.StatusOK, resp)
+	return c.JSON(http.StatusOK, entity.NewSuccessResponse(msg.MsgProfileSeen, resp))
 }

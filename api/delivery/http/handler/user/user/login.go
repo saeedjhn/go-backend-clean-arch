@@ -50,7 +50,7 @@ func (h *Handler) Login(c echo.Context) error {
 		code := httpstatus.MapkindToHTTPStatusCode(richErr.Kind())
 
 		if resp.FieldErrors != nil {
-			return c.JSON(
+			return echo.NewHTTPError(
 				code,
 				entity.NewErrorResponse(richErr.Message(), resp.FieldErrors).WithMeta(richErr.Meta()),
 			)
