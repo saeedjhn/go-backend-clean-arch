@@ -57,8 +57,7 @@ func (i *Interactor) Login(ctx context.Context, req user.LoginRequest) (user.Log
 			Email:     u.Email,
 			CreatedAt: u.CreatedAt,
 			UpdatedAt: u.UpdatedAt,
-		}, // Or
-		// UserInfo: user.ToUserInfoDTO(),
+		},
 		Tokens: user.Tokens{
 			AccessToken:  accessToken,
 			RefreshToken: refreshToken,

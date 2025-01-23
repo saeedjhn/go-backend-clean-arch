@@ -24,15 +24,15 @@ var _ contract.Tracer = (*OpenTelemetry)(nil)
 // It provides a tracer instance for span creation and a tracer provider for managing lifecycle and configurations.
 // This struct facilitates the seamless integration of OpenTelemetry into applications.
 type OpenTelemetry struct {
-	cfg            Config
-	tracer         trace.Tracer             // Tracer instance for creating spans.
-	tracerProvider *sdktrace.TracerProvider // TracerProvider to manage tracer lifecycle and export spans.
+	options        Options
+	tracer         trace.Tracer
+	tracerProvider *sdktrace.TracerProvider
 }
 
 // New creates a new instance of OpenTelemetry with the provided configuration.
-func New(cfg Config) *OpenTelemetry {
+func New(ops Options) *OpenTelemetry {
 	return &OpenTelemetry{
-		cfg:            cfg,
+		options:        ops,
 		tracer:         nil,
 		tracerProvider: nil,
 	}
@@ -40,18 +40,18 @@ func New(cfg Config) *OpenTelemetry {
 
 // Configure initializes the OpenTelemetry by setting up the tracer provider and exporter.
 func (o *OpenTelemetry) Configure() error {
-	if len(o.cfg.Endpoint) == 0 {
+	if len(o.options.Config.Endpoint) == 0 {
 		return ErrOTLPEndpointRequired
 	}
 
-	exp, err := createExporter(o.cfg)
+	exp, err := createExporter(o.options.Config)
 	if err != nil {
 		return err
 	}
 
-	tp := createTraceProvider(o.cfg, exp)
+	tp := createTraceProvider(o.options.AppInfo, exp)
 
-	o.tracer = tp.Tracer(o.cfg.AppName)
+	o.tracer = tp.Tracer(o.options.AppInfo.Name)
 	o.tracerProvider = tp
 
 	return nil
@@ -117,20 +117,20 @@ func createExporter(cfg Config) (*otlptrace.Exporter, error) {
 }
 
 // createTraceProvider initializes a TracerProvider with the given exporter and configuration.
-func createTraceProvider(cfg Config, exp sdktrace.SpanExporter) *sdktrace.TracerProvider {
+func createTraceProvider(appInfo AppInfo, exp sdktrace.SpanExporter) *sdktrace.TracerProvider {
 	provider := sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(exp),
 		sdktrace.WithResource(resource.NewWithAttributes(
-			semconv.SchemaURL,                                // OpenTelemetry schema URL
-			semconv.ServiceNameKey.String(cfg.AppName),       // Service name
-			semconv.ServiceVersionKey.String(cfg.AppVersion), // Service version
+			semconv.SchemaURL, // OpenTelemetry schema URL
+			semconv.ServiceNameKey.String(appInfo.Name),       // Service name
+			semconv.ServiceVersionKey.String(appInfo.Version), // Service version
 			// Deployment environment (e.g., development, staging, production)
-			semconv.DeploymentEnvironmentKey.String(cfg.AppEnv),
-			// semconv.ServiceInstanceIDKey.Value(_cfg.InstanceID), // Instance ID (useful for scaling scenarios)
+			semconv.DeploymentEnvironmentKey.String(appInfo.Env),
+			// semconv.ServiceInstanceIDKey.String(appInfo.InstanceID), // Instance ID (useful for scaling scenarios)
 
 			// Network information
-			semconv.NetHostNameKey.String(cfg.AppHost), // ServiceHost name
-			semconv.NetHostPortKey.Int(cfg.AppPort),    // ServicePort number
+			semconv.NetHostNameKey.String(appInfo.Host), // ServiceHost name
+			semconv.NetHostPortKey.String(appInfo.Port), // ServicePort number
 
 			// Dependency information
 			// attribute.Value("database", "PostgreSQL"), // Database in use
