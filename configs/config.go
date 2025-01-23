@@ -3,6 +3,8 @@ package configs
 import (
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/otelcollector"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/oteltracer"
@@ -73,6 +75,7 @@ type Config struct {
 	Pprof       Pprof                 `mapstructure:"pprof"`
 	CORS        CORS                  `mapstructure:"cors"`
 	Tracer      oteltracer.Config     `mapstructure:"tracer"`
+	Collector   otelcollector.Config  `mapstructure:"collector"`
 	Logger      jsonfilelogger.Config `mapstructure:"logger"`
 	Mysql       mysql.Config          `mapstructure:"mysql"`
 	Postgres    pq.Config             `mapstructure:"postgres"`

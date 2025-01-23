@@ -104,9 +104,9 @@ services:
       - "16686:16686"   # Jaeger UI port
       - "14268:14268"   # accept jaeger.thrift directly from clients
       - "14250:14250"   # accept model.proto
-      - "4317:4317"     # accept OpenTelemetry Protocol (OTLP) over gRPC
+      #      - "4317:4317"     # accept OpenTelemetry Protocol (OTLP) over gRPC
       - "4318:4318"     # accept OpenTelemetry Protocol (OTLP) over HTTP
-    #      - "9411:9411"     # Zipkin compatible endpoint (optional)
+      #      - "9411:9411"     # Zipkin compatible endpoint (optional)
     networks:
       - go-backend-clean-arch_network
     restart: always
@@ -219,6 +219,32 @@ services:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - go-backend-clean-arch_network
+    restart: always
+
+  ######################## OTEL-collector ########################
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.114.0
+    container_name: go-backend-clean-arch_otel-collector
+    command: [ "--config=/etc/otel-collector.yml" ]
+    volumes:
+      - ./otel-collector/collector.yml:/etc/otel-collector.yml
+    ports:
+      - "${OTEL_COLLECTOR_PORT}:${OTEL_COLLECTOR_PORT}"
+    networks:
+      - go-backend-clean-arch_network
+
+  ######################## Grafana ########################
+  grafana:
+    image: grafana/grafana:11.4.0
+    container_name: go-backend-clean-arch_grafana
+    env_file:
+      - .env
+    ports:
+      - "${GRAFANA_PORT}:${GRAFANA_PORT}"  # Grafana Web UI
+    networks:
+      - go-backend-clean-arch_network
+    depends_on:
+      - prometheus
     restart: always
 
   ####################### END-MONITORING ####################################################################################

@@ -111,6 +111,10 @@ func main() {
 		app.Logger.Errorf("Shutdown.Tracer: %v", err)
 	}
 
+	if err = app.ShutdownCollector(ctxWithTimeout); err != nil {
+		app.Logger.Errorf("Shutdown.Collector: %v", err)
+	}
+
 	// Optionally, close PostgreSQL or other database connections
 
 	// Wait until graceful shutdown is complete

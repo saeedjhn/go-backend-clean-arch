@@ -1,1 +1,0 @@
-package oterlcollector_test

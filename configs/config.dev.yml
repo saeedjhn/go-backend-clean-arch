@@ -94,8 +94,7 @@ auth:
 
 tracer:
   endpoint: "go-backend-clean-arch_jaeger:4318"
-  app_host: "localhost" # reference http_server.host
-  app_port: 8000 # reference http_server.port
-  app_name: "go-backend-clean-arch" # reference application.name
-  app_version: "0.1.0" # reference application.version
-  app_env: "development" # reference application.env
+
+collector:
+  endpoint: "go-backend-clean-arch_otel-collector:4317"
+  timeout: "30s"

@@ -23,12 +23,13 @@ type DB struct {
 }
 
 type Application struct {
-	Config  *configs.Config
-	Logger  contract.Logger
-	Trc     contract.Tracer
-	Cache   Cache
-	DB      DB
-	Usecase *Usecase
+	Config    *configs.Config
+	Logger    contract.Logger
+	Trc       contract.Tracer
+	Collector contract.Collector
+	Cache     Cache
+	DB        DB
+	Usecase   *Usecase
 }
 
 func App(config *configs.Config) (*Application, error) {
@@ -44,19 +45,27 @@ func App(config *configs.Config) (*Application, error) {
 func (a *Application) setup() error {
 	var err error
 
-	// if a.Config, err = ConfigLoad(a.ConfigOption); err != nil {
-	// 	return err
-	// }
+	a.Logger = NewLogger(a.Config.Application, a.Config.Logger)
+
+	if a.Trc, err = NewTracer(
+		a.Config.Tracer,
+		a.Config.Application,
+		a.Config.HTTPServer,
+	); err != nil {
+		return err
+	}
+
+	if a.Collector, err = NewCollector(
+		a.Config.Collector,
+		a.Config.Application,
+		a.Config.HTTPServer,
+	); err != nil {
+		return err
+	}
 
 	if a.DB.MySQL, err = NewMysqlConnection(a.Config.Mysql); err != nil {
 		return err
 	}
-
-	if a.Trc, err = NewTracer(a.Config.Tracer); err != nil {
-		return err
-	}
-
-	a.Logger = NewLogger(a.Config.Application, a.Config.Logger)
 
 	if a.DB.Postgres, err = NewPostgresConnection(a.Config.Postgres); err != nil {
 		return err
@@ -89,6 +98,10 @@ func (a *Application) CloseRedisClientConnection() error {
 
 func (a *Application) ShutdownTracer(ctx context.Context) error {
 	return ShutdownTracer(ctx, a.Trc)
+}
+
+func (a *Application) ShutdownCollector(ctx context.Context) error {
+	return ShutdownCollector(ctx, a.Collector)
 }
 
 // func (a *Application) ClosePostgresqlConnection() error {

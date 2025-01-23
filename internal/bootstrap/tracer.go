@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"context"
 	"fmt"
+
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
@@ -15,7 +16,7 @@ func NewTracer(
 	appInfo configs.Application,
 	serverInfo configs.HTTPServer,
 ) (contract.Tracer, error) {
-	tracerClient := oteltracer.New(oteltracer.Options{
+	client := oteltracer.New(oteltracer.Options{
 		Config: oteltracer.Config{Endpoint: config.Endpoint},
 		AppInfo: oteltracer.AppInfo{
 			Host:    serverInfo.Host,
@@ -26,11 +27,11 @@ func NewTracer(
 		},
 	})
 
-	if err := tracerClient.Configure(); err != nil {
-		return nil, fmt.Errorf("failed to initialize tracing: %w", err)
+	if err := client.Configure(); err != nil {
+		return nil, fmt.Errorf("failed to initialize tracer: %w", err)
 	}
 
-	return tracerClient, nil
+	return client, nil
 }
 
 func ShutdownTracer(ctx context.Context, trc contract.Tracer) error {
