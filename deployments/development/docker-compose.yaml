@@ -237,15 +237,68 @@ services:
   grafana:
     image: grafana/grafana:11.4.0
     container_name: go-backend-clean-arch_grafana
+    user: '472'
     env_file:
       - .env
     ports:
       - "${GRAFANA_PORT}:${GRAFANA_PORT}"  # Grafana Web UI
+    volumes:
+      - grafana:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
     networks:
       - go-backend-clean-arch_network
     depends_on:
       - prometheus
     restart: always
+
+  ######################## Alert-manager ########################
+#  alertmanager:
+  #    image: prom/alertmanager:v0.28.0
+  #    container_name: go-backend-clean-arch_alert-manager
+  #    command:
+  #      - '--config.file=/etc/alertmanager/config.yml'
+  #      - '--storage.path=/alertmanager'
+  #    ports:
+  #      - "${ALERT_MANAGER_PORT}:${ALERT_MANAGER_PORT}"
+  #    volumes:
+  #      - ./alertmanager/:/etc/alertmanager/
+  #    restart: always
+
+  ######################## Node-exporter ########################
+#  node-exporter:
+  #    image: prom/node-exporter:v1.8.2
+  #    container_name: go-backend-clean-arch_node-exporter
+  #    command:
+  #      - '--path.procfs=/host/proc'
+  #      - '--path.sysfs=/host/sys'
+  #      - --collector.filesystem.ignored-mount-points
+  #      - '^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'
+  #    ports:
+  #      - "${NODE_EXPORTER_PORT}:${NODE_EXPORTER_PORT}"
+  #    volumes:
+  #      - /proc:/host/proc:ro
+  #      - /sys:/host/sys:ro
+  #      - /:/rootfs:ro
+  #    deploy:
+  #      mode: global
+  #    restart: always
+
+  ######################## Cadvisor ########################
+#  cadvisor:
+#    image: gcr.io/cadvisor/cadvisor:v0.49.2
+#    container_name: go-backend-clean-arch_cadvisor
+#    ports:
+#      - "${CADVISOR_PORT}:${CADVISOR_PORT}"
+#    volumes:
+#      - /:/rootfs
+#      - /var/run:/var/run
+#      - /sys:/sys
+#      - /var/lib/docker/:/var/lib/docker
+#      - /dev/disk/:/dev/disk
+#    privileged: true
+#    devices:
+#      - /dev/kmsg
+#    restart: always
 
   ####################### END-MONITORING ####################################################################################
 
@@ -271,6 +324,7 @@ volumes:
   filebeat:
   elasticsearch:
   setup-elk:
+  grafana:
   #  psql:
   #  mongo:
   #  pgadmin:
