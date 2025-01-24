@@ -1,0 +1,61 @@
+package otelcollector
+
+import (
+	"context"
+	"fmt"
+	"go.opentelemetry.io/otel/metric"
+)
+
+func (o *OpenTelemetry) Float64Counter(
+	ctx context.Context,
+	name string,
+	count float64,
+	description string,
+	attrs ...map[string]interface{},
+) error {
+	otelAttrs := o.setAttrs(attrs)
+
+	val, ok := o.counterCache.Load(name)
+	if ok {
+		val.(metric.Float64Counter).Add(ctx, count, metric.WithAttributes(otelAttrs...))
+
+		return nil
+	}
+
+	counter, err := o.meter.Float64Counter(name, metric.WithDescription(description))
+	if err != nil {
+		return fmt.Errorf("failed to create Float64Counter for %s: %w", name, err)
+	}
+
+	o.counterCache.Store(name, counter)
+	counter.Add(ctx, count, metric.WithAttributes(otelAttrs...))
+
+	return nil
+}
+
+func (o *OpenTelemetry) Float64UpDownCounter(
+	ctx context.Context,
+	name string,
+	count float64,
+	description string,
+	attrs ...map[string]interface{},
+) error {
+	otelAttrs := o.setAttrs(attrs)
+
+	val, ok := o.counterCache.Load(name)
+	if ok {
+		val.(metric.Float64UpDownCounter).Add(ctx, count, metric.WithAttributes(otelAttrs...))
+
+		return nil
+	}
+
+	counter, err := o.meter.Float64Counter(name, metric.WithDescription(description))
+	if err != nil {
+		return fmt.Errorf("failed to create Float64UpDownCounter for %s: %w", name, err)
+	}
+
+	o.counterCache.Store(name, counter)
+	counter.Add(ctx, count, metric.WithAttributes(otelAttrs...))
+
+	return nil
+}

@@ -220,6 +220,9 @@ services:
     networks:
       - go-backend-clean-arch_network
     restart: always
+  #    depends_on:
+  #      - node-exporter
+  #      - cadvisor
 
   ######################## OTEL-collector ########################
   otel-collector:
@@ -252,7 +255,7 @@ services:
     restart: always
 
   ######################## Alert-manager ########################
-#  alertmanager:
+  #  alertmanager:
   #    image: prom/alertmanager:v0.28.0
   #    container_name: go-backend-clean-arch_alert-manager
   #    command:
@@ -265,7 +268,7 @@ services:
   #    restart: always
 
   ######################## Node-exporter ########################
-#  node-exporter:
+  #  node-exporter:
   #    image: prom/node-exporter:v1.8.2
   #    container_name: go-backend-clean-arch_node-exporter
   #    command:
@@ -284,21 +287,21 @@ services:
   #    restart: always
 
   ######################## Cadvisor ########################
-#  cadvisor:
-#    image: gcr.io/cadvisor/cadvisor:v0.49.2
-#    container_name: go-backend-clean-arch_cadvisor
-#    ports:
-#      - "${CADVISOR_PORT}:${CADVISOR_PORT}"
-#    volumes:
-#      - /:/rootfs
-#      - /var/run:/var/run
-#      - /sys:/sys
-#      - /var/lib/docker/:/var/lib/docker
-#      - /dev/disk/:/dev/disk
-#    privileged: true
-#    devices:
-#      - /dev/kmsg
-#    restart: always
+  #  cadvisor:
+  #    image: gcr.io/cadvisor/cadvisor:v0.49.2
+  #    container_name: go-backend-clean-arch_cadvisor
+  #    ports:
+  #      - "${CADVISOR_PORT}:${CADVISOR_PORT}"
+  #    volumes:
+  #      - /:/rootfs
+  #      - /var/run:/var/run
+  #      - /sys:/sys
+  #      - /var/lib/docker/:/var/lib/docker
+  #      - /dev/disk/:/dev/disk
+  #    privileged: true
+  #    devices:
+  #      - /dev/kmsg
+  #    restart: always
 
   ####################### END-MONITORING ####################################################################################
 

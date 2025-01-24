@@ -61,45 +61,6 @@ func (o *OpenTelemetry) Configure() error {
 	return nil
 }
 
-// IncrementInt64Counter increments an Int64Counter metric with the specified attributes.
-func (o *OpenTelemetry) IncrementInt64Counter(
-	ctx context.Context,
-	name string,
-	incr int64,
-	description string,
-	attrs ...map[string]interface{},
-) error {
-	var otelAttrs []attribute.KeyValue
-
-	// Convert attributes into OpenTelemetry format.
-	if len(attrs) != 0 {
-		for _, attr := range attrs {
-			for k, v := range attr {
-				otelAttrs = append(otelAttrs, attribute.String(k, fmt.Sprintf("%#v", v)))
-			}
-		}
-	}
-
-	// Check if the counter already exists in the cache.
-	val, ok := o.counterCache.Load(name)
-	if ok {
-		val.(metric.Int64Counter).Add(ctx, incr, metric.WithAttributes(otelAttrs...))
-
-		return nil
-	}
-
-	// Create a new counter if it does not exist.
-	counter, err := o.meter.Int64Counter(name, metric.WithDescription(description))
-	if err != nil {
-		return fmt.Errorf("failed to create Int64Counter for %s: %v\n", name, err)
-	}
-
-	o.counterCache.Store(name, counter)
-	counter.Add(ctx, incr, metric.WithAttributes(otelAttrs...))
-
-	return nil
-}
-
 // Shutdown gracefully shuts down the MeterProvider and releases resources.
 func (o *OpenTelemetry) Shutdown(ctx context.Context) error {
 	if o.meter == nil {
@@ -115,6 +76,21 @@ func (o *OpenTelemetry) Shutdown(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+func (o *OpenTelemetry) setAttrs(attrs []map[string]interface{}) []attribute.KeyValue {
+	var otelAttrs []attribute.KeyValue
+
+	// Convert attributes into OpenTelemetry format.
+	if len(attrs) != 0 {
+		for _, attr := range attrs {
+			for k, v := range attr {
+				otelAttrs = append(otelAttrs, attribute.String(k, fmt.Sprintf("%#v", v)))
+			}
+		}
+	}
+
+	return otelAttrs
 }
 
 // createConn establishes a gRPC connection to the specified OTLP endpoint.
