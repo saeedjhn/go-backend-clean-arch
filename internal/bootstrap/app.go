@@ -3,11 +3,12 @@ package bootstrap
 import (
 	"context"
 
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/inmemory"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
 )

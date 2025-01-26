@@ -111,14 +111,7 @@ func Test_UserInterator_Login_ValidationSection(t *testing.T) {
 				mockAuth.On("CreateRefreshToken", authenticable).Return("refresh-token", nil)
 			}
 
-			usecase := userusecase.New(
-				_myDBConfig,
-				setupTracer(),
-				mockVld,
-				mockAuth,
-				mockCache,
-				mockRepo,
-			)
+			usecase := userusecase.New(_myDBConfig, setupTracer(), mockAuth, mockVld, mockCache, mockRepo)
 
 			// Call the Login method
 			resp, errL := usecase.Login(ctx, tc.req)
@@ -222,14 +215,7 @@ func Test_UserInterator_LoginRepositorySection(t *testing.T) {
 				mockAuth.On("CreateRefreshToken", authenticable).Return("refresh-token", nil)
 			}
 
-			usecase := userusecase.New(
-				_myDBConfig,
-				setupTracer(),
-				mockVld,
-				mockAuth,
-				mockCache,
-				mockRepo,
-			)
+			usecase := userusecase.New(_myDBConfig, setupTracer(), mockAuth, mockVld, mockCache, mockRepo)
 
 			resp, errL := usecase.Login(ctx, tc.req)
 
@@ -329,14 +315,7 @@ func Test_UserInterator_LoginCreateTokenSection(t *testing.T) {
 				mockAuth.On("CreateRefreshToken", authenticable).Return(tc.refreshToken, tc.expectedError)
 			}
 
-			usecase := userusecase.New(
-				_myDBConfig,
-				setupTracer(),
-				mockVld,
-				mockAuth,
-				mockCache,
-				mockRepo,
-			)
+			usecase := userusecase.New(_myDBConfig, setupTracer(), mockAuth, mockVld, mockCache, mockRepo)
 
 			resp, errL := usecase.Login(ctx, tc.req)
 

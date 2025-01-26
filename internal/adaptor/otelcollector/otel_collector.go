@@ -6,6 +6,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
@@ -20,10 +22,11 @@ import (
 // OpenTelemetry encapsulates the configuration and methods
 // to interact with OpenTelemetry metrics using a MeterProvider and counters.
 type OpenTelemetry struct {
-	options       Options
-	meter         metric.Meter
-	meterProvider *sdkmetric.MeterProvider
-	counterCache  sync.Map // Cache for storing counters by name to avoid recreation.
+	options          Options
+	bucketBoundaries []float64
+	meter            metric.Meter
+	meterProvider    *sdkmetric.MeterProvider
+	counterCache     sync.Map // Cache for storing counters by name to avoid recreation.
 }
 
 // New creates a new instance of OpenTelemetry with the provided context and configuration.
@@ -76,6 +79,12 @@ func (o *OpenTelemetry) Shutdown(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+func (o *OpenTelemetry) WithBucketBoundaries(bounds []float64) contract.Collector {
+	o.bucketBoundaries = bounds
+
+	return o
 }
 
 func (o *OpenTelemetry) setAttrs(attrs []map[string]interface{}) []attribute.KeyValue {

@@ -23,7 +23,7 @@ func Register(app *bootstrap.Application, gs grpc.ServiceRegistrar) {
 	vld := uservalidator.New(app.Config.Application.EntropyPassword)
 
 	authIntr := authusecase.New(app.Config.Auth)
-	userIntr := userusecase.New(app.Config, app.Trc, vld, authIntr, rdsRepo, repo)
+	userIntr := userusecase.New(app.Config, app.Trc, authIntr, vld, rdsRepo, repo)
 
 	us := New(userIntr)
 

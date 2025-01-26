@@ -52,10 +52,10 @@ type Repository interface {
 type Interactor struct {
 	cfg        *configs.Config
 	trc        contract.Tracer
-	vld        Validator
 	authIntr   AuthInteractor
-	repository Repository
+	vld        Validator
 	cache      Cache
+	repository Repository
 }
 
 // var _ userhandler.Interactor = (*Interactor)(nil) // Commented, because it happens import cycle.
@@ -63,8 +63,8 @@ type Interactor struct {
 func New(
 	cfg *configs.Config,
 	trc contract.Tracer,
-	vld Validator,
 	authIntr AuthInteractor,
+	vld Validator,
 	cache Cache,
 	repository Repository,
 ) *Interactor {

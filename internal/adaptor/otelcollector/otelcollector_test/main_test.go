@@ -2,10 +2,13 @@ package oterlcollector_test
 
 import (
 	"context"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/otelcollector"
 	"log"
+	"math/rand"
+	"runtime"
 	"testing"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/otelcollector"
 )
 
 var (
@@ -22,6 +25,8 @@ var (
 	}
 )
 
+//go:generate go test -v -race -count=1
+
 func TestMain(m *testing.M) {
 	_otelClient = otelcollector.New(_options)
 
@@ -36,4 +41,29 @@ func TestMain(m *testing.M) {
 	}()
 
 	m.Run()
+}
+
+func getMemoryUsage() int {
+	var memStats runtime.MemStats
+	runtime.ReadMemStats(&memStats)
+	return int(memStats.Alloc) // Currently allocated memory in bytes
+}
+
+func randomNumber() int {
+	rand.NewSource(time.Now().UnixNano())
+
+	return rand.Intn(101)
+}
+
+func randomAPIResponse() float64 {
+	return float64(time.Duration(rand.Intn(100)))
+}
+
+func simulateComputation(n int) {
+	slice := make([]int, n)
+
+	for k, v := range slice {
+		v = k * (2 + v)
+		time.Sleep(500 * time.Millisecond)
+	}
 }

@@ -3,10 +3,11 @@ package otelcollector
 import (
 	"context"
 	"fmt"
+
 	"go.opentelemetry.io/otel/metric"
 )
 
-func (o *OpenTelemetry) Float64Counter(
+func (o *OpenTelemetry) FloatCounter(
 	ctx context.Context,
 	name string,
 	count float64,
@@ -24,7 +25,7 @@ func (o *OpenTelemetry) Float64Counter(
 
 	counter, err := o.meter.Float64Counter(name, metric.WithDescription(description))
 	if err != nil {
-		return fmt.Errorf("failed to create Float64Counter for %s: %w", name, err)
+		return fmt.Errorf("failed to create FloatCounter for %s: %w", name, err)
 	}
 
 	o.counterCache.Store(name, counter)
@@ -33,7 +34,7 @@ func (o *OpenTelemetry) Float64Counter(
 	return nil
 }
 
-func (o *OpenTelemetry) Float64UpDownCounter(
+func (o *OpenTelemetry) FloatUpDownCounter(
 	ctx context.Context,
 	name string,
 	count float64,
@@ -51,7 +52,7 @@ func (o *OpenTelemetry) Float64UpDownCounter(
 
 	counter, err := o.meter.Float64Counter(name, metric.WithDescription(description))
 	if err != nil {
-		return fmt.Errorf("failed to create Float64UpDownCounter for %s: %w", name, err)
+		return fmt.Errorf("failed to create FloatUpDownCounter for %s: %w", name, err)
 	}
 
 	o.counterCache.Store(name, counter)

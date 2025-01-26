@@ -18,7 +18,7 @@ func Setup(app *bootstrap.Application, e *echo.Echo) {
 	vld := uservalidator.New(app.Config.Application.EntropyPassword)
 
 	authIntr := authusecase.New(app.Config.Auth)
-	userIntr := userusecase.New(app.Config, app.Trc, vld, authIntr, rdsRepo, repo)
+	userIntr := userusecase.New(app.Config, app.Trc, authIntr, vld, rdsRepo, repo)
 
 	handler := New(app.Trc, authIntr, userIntr)
 
