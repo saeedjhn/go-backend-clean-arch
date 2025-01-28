@@ -28,7 +28,11 @@ func New(app *bootstrap.Application) *Server {
 }
 
 func (s Server) Run() error {
-	intercep := interceptor.New(s.app.Config, s.app.Logger)
+	intercep := interceptor.New(
+		s.app.Config,
+		s.app.Logger,
+		s.app.Collector,
+	)
 
 	addr := fmt.Sprintf(":%s", s.app.Config.GRPCServer.Port)
 
@@ -53,9 +57,10 @@ func (s Server) Run() error {
 	}),
 		grpc.UnaryInterceptor(intercep.Logger),
 		grpc.ChainUnaryInterceptor(
-			grpcctxtags.UnaryServerInterceptor(),
-			grpcprometheus.UnaryServerInterceptor,
-			grpcrecovery.UnaryServerInterceptor(),
+			intercep.Metrics,                      // Metrics Interceptor
+			grpcctxtags.UnaryServerInterceptor(),  // Context Tags Interceptor
+			grpcprometheus.UnaryServerInterceptor, // Prometheus Interceptor
+			grpcrecovery.UnaryServerInterceptor(), // Recovery Interceptor
 		),
 	)
 
