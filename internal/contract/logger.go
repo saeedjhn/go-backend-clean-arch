@@ -1,13 +1,15 @@
 package contract
 
 type Logger interface {
-	Debug(args ...interface{})
-	Debugf(msg string, args ...interface{})
 	Info(args ...interface{})
 	Infof(msg string, args ...interface{})
 	Infow(msg string, keysAndValues ...interface{})
+	Debug(args ...interface{})
+	Debugf(msg string, args ...interface{})
+	Debugw(msg string, keysAndValues ...interface{})
 	Warn(args ...interface{})
 	Warnf(msg string, args ...interface{})
+	Warnw(msg string, keysAndValues ...interface{})
 	Error(args ...interface{})
 	Errorf(msg string, args ...interface{})
 	Errorw(msg string, keysAndValues ...interface{})

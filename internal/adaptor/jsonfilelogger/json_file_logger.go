@@ -34,6 +34,18 @@ func (l *L) Configure() *L {
 	return l
 }
 
+func (l *L) Info(args ...interface{}) {
+	l.sugar.Info(args...)
+}
+
+func (l *L) Infof(msg string, args ...interface{}) {
+	l.sugar.Infof(msg, args...)
+}
+
+func (l *L) Infow(msg string, keysAndValues ...interface{}) {
+	l.sugar.Infow(msg, keysAndValues...)
+}
+
 func (l *L) Debug(args ...interface{}) {
 	l.sugar.Debug(args...)
 }
@@ -42,16 +54,8 @@ func (l *L) Debugf(msg string, args ...interface{}) {
 	l.sugar.Debugf(msg, args...)
 }
 
-func (l *L) Info(args ...interface{}) {
-	l.sugar.Info(args...)
-}
-
-func (l *L) Infow(msg string, keysAndValues ...interface{}) {
-	l.sugar.Infow(msg, keysAndValues...)
-}
-
-func (l *L) Infof(msg string, args ...interface{}) {
-	l.sugar.Infof(msg, args...)
+func (l *L) Debugw(msg string, keysAndValues ...interface{}) {
+	l.sugar.Debugw(msg, keysAndValues...)
 }
 
 func (l *L) Warn(args ...interface{}) {
@@ -60,6 +64,10 @@ func (l *L) Warn(args ...interface{}) {
 
 func (l *L) Warnf(msg string, args ...interface{}) {
 	l.sugar.Warnf(msg, args...)
+}
+
+func (l *L) Warnw(msg string, keysAndValus ...interface{}) {
+	l.sugar.Warnw(msg, keysAndValus...)
 }
 
 func (l *L) Error(args ...interface{}) {
