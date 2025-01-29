@@ -3,10 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"maps"
-	"strconv"
-
 	"github.com/go-resty/resty/v2"
+	"maps"
 )
 
 type HTTPAdaptor struct {
@@ -77,13 +75,27 @@ func (c *HTTPAdaptor) FetchByID(ctx context.Context, req Request) (Response, err
 		r.SetQueryParams(c.Params)
 	}
 
-	r.SetPathParam("postId", strconv.FormatUint(req.ID, 10))
+	if len(c.Paths) != 0 {
+		for k, v := range c.Paths {
+			r.SetPathParam(k, v)
+		}
+	}
+
+	// r.SetPathParam("postId", strconv.FormatUint(req.ID, 10))
 
 	resp, err := r.Get(c.addr)
 
 	if err != nil {
 		return rs, fmt.Errorf("request failed: %w", err)
 	}
+
+	// if resp.StatusCode() != http.StatusOK {
+	// 	return rs, fmt.Errorf(
+	// 		"error: status code %d, body: %s",
+	// 		resp.StatusCode(),
+	// 		resp.String(),
+	// 	)
+	// }
 
 	if resp.StatusCode() < 200 || resp.StatusCode() > 299 {
 		return rs, fmt.Errorf(

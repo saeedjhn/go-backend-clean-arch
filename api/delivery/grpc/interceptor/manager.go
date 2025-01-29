@@ -52,6 +52,8 @@ func (im *Manager) Logger(
 	return reply, err
 }
 
+// TODO: api.grpc.delivery.interceptor.metrics-checkErrorAnyCollectorMethod
+
 func (im *Manager) Metrics(
 	ctx context.Context,
 	req interface{}, // gRPC request
