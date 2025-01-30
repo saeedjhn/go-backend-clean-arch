@@ -3,7 +3,7 @@ package task
 import (
 	"context"
 
-	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
+	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 	taskusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/task"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"

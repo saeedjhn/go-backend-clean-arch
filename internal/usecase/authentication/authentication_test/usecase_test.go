@@ -1,4 +1,4 @@
-package authusecase_test
+package authentication_test
 
 import (
 	"testing"
@@ -7,12 +7,12 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
-var _config = auth.Config{ //nolint:gochecknoglobals // nothing
+var _config = authentication.Config{ //nolint:gochecknoglobals // nothing
 	AccessTokenSecret:     "secret123",
 	AccessTokenSubject:    "access-subject",
 	AccessTokenExpiryTime: time.Minute,
@@ -30,7 +30,7 @@ type request struct {
 func Test_AuthInteractor_CreateAccessToken(t *testing.T) {
 	t.Parallel()
 
-	interactor := auth.New(_config)
+	interactor := authentication.New(_config)
 
 	tests := []struct {
 		name          string
@@ -66,7 +66,7 @@ func Test_AuthInteractor_CreateAccessToken(t *testing.T) {
 
 func Test_AuthInteractor_IsAuthorized(t *testing.T) {
 	t.Parallel()
-	interactor := auth.New(_config)
+	interactor := authentication.New(_config)
 
 	tests := []struct {
 		name          string
@@ -118,7 +118,7 @@ func Test_AuthInteractor_IsAuthorized(t *testing.T) {
 func Test_AuthInteractor_ParseToken(t *testing.T) {
 	t.Parallel()
 
-	interactor := auth.New(_config)
+	interactor := authentication.New(_config)
 
 	tests := []struct {
 		name           string
@@ -178,7 +178,7 @@ func generateTestToken(secret string, duration time.Duration) string {
 }
 
 func generateTestTokenWithClaims(secret string, duration time.Duration, userID uint64) string {
-	claims := auth.Claims{
+	claims := authentication.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(duration)),
 		},

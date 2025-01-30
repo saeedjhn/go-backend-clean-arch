@@ -4,11 +4,11 @@ import (
 	mw "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 )
 
 func Auth(
-	authIntr *auth.Interactor,
+	authIntr *authentication.Interactor,
 ) echo.MiddlewareFunc {
 	return mw.WithConfig(mw.Config{
 		ContextKey: configs.AuthMiddlewareContextKey,

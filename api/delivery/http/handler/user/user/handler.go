@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
-	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
+	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 	userusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"

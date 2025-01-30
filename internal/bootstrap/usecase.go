@@ -6,7 +6,7 @@ import (
 	mysqltask "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/task"
 	mysqluser "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/user"
 	redisuser "github.com/saeedjhn/go-backend-clean-arch/internal/repository/redis/user"
-	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
+	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 	taskusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/task"
 	userusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user"
 	uservalidator "github.com/saeedjhn/go-backend-clean-arch/internal/validator/user"

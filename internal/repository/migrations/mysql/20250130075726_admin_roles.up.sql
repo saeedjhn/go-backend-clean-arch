@@ -1,0 +1,8 @@
+CREATE TABLE admin_roles
+(
+    admin_id BIGINT UNSIGNED,
+    role_id  BIGINT UNSIGNED,
+    PRIMARY KEY (admin_id, role_id),
+    FOREIGN KEY (admin_id) REFERENCES admins (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE ON UPDATE CASCADE
+);

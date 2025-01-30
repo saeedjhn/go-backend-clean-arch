@@ -5,7 +5,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	mysqluser "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/user"
 	redisuser "github.com/saeedjhn/go-backend-clean-arch/internal/repository/redis/user"
-	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
+	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 	userusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user"
 	uservalidator "github.com/saeedjhn/go-backend-clean-arch/internal/validator/user"
 )

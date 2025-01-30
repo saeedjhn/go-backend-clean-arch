@@ -3,7 +3,7 @@
 -- https://www.grouparoo.com/blog/varchar-191#why-varchar-and-not-text
 CREATE TABLE `users`
 (
-    `id`         INT AUTO_INCREMENT PRIMARY KEY,
+    `id`         BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `name`       VARCHAR(191),
     `mobile`     VARCHAR(191)                        NOT NULL,
     `email`      VARCHAR(191),

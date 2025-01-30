@@ -14,14 +14,14 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 )
 
 //go:generate mockery --name AuthInteractor
 type AuthInteractor interface {
 	CreateAccessToken(req entity.Authenticable) (string, error)
 	CreateRefreshToken(req entity.Authenticable) (string, error)
-	ParseToken(secret, requestToken string) (*auth.Claims, error)
+	ParseToken(secret, requestToken string) (*authentication.Claims, error)
 }
 
 //go:generate mockery --name Validator

@@ -4,7 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	mysqltask "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/task"
-	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
+	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 	taskusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/task"
 )
 

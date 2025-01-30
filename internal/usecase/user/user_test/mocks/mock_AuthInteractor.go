@@ -4,7 +4,7 @@ package mocks
 
 import (
 	entity "github.com/saeedjhn/go-backend-clean-arch/internal/entity"
-	auth "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/auth"
+	auth "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 
 	mock "github.com/stretchr/testify/mock"
 )

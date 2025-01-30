@@ -3,8 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/go-resty/resty/v2"
 	"maps"
+
+	"github.com/go-resty/resty/v2"
 )
 
 type HTTPAdaptor struct {

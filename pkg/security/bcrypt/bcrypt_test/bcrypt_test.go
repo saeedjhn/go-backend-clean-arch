@@ -7,5 +7,5 @@ import (
 )
 
 func TestBcrypt(t *testing.T) {
-	t.Log(bcrypt.Generate("pass", 10))
+	t.Log(bcrypt.Generate("password123", 10))
 }
