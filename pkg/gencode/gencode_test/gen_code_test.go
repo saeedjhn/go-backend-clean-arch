@@ -1,8 +1,9 @@
 package gencode_test
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/gencode"
 	"testing"
+
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/gencode"
 )
 
 //go:generate go test -v -race -count=1 ./...
