@@ -2,9 +2,16 @@ package role
 
 import (
 	"context"
+
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 )
+
+//go:generate mockery --name Validator
+type Validator interface {
+}
 
 //go:generate mockery --name Repository
 type Repository interface {
@@ -23,9 +30,22 @@ type Repository interface {
 }
 
 type Interactor struct {
+	cfg        *configs.Config
+	trc        contract.Tracer
+	vld        Validator
 	repository Repository
 }
 
-func New(repository Repository) *Interactor {
-	return &Interactor{repository: repository}
+func New(
+	cfg *configs.Config,
+	trc contract.Tracer,
+	vld Validator,
+	repository Repository,
+) *Interactor {
+	return &Interactor{
+		cfg:        cfg,
+		trc:        trc,
+		vld:        vld,
+		repository: repository,
+	}
 }
