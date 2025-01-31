@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	"log"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 )
 
 func main() {
