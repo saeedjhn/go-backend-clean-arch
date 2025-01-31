@@ -1,10 +1,10 @@
 package resource
 
 const (
-	_opresourceServiceCreate     = "resourceservice_Create"
-	_opresourceServiceGetByID    = "resourceservice_GetByID"
-	_opresourceServiceGetAll     = "resourceservice_GetAll"
-	_opresourceServiceUpdate     = "resourceservice_Update"
-	_opresourceServiceDeleteByID = "resourceservice_DeleteByID"
-	_opresourceServiceDeleteAll  = "resourceservice_DeleteAll"
+	_opResourceServiceCreate     = "resourceservice_Create"
+	_opResourceServiceGetByID    = "resourceservice_GetByID"
+	_opResourceServiceGetAll     = "resourceservice_GetAll"
+	_opResourceServiceUpdate     = "resourceservice_Update"
+	_opResourceServiceDeleteByID = "resourceservice_DeleteByID"
+	_opResourceServiceDeleteAll  = "resourceservice_DeleteAll"
 )

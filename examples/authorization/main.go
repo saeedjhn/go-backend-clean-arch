@@ -49,12 +49,12 @@ func main() {
 	}
 
 	// Example 3: Define permissions for roles on resources
-	adminPermissions := entity.Permissions{
+	adminPermissions := entity.Permission{
 		Allow: entity.RWXD{R: true, W: true, X: true, D: true}, // Full permissions
 		Deny:  entity.RWXD{},
 	}
 
-	managerPermissions := entity.Permissions{
+	managerPermissions := entity.Permission{
 		Allow: entity.RWXD{R: true, W: true, X: false, D: false}, // Read and Write permissions only
 		Deny:  entity.RWXD{X: true, D: true},                     // Deny Execute and Delete actions
 	}
@@ -94,6 +94,6 @@ func main() {
 
 	// Example Output
 	log.Printf("Admin User: %+v\n", adminUser)
-	log.Printf("Role Permissions: %+v\n", adminRolePermission)
-	log.Printf("Manager Permissions: %+v\n", managerRolePermission)
+	log.Printf("Role Permission: %+v\n", adminRolePermission)
+	log.Printf("Manager Permission: %+v\n", managerRolePermission)
 }

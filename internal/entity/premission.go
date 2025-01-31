@@ -1,7 +1,7 @@
 package entity
 
-// Permissions describe the rules for accessing resources.
-type Permissions struct {
+// Permission describe the rules for accessing resources.
+type Permission struct {
 	Allow RWXD // Allowed actions
 	Deny  RWXD // Denied actions
 }
