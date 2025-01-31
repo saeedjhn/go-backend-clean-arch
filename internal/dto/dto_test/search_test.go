@@ -1,9 +1,10 @@
 package dto_test
 
 import (
+	"testing"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 //go:generate go test -v -race -count=1

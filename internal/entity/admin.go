@@ -4,7 +4,7 @@ import "time"
 
 // Admin represents a system administrator with specific roles and permissions.
 type Admin struct {
-	ID          uint64 // Unique identifier for the admin (e.g., UUID)
+	ID          uint64
 	FirstName   string
 	LastName    string
 	Email       string
