@@ -1,7 +1,7 @@
 CREATE TABLE roles
 (
     id          BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name        VARCHAR(191) NOT NULL,
+    name        VARCHAR(191) NOT NULL UNIQUE,
     description TEXT,
     internal    BOOLEAN      NOT NULL DEFAULT FALSE,
     created_at  TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,

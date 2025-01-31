@@ -4,7 +4,7 @@ CREATE TABLE admins
     first_name  VARCHAR(191) NOT NULL,
     last_name   VARCHAR(191) NOT NULL,
     email       VARCHAR(191) NOT NULL UNIQUE,
-    mobile      VARCHAR(191) NOT NULL,
+    mobile      VARCHAR(191) NOT NULL UNIQUE,
     description TEXT,
     password    VARCHAR(191) NOT NULL,
     gender      ENUM('male', 'female') NOT NULL,

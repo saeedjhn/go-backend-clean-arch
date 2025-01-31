@@ -1,7 +1,7 @@
 CREATE TABLE role_wildcard_permissions
 (
     role_id          BIGINT UNSIGNED,
-    resource_pattern VARCHAR(191),
+    resource_pattern VARCHAR(191) NOT NULL,
     priority         INT       DEFAULT 0,
     permission_id    BIGINT UNSIGNED,
     created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

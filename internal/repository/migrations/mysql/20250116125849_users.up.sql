@@ -4,9 +4,9 @@
 CREATE TABLE `users`
 (
     `id`         BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `name`       VARCHAR(191),
-    `mobile`     VARCHAR(191)                        NOT NULL,
-    `email`      VARCHAR(191),
+    `name`       VARCHAR(191)                        NOT NULL,
+    `mobile`     VARCHAR(191)                        NOT NULL UNIQUE,
+    `email`      VARCHAR(191)                        NOT NULL UNIQUE,
     `password`   VARCHAR(191)                        NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
