@@ -24,6 +24,7 @@ type Repository interface {
 		sort dto.SortRequest,
 		searchParams *dto.QuerySearch,
 	) ([]entity.Admin, uint, error)
+	GetRolesIDsByID(ctx context.Context, id uint64) ([]uint64, error)
 	MobileExists(ctx context.Context, mobile string) (bool, error)
 	EmailExists(ctx context.Context, email string) (bool, error)
 	DeleteByID(ctx context.Context, id uint64) error

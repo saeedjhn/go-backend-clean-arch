@@ -8,7 +8,7 @@ import (
 func (h *Handler) SetRoutes(e *echo.Echo) {
 	group := e.Group("/users")
 
-	group.Use(mymiddleware.Auth(h.authIntr))
+	group.Use(mymiddleware.Authentication(h.authIntr))
 	{
 		group.POST("/:id/tasks", h.Create, mymiddleware.CheckIsValidUserID)
 		group.GET("/:id/tasks", h.Tasks, mymiddleware.CheckIsValidUserID)

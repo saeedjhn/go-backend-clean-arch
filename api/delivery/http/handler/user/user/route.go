@@ -20,7 +20,7 @@ func (h *Handler) SetRoutes(e *echo.Echo) {
 		}
 
 		protectedG := group.Group("")
-		protectedG.Use(mymiddleware.Auth(h.authIntr))
+		protectedG.Use(mymiddleware.Authentication(h.authIntr))
 		{
 			protectedG.GET("/profile", h.Profile)
 		}

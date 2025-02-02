@@ -6,10 +6,19 @@ type Permission struct {
 	Deny  RWXD // Denied actions
 }
 
+type Action string
+
+const (
+	ReadAction    Action = "r"
+	WriteAction   Action = "w"
+	ExecuteAction Action = "x"
+	DeleteAction  Action = "d"
+)
+
 // RWXD specifies a set of permissions for resources.
 type RWXD struct {
-	R bool // Read permission
-	W bool // Write permission
-	X bool // Execute permission
-	D bool // Delete permission
+	R bool // ReadAction permission
+	W bool // WriteAction permission
+	X bool // ExecuteAction permission
+	D bool // DeleteAction permission
 }

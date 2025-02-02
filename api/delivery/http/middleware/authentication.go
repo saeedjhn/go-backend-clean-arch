@@ -7,7 +7,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 )
 
-func Auth(
+func Authentication(
 	authIntr *authentication.Interactor,
 ) echo.MiddlewareFunc {
 	return mw.WithConfig(mw.Config{
@@ -28,7 +28,7 @@ func Auth(
 
 // const _lenValidAuthorizationKeyFromHeader = 2
 //
-// func Auth(
+// func Authentication(
 //	authInteractor *authusecase.Interactor,
 // ) echo.MiddlewareFunc {
 //	return func(next echo.HandlerFunc) echo.HandlerFunc {
