@@ -1,6 +1,8 @@
 package entity
 
+import "github.com/saeedjhn/go-backend-clean-arch/internal/types"
+
 type Authenticable struct {
-	ID   uint64
+	ID   types.ID
 	Role string
 }

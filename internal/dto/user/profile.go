@@ -1,7 +1,9 @@
 package user
 
+import "github.com/saeedjhn/go-backend-clean-arch/internal/types"
+
 type ProfileRequest struct {
-	ID uint64 `json:"id"`
+	ID types.ID `json:"id"`
 }
 
 type ProfileResponse struct {

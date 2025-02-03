@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"errors"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
@@ -50,7 +52,7 @@ func (r *DB) Create(ctx context.Context, u entity.User) (entity.User, error) {
 	}
 
 	id, _ := res.LastInsertId()
-	u.ID = uint64(id) // #nosec G115 // integer overflow conversion int64 -> uint64
+	u.ID = types.ID(id) // #nosec G115 // integer overflow conversion int64 -> uint64
 
 	return u, nil
 }

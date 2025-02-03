@@ -1,9 +1,11 @@
 package task
 
+import "github.com/saeedjhn/go-backend-clean-arch/internal/types"
+
 type CreateRequest struct {
-	UserID      uint64 `json:"user_id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
+	UserID      types.ID `json:"user_id"`
+	Title       string   `json:"title"`
+	Description string   `json:"description"`
 	// Status      uint8  `json:"status"`
 }
 

@@ -1,10 +1,14 @@
 package entity
 
-import "time"
+import (
+	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+)
 
 // Admin represents a system administrator with specific roles and permissions.
 type Admin struct {
-	ID          uint64
+	ID          types.ID
 	FirstName   string
 	LastName    string
 	Email       string

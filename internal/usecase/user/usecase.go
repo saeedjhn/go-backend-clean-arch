@@ -6,7 +6,6 @@ import (
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/security/bcrypt"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
@@ -30,7 +29,6 @@ type Validator interface {
 	ValidateLoginRequest(req user.LoginRequest) (map[string]string, error)
 	ValidateProfileRequest(req user.ProfileRequest) (map[string]string, error)
 	ValidateRefreshTokenRequest(req user.RefreshTokenRequest) (map[string]string, error)
-	ValidateCreateTaskRequest(req task.CreateRequest) (map[string]string, error)
 }
 
 //go:generate mockery --name Cache

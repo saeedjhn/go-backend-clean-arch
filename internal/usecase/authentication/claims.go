@@ -2,12 +2,13 @@ package authentication
 
 import (
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
 )
 
 type Claims struct {
 	jwt.RegisteredClaims
-	UserID  uint64   `json:"user_id"`
-	RoleIDs []uint64 `json:"role_ids"`
+	UserID  types.ID   `json:"user_id"`
+	RoleIDs []types.ID `json:"role_ids"`
 }
 
 // func (c Claims) Valid() error {

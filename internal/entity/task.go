@@ -1,10 +1,14 @@
 package entity
 
-import "time"
+import (
+	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+)
 
 type Task struct {
-	ID          uint64
-	UserID      uint64
+	ID          types.ID
+	UserID      types.ID
 	Title       string
 	Description string
 	Status      TaskStatus

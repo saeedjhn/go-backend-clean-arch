@@ -4,10 +4,12 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
+
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 
 	"github.com/labstack/echo/v4"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
 )
 
 func CheckIsValidUserID(next echo.HandlerFunc) echo.HandlerFunc {
@@ -15,14 +17,10 @@ func CheckIsValidUserID(next echo.HandlerFunc) echo.HandlerFunc {
 		id := c.Param("id")
 		claims := claim.GetClaimsFromEchoContext(c)
 
-		idFromTokenConvertToSTR := strconv.FormatUint(claims.UserID, 10)
+		idFromTokenConvertToSTR := strconv.FormatUint(claims.UserID.Uint64(), 10)
 
 		if id != idFromTokenConvertToSTR {
-			return echo.NewHTTPError(http.StatusBadRequest, echo.Map{
-				"status":  false,
-				"message": msg.ErrMsg401UnAuthorized,
-				"errors":  nil,
-			})
+			return echo.NewHTTPError(http.StatusBadRequest, entity.NewErrorResponse(msg.ErrMsg401UnAuthorized, nil))
 		}
 
 		return next(c)

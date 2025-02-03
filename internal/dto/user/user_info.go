@@ -1,9 +1,13 @@
 package user
 
-import "time"
+import (
+	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+)
 
 type UserInfo struct {
-	ID        uint64    `json:"id"`
+	ID        types.ID  `json:"id"`
 	Name      string    `json:"name"`
 	Mobile    string    `json:"mobile"`
 	Email     string    `json:"email"`

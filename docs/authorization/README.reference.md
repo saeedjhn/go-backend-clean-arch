@@ -1,0 +1,1 @@
+[Custom role-based authorization in Golang](https://mikebolshakov.medium.com/custom-role-based-authorization-in-golang-ba6d5585a521)

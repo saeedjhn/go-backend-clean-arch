@@ -3,7 +3,7 @@ package user
 import (
 	"errors"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
+	userdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
@@ -11,7 +11,7 @@ import (
 	passwordvalidator "github.com/wagslane/go-password-validator"
 )
 
-func (v Validator) ValidateRegisterRequest(req user.RegisterRequest) (map[string]string, error) {
+func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[string]string, error) {
 	if err := validation.ValidateStruct(&req,
 		validation.Field(&req.Name,
 			validation.Required,

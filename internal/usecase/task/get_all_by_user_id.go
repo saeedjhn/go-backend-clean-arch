@@ -7,7 +7,7 @@ import (
 )
 
 func (i *Interactor) GetAllByUserID(ctx context.Context, req taskdto.GetAllByUserIDRequest) (taskdto.GetByUserIDResponse, error) {
-	tasksByUserID, err := i.repository.GetAllByUserID(ctx, req.UserID)
+	tasksByUserID, err := i.repository.GetAllByUserID(ctx, req.UserID.Uint64())
 	if err != nil {
 		return taskdto.GetByUserIDResponse{}, err
 	}

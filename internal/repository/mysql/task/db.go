@@ -6,6 +6,8 @@ import (
 	"errors"
 	"log"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+
 	entity2 "github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
@@ -40,7 +42,7 @@ func (r *DB) Create(ctx context.Context, t entity2.Task) (entity2.Task, error) {
 	}
 
 	id, _ := res.LastInsertId()
-	t.ID = uint64(id) // #nosec G115 // integer overflow conversion int64 -> uint64
+	t.ID = types.ID(id) // #nosec G115 // integer overflow conversion int64 -> uint64
 
 	return t, nil
 }

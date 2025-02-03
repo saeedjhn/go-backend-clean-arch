@@ -14,7 +14,7 @@ func (i *Interactor) Profile(ctx context.Context, req user.ProfileRequest) (user
 	})
 	defer span.End()
 
-	u, err := i.repository.GetByID(ctx, req.ID)
+	u, err := i.repository.GetByID(ctx, req.ID.Uint64())
 	if err != nil {
 		return user.ProfileResponse{}, err
 	}

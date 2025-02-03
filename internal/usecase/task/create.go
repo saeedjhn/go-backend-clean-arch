@@ -11,7 +11,7 @@ import (
 )
 
 func (i *Interactor) Create(ctx context.Context, req taskdto.CreateRequest) (taskdto.CreateResponse, error) {
-	isExistsUser, err := i.repository.IsExistsUser(ctx, req.UserID)
+	isExistsUser, err := i.repository.IsExistsUser(ctx, req.UserID.Uint64())
 	if err != nil {
 		return taskdto.CreateResponse{}, err
 	}

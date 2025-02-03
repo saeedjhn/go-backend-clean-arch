@@ -3,14 +3,14 @@ package task
 import (
 	"errors"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
+	taskdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
-func (v Validator) ValidateCreateRequest(req task.CreateRequest) (map[string]string, error) {
+func (v Validator) ValidateCreateRequest(req taskdto.CreateRequest) (map[string]string, error) {
 	if err := validation.ValidateStruct(&req,
 		validation.Field(&req.Title,
 			validation.Required,

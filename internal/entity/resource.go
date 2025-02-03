@@ -1,10 +1,14 @@
 package entity
 
-import "time"
+import (
+	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+)
 
 // Resource represents a protectable entity within the system.
 type Resource struct {
-	ID          uint64
+	ID          types.ID
 	Name        string
 	Description string
 	Type        string // Type of resource (e.g., "module", "file", "API")

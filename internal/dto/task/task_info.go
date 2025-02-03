@@ -3,12 +3,14 @@ package task
 import (
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 )
 
 type TaskInfo struct {
-	ID          uint64            `json:"id"`
-	UserID      uint64            `json:"user_id"`
+	ID          types.ID          `json:"id"`
+	UserID      types.ID          `json:"user_id"`
 	Title       string            `json:"title"`
 	Description string            `json:"description"`
 	Status      entity.TaskStatus `json:"status"`

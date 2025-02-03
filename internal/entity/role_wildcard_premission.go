@@ -1,10 +1,14 @@
 package entity
 
-import "time"
+import (
+	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+)
 
 // RoleWildCardPermission defines permissions for a role on a pattern of resources.
 type RoleWildCardPermission struct {
-	RoleID          uint64     // Code of the role
+	RoleID          types.ID   // Code of the role
 	ResourcePattern string     // Resource pattern using wildcards (e.g., "resource.*")
 	Priority        int        // Priority of the wildcard permission
 	Permissions     Permission // Allowed and denied actions

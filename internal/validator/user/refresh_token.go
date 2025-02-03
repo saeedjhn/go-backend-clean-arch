@@ -3,14 +3,14 @@ package user
 import (
 	"errors"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
+	userdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
-func (v Validator) ValidateRefreshTokenRequest(req user.RefreshTokenRequest) (map[string]string, error) {
+func (v Validator) ValidateRefreshTokenRequest(req userdto.RefreshTokenRequest) (map[string]string, error) {
 	if err := validation.ValidateStruct(&req,
 		validation.Field(&req.RefreshToken,
 			validation.Required),

@@ -3,14 +3,14 @@ package user
 import (
 	"errors"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
+	userdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
-func (v Validator) ValidateProfileRequest(req user.ProfileRequest) (map[string]string, error) {
+func (v Validator) ValidateProfileRequest(req userdto.ProfileRequest) (map[string]string, error) {
 	if err := validation.ValidateStruct(&req,
 		validation.Field(&req.ID,
 			validation.Required),

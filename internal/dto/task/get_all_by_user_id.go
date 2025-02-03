@@ -1,7 +1,9 @@
 package task
 
+import "github.com/saeedjhn/go-backend-clean-arch/internal/types"
+
 type GetAllByUserIDRequest struct {
-	UserID uint64 `param:"id" json:"user_id"`
+	UserID types.ID `param:"id" json:"user_id"`
 }
 
 type GetByUserIDResponse struct {

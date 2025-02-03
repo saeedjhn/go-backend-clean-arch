@@ -32,7 +32,7 @@ func (i *Interactor) RefreshToken(
 			WithKind(richerror.KindStatusBadRequest)
 	}
 
-	u, err := i.repository.GetByID(ctx, resp.UserID)
+	u, err := i.repository.GetByID(ctx, resp.UserID.Uint64())
 	if err != nil {
 		return user.RefreshTokenResponse{}, err
 	}

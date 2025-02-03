@@ -4,6 +4,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+
 	"github.com/golang-jwt/jwt/v5"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
@@ -182,7 +184,7 @@ func generateTestTokenWithClaims(secret string, duration time.Duration, userID u
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(duration)),
 		},
-		UserID: userID,
+		UserID: types.ID(userID),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, _ := token.SignedString([]byte(secret))

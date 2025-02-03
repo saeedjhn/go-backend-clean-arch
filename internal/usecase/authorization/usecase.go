@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 )
 
@@ -49,7 +51,7 @@ func New(
 	}
 }
 
-func (a *Interactor) CheckAccess(ctx context.Context, roleIDs []uint64, resourceName string, actions ...entity.Action) (bool, error) {
+func (a *Interactor) CheckAccess(ctx context.Context, roleIDs []types.ID, resourceName string, actions ...entity.Action) (bool, error) {
 	if len(actions) == 0 || len(roleIDs) == 0 {
 		return false, nil
 	}
@@ -78,7 +80,7 @@ func (a *Interactor) CheckAccess(ctx context.Context, roleIDs []uint64, resource
 		// 	a.Cache.Set(ctx, cacheKey, encoded, a.Config.CacheTTL)
 		// }
 
-		perm, errRRP := a.roleResourcePermissionIntr.GetByRoleIDAndResourceID(ctx, roleID, resourceID)
+		perm, errRRP := a.roleResourcePermissionIntr.GetByRoleIDAndResourceID(ctx, roleID.Uint64(), resourceID)
 		if errRRP != nil {
 			continue
 		}
