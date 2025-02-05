@@ -2,9 +2,10 @@ package scheduler_test
 
 import (
 	"context"
-	"github.com/stretchr/testify/require"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/scheduler"
 	"github.com/stretchr/testify/assert"
@@ -55,6 +56,24 @@ func TestScheduler_StartAt_WithValidConfig_TaskRunsAtScheduledTime(t *testing.T)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
+
+	err := sch.StartAt(ctx, func() {}, time.Millisecond*50)
+
+	require.NoError(t, err)
+
+	_ = sch.Start()
+
+	time.Sleep(70 * time.Millisecond)
+
+	_ = sch.Shutdown()
+}
+
+func TestScheduler_StartAt_WithCancel_TaskCanceledAtScheduledTime(t *testing.T) {
+	sch := scheduler.New()
+	_ = sch.Configure()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
 
 	err := sch.StartAt(ctx, func() {}, time.Millisecond*50)
 
