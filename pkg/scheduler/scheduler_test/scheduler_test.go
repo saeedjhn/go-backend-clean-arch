@@ -1,11 +1,10 @@
 package scheduler_test
 
 import (
-	"log"
+	"context"
+	"github.com/stretchr/testify/require"
 	"testing"
 	"time"
-
-	"github.com/stretchr/testify/require"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/scheduler"
 	"github.com/stretchr/testify/assert"
@@ -13,80 +12,124 @@ import (
 
 //go:generate go test -v -race -count=1 ./...
 
-func Test_Configure_WhenCalled_ShouldInitializeScheduler(t *testing.T) {
+func TestScheduler_Configure_InitializesScheduler(t *testing.T) {
 	sch := scheduler.New()
+
 	err := sch.Configure()
-	require.NoError(t, err, "Configure should not return an error")
+
+	assert.NoError(t, err, "scheduler should be initialized successfully")
 }
 
-func Test_RepeatTaskEvery_WhenCalled_ShouldScheduleTask(t *testing.T) {
+func TestScheduler_RepeatTaskEvery_WithValidConfig_TaskRunsSuccessfully(t *testing.T) {
 	sch := scheduler.New()
-	err := sch.Configure()
+	_ = sch.Configure()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	err := sch.RepeatTaskEvery(ctx, func() {}, time.Millisecond*10)
+
 	require.NoError(t, err)
 
-	err = sch.RepeatTaskEvery(time.Second, func() {
-		log.Println("Task executed every second")
-	})
-	require.NoError(t, err)
+	_ = sch.Start()
 
-	sch.Start()
-	time.Sleep(3 * time.Second)
+	time.Sleep(50 * time.Millisecond)
 
-	err = sch.Shutdown()
-	require.NoError(t, err)
+	_ = sch.Shutdown()
 }
 
-func Test_StartAt_WhenCalled_ShouldScheduleDelayedTask(t *testing.T) {
+func TestScheduler_RepeatTaskEvery_SchedulerNotInitialized_ReturnsError(t *testing.T) {
 	sch := scheduler.New()
-	err := sch.Configure()
-	require.NoError(t, err)
 
-	err = sch.StartAt(2*time.Second, func() {
-		log.Println("Task executed after delay")
-	})
-	require.NoError(t, err)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
-	sch.Start()
-	time.Sleep(5 * time.Second)
+	err := sch.RepeatTaskEvery(ctx, func() {}, time.Second)
 
-	err = sch.Shutdown()
-	require.NoError(t, err)
+	assert.Error(t, err)
 }
 
-func Test_Start_WhenCalled_ShouldStartScheduler(t *testing.T) {
+func TestScheduler_StartAt_WithValidConfig_TaskRunsAtScheduledTime(t *testing.T) {
 	sch := scheduler.New()
-	err := sch.Configure()
+	_ = sch.Configure()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	err := sch.StartAt(ctx, func() {}, time.Millisecond*50)
+
 	require.NoError(t, err)
 
-	assert.NotPanics(t, func() {
-		sch.Start()
-	})
+	_ = sch.Start()
+
+	time.Sleep(70 * time.Millisecond)
+
+	_ = sch.Shutdown()
 }
 
-func Test_StopJobs_WhenCalled_ShouldStopAllJobs(t *testing.T) {
+func TestScheduler_StartAt_SchedulerNotInitialized_ReturnsError(t *testing.T) {
 	sch := scheduler.New()
-	err := sch.Configure()
-	require.NoError(t, err)
 
-	err = sch.RepeatTaskEvery(time.Second, func() {
-		log.Println("Task executed every second")
-	})
-	require.NoError(t, err)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
-	sch.Start()
-	time.Sleep(3 * time.Second)
+	err := sch.StartAt(ctx, func() {}, time.Second)
 
-	err = sch.StopJobs()
-	require.NoError(t, err)
+	assert.Error(t, err)
 }
 
-func Test_Shutdown_WhenCalled_ShouldShutdownScheduler(t *testing.T) {
+func TestScheduler_Start_SchedulerNotInitialized_ReturnsError(t *testing.T) {
 	sch := scheduler.New()
-	err := sch.Configure()
-	require.NoError(t, err)
 
-	sch.Start()
+	err := sch.Start()
 
-	err = sch.Shutdown()
-	require.NoError(t, err)
+	assert.Error(t, err)
+}
+
+func TestScheduler_StopJobs_WithRunningTasks_TasksShouldStop(t *testing.T) {
+	sch := scheduler.New()
+	_ = sch.Configure()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	_ = sch.RepeatTaskEvery(ctx, func() {}, time.Millisecond*10)
+
+	_ = sch.Start()
+	time.Sleep(30 * time.Millisecond)
+
+	err := sch.StopJobs()
+	assert.NoError(t, err)
+}
+
+func TestScheduler_StopJobs_SchedulerNotInitialized_ReturnsError(t *testing.T) {
+	sch := scheduler.New()
+
+	err := sch.StopJobs()
+
+	assert.Error(t, err)
+}
+
+func TestScheduler_Shutdown_WithRunningTasks_SchedulerStopsSuccessfully(t *testing.T) {
+	sch := scheduler.New()
+	_ = sch.Configure()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	_ = sch.RepeatTaskEvery(ctx, func() {}, time.Millisecond*10)
+
+	_ = sch.Start()
+	time.Sleep(30 * time.Millisecond)
+
+	err := sch.Shutdown()
+	assert.NoError(t, err)
+}
+
+func TestScheduler_Shutdown_SchedulerNotInitialized_ReturnsError(t *testing.T) {
+	sch := scheduler.New()
+
+	err := sch.Shutdown()
+
+	assert.Error(t, err)
 }

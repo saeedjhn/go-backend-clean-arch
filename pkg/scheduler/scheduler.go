@@ -1,7 +1,9 @@
 package scheduler
 
 import (
+	"context"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/go-co-op/gocron/v2"
@@ -9,6 +11,7 @@ import (
 
 type Scheduler struct {
 	sch gocron.Scheduler
+	mu  sync.Mutex
 }
 
 func New() *Scheduler {
@@ -26,10 +29,20 @@ func (s *Scheduler) Configure() error {
 }
 
 func (s *Scheduler) RepeatTaskEvery(
-	t time.Duration,
+	ctx context.Context,
 	fn func(),
+	t time.Duration,
 ) error {
-	_, err := s.sch.NewJob(gocron.DurationJob(t), gocron.NewTask(fn))
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if err := s.checkInitialized(); err != nil {
+		return err
+	}
+
+	task := s.wrapTaskWithContext(ctx, fn)
+
+	_, err := s.sch.NewJob(gocron.DurationJob(t), gocron.NewTask(task))
 	if err != nil {
 		return fmt.Errorf("failed to create task: %w", err)
 	}
@@ -37,10 +50,23 @@ func (s *Scheduler) RepeatTaskEvery(
 	return nil
 }
 
-func (s *Scheduler) StartAt(t time.Duration, fn func()) error {
+func (s *Scheduler) StartAt(
+	ctx context.Context,
+	fn func(),
+	t time.Duration,
+) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if err := s.checkInitialized(); err != nil {
+		return err
+	}
+
+	task := s.wrapTaskWithContext(ctx, fn)
+
 	_, err := s.sch.NewJob(
 		gocron.OneTimeJob(gocron.OneTimeJobStartDateTime(time.Now().Add(t))),
-		gocron.NewTask(fn),
+		gocron.NewTask(task),
 	)
 	if err != nil {
 		return fmt.Errorf("failed to create task: %w", err)
@@ -49,11 +75,21 @@ func (s *Scheduler) StartAt(t time.Duration, fn func()) error {
 	return nil
 }
 
-func (s *Scheduler) Start() {
+func (s *Scheduler) Start() error {
+	if err := s.checkInitialized(); err != nil {
+		return err
+	}
+
 	s.sch.Start()
+
+	return nil
 }
 
 func (s *Scheduler) StopJobs() error {
+	if err := s.checkInitialized(); err != nil {
+		return err
+	}
+
 	if err := s.sch.StopJobs(); err != nil {
 		return fmt.Errorf("failed to stop scheduled jobs: %w", err)
 	}
@@ -62,8 +98,31 @@ func (s *Scheduler) StopJobs() error {
 }
 
 func (s *Scheduler) Shutdown() error {
+	if err := s.checkInitialized(); err != nil {
+		return err
+	}
+
 	if err := s.sch.Shutdown(); err != nil {
 		return fmt.Errorf("failed to shutdown scheduler: %w", err)
+	}
+
+	return nil
+}
+
+func (s *Scheduler) wrapTaskWithContext(ctx context.Context, fn func()) func() {
+	return func() {
+		select {
+		case <-ctx.Done():
+			return
+		default:
+			fn()
+		}
+	}
+}
+
+func (s *Scheduler) checkInitialized() error {
+	if s.sch == nil {
+		return _errNotInitialized
 	}
 
 	return nil
