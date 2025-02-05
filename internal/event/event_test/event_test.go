@@ -3,15 +3,16 @@ package event_test
 import (
 	"context"
 	"errors"
+	"log"
+	"sync"
+	"testing"
+	"time"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/event"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/event/event_test/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"log"
-	"sync"
-	"testing"
-	"time"
 )
 
 //go:generate go test -v -race -count=1 ./...

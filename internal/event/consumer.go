@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"golang.org/x/sync/errgroup"
 	"log"
 	"sync"
+
+	"golang.org/x/sync/errgroup"
 )
 
 type C struct {
