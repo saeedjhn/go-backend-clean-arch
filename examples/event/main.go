@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 	"log"
 	"os"
 	"os/signal"
@@ -47,6 +49,8 @@ func handleOrderPlaced(event event.Event) error {
 }
 
 func main() {
+	logger := setupLogger()
+
 	urTopic := event.Topic("user.registered")
 	opTopic := event.Topic("order.processing")
 
@@ -61,6 +65,7 @@ func main() {
 		router,
 		bus,
 	)
+	eventConsumer.WithLogger(logger)
 
 	// Start the event consumer
 	var wg sync.WaitGroup
@@ -69,11 +74,7 @@ func main() {
 	// Or
 	ctx, cancel := context.WithCancel(context.Background())
 
-	go func() {
-		if err := eventConsumer.Start(ctx, &wg); err != nil {
-			log.Fatalf("Failed to start C: %v", err)
-		}
-	}()
+	go eventConsumer.Start(ctx, &wg)
 
 	evtUserRegistered := event.Event{Topic: urTopic, Payload: []byte("User123")}
 	evtOrderProcessing := event.Event{Topic: opTopic, Payload: []byte("Order123456")}
@@ -105,4 +106,16 @@ func main() {
 
 	// Gracefully shut down the consumer
 	wg.Wait()
+}
+
+func setupLogger() contract.Logger {
+	config := jsonfilelogger.Config{
+		LocalTime:        true,
+		Console:          true,
+		EnableCaller:     true,
+		EnableStacktrace: true,
+		Level:            "debug",
+	}
+
+	return jsonfilelogger.New(jsonfilelogger.NewDevelopmentStrategy(config)).Configure()
 }

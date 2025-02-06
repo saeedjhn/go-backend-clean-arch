@@ -2,18 +2,15 @@ package event
 
 import (
 	"context"
-	"errors"
-	"fmt"
-	"log"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 	"sync"
-
-	"golang.org/x/sync/errgroup"
 )
 
 type C struct {
-	chanBufferSize uint64
+	logger         contract.Logger
 	Consumers      []Consumer
 	Router         *Router
+	chanBufferSize uint64
 }
 
 func NewEventConsumer(
@@ -28,81 +25,142 @@ func NewEventConsumer(
 	}
 }
 
-func (c *C) Start(ctx context.Context, wg *sync.WaitGroup) error {
-	eventStream := make(chan Event, c.chanBufferSize)
-	g, ctx := errgroup.WithContext(ctx)
+func (c *C) WithLogger(logger contract.Logger) *C {
+	c.logger = logger
 
+	return c
+}
+
+func (c *C) Start(ctx context.Context, wg *sync.WaitGroup) {
+	eventStream := make(chan Event, c.chanBufferSize)
 	var once sync.Once // To ensure eventStream is closed only once
 
 	// Start consumers
 	for _, consumer := range c.Consumers {
-		consumer := consumer // Prevent closure issue
-		g.Go(func() error {
+		// consumer := consumer // Prevent closure issue
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
 			for {
 				select {
 				case <-ctx.Done():
-					log.Println("[Start] Consumer shutting down due to context cancellation")
-					return ctx.Err()
+					c.logger.Info("[Start] Consumer shutting down due to context cancellation")
+					return
 				default:
 					if err := consumer.Consume(eventStream); err != nil {
-						log.Printf("[Start] Consumer failed: %v", err)
-						return fmt.Errorf("[Start] consumer execution error: %w", err)
+						c.logger.Errorf("[Start] Consumer failed: %v", err)
+						return
 					}
 				}
 			}
-		})
+		}()
 	}
 
 	wg.Add(1)
-	g.Go(func() error {
+	go func() {
 		defer wg.Done()
-
 		for {
 			select {
 			case <-ctx.Done():
-				log.Println("[Start] Event processor shutting down due to context cancellation")
-				return ctx.Err()
+				c.logger.Info("[Start] Event processor shutting down due to context cancellation")
+				return
 			case e, ok := <-eventStream:
 				if !ok {
-					log.Println("[Start] Event stream closed, stopping event processing")
-					return nil
+					c.logger.Info("[Start] Event stream closed, stopping event processing")
+					return
 				}
 				if err := c.Router.Handle(e); err != nil {
-					log.Printf("[Start] Error handling event [%s]: %v", e.Topic, err)
-					return fmt.Errorf("[Start] failed to handle event [%s]: %w", e.Topic, err)
+					c.logger.Errorf("[Start] Error handling event [%s]: %v", e.Topic, err)
 				}
 			}
 		}
-	})
+	}()
 
 	// Ensure eventStream is closed once when context is done
 	go func() {
 		<-ctx.Done()
 		once.Do(func() {
 			close(eventStream)
+			c.logger.Info("[Start] Event stream closed")
 		})
 	}()
-
-	err := g.Wait()
-
-	// Ensure eventStream is closed properly
-	once.Do(func() {
-		close(eventStream)
-	})
-
-	if err != nil {
-		if errors.Is(err, context.Canceled) {
-			log.Println("[Start] Event consumer stopped gracefully due to context cancellation")
-			return nil
-		}
-
-		return fmt.Errorf("[Start] event consumer encountered an error: %w", err)
-	}
-
-	log.Println("[Start] Successfully completed event processing")
-
-	return nil
 }
+
+// func (c *C) Start(ctx context.Context, wg *sync.WaitGroup) error {
+// 	eventStream := make(chan Event, c.chanBufferSize)
+// 	g, ctx := errgroup.WithContext(ctx)
+//
+// 	var once sync.Once // To ensure eventStream is closed only once
+//
+// 	// Start consumers
+// 	for _, consumer := range c.Consumers {
+// 		consumer := consumer // Prevent closure issue
+// 		g.Go(func() error {
+// 			for {
+// 				select {
+// 				case <-ctx.Done():
+// 					log.Println("[Start] Consumer shutting down due to context cancellation")
+// 					return ctx.Err()
+// 				default:
+// 					if err := consumer.Consume(eventStream); err != nil {
+// 						log.Printf("[Start] Consumer failed: %v", err)
+// 						return fmt.Errorf("[Start] consumer execution error: %w", err)
+// 					}
+// 				}
+// 			}
+// 		})
+// 	}
+//
+// 	wg.Add(1)
+// 	g.Go(func() error {
+// 		defer wg.Done()
+//
+// 		for {
+// 			select {
+// 			case <-ctx.Done():
+// 				log.Println("[Start] Event processor shutting down due to context cancellation")
+// 				return ctx.Err()
+// 			case e, ok := <-eventStream:
+// 				if !ok {
+// 					log.Println("[Start] Event stream closed, stopping event processing")
+// 					return nil
+// 				}
+// 				if err := c.Router.Handle(e); err != nil {
+// 					log.Printf("[Start] Error handling event [%s]: %v", e.Topic, err)
+// 					return fmt.Errorf("[Start] failed to handle event [%s]: %w", e.Topic, err)
+// 				}
+// 			}
+// 		}
+// 	})
+//
+// 	// Ensure eventStream is closed once when context is done
+// 	go func() {
+// 		<-ctx.Done()
+// 		once.Do(func() {
+// 			close(eventStream)
+// 		})
+// 	}()
+//
+// 	err := g.Wait()
+//
+// 	// Ensure eventStream is closed properly
+// 	once.Do(func() {
+// 		close(eventStream)
+// 	})
+//
+// 	if err != nil {
+// 		if errors.Is(err, context.Canceled) {
+// 			log.Println("[Start] Event consumer stopped gracefully due to context cancellation")
+// 			return nil
+// 		}
+//
+// 		return fmt.Errorf("[Start] event consumer encountered an error: %w", err)
+// 	}
+//
+// 	log.Println("[Start] Successfully completed event processing")
+//
+// 	return nil
+// }
 
 //
 // func (c *C) Start(ctx context.Context, wg *sync.WaitGroup) error {
