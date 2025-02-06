@@ -6,14 +6,14 @@ import (
 	"os/signal"
 	"time"
 
-	rmqarc2 "github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/rmqpc"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/rmqpc"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/event"
 )
 
 func main() {
-	cfg := rmqarc2.Config{
-		Connection: rmqarc2.ConnectionConfig{
+	cfg := rmqpc.Config{
+		Connection: rmqpc.ConnectionConfig{
 			Username:         "admin",
 			Password:         "password123",
 			Host:             "localhost",
@@ -23,17 +23,17 @@ func main() {
 			MaxDelay:         10 * time.Second,
 			MaxRetry:         5,
 		},
-		MQ: rmqarc2.MQConfig{
-			Exchange: rmqarc2.ExchangeConfig{
+		MQ: rmqpc.MQConfig{
+			Exchange: rmqpc.ExchangeConfig{
 				Name:       "my-exchange",
-				Kind:       rmqarc2.TopicExchange,
+				Kind:       rmqpc.TopicExchange,
 				Durable:    true,
 				AutoDelete: false,
 				Internal:   false,
 				NoWait:     false,
 				Args:       nil,
 			},
-			QueueBind: rmqarc2.QueueBindConfig{
+			QueueBind: rmqpc.QueueBindConfig{
 				Queue:            "my-queue",
 				BindingKey:       []string{"my-routing-key"},
 				Durable:          true,
@@ -46,12 +46,12 @@ func main() {
 				PrefetchSize:     0,
 				PrefetchGlobal:   false,
 			},
-			Publish: rmqarc2.PublishConfig{
+			Publish: rmqpc.PublishConfig{
 				RoutingKey: "my-routing-key",
 				Mandatory:  false,
 				Immediate:  false,
 			},
-			Consume: rmqarc2.ConsumeConfig{
+			Consume: rmqpc.ConsumeConfig{
 				AutoAck:   false,
 				Exclusive: false,
 				NoLocal:   false,
@@ -61,7 +61,7 @@ func main() {
 		},
 	}
 
-	conn := rmqarc2.New("my-connection", cfg)
+	conn := rmqpc.New("my-connection", cfg)
 
 	if err := conn.Connect(); err != nil {
 		log.Fatalf("Failed to connect: %v", err)

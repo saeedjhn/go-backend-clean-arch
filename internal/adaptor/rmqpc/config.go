@@ -69,7 +69,7 @@ type ConsumeConfig struct {
 // PublishConfig defines the configuration for publishing a message to an exchange in RabbitMQ.
 type PublishConfig struct {
 	ExchangeName string // Name of the exchange to publish the message to.
-	RoutingKey   string // The routing key used for routing the message.
-	Mandatory    bool   // Whether the message must be delivered to at least one queue.
-	Immediate    bool   // Whether the message must be immediately delivered to a consumer.
+	// RoutingKey   string // The routing key used for routing the message.
+	Mandatory bool // Whether the message must be delivered to at least one queue.
+	Immediate bool // Whether the message must be immediately delivered to a consumer.
 }

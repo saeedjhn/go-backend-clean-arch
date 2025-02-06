@@ -61,12 +61,11 @@ func main() {
 				PrefetchGlobal:   false,
 			},
 			Publish: rmqpc.PublishConfig{
-				// RoutingKey: "my-routing-key",
 				Mandatory: false,
 				Immediate: false,
 			},
 			Consume: rmqpc.ConsumeConfig{
-				AutoAck:   true,
+				AutoAck:   false,
 				Exclusive: false,
 				NoLocal:   false,
 				NoWait:    false,

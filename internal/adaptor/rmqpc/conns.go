@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"net"
 	"time"
 
 	"github.com/google/uuid"
@@ -63,11 +64,10 @@ func (c *Connection) Connect() error {
 	log.Println("Connect.Invoked")
 
 	var err error
-	uri := fmt.Sprintf("amqp://%s:%s@%s:%s",
+	uri := fmt.Sprintf("amqp://%s:%s@%s",
 		c.config.Connection.Username,
 		c.config.Connection.Password,
-		c.config.Connection.Host,
-		c.config.Connection.Port,
+		net.JoinHostPort(c.config.Connection.Host, c.config.Connection.Port),
 	)
 
 	c.connection, err = amqp.Dial(uri)
@@ -184,7 +184,7 @@ func (c *Connection) Publish(evt event.Event) error {
 		return fmt.Errorf(
 			"publish failed: message delivery to exchange '%s' with routing key '%s' unsuccessful: %w",
 			c.config.MQ.Exchange.Name,
-			c.config.MQ.Publish.RoutingKey,
+			evt.Topic,
 			err,
 		)
 	}
@@ -195,26 +195,29 @@ func (c *Connection) Publish(evt event.Event) error {
 func (c *Connection) Consume(eventStream chan<- event.Event) error {
 	log.Println("StartConsume.Invoked")
 
+	var (
+		deliveries <-chan amqp.Delivery
+		err        error
+	)
 	if c.isEmptyQueue() {
-		deliveries, err := c.consumeFromTemporaryQueue(c.config.MQ.Consume)
+		deliveries, err = c.consumeFromTemporaryQueue(c.config.MQ.Consume)
 		if err != nil {
 			return fmt.Errorf("failed to consume from temporary queue: %w", err)
 		}
-
-		for deliver := range deliveries {
-			eventStream <- event.Event{Topic: event.Topic(deliver.RoutingKey), Payload: deliver.Body}
-		}
-
-		return nil
 	}
 
-	deliveries, err := c.consumeFromDefinedQueues(c.config.MQ.Consume)
+	deliveries, err = c.consumeFromDefinedQueues(c.config.MQ.Consume)
 	if err != nil {
 		return fmt.Errorf("failed to consume from temporary queue: %w", err)
 	}
 
-	for deliver := range deliveries {
-		eventStream <- event.Event{Topic: event.Topic(deliver.RoutingKey), Payload: deliver.Body}
+	for delivery := range deliveries {
+		eventStream <- event.Event{Topic: event.Topic(delivery.RoutingKey), Payload: delivery.Body}
+		if !c.config.MQ.Consume.AutoAck {
+			if err = delivery.Ack(false); err != nil {
+				return fmt.Errorf("failed to ACK message: %v", err)
+			}
+		}
 	}
 
 	return nil
@@ -263,11 +266,7 @@ func (c *Connection) reconnect() error {
 }
 
 func (c *Connection) isEmptyQueue() bool {
-	if len(c.config.MQ.QueueBind.Queue) == 0 {
-		return true
-	}
-
-	return false
+	return len(c.config.MQ.QueueBind.Queue) == 0
 }
 
 func buildConsumeTag(queueName string) string {
