@@ -3,12 +3,13 @@ package event_test
 import (
 	"context"
 	"errors"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 	"log"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/event"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/event/event_test/mocks"

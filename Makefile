@@ -57,7 +57,8 @@ install-deps:
 .PHONY: tparse
 tparse:
 	set +e; \
-    go test ./... -json > $(TEST_SUMMARIES_FILE); \
+#    go test ./... -json > $(TEST_SUMMARIES_FILE); \
+    go test $(TEST_PATH) -json > $(TEST_SUMMARIES_FILE); \
     tparse -all -file=$(TEST_SUMMARIES_FILE); \
     rm -f $(TEST_SUMMARIES_FILE)
 

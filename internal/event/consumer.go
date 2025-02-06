@@ -2,8 +2,9 @@ package event
 
 import (
 	"context"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 	"sync"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 )
 
 type C struct {
@@ -37,7 +38,7 @@ func (c *C) Start(ctx context.Context, wg *sync.WaitGroup) {
 
 	// Start consumers
 	for _, consumer := range c.Consumers {
-		// consumer := consumer // Prevent closure issue
+		consumer := consumer // Prevent closure issue
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
