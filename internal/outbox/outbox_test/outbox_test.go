@@ -6,6 +6,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/outbox"
@@ -26,7 +28,7 @@ func TestOutbox_ProcessOutBoxEvents_NoUnpublishedEvents_ReturnsNil(t *testing.T)
 		BatchSize:      2,
 		RetryThreshold: 3,
 	}
-	var events []outbox.Event
+	var events []entity.Outbox
 
 	logger := setupLogger()
 	sch, err := setupScheduler()
@@ -61,7 +63,7 @@ func TestOutbox_ProcessOutBoxEvents_FailToPublishEvent_ReturnsError(t *testing.T
 		BatchSize:      1,
 		RetryThreshold: 1,
 	}
-	events := []outbox.Event{{
+	events := []entity.Outbox{{
 		ID:            1,
 		Topic:         "user.sign.up",
 		Payload:       []byte("user data"),
@@ -107,7 +109,7 @@ func TestOutbox_ProcessOutBoxEvents_FailToUpdatePublished_ReturnsError(t *testin
 		BatchSize:      2,
 		RetryThreshold: 3,
 	}
-	events := []outbox.Event{{
+	events := []entity.Outbox{{
 		ID:            1,
 		Topic:         "user.sign.up",
 		Payload:       []byte("user data"),
@@ -154,7 +156,7 @@ func TestOutbox_ProcessOutBoxEvents_SuccessfullyPublished_ReturnsNil(t *testing.
 		BatchSize:      2,
 		RetryThreshold: 3,
 	}
-	events := []outbox.Event{{
+	events := []entity.Outbox{{
 		ID:            1,
 		Topic:         "user.sign.up",
 		Payload:       []byte("user data"),

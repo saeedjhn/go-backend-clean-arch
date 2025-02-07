@@ -8,6 +8,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 
@@ -32,6 +34,7 @@ func TestStart_WithContextCancellation_StopsGracefully(t *testing.T) {
 	eventConsumer.WithLogger(logger)
 
 	var wg sync.WaitGroup
+	wg.Add(1)
 
 	go func() {
 		time.Sleep(100 * time.Millisecond)
@@ -41,7 +44,10 @@ func TestStart_WithContextCancellation_StopsGracefully(t *testing.T) {
 	// err := eventConsumer.Start(ctx, &wg)
 	// require.NoError(t, err)
 
-	eventConsumer.Start(ctx, &wg)
+	go func() {
+		defer wg.Done()
+		eventConsumer.Start(ctx)
+	}()
 
 	mockConsumer.AssertExpectations(t)
 }
@@ -60,12 +66,16 @@ func TestStart_WithConsumerError_ReturnsError(t *testing.T) {
 	eventConsumer.WithLogger(logger)
 
 	var wg sync.WaitGroup
+	wg.Add(1)
 
 	// err := eventConsumer.Start(ctx, &wg)
 	// require.Error(t, err)
 	// assert.Contains(t, err.Error(), "consumer failure")
 
-	eventConsumer.Start(ctx, &wg)
+	go func() {
+		defer wg.Done()
+		eventConsumer.Start(ctx)
+	}()
 
 	mockConsumer.AssertExpectations(t)
 }
@@ -84,6 +94,7 @@ func TestStart_WithNoEvents_ExitsGracefully(t *testing.T) {
 	eventConsumer.WithLogger(logger)
 
 	var wg sync.WaitGroup
+	wg.Add(1)
 
 	go func() {
 		time.Sleep(100 * time.Millisecond)
@@ -93,7 +104,10 @@ func TestStart_WithNoEvents_ExitsGracefully(t *testing.T) {
 	// err := eventConsumer.Start(ctx, &wg)
 	// require.NoError(t, err)
 
-	eventConsumer.Start(ctx, &wg)
+	go func() {
+		defer wg.Done()
+		eventConsumer.Start(ctx)
+	}()
 
 	mockConsumer.AssertExpectations(t)
 }
@@ -107,7 +121,7 @@ func TestStart_WithValidEvents_ProcessesSuccessfull(t *testing.T) {
 		Return(nil).Maybe()
 
 	router := event.NewRouter()
-	router.Register(event.Topic("user.registered"), handleUserRegistered)
+	router.Register(entity.Topic("user.registered"), handleUserRegistered)
 
 	eventConsumer := event.NewEventConsumer(10, router, mockConsumer)
 	eventConsumer.WithLogger(logger)
@@ -118,17 +132,21 @@ func TestStart_WithValidEvents_ProcessesSuccessfull(t *testing.T) {
 	}()
 
 	var wg sync.WaitGroup
+	wg.Add(1)
 
 	// err := eventConsumer.Start(ctx, &wg)
 	// require.NoError(t, err)
-	eventConsumer.Start(ctx, &wg)
+	go func() {
+		defer wg.Done()
+		eventConsumer.Start(ctx)
+	}()
 
 	wg.Wait()
 
 	mockConsumer.AssertExpectations(t)
 }
 
-func handleUserRegistered(event event.Event) error {
+func handleUserRegistered(event entity.Event) error {
 	log.Printf("[Notification] Sending welcome email for user: %s\n", string(event.Payload))
 	return nil
 }

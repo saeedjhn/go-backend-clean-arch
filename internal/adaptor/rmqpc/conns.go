@@ -3,13 +3,12 @@ package rmqpc
 import (
 	"errors"
 	"fmt"
-	"log"
 	"net"
 	"time"
 
-	"github.com/google/uuid"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/event"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
+	"github.com/google/uuid"
 	"github.com/streadway/amqp"
 )
 
@@ -61,9 +60,8 @@ func (c *Connection) Channel() *amqp.Channel {
 }
 
 func (c *Connection) Connect() error {
-	log.Println("Connect.Invoked")
-
 	var err error
+
 	uri := fmt.Sprintf("amqp://%s:%s@%s",
 		c.config.Connection.Username,
 		c.config.Connection.Password,
@@ -90,8 +88,6 @@ func (c *Connection) Connect() error {
 }
 
 func (c *Connection) SetupExchange() error {
-	log.Println("SetupExchange.Invoked")
-
 	if err := c.channel.ExchangeDeclare(
 		c.config.MQ.Exchange.Name,
 		c.config.MQ.Exchange.Kind.String(),
@@ -112,8 +108,6 @@ func (c *Connection) SetupExchange() error {
 }
 
 func (c *Connection) SetupBindQueue() error {
-	log.Println("SetupBindQueue.Invoked")
-
 	q, err := c.channel.QueueDeclare(
 		c.config.MQ.QueueBind.Queue,
 		c.config.MQ.QueueBind.Durable,
@@ -129,7 +123,7 @@ func (c *Connection) SetupBindQueue() error {
 	for _, bindingKey := range c.config.MQ.QueueBind.BindingKey {
 		if err = c.channel.QueueBind(
 			q.Name,
-			bindingKey, // binding key
+			bindingKey.String(), // binding key
 			c.config.MQ.Exchange.Name,
 			c.config.MQ.QueueBind.NoWait,
 			amqp.Table(c.config.MQ.QueueBind.ArgsQueueBind),
@@ -154,9 +148,7 @@ func (c *Connection) SetupBindQueue() error {
 	return nil
 }
 
-func (c *Connection) Publish(evt event.Event) error {
-	log.Println("Publish.Invoked")
-
+func (c *Connection) Publish(evt entity.Event) error {
 	// non-blocking channel - if there is no error will go to default where we do nothing
 	select {
 	case err := <-c.errChan:
@@ -172,7 +164,6 @@ func (c *Connection) Publish(evt event.Event) error {
 
 	if err := c.channel.Publish(
 		c.config.MQ.Exchange.Name,
-		// c.config.MQ.Publish.RoutingKey,
 		string(evt.Topic), // routing key
 		c.config.MQ.Publish.Mandatory,
 		c.config.MQ.Publish.Immediate,
@@ -192,9 +183,7 @@ func (c *Connection) Publish(evt event.Event) error {
 	return nil
 }
 
-func (c *Connection) Consume(eventStream chan<- event.Event) error {
-	log.Println("StartConsume.Invoked")
-
+func (c *Connection) Consume(eventStream chan<- entity.Event) error {
 	var (
 		deliveries <-chan amqp.Delivery
 		err        error
@@ -212,7 +201,7 @@ func (c *Connection) Consume(eventStream chan<- event.Event) error {
 	}
 
 	for delivery := range deliveries {
-		eventStream <- event.Event{Topic: event.Topic(delivery.RoutingKey), Payload: delivery.Body}
+		eventStream <- entity.Event{Topic: entity.Topic(delivery.RoutingKey), Payload: delivery.Body}
 		if !c.config.MQ.Consume.AutoAck {
 			if err = delivery.Ack(false); err != nil {
 				return fmt.Errorf("failed to ACK message: %v", err)
@@ -224,8 +213,6 @@ func (c *Connection) Consume(eventStream chan<- event.Event) error {
 }
 
 func (c *Connection) reconnect() error {
-	log.Println("reconnect.Invoked")
-
 	var (
 		retryTimeout = c.config.Connection.BaseRetryTimeout
 
@@ -247,7 +234,7 @@ func (c *Connection) reconnect() error {
 			return nil
 		}
 
-		log.Printf("retryTimeout: %v", retryTimeout)
+		// log.Printf("retryTimeout: %v", retryTimeout)
 		retryTimeout = time.Duration(float64(retryTimeout) * c.config.Connection.Multiplier)
 
 		time.Sleep(retryTimeout)
@@ -277,10 +264,10 @@ func (c *Connection) consumeFromTemporaryQueue(cfg ConsumeConfig) (<-chan amqp.D
 	uuID := uuid.New().String()
 	uuIDTag := buildConsumeTag(uuID)
 
-	log.Printf(
-		"StartConsume.Starting.To.Consume.From.Queue, ConsumerTag: %v",
-		uuIDTag,
-	)
+	// log.Printf(
+	// 	"StartConsume.Starting.To.Consume.From.Queue, ConsumerTag: %v",
+	// 	uuIDTag,
+	// )
 
 	consume, err := c.channel.Consume(
 		uuID,
@@ -306,10 +293,10 @@ func (c *Connection) consumeFromTemporaryQueue(cfg ConsumeConfig) (<-chan amqp.D
 func (c *Connection) consumeFromDefinedQueues(cfg ConsumeConfig) (<-chan amqp.Delivery, error) {
 	qTag := buildConsumeTag(c.config.MQ.QueueBind.Queue)
 
-	log.Printf(
-		"StartConsume.Starting.To.Consume.From.Queue, ConsumerTag: %v",
-		buildConsumeTag(c.config.MQ.QueueBind.Queue),
-	)
+	// log.Printf(
+	// 	"StartConsume.Starting.To.Consume.From.Queue, ConsumerTag: %v",
+	// 	buildConsumeTag(c.config.MQ.QueueBind.Queue),
+	// )
 
 	consume, err := c.channel.Consume(
 		c.config.MQ.QueueBind.Queue,

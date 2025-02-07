@@ -5,11 +5,12 @@ import (
 	"sync"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 )
 
 type C struct {
 	logger         contract.Logger
-	Consumers      []Consumer
+	Consumers      []contract.Consumer
 	Router         *Router
 	chanBufferSize uint64
 }
@@ -17,7 +18,7 @@ type C struct {
 func NewEventConsumer(
 	chanBufferSize uint64,
 	router *Router,
-	consumers ...Consumer,
+	consumers ...contract.Consumer,
 ) *C {
 	return &C{
 		chanBufferSize: chanBufferSize,
@@ -32,16 +33,14 @@ func (c *C) WithLogger(logger contract.Logger) *C {
 	return c
 }
 
-func (c *C) Start(ctx context.Context, wg *sync.WaitGroup) {
-	eventStream := make(chan Event, c.chanBufferSize)
+func (c *C) Start(ctx context.Context) {
+	eventStream := make(chan entity.Event, c.chanBufferSize)
 	var once sync.Once // To ensure eventStream is closed only once
 
 	// Start consumers
 	for _, consumer := range c.Consumers {
 		consumer := consumer // Prevent closure issue
-		wg.Add(1)
 		go func() {
-			defer wg.Done()
 			for {
 				select {
 				case <-ctx.Done():
@@ -57,9 +56,7 @@ func (c *C) Start(ctx context.Context, wg *sync.WaitGroup) {
 		}()
 	}
 
-	wg.Add(1)
 	go func() {
-		defer wg.Done()
 		for {
 			select {
 			case <-ctx.Done():
@@ -86,6 +83,61 @@ func (c *C) Start(ctx context.Context, wg *sync.WaitGroup) {
 		})
 	}()
 }
+
+// func (c *C) Start(ctx context.Context, wg *sync.WaitGroup) {
+// 	eventStream := make(chan entity.Event, c.chanBufferSize)
+// 	var once sync.Once // To ensure eventStream is closed only once
+//
+// 	// Start consumers
+// 	for _, consumer := range c.Consumers {
+// 		consumer := consumer // Prevent closure issue
+// 		wg.Add(1)
+// 		go func() {
+// 			defer wg.Done()
+// 			for {
+// 				select {
+// 				case <-ctx.Done():
+// 					c.logger.Info("[Start] Consumer shutting down due to context cancellation")
+// 					return
+// 				default:
+// 					if err := consumer.Consume(eventStream); err != nil {
+// 						c.logger.Errorf("[Start] Consumer failed: %v", err)
+// 						return
+// 					}
+// 				}
+// 			}
+// 		}()
+// 	}
+//
+// 	wg.Add(1)
+// 	go func() {
+// 		defer wg.Done()
+// 		for {
+// 			select {
+// 			case <-ctx.Done():
+// 				c.logger.Info("[Start] Event processor shutting down due to context cancellation")
+// 				return
+// 			case e, ok := <-eventStream:
+// 				if !ok {
+// 					c.logger.Info("[Start] Event stream closed, stopping event processing")
+// 					return
+// 				}
+// 				if err := c.Router.Handle(e); err != nil {
+// 					c.logger.Errorf("[Start] Error handling event [%s]: %v", e.Topic, err)
+// 				}
+// 			}
+// 		}
+// 	}()
+//
+// 	// Ensure eventStream is closed once when context is done
+// 	go func() {
+// 		<-ctx.Done()
+// 		once.Do(func() {
+// 			close(eventStream)
+// 			c.logger.Info("[Start] Event stream closed")
+// 		})
+// 	}()
+// }
 
 // func (c *C) Start(ctx context.Context, wg *sync.WaitGroup) error {
 // 	eventStream := make(chan Event, c.chanBufferSize)

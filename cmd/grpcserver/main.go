@@ -20,12 +20,10 @@ func main() {
 		fileExt  string
 	)
 
-	// Parse command-line flag for environment mode with default value as development
-	flag.StringVar(&confPath, "conf", "deployments/development", "config path, e.g., -conf deployments/development")
+	flag.StringVar(&confPath, "conf", "configs", "config path, e.g., -conf deployments/development")
 	flag.StringVar(&fileExt, "ext", "yml", "file extension, e.g., -ext yml")
 	flag.Parse()
 
-	// Get the current working directory
 	workingDir, err := os.Getwd()
 	if err != nil {
 		log.Fatalf("Error getting current working directory: %v", err)
@@ -45,7 +43,6 @@ func main() {
 		)
 	}
 
-	// Initialize configuration options to specify how the configuration should be loaded.
 	cfgOption := configs.Option{
 		Prefix:      "",
 		Delimiter:   "",
@@ -54,44 +51,37 @@ func main() {
 		CallbackEnv: nil,
 	}
 
-	// Attempt to load the configuration using the specified options.
 	config, err := configs.Load(cfgOption)
 	if err != nil {
 		log.Fatalf("Error loading configuration with option '%v': %v", cfgOption, err)
 	}
 
-	// Bootstrap the application with the provided configuration options.
 	app, err := bootstrap.App(config)
 	if err != nil {
 		log.Fatalf("bootstrap app: %v", err)
 	}
 
-	// Log the application configuration at startup
 	app.Logger.Infow("App.Startup.Config", "config", app.Config)
 
-	// Set up signal handling for graceful shutdown (e.g., SIGINT, SIGTERM)
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt) // more SIGX (SIGINT, SIGTERM, etc)
 
-	// Start gRPC server in a goroutine
 	server := grpc.New(app)
 	go func() {
 		if err = server.Run(); err != nil {
-			app.Logger.Fatalf("Server.GRPC.Run: %v", err)
+			app.Logger.DPanicf("Server.GRPC.Run: %v", err)
 		}
 	}()
 
 	// Wait for termination signal (e.g., Ctrl+C)
 	<-quit
 
-	// Graceful shutdown logic
 	ctxWithTimeout, cancel := context.WithTimeout(
 		context.Background(),
 		app.Config.Application.GracefulShutdownTimeout,
 	)
 	defer cancel()
 
-	// Log received interrupt signal and shutting down gracefully
 	app.Logger.Info("App.Shutdown.Gracefully - Received interrupt signal, shutting down gracefully")
 
 	if err = app.CloseRedisClientConnection(); err != nil {

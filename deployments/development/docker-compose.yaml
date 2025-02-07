@@ -15,6 +15,7 @@ services:
     networks:
       - go-backend-clean-arch_network
     depends_on:
+      - rabbitmq
       - mysqldb
       - redis
 

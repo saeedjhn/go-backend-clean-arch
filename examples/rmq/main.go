@@ -6,9 +6,9 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/rmqpc"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/event"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/rmqpc"
 )
 
 func main() {
@@ -47,9 +47,9 @@ func main() {
 				PrefetchGlobal:   false,
 			},
 			Publish: rmqpc.PublishConfig{
-				RoutingKey: "my-routing-key",
-				Mandatory:  false,
-				Immediate:  false,
+				// RoutingKey: "my-routing-key",
+				Mandatory: false,
+				Immediate: false,
 			},
 			Consume: rmqpc.ConsumeConfig{
 				AutoAck:   false,
@@ -75,7 +75,7 @@ func main() {
 		log.Fatalf("Failed to setup queue binding: %v", err)
 	}
 
-	eventStream := make(chan event.Event)
+	eventStream := make(chan entity.Event)
 
 	go func() {
 		if err := conn.Consume(eventStream); err != nil {
@@ -83,7 +83,7 @@ func main() {
 		}
 	}()
 
-	eventMsg := event.Event{
+	eventMsg := entity.Event{
 		Topic:   "my-routing-key",
 		Payload: []byte("Hello, RabbitMQ!"),
 	}

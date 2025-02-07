@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"log"
-	"os"
-	"os/signal"
 	"sync"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/rmqpc"
 
@@ -16,12 +16,15 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/event"
 )
 
+const _eventBufferSize = 1024
+
 func main() {
 	logger := setupLogger()
 
-	urTopic := event.Topic("user.registered")
-	opTopic := event.Topic("order.processing")
+	urTopic := entity.Topic("user.registered")
+	opTopic := entity.Topic("order.processing")
 
+	// Definination JOBS
 	router := event.NewRouter()
 	router.Register(urTopic, handleUserRegistered)
 	router.Register(opTopic, handleOrderPlaced)
@@ -49,7 +52,7 @@ func main() {
 			},
 			QueueBind: rmqpc.QueueBindConfig{
 				Queue:            "test-queue",
-				BindingKey:       []string{urTopic.String(), opTopic.String()},
+				BindingKey:       []entity.Topic{urTopic, opTopic},
 				Durable:          true,
 				AutoDelete:       false,
 				Exclusive:        false,
@@ -97,20 +100,23 @@ func main() {
 
 	// Start the event consumer
 	var wg sync.WaitGroup
-	// ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	// defer cancel()
+	wg.Add(1)
 	// Or
 	ctx, cancel := context.WithCancel(context.Background())
 
-	go eventConsumer.Start(ctx, &wg)
+	go func() {
+		defer wg.Done()
+		eventConsumer.Start(ctx)
+	}()
 
-	evtUserRegistered := event.Event{Topic: urTopic, Payload: []byte("User123")}
-	evtOrderProcessing := event.Event{Topic: opTopic, Payload: []byte("Order123456")}
+	evtUserRegistered := entity.Event{Topic: urTopic, Payload: []byte("User123")}
+	evtOrderProcessing := entity.Event{Topic: opTopic, Payload: []byte("Order123456")}
 
 	go func() {
 		for i := range 3 {
 			log.Printf("bus.Publish %d invoked\n", i)
 
+			// Publish or insert event to db & background run outbox with scheduler, 5s internal
 			if err := rMQ.Publish(evtUserRegistered); err != nil {
 				log.Fatalf("Failed to publish event: %v", err)
 			}
@@ -123,25 +129,33 @@ func main() {
 		}
 	}()
 
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, os.Interrupt)
+	quit := make(chan bool)
+	// quit := make(chan os.Signal, 1)
+	// signal.Notify(quit, os.Interrupt)
 
 	log.Println("Waiting for termination signal...")
+	go func() {
+		time.Sleep(5 * time.Second)
+		quit <- true
+	}()
+
 	<-quit
 	log.Println("Termination signal received, shutting down...")
 
 	cancel()
-
 	// Gracefully shut down the consumer
 	wg.Wait()
+
+	log.Println("Consumer shut down gracefully.")
+	// Wait until graceful shutdown is complete
 }
 
-func handleUserRegistered(event event.Event) error {
+func handleUserRegistered(event entity.Event) error {
 	log.Printf("[Notification] Sending welcome email for user: %s\n", string(event.Payload))
 	return nil
 }
 
-func handleOrderPlaced(event event.Event) error {
+func handleOrderPlaced(event entity.Event) error {
 	log.Printf("[Order] Processing order: %s\n", string(event.Payload))
 	return nil
 }

@@ -6,7 +6,7 @@ import (
 	context "context"
 	time "time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/outbox"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
 	mock "github.com/stretchr/testify/mock"
 
@@ -27,23 +27,23 @@ func (_m *MockRepository) EXPECT() *MockRepository_Expecter {
 }
 
 // GetUnPublished provides a mock function with given fields: ctx, offset, limit, retryThreshold
-func (_m *MockRepository) GetUnPublished(ctx context.Context, offset int, limit int, retryThreshold int) ([]outbox.Event, error) {
+func (_m *MockRepository) GetUnPublished(ctx context.Context, offset int, limit int, retryThreshold int) ([]entity.Outbox, error) {
 	ret := _m.Called(ctx, offset, limit, retryThreshold)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetUnPublished")
 	}
 
-	var r0 []outbox.Event
+	var r0 []entity.Outbox
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int, int, int) ([]outbox.Event, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int, int, int) ([]entity.Outbox, error)); ok {
 		return rf(ctx, offset, limit, retryThreshold)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int, int, int) []outbox.Event); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int, int, int) []entity.Outbox); ok {
 		r0 = rf(ctx, offset, limit, retryThreshold)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]outbox.Event)
+			r0 = ret.Get(0).([]entity.Outbox)
 		}
 	}
 
@@ -77,12 +77,59 @@ func (_c *MockRepository_GetUnPublished_Call) Run(run func(ctx context.Context, 
 	return _c
 }
 
-func (_c *MockRepository_GetUnPublished_Call) Return(_a0 []outbox.Event, _a1 error) *MockRepository_GetUnPublished_Call {
+func (_c *MockRepository_GetUnPublished_Call) Return(_a0 []entity.Outbox, _a1 error) *MockRepository_GetUnPublished_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockRepository_GetUnPublished_Call) RunAndReturn(run func(context.Context, int, int, int) ([]outbox.Event, error)) *MockRepository_GetUnPublished_Call {
+func (_c *MockRepository_GetUnPublished_Call) RunAndReturn(run func(context.Context, int, int, int) ([]entity.Outbox, error)) *MockRepository_GetUnPublished_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// InsertEvent provides a mock function with given fields: ctx, evt
+func (_m *MockRepository) InsertEvent(ctx context.Context, evt entity.Outbox) error {
+	ret := _m.Called(ctx, evt)
+
+	if len(ret) == 0 {
+		panic("no return value specified for InsertEvent")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, entity.Outbox) error); ok {
+		r0 = rf(ctx, evt)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockRepository_InsertEvent_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'InsertEvent'
+type MockRepository_InsertEvent_Call struct {
+	*mock.Call
+}
+
+// InsertEvent is a helper method to define mock.On call
+//   - ctx context.Context
+//   - evt Outbox
+func (_e *MockRepository_Expecter) InsertEvent(ctx interface{}, evt interface{}) *MockRepository_InsertEvent_Call {
+	return &MockRepository_InsertEvent_Call{Call: _e.mock.On("InsertEvent", ctx, evt)}
+}
+
+func (_c *MockRepository_InsertEvent_Call) Run(run func(ctx context.Context, evt entity.Outbox)) *MockRepository_InsertEvent_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(entity.Outbox))
+	})
+	return _c
+}
+
+func (_c *MockRepository_InsertEvent_Call) Return(_a0 error) *MockRepository_InsertEvent_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockRepository_InsertEvent_Call) RunAndReturn(run func(context.Context, entity.Outbox) error) *MockRepository_InsertEvent_Call {
 	_c.Call.Return(run)
 	return _c
 }

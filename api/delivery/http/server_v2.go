@@ -1,7 +1,9 @@
 package http
 
 import (
+	"errors"
 	"fmt"
+	"net/http"
 
 	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler"
 
@@ -47,7 +49,11 @@ func (s Server) Run() error {
 
 	s.App.Logger.Infow("Server.HTTP.Start", "config", s.App.Config.HTTPServer)
 
-	return s.Router.Start(address)
+	if err := s.Router.Start(address); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		return err
+	}
+
+	return nil
 }
 
 // func (s Server) SetupMiddleware() {

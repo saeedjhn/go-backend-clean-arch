@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/event"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -21,7 +21,7 @@ func (_m *MockConsumer) EXPECT() *MockConsumer_Expecter {
 }
 
 // Consume provides a mock function with given fields: _a0
-func (_m *MockConsumer) Consume(_a0 chan<- event.Event) error {
+func (_m *MockConsumer) Consume(_a0 chan<- entity.Event) error {
 	ret := _m.Called(_a0)
 
 	if len(ret) == 0 {
@@ -29,7 +29,7 @@ func (_m *MockConsumer) Consume(_a0 chan<- event.Event) error {
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(chan<- event.Event) error); ok {
+	if rf, ok := ret.Get(0).(func(chan<- entity.Event) error); ok {
 		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)
@@ -49,9 +49,9 @@ func (_e *MockConsumer_Expecter) Consume(_a0 interface{}) *MockConsumer_Consume_
 	return &MockConsumer_Consume_Call{Call: _e.mock.On("Consume", _a0)}
 }
 
-func (_c *MockConsumer_Consume_Call) Run(run func(_a0 chan<- event.Event)) *MockConsumer_Consume_Call {
+func (_c *MockConsumer_Consume_Call) Run(run func(_a0 chan<- entity.Event)) *MockConsumer_Consume_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(chan<- event.Event))
+		run(args[0].(chan<- entity.Event))
 	})
 	return _c
 }
@@ -61,7 +61,7 @@ func (_c *MockConsumer_Consume_Call) Return(_a0 error) *MockConsumer_Consume_Cal
 	return _c
 }
 
-func (_c *MockConsumer_Consume_Call) RunAndReturn(run func(chan<- event.Event) error) *MockConsumer_Consume_Call {
+func (_c *MockConsumer_Consume_Call) RunAndReturn(run func(chan<- entity.Event) error) *MockConsumer_Consume_Call {
 	_c.Call.Return(run)
 	return _c
 }

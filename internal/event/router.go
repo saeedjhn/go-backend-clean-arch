@@ -3,27 +3,27 @@ package event
 import (
 	"fmt"
 	"sync"
-)
 
-type handlerFunc func(event Event) error
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+)
 
 type Router struct {
 	mu       sync.RWMutex
-	handlers map[Topic]handlerFunc
+	handlers map[entity.Topic]entity.RouterHandler
 }
 
 func NewRouter() *Router {
-	return &Router{handlers: make(map[Topic]handlerFunc)}
+	return &Router{handlers: make(map[entity.Topic]entity.RouterHandler)}
 }
 
-func (r *Router) Register(topic Topic, handler handlerFunc) {
+func (r *Router) Register(topic entity.Topic, handler entity.RouterHandler) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
 	r.handlers[topic] = handler
 }
 
-func (r *Router) Handle(event Event) error {
+func (r *Router) Handle(event entity.Event) error {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 

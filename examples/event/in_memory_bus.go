@@ -1,24 +1,24 @@
 package main
 
-import "github.com/saeedjhn/go-backend-clean-arch/internal/event"
-
-const _eventBufferSize = 1024
+import (
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+)
 
 type InMemoryBus struct {
-	eventStream chan event.Event
+	eventStream chan entity.Event
 }
 
 func NewInMemoryBus() *InMemoryBus {
-	return &InMemoryBus{eventStream: make(chan event.Event, _eventBufferSize)}
+	return &InMemoryBus{eventStream: make(chan entity.Event, _eventBufferSize)}
 }
 
-func (b *InMemoryBus) Publish(event event.Event) error {
+func (b *InMemoryBus) Publish(event entity.Event) error {
 	b.eventStream <- event
 
 	return nil
 }
 
-func (b *InMemoryBus) Consume(ch chan<- event.Event) error {
+func (b *InMemoryBus) Consume(ch chan<- entity.Event) error {
 	// go func() {
 	for evt := range b.eventStream {
 		ch <- evt
