@@ -40,7 +40,7 @@ const (
 	ConsumeNoWait    = false
 )
 
-var _routerRegister = map[entity.Topic]entity.RouterHandler{
+var _routerRegister = map[entity.Topic]entity.RouterHandler{ //nolint:gochecknoglobals // nothing
 	entity.UserRegisteredTopic: job.UserRegisteredHandler,
 }
 
@@ -54,11 +54,11 @@ func NewEvent(
 	for t, h := range _routerRegister {
 		router.Register(t, h)
 	}
-	// router.Register(entity.UserRegisteredTopic, job.UserRegisteredHandler)
 
 	rMQ, err := setupRabbitMQ(configRabbitmq)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed rabbitmq setup (host: %s, port: %s): %w",
+			configRabbitmq.Host, configRabbitmq.Port, err)
 	}
 
 	eventConsumer := event.NewEventConsumer(

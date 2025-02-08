@@ -86,7 +86,8 @@ services:
     container_name: go-backend-clean-arch_redis
     env_file:
       - .env
-    command: redis-server --loglevel warning --save 60 1 --requirepass "password123"
+    #    command: redis-server --loglevel warning --save 60 1 --requirepass "password123"
+    command: redis-server --loglevel warning --save 60 1
     volumes:
       - redis:/var/lib/redis/data
     ports:
