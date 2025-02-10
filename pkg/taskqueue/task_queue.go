@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net"
-	"time"
 
 	"github.com/hibiken/asynq"
 )
@@ -39,23 +38,46 @@ func New(config Config) *TaskQueue {
 	}
 }
 
-func (tq *TaskQueue) EnqueueTask(taskType string, payload []byte, queueName Queue) error {
+func (tq *TaskQueue) EnqueueTask(taskType string, payload []byte, opts ...TaskOption) error {
+	options := defaultTaskOptions()
+	tq.setTaskOptions(opts, options)
+
 	task := asynq.NewTask(taskType, payload)
-	_, err := tq.client.Enqueue(task, asynq.Queue(queueName.String()))
+	_, err := tq.client.Enqueue(
+		task,
+		asynq.Queue(options.queueName.String()),
+		asynq.MaxRetry(options.retry),
+	)
 
 	return err
 }
 
-func (tq *TaskQueue) EnqueueTaskIn(taskType string, payload []byte, queueName Queue, delay time.Duration) error {
+func (tq *TaskQueue) EnqueueTaskIn(taskType string, payload []byte, opts ...TaskOption) error {
+	options := defaultTaskOptions()
+	tq.setTaskOptions(opts, options)
+
 	task := asynq.NewTask(taskType, payload)
-	_, err := tq.client.Enqueue(task, asynq.Queue(queueName.String()), asynq.ProcessIn(delay))
+	_, err := tq.client.Enqueue(
+		task,
+		asynq.Queue(options.queueName.String()),
+		asynq.ProcessIn(options.delay),
+		asynq.MaxRetry(options.retry),
+	)
 
 	return err
 }
 
-func (tq *TaskQueue) EnqueueTaskAt(taskType string, payload []byte, queueName Queue, runAt time.Time) error {
+func (tq *TaskQueue) EnqueueTaskAt(taskType string, payload []byte, opts ...TaskOption) error {
+	options := defaultTaskOptions()
+	tq.setTaskOptions(opts, options)
+
 	task := asynq.NewTask(taskType, payload)
-	_, err := tq.client.Enqueue(task, asynq.Queue(queueName.String()), asynq.ProcessAt(runAt))
+	_, err := tq.client.Enqueue(
+		task,
+		asynq.Queue(options.queueName.String()),
+		asynq.ProcessAt(options.at),
+		asynq.MaxRetry(options.retry),
+	)
 
 	return err
 }
@@ -84,12 +106,26 @@ func (tq *TaskQueue) StartScheduler() error {
 	return nil
 }
 
+func (tq *TaskQueue) ShutdownScheduler() {
+	tq.scheduler.Shutdown()
+}
+
 func (tq *TaskQueue) StartServer() error {
 	if err := tq.server.Run(tq.mux); err != nil {
 		return fmt.Errorf("could not start worker server: %w", err)
 	}
 
 	return nil
+}
+
+func (tq *TaskQueue) ShutdownServer() {
+	tq.server.Shutdown()
+}
+
+func (tq *TaskQueue) setTaskOptions(opts []TaskOption, options *taskOptions) {
+	for _, opt := range opts {
+		opt(options)
+	}
 }
 
 func getRedisConfig(config RedisConfig) asynq.RedisClientOpt {
