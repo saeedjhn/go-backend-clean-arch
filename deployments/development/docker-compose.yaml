@@ -325,6 +325,23 @@ services:
 
   ####################### END-MONITORING ####################################################################################
 
+  ######################## Asynqmon ########################
+  asynqmon:
+    image: hibiken/asynqmon:0.7.2
+    container_name: go-backend-clean-arch_asynqmon
+    environment:
+      - REDIS_ADDR=redis:6379
+      - PORT=8005 # PORT == .env.AQ_PORT
+      - ENABLE_METRICS_EXPORTER=true
+      - PROMETHEUS_ADDR=prometheus:9090
+    ports:
+      - "${AQ_PORT}:${AQ_PORT}"
+    networks:
+      - go-backend-clean-arch_network
+    depends_on:
+      - redis
+    restart: unless-stopped
+
   ####################### SETUP-API GATEWAY ####################################################################################
   nginx:
     build:

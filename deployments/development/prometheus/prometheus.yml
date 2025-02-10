@@ -15,6 +15,11 @@ scrape_configs:
     static_configs:
       - targets: [ 'otel-collector:9090' ]
 
+  - job_name: 'asynq'
+    scrape_interval: 15s
+    static_configs:
+      - targets: [ 'asynqmon:8005' ]
+
   - job_name: 'app'
     scrape_interval: 15s
     #    metrics_path: path/metrics
