@@ -1,8 +1,10 @@
 package mysql
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
+	"sync"
 
 	_ "github.com/go-sql-driver/mysql" // Blank import without comment
 )
@@ -10,33 +12,67 @@ import (
 const _driverName = "mysql"
 
 type DB struct {
-	config Config
-	db     *sql.DB
+	config     Config
+	db         *sql.DB
+	mu         sync.Mutex
+	statements map[uint]*sql.Stmt
 }
 
 func New(config Config) *DB {
-	return &DB{config: config}
+	return &DB{config: config, statements: make(map[uint]*sql.Stmt)}
 }
 
-func (m *DB) ConnectTo() error {
+func (db *DB) ConnectTo() error {
 	var err error
 	uri := fmt.Sprintf("%s:%s@(%s:%s)/%s?parseTime=true",
 
-		m.config.Username, m.config.Password, m.config.Host, m.config.Port, m.config.Database)
+		db.config.Username, db.config.Password, db.config.Host, db.config.Port, db.config.Database)
 
-	m.db, err = sql.Open(_driverName, uri)
+	db.db, err = sql.Open(_driverName, uri)
 	if err != nil {
 		return fmt.Errorf("can`t open mysql db: %w", err)
 	}
 
 	// See "Important settings" section.
-	m.db.SetMaxIdleConns(m.config.MaxIdleConns)
-	m.db.SetMaxOpenConns(m.config.MaxOpenConns)
-	m.db.SetConnMaxLifetime(m.config.ConnMaxLiftTime)
+	db.db.SetMaxIdleConns(db.config.MaxIdleConns)
+	db.db.SetMaxOpenConns(db.config.MaxOpenConns)
+	db.db.SetConnMaxLifetime(db.config.ConnMaxLiftTime)
 
 	return nil
 }
 
-func (m *DB) Conn() *sql.DB {
-	return m.db
+func (db *DB) PrepareStatement(ctx context.Context, key uint, query string) (*sql.Stmt, error) {
+	db.mu.Lock()
+	defer db.mu.Unlock()
+
+	if stmt, ok := db.statements[key]; ok {
+		return stmt, nil
+	}
+
+	stmt, err := db.db.PrepareContext(ctx, query)
+	if err != nil {
+		return nil, fmt.Errorf("failed to prepare SQL statement: %v", err)
+	}
+
+	db.statements[key] = stmt
+
+	return stmt, nil
+}
+
+func (db *DB) Conn() *sql.DB {
+	return db.db
+}
+
+func (db *DB) CloseStatements() error {
+	db.mu.Lock()
+	defer db.mu.Unlock()
+
+	for _, stmt := range db.statements {
+		err := stmt.Close()
+		if err != nil {
+			return fmt.Errorf("failed to close SQL statement: %v", err)
+		}
+	}
+
+	return nil
 }

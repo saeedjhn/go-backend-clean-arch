@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"errors"
 
+	mysqlrepo "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
@@ -43,7 +45,14 @@ func (r *DB) Create(ctx context.Context, u entity.User) (entity.User, error) {
 
 	span.SetAttribute("db.query", query)
 
-	res, err := r.conn.Conn().Exec(query, u.Name, u.Mobile, u.Email, u.Password)
+	stmt, err := r.conn.PrepareStatement(ctx, uint(mysqlrepo.StatementKeyUserCreate), query)
+	if err != nil {
+		return entity.User{}, richerror.New(_opMysqlUserCreate).WithErr(err).
+			WithMessage(msg.ErrMsgCantPrepareStatement).WithKind(richerror.KindStatusInternalServerError)
+	}
+
+	res, err := stmt.ExecContext(ctx, u.Name, u.Mobile, u.Email, u.Password)
+	// res, err := r.conn.Conn().Exec(query, u.Name, u.Mobile, u.Email, u.Password)
 	if err != nil {
 		return entity.User{},
 			richerror.New(_opMysqlUserCreate).WithErr(err).
@@ -57,8 +66,8 @@ func (r *DB) Create(ctx context.Context, u entity.User) (entity.User, error) {
 	return u, nil
 }
 
-func (r *DB) IsMobileUnique(ctx context.Context, mobile string) (bool, error) {
-	_, span := r.trc.Span(ctx, "DB IsMobileUnique")
+func (r *DB) IsExistsByMobile(ctx context.Context, mobile string) (bool, error) {
+	_, span := r.trc.Span(ctx, "DB IsExistsByMobile")
 	span.SetAttributes(map[string]interface{}{
 		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO
 		"db.operation": "SELECT", // SELECT, INSERT, UPDATE, DELETE
@@ -68,14 +77,20 @@ func (r *DB) IsMobileUnique(ctx context.Context, mobile string) (bool, error) {
 	var exists bool
 
 	query := "select exists(select 1 from users where mobile = ?)"
-	err := r.conn.Conn().
-		QueryRow(query, mobile).Scan(&exists)
 
 	span.SetAttribute("db.query", query)
 
+	stmt, err := r.conn.PrepareStatement(ctx, uint(mysqlrepo.StatementKeyUserIsExistsByMobile), query)
+	if err != nil {
+		return false, richerror.New(_opMysqlUserIsExistsByMobile).WithErr(err).
+			WithMessage(msg.ErrMsgCantPrepareStatement).WithKind(richerror.KindStatusInternalServerError)
+	}
+
+	err = stmt.QueryRowContext(ctx, mobile).Scan(&exists)
+	// err := r.conn.Conn().QueryRow(query, mobile).Scan(&exists)
 	if err != nil {
 		return false,
-			richerror.New(_opMysqlUserIsMobileUnique).WithErr(err).
+			richerror.New(_opMysqlUserIsExistsByMobile).WithErr(err).
 				WithMessage(msg.ErrorMsg500InternalServerError).
 				WithKind(richerror.KindStatusInternalServerError)
 	}
@@ -96,10 +111,17 @@ func (r *DB) GetByMobile(ctx context.Context, mobile string) (entity.User, error
 	defer span.End()
 
 	query := "SELECT * FROM users WHERE mobile = ?"
-	row := r.conn.Conn().QueryRow(query, mobile)
 
 	span.SetAttribute("db.query", query)
 
+	// row := r.conn.Conn().QueryRow(query, mobile)
+	stmt, err := r.conn.PrepareStatement(ctx, uint(mysqlrepo.StatementKeyUserGetByMobile), query)
+	if err != nil {
+		return entity.User{}, richerror.New(_opMysqlUserGetByMobile).WithErr(err).
+			WithMessage(msg.ErrMsgCantPrepareStatement).WithKind(richerror.KindStatusInternalServerError)
+	}
+
+	row := stmt.QueryRowContext(ctx, mobile)
 	user, err := scanUser(row)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -125,10 +147,17 @@ func (r *DB) GetByID(ctx context.Context, id uint64) (entity.User, error) {
 	defer span.End()
 
 	query := "SELECT * FROM users WHERE id = ?"
-	row := r.conn.Conn().QueryRow(query, id)
+
+	// row := r.conn.Conn().QueryRow(query, id)
+	stmt, err := r.conn.PrepareStatement(ctx, uint(mysqlrepo.StatementKeyUserGetByID), query)
+	if err != nil {
+		return entity.User{}, richerror.New(_opMysqlUserGetByID).WithErr(err).
+			WithMessage(msg.ErrMsgCantPrepareStatement).WithKind(richerror.KindStatusInternalServerError)
+	}
 
 	span.SetAttribute("db.query", query)
 
+	row := stmt.QueryRowContext(ctx, id)
 	user, err := scanUser(row)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -149,6 +178,8 @@ func scanUser(scanner Scanner) (entity.User, error) {
 	var user entity.User
 
 	err := scanner.Scan(&user.ID, &user.Name, &user.Mobile, &user.Email, &user.Password, &user.CreatedAt, &user.UpdatedAt)
+
+	// Convert something...
 
 	return user, err
 }
