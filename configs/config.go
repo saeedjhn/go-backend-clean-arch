@@ -3,8 +3,6 @@ package configs
 import (
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/rmqpc"
-
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/otelcollector"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
@@ -71,18 +69,17 @@ type CORS struct {
 }
 
 type Config struct {
-	Application Application            `mapstructure:"application"`
-	HTTPServer  HTTPServer             `mapstructure:"http_server"`
-	GRPCServer  GRPCServer             `mapstructure:"grpc_server"`
-	Pprof       Pprof                  `mapstructure:"pprof"`
-	CORS        CORS                   `mapstructure:"cors"`
-	Rabbitmq    rmqpc.ConnectionConfig `mapstructure:"rabbitmq"`
-	Tracer      oteltracer.Config      `mapstructure:"tracer"`
-	Collector   otelcollector.Config   `mapstructure:"collector"`
-	Logger      jsonfilelogger.Config  `mapstructure:"logger"`
-	Mysql       mysql.Config           `mapstructure:"mysql"`
-	Postgres    pq.Config              `mapstructure:"postgres"`
-	Redis       redis.Config           `mapstructure:"redis"`
-	Mongo       mongo.Config           `mapstructure:"mongo"`
-	Auth        authentication.Config  `mapstructure:"auth"`
+	Application Application           `mapstructure:"application"`
+	HTTPServer  HTTPServer            `mapstructure:"http_server"`
+	GRPCServer  GRPCServer            `mapstructure:"grpc_server"`
+	Pprof       Pprof                 `mapstructure:"pprof"`
+	CORS        CORS                  `mapstructure:"cors"`
+	Tracer      oteltracer.Config     `mapstructure:"tracer"`
+	Collector   otelcollector.Config  `mapstructure:"collector"`
+	Logger      jsonfilelogger.Config `mapstructure:"logger"`
+	Mysql       mysql.Config          `mapstructure:"mysql"`
+	Postgres    pq.Config             `mapstructure:"postgres"`
+	Redis       redis.Config          `mapstructure:"redis"`
+	Mongo       mongo.Config          `mapstructure:"mongo"`
+	Auth        authentication.Config `mapstructure:"auth"`
 }

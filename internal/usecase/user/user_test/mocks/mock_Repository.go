@@ -194,11 +194,11 @@ func (_c *MockRepository_GetByMobile_Call) RunAndReturn(run func(context.Context
 }
 
 // IsMobileUnique provides a mock function with given fields: ctx, mobile
-func (_m *MockRepository) IsMobileUnique(ctx context.Context, mobile string) (bool, error) {
+func (_m *MockRepository) IsExistsByMobile(ctx context.Context, mobile string) (bool, error) {
 	ret := _m.Called(ctx, mobile)
 
 	if len(ret) == 0 {
-		panic("no return value specified for IsMobileUnique")
+		panic("no return value specified for IsExistsByMobile")
 	}
 
 	var r0 bool
@@ -221,7 +221,7 @@ func (_m *MockRepository) IsMobileUnique(ctx context.Context, mobile string) (bo
 	return r0, r1
 }
 
-// MockRepository_IsMobileUnique_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'IsMobileUnique'
+// MockRepository_IsMobileUnique_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'IsExistsByMobile'
 type MockRepository_IsMobileUnique_Call struct {
 	*mock.Call
 }
@@ -230,7 +230,7 @@ type MockRepository_IsMobileUnique_Call struct {
 //   - ctx context.Context
 //   - mobile string
 func (_e *MockRepository_Expecter) IsMobileUnique(ctx interface{}, mobile interface{}) *MockRepository_IsMobileUnique_Call {
-	return &MockRepository_IsMobileUnique_Call{Call: _e.mock.On("IsMobileUnique", ctx, mobile)}
+	return &MockRepository_IsMobileUnique_Call{Call: _e.mock.On("IsExistsByMobile", ctx, mobile)}
 }
 
 func (_c *MockRepository_IsMobileUnique_Call) Run(run func(ctx context.Context, mobile string)) *MockRepository_IsMobileUnique_Call {

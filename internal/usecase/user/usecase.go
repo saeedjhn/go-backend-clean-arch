@@ -42,7 +42,7 @@ type Cache interface {
 //go:generate mockery --name Repository
 type Repository interface {
 	Create(ctx context.Context, u entity.User) (entity.User, error)
-	IsMobileUnique(ctx context.Context, mobile string) (bool, error)
+	IsExistsByMobile(ctx context.Context, mobile string) (bool, error)
 	GetByMobile(ctx context.Context, mobile string) (entity.User, error)
 	GetByID(ctx context.Context, id uint64) (entity.User, error)
 }

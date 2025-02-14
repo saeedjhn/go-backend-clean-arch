@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
-	"sync"
 
 	grpcserver "github.com/saeedjhn/go-backend-clean-arch/api/delivery/grpc"
 	httpserver "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http"
@@ -87,30 +86,14 @@ func main() {
 		// Code for Pprof server setup goes here (if necessary)
 	}()
 
-	var wg sync.WaitGroup
-	wg.Add(1)
-
-	ctxWithCancel, cancelC := context.WithCancel(context.Background())
-
-	go func() {
-		defer wg.Done()
-		if err = bootstrap.NewEvent(ctxWithCancel, app.Config.Rabbitmq, app.Logger); err != nil {
-			app.Logger.Errorf("Event.Run: %v", err)
-		}
-	}()
-
 	// Wait for termination signal (e.g., Ctrl+C)
-	// go func() {
-	// 	time.Sleep(8 * time.Second)
-	// 	quit <- true
-	// }()
 	<-quit
 
-	ctxWithTimeout, cancelT := context.WithTimeout(
+	ctxWithTimeout, cancel := context.WithTimeout(
 		context.Background(),
 		app.Config.Application.GracefulShutdownTimeout,
 	)
-	defer cancelT()
+	defer cancel()
 
 	if err = hs.Router.Shutdown(ctxWithTimeout); err != nil {
 		app.Logger.Errorf("Server.HTTP.Shutdown: %v", err)
@@ -135,9 +118,6 @@ func main() {
 	}
 
 	// Optionally, close PostgreSQL or other database connections
-
-	cancelC()
-	wg.Wait()
 
 	// Wait until graceful shutdown is complete
 	<-ctxWithTimeout.Done()

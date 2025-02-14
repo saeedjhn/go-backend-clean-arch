@@ -38,7 +38,7 @@ pprof:
   idle_timeout: "120s"
 
 logger:
-  file_path: "logs"
+  file_path: "./logs"
   max_size: 10
   max_backups: 10
   max_age: 30

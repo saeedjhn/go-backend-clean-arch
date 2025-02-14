@@ -17,6 +17,10 @@ func NewPostgresConnection(c pq.Config) (*pq.DB, error) {
 }
 
 func ClosePostgresConnection(db *pq.DB) error {
+	if err := db.CloseStatements(); err != nil {
+		return fmt.Errorf("don`t close pq statement: %w", err)
+	}
+
 	if err := db.Conn().Close(); err != nil {
 		return fmt.Errorf("don`t close pq connection: %w", err)
 	}

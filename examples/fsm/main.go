@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 )
@@ -35,10 +35,10 @@ func main() {
 
 	for _, event := range events {
 		if err := fsm.ApplyEventFSM(event); err != nil {
-			fmt.Println("Error:", err)
+			log.Println("Error:", err)
 			break
 		}
 	}
 
-	fmt.Println("Final State:", fsm.GetCurrentState())
+	log.Println("Final State:", fsm.GetCurrentState())
 }

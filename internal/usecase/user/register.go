@@ -22,7 +22,7 @@ func (i *Interactor) Register(ctx context.Context, req user.RegisterRequest) (us
 		return user.RegisterResponse{FieldErrors: fieldsErrs}, err
 	}
 
-	isUnique, err := i.repository.IsMobileUnique(ctx, req.Mobile)
+	isUnique, err := i.repository.IsExistsByMobile(ctx, req.Mobile)
 	if err != nil {
 		return user.RegisterResponse{}, err
 	}
