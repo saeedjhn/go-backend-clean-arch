@@ -41,9 +41,10 @@ export LDFLAGS := -ldflags "-X main.VERSION=${VERSION} -X main.COMMIT=${COMMIT} 
 include ./scripts/tools.Makefile
 
 # ~~~ Development Environment ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#install-deps: scripts/bin/migrate scripts/bin/air scripts/bin/gotestsum scripts/bin/tparse scripts/bin/mockery ## Install Development Dependencies (localy).
+#install-deps: scripts/bin/migrate scripts/bin/sqlc scripts/bin/air scripts/bin/gotestsum scripts/bin/tparse scripts/bin/mockery ## Install Development Dependencies (localy).
 install-deps:
 	@ $(MAKE) scripts/bin/migrate
+	@ $(MAKE) scripts/bin/sqlc
 	@ $(MAKE) scripts/bin/air
 	@ $(MAKE) scripts/bin/gotestsum
 	@ $(MAKE) scripts/bin/tparse
@@ -183,7 +184,6 @@ go/clean:
 migrate-force: $(MIGRATE) ##  Set version V but don't run migration (ignores dirty state).
 	migrate -database $(MYSQL_DSN) -path $(MYSQL_MIGRATION_PATH) version
 	migrate -database $(MYSQL_DSN) -path $(MYSQL_MIGRATION_PATH) force 1
-	@ echo "Set version"
 
 .PHONY: migrate-up
 migrate-up: $(MIGRATE) ## Apply all (or N up) migrations.
@@ -205,6 +205,14 @@ migrate-create: $(MIGRATE) ## Create a set of up/down migrations with a specifie
 	migrate create -ext sql -dir $(MYSQL_MIGRATION_PATH) $${Name}
 
 # ==================================================================================== #
+# DATABASE AUTOMATIC GENERATE SQL
+# ==================================================================================== #
+.PHONY: sqlc-generate
+sqlc-generate: $(SQLC) ## Create
+	@ echo " > Generate type-safe code from SQL is running"
+	sqlc generate
+
+# ==================================================================================== #
 # SCHEDULER
 # ==================================================================================== #
 
@@ -215,25 +223,6 @@ run/scheduler:
 	@echo " > Compile and run Scheduler program"
 	@echo
 	go run ${SCHEDULER}
-
-# ==================================================================================== #
-# DATABASE MIGRATIONS
-# ==================================================================================== #
-
-## run/up:
-#.PHONY: run/up
-#run/up:
-#	docker-compose -f deployments/docker-compose.yaml up -d mysqldb
-#	go run $(MIGRATION) $(ARGS)  # make run/up ARGS=--up
-#
-#
-### run/down:
-#.PHONY: run/down
-#run/down:
-#
-### run/rollback:
-#.PHONY: run/rollback
-#run/rollback:
 
 # ==================================================================================== #
 # QUALITY CONTROL

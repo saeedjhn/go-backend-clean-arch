@@ -33,6 +33,23 @@ scripts/bin/migrate: scripts/bin
 		echo "migrate already installed."; \
 	fi
 
+# ~~ [sqlc] ~~~ https://github.com/sqlc-dev/sqlc ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SQLC := $(shell command -v sqlc || echo "scripts/bin/sqlc")
+sqlc: scripts/bin/sqlc ## Install sqlc (Generate type-safe code from SQL)
+
+scripts/bin/sqlc: VERSION := 1.28.0
+scripts/bin/sqlc: GITHUB  := sqlc-dev/sqlc
+scripts/bin/sqlc: ARCHIVE := sqlc_$(VERSION)_$(OSTYPE)_$(ARCH).tar.gz
+scripts/bin/sqlc: scripts/bin
+	@ if [ ! -f "$@" ]; then \
+		printf "Install sqlc... "; \
+		curl -Ls $(shell echo $(call github_url) | tr A-Z a-z) | tar -zOxf - ./sqlc > $@ && chmod +x $@; \
+		echo "done."; \
+	else \
+		echo "sqlc already installed."; \
+	fi
+
 # ~~ [ air ] ~~~ https://github.com/cosmtrek/air ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 AIR := $(shell command -v air || echo "scripts/bin/air")
