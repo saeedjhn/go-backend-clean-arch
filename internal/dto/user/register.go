@@ -3,6 +3,7 @@ package user
 type RegisterRequest struct {
 	Name     string `json:"name"`
 	Mobile   string `json:"mobile"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 

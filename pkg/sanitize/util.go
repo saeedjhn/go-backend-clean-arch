@@ -102,7 +102,7 @@ import (
 // }
 
 // func mapToStruct(ptr interface{}) error {
-//	if !isPointer(ptr) {
+//	if !IsPointer(ptr) {
 //		return fmt.Errorf("please give me the pointer arg")
 //	}
 //
@@ -120,6 +120,6 @@ import (
 //	return nil
 // }
 
-func isPointer(param interface{}) bool {
+func IsPointer(param interface{}) bool {
 	return reflect.ValueOf(param).Kind() == reflect.Ptr
 }

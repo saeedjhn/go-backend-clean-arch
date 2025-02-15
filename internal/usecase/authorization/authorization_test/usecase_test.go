@@ -5,6 +5,8 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authorization"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authorization/authorization_test/mocks"
@@ -18,7 +20,7 @@ import (
 func TestCheckAccess_NoActionsGiven_ReturnsFalse(t *testing.T) {
 	i := authorization.New(authorization.Config{}, nil, nil)
 
-	allowed, err := i.CheckAccess(context.Background(), []uint64{1}, "resource", []entity.Action{}...)
+	allowed, err := i.CheckAccess(context.Background(), []types.ID{1}, "resource", []entity.Action{}...)
 	require.NoError(t, err)
 	assert.False(t, allowed)
 }
@@ -32,7 +34,7 @@ func TestCheckAccess_ResourceNotFound_ReturnsError(t *testing.T) {
 
 	i := authorization.New(authorization.Config{}, mockResource, mockRoleResource)
 
-	allowed, err := i.CheckAccess(context.Background(), []uint64{1}, "resource", entity.ReadAction)
+	allowed, err := i.CheckAccess(context.Background(), []types.ID{1}, "resource", entity.ReadAction)
 	assert.Error(t, err)
 	assert.False(t, allowed)
 }
@@ -48,7 +50,7 @@ func TestCheckAccess_ResourceNotFound_ReturnsError(t *testing.T) {
 //
 // 	i := authorization.New(authorization.Config{}, mockResource, mockRoleResource)
 //
-// 	allowed, err := i.CheckAccess(context.Background(), []uint64{1}, "resource", entity.ReadAction)
+// 	allowed, err := i.CheckAccess(context.Background(), []types.ID{1}, "resource", entity.ReadAction)
 // 	assert.Error(t, err)
 // 	assert.False(t, allowed)
 // }
@@ -69,7 +71,7 @@ func TestCheckAccess_AllowedRead_ReturnsTrue(t *testing.T) {
 
 	i := authorization.New(authorization.Config{}, mockResource, mockRoleResource)
 
-	allowed, err := i.CheckAccess(context.Background(), []uint64{1}, "resource", entity.ReadAction)
+	allowed, err := i.CheckAccess(context.Background(), []types.ID{1}, "resource", entity.ReadAction)
 	require.NoError(t, err)
 	assert.True(t, allowed)
 }
@@ -88,7 +90,7 @@ func TestCheckAccess_DeniedRead_ReturnsFalse(t *testing.T) {
 
 	i := authorization.New(authorization.Config{}, mockResource, mockRoleResource)
 
-	allowed, err := i.CheckAccess(context.Background(), []uint64{1}, "resource", entity.ReadAction)
+	allowed, err := i.CheckAccess(context.Background(), []types.ID{1}, "resource", entity.ReadAction)
 	require.NoError(t, err)
 	assert.False(t, allowed)
 }
@@ -112,7 +114,7 @@ func TestCheckAccess_MultipleActions_AllAllowed_ReturnsTrue(t *testing.T) {
 
 	i := authorization.New(authorization.Config{}, mockResource, mockRoleResource)
 
-	allowed, err := i.CheckAccess(context.Background(), []uint64{1}, "resource", entity.ReadAction, entity.WriteAction)
+	allowed, err := i.CheckAccess(context.Background(), []types.ID{1}, "resource", entity.ReadAction, entity.WriteAction)
 	require.NoError(t, err)
 	assert.True(t, allowed)
 }
@@ -131,7 +133,7 @@ func TestCheckAccess_MultipleActions_OneDenied_ReturnsFalse(t *testing.T) {
 
 	i := authorization.New(authorization.Config{}, mockResource, mockRoleResource)
 
-	allowed, err := i.CheckAccess(context.Background(), []uint64{1}, "resource", entity.ReadAction, entity.WriteAction)
+	allowed, err := i.CheckAccess(context.Background(), []types.ID{1}, "resource", entity.ReadAction, entity.WriteAction)
 	require.NoError(t, err)
 	assert.False(t, allowed)
 }
@@ -157,7 +159,7 @@ func TestCheckAccess_MultipleRolesAndActions_OneAllowed_ReturnsTrue(t *testing.T
 
 	i := authorization.New(authorization.Config{}, mockResource, mockRoleResource)
 
-	allowed, err := i.CheckAccess(context.Background(), []uint64{1, 2}, "resource", entity.ReadAction, entity.WriteAction)
+	allowed, err := i.CheckAccess(context.Background(), []types.ID{1, 2}, "resource", entity.ReadAction, entity.WriteAction)
 	require.NoError(t, err)
 	assert.True(t, allowed)
 }
@@ -180,7 +182,7 @@ func TestCheckAccess_MultipleRoles_OneAllowed_ReturnsTrue(t *testing.T) {
 
 	i := authorization.New(authorization.Config{}, mockResource, mockRoleResource)
 
-	allowed, err := i.CheckAccess(context.Background(), []uint64{1, 2}, "resource", entity.ReadAction)
+	allowed, err := i.CheckAccess(context.Background(), []types.ID{1, 2}, "resource", entity.ReadAction)
 	require.NoError(t, err)
 	assert.True(t, allowed)
 }
@@ -208,7 +210,7 @@ func TestCheckAccess_MultipleRoles_AllDenied_ReturnsFalse(t *testing.T) {
 
 	i := authorization.New(authorization.Config{}, mockResource, mockRoleResource)
 
-	allowed, err := i.CheckAccess(context.Background(), []uint64{1, 2}, "resource", entity.ReadAction)
+	allowed, err := i.CheckAccess(context.Background(), []types.ID{1, 2}, "resource", entity.ReadAction)
 	require.NoError(t, err)
 	assert.False(t, allowed)
 }

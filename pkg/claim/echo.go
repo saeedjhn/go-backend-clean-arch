@@ -7,6 +7,5 @@ import (
 )
 
 func GetClaimsFromEchoContext(c echo.Context) *authentication.Claims {
-	//nolint:forcetypeassert //defensive programming vs let it crash - log-metric-recover ,...
 	return c.Get(configs.AuthMiddlewareContextKey).(*authentication.Claims)
 }

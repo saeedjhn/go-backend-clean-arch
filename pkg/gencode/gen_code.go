@@ -3,6 +3,8 @@ package gencode
 import (
 	"math/rand"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 func GenCode(length int, chars string) (string, error) {
@@ -21,6 +23,10 @@ func GenCode(length int, chars string) (string, error) {
 	}
 
 	return string(result), nil
+}
+
+func GenUUID() string {
+	return uuid.New().String()
 }
 
 // func GenCode(length int, chars string) (string, error) {

@@ -59,6 +59,7 @@ install-deps:
 tparse:
 	set +e; \
 #    go test ./... -json > $(TEST_SUMMARIES_FILE); \
+# 	 TEST_PATH=relativePathOrAbsolutePath(ex: ./pkg/package) make tparse \
     go test $(TEST_PATH) -json > $(TEST_SUMMARIES_FILE); \
     tparse -all -file=$(TEST_SUMMARIES_FILE); \
     rm -f $(TEST_SUMMARIES_FILE)

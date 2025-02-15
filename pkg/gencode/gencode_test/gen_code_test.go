@@ -6,7 +6,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/gencode"
 )
 
-//go:generate go test -v -race -count=1 ./...
+//go:generate go test -v -race -count=1 -run TestGenCode
 
 func TestGenCode_ValidLength_ReturnsStringWithCorrectLength(t *testing.T) {
 	chars := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

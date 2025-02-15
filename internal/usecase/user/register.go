@@ -38,6 +38,7 @@ func (i *Interactor) Register(ctx context.Context, req user.RegisterRequest) (us
 	u := entity.User{
 		Name:   req.Name,
 		Mobile: req.Mobile,
+		Email:  req.Email,
 	}
 
 	encryptedPass, _ := GenerateHash(req.Password) // TODO: usecase>userusecase>register>CheckErrorGenerateHash

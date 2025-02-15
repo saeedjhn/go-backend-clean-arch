@@ -62,7 +62,7 @@ func (s Sanitize) SetPolicy(policy Policy) Sanitize {
 }
 
 func (s Sanitize) Any(param interface{}) (interface{}, error) {
-	sanitized, err := s.recursively(param)
+	sanitized, err := s.Recursively(param)
 	if err != nil {
 		return nil, err
 	}
@@ -71,15 +71,15 @@ func (s Sanitize) Any(param interface{}) (interface{}, error) {
 }
 
 func (s Sanitize) StructToMap(param interface{}) (map[string]interface{}, error) {
-	return s.structure(param)
+	return s.Structure(param)
 }
 
 func (s Sanitize) Struct(ptr interface{}) error {
-	if !isPointer(ptr) {
+	if !IsPointer(ptr) {
 		return errors.New("please give me the pointer arg")
 	}
 
-	dataMap, err := s.structure(reflect.ValueOf(ptr).Elem().Interface())
+	dataMap, err := s.Structure(reflect.ValueOf(ptr).Elem().Interface())
 	// dataMap, err := sanitizeStruct(ptr)
 	if err != nil {
 		return errors.New("cannot perform the operation")
@@ -99,7 +99,7 @@ func (s Sanitize) Array(param interface{}) ([]interface{}, error) {
 
 	//nolint:intrange // for loop can be changed to use an integer range (Go 1.22+)
 	for index := 0; index < paramValue.Len(); index++ {
-		sanitisedParam, err := s.recursively(paramValue.Index(index).Interface())
+		sanitisedParam, err := s.Recursively(paramValue.Index(index).Interface())
 		if err != nil {
 			return nil, err
 		}
@@ -115,7 +115,7 @@ func (s Sanitize) Map(param interface{}) (map[string]interface{}, error) {
 	sanitisedMap := make(map[string]interface{})
 
 	for _, key := range paramValue.MapKeys() {
-		sanitisedParam, err := s.recursively(paramValue.MapIndex(key).Interface())
+		sanitisedParam, err := s.Recursively(paramValue.MapIndex(key).Interface())
 		if err != nil {
 			return nil, err
 		}
@@ -127,17 +127,17 @@ func (s Sanitize) Map(param interface{}) (map[string]interface{}, error) {
 }
 
 func (s Sanitize) String(param string) string {
-	// sanitizedHTMLStr := s.policy.Sanitize(param)
-	// v := reflect.ValueOf(param)
+	// regex := regexp.MustCompile(`(?i)javascript:\s*`)
+	// regex := regexp.MustCompile(`(?i)javascript:[^;]*(;|$)`)
+	regex := regexp.MustCompile(`(?i)javascript\s*:[^;]*(;|$)`)
 
-	sanitizedHTMLStr := s.policy.Sanitize(param)
+	sanitizedStr := regex.ReplaceAllString(param, "")
+	sanitizedStr = s.policy.Sanitize(sanitizedStr)
 
-	regex := regexp.MustCompile(`\bjavascript\b`)
-
-	return regex.ReplaceAllString(sanitizedHTMLStr, "")
+	return sanitizedStr
 }
 
-func (s Sanitize) recursively(param interface{}) (interface{}, error) {
+func (s Sanitize) Recursively(param interface{}) (interface{}, error) {
 	if param == nil {
 		return param, nil
 	}
@@ -166,7 +166,7 @@ func (s Sanitize) recursively(param interface{}) (interface{}, error) {
 	}
 }
 
-func (s Sanitize) structure(param interface{}) (map[string]interface{}, error) {
+func (s Sanitize) Structure(param interface{}) (map[string]interface{}, error) {
 	paramValue := reflect.ValueOf(param)
 	newStruct := reflect.Indirect(paramValue)
 
@@ -177,7 +177,7 @@ func (s Sanitize) structure(param interface{}) (map[string]interface{}, error) {
 	//nolint:intrange // for loop can be changed to use an integer range (Go 1.22+)
 	for i := 0; i < paramValue.NumField(); i++ {
 		fieldName := newStruct.Type().Field(i).Name
-		values[i], _ = s.recursively(paramValue.Field(i).Interface())
+		values[i], _ = s.Recursively(paramValue.Field(i).Interface())
 		sanitisedStruct[fieldName] = values[i]
 	}
 

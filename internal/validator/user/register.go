@@ -3,6 +3,8 @@ package user
 import (
 	"errors"
 
+	"github.com/go-ozzo/ozzo-validation/v4/is"
+
 	userdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
@@ -16,6 +18,10 @@ func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[str
 		validation.Field(&req.Name,
 			validation.Required,
 			validation.Length(_nameMinLen, _nameMaxLen)),
+
+		validation.Field(&req.Email,
+			validation.Required,
+			is.Email),
 
 		validation.Field(&req.Mobile,
 			validation.Required,

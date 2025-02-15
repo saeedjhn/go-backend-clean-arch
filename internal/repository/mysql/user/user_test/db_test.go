@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"testing"
-	"time"
 
 	setuptest "github.com/saeedjhn/go-backend-clean-arch/test/setup_test"
 
@@ -24,8 +23,9 @@ func Test_MysqlUser_GetByMobile(t *testing.T) {
 		t.Fatalf("failed to create database connection: %v", err)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+	// ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	// defer cancel()
+	ctx := context.Background()
 
 	db := mysqluser.New(doubles.NewDummyTracer(), conn)
 

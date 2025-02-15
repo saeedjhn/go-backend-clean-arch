@@ -10,6 +10,8 @@ import (
 	"errors"
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 )
 
@@ -19,11 +21,11 @@ const (
 )
 
 type StubDB struct {
-	conn map[uint64]entity.User
+	conn map[types.ID]entity.User
 }
 
 func NewStubDB() *StubDB {
-	conn := map[uint64]entity.User{
+	conn := map[types.ID]entity.User{
 		1001: {
 			ID:        _FirstRecordID,
 			Name:      "n",
@@ -47,7 +49,7 @@ func NewStubDB() *StubDB {
 	return &StubDB{conn: conn}
 }
 
-func (s StubDB) Create(u entity.User) (uint64, error) {
+func (s StubDB) Create(u entity.User) (types.ID, error) {
 	s.conn[u.ID] = u
 	exists := s.IsByID(u.ID)
 	if exists {
@@ -57,7 +59,7 @@ func (s StubDB) Create(u entity.User) (uint64, error) {
 	return u.ID, nil
 }
 
-func (s StubDB) GetByID(id uint64) (entity.User, error) {
+func (s StubDB) GetByID(id types.ID) (entity.User, error) {
 	user, exists := s.conn[id]
 	if !exists {
 		return entity.User{}, errors.New("user not found")
@@ -66,7 +68,7 @@ func (s StubDB) GetByID(id uint64) (entity.User, error) {
 	return user, nil
 }
 
-func (s StubDB) IsByID(id uint64) bool {
+func (s StubDB) IsByID(id types.ID) bool {
 	_, exists := s.conn[id]
 
 	return exists

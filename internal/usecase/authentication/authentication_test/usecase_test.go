@@ -126,7 +126,7 @@ func Test_AuthInteractor_ParseToken(t *testing.T) {
 		name           string
 		token          string
 		secret         string
-		expectedUserID uint64
+		expectedUserID types.ID
 		expectedError  bool
 	}{
 		{
