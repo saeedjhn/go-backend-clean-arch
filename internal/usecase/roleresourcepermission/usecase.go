@@ -15,21 +15,25 @@ type Validator interface {
 
 //go:generate mockery --name Repository
 type Repository interface {
-	Create(ctx context.Context, r entity.RoleResourcePermission) (entity.RoleResourcePermission, error)
-	GetByID(ctx context.Context, id uint64) (entity.RoleResourcePermission, error)
-	GetByRoleIDAndResourceID(ctx context.Context, roleID, resourceID uint64) (entity.RoleResourcePermission, error)
-	GetByRoleIDsAndResourceID(ctx context.Context, roleIDs []uint64, resourceID uint64) ([]entity.RoleResourcePermission, error)
+	Create(_ context.Context, r entity.RoleResourcePermission) (entity.RoleResourcePermission, error)
+	GetByID(_ context.Context, id uint64) (entity.RoleResourcePermission, error)
+	GetByRoleIDAndResourceID(_ context.Context, roleID, resourceID uint64) (entity.RoleResourcePermission, error)
+	GetByRoleIDsAndResourceID(
+		_ context.Context,
+		roleIDs []uint64,
+		resourceID uint64,
+	) ([]entity.RoleResourcePermission, error)
 	GetAll(
-		ctx context.Context,
+		_ context.Context,
 		filter dto.FilterRequest,
 		pagination dto.PaginationRequest,
 		sort dto.SortRequest,
 		searchParams *dto.QuerySearch,
 	) ([]entity.RoleResourcePermission, uint, error)
-	Update(ctx context.Context, r entity.RoleResourcePermission) error
-	DeleteByID(ctx context.Context, id uint64) error
-	DeleteAllPermissionsForRole(ctx context.Context, roleID uint64) error
-	DeleteAll(ctx context.Context) error
+	Update(_ context.Context, r entity.RoleResourcePermission) error
+	DeleteByID(_ context.Context, id uint64) error
+	DeleteAllPermissionsForRole(_ context.Context, roleID uint64) error
+	DeleteAll(_ context.Context) error
 }
 
 type Interactor struct {

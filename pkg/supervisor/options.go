@@ -1,6 +1,6 @@
 package supervisor
 
-var defaultOptions = ProcessOption{
+var defaultOptions = ProcessOption{ //nolint:gochecknoglobals // nothing
 	Recover:         true,
 	RetryInterval:   ProcessRetryInterval,
 	RecoverInterval: ProcessRecoverInterval,

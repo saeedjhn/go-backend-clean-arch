@@ -33,26 +33,63 @@ func (e *ErrorResponse) WithMeta(meta map[string]interface{}) *ErrorResponse {
 	return e
 }
 
-type SuccessResponse struct {
+type SuccessResponse[T any] struct {
 	Success bool                   `json:"success"`
 	Message string                 `json:"message"`
-	Data    interface{}            `json:"data"`
+	Data    T                      `json:"data"`
 	Meta    map[string]interface{} `json:"meta,omitempty"`
 }
 
-func NewSuccessResponse(
+func NewSuccessResponse[T any](
 	message string,
-	data interface{},
-) *SuccessResponse {
-	return &SuccessResponse{
+	data T,
+) *SuccessResponse[T] {
+	return &SuccessResponse[T]{
 		Success: true,
 		Message: message,
 		Data:    data,
 	}
 }
 
-func (e *SuccessResponse) WithMeta(meta map[string]interface{}) *SuccessResponse {
+func (e *SuccessResponse[T]) WithMeta(meta map[string]interface{}) *SuccessResponse[T] {
+	if e.Meta == nil {
+		e.Meta = make(map[string]interface{})
+	}
 	maps.Copy(e.Meta, meta)
-
 	return e
+}
+
+// type SuccessResponse struct {
+// 	Success bool                   `json:"success"`
+// 	Message string                 `json:"message"`
+// 	Data    interface{}            `json:"data"`
+// 	Meta    map[string]interface{} `json:"meta,omitempty"`
+// }
+//
+// func NewSuccessResponse(
+// 	message string,
+// 	data interface{},
+// ) *SuccessResponse {
+// 	return &SuccessResponse{
+// 		Success: true,
+// 		Message: message,
+// 		Data:    data,
+// 	}
+// }
+//
+// func (e *SuccessResponse) WithMeta(meta map[string]interface{}) *SuccessResponse {
+// 	maps.Copy(e.Meta, meta)
+//
+// 	return e
+// }
+
+type SR[T interface{}] struct {
+	Success bool                   `json:"success"`
+	Message string                 `json:"message"`
+	Data    T                      `json:"data"`
+	Meta    map[string]interface{} `json:"meta,omitempty"`
+}
+
+func ForTestSuccessResponse[T interface{}]() SR[T] {
+	return SR[T]{}
 }

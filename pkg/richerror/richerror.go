@@ -1,7 +1,7 @@
 package richerror
 
 import (
-	json "encoding/json"
+	"encoding/json"
 	"errors"
 )
 
@@ -44,7 +44,6 @@ func (e *RichError) WithErr(err error) *RichError {
 }
 
 // WithMeta adds metadata to the error.
-// func (e *RichError) WithMeta(key string, value interface{}) *RichError {
 func (e *RichError) WithMeta(meta map[string]interface{}) *RichError {
 	e.meta = meta
 	return e

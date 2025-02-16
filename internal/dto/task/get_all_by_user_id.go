@@ -7,6 +7,6 @@ type GetAllByUserIDRequest struct {
 }
 
 type GetByUserIDResponse struct {
-	Tasks       []TaskInfo        `json:"tasks"`
+	Tasks       []Info            `json:"tasks"`
 	FieldErrors map[string]string `json:"field_errors,omitempty"`
 }

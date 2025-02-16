@@ -45,7 +45,9 @@ func (r *DB) Create(ctx context.Context, u entity.User) (entity.User, error) {
 
 	span.SetAttribute("db.query", query)
 
-	stmt, err := r.conn.PrepareStatement(ctx, uint(mysqlrepo.StatementKeyUserCreate), query)
+	stmt, err := r.conn.PrepareStatement( //nolint:sqlclosecheck // nothing
+		ctx, uint(mysqlrepo.StatementKeyUserCreate), query,
+	)
 	if err != nil {
 		return entity.User{}, richerror.New(_opMysqlUserCreate).WithErr(err).
 			WithMessage(msg.ErrMsgCantPrepareStatement).WithKind(richerror.KindStatusInternalServerError)
@@ -80,7 +82,9 @@ func (r *DB) IsExistsByMobile(ctx context.Context, mobile string) (bool, error) 
 
 	span.SetAttribute("db.query", query)
 
-	stmt, err := r.conn.PrepareStatement(ctx, uint(mysqlrepo.StatementKeyUserIsExistsByMobile), query)
+	stmt, err := r.conn.PrepareStatement( //nolint:sqlclosecheck // nothing
+		ctx, uint(mysqlrepo.StatementKeyUserIsExistsByMobile), query,
+	)
 	if err != nil {
 		return false, richerror.New(_opMysqlUserIsExistsByMobile).WithErr(err).
 			WithMessage(msg.ErrMsgCantPrepareStatement).WithKind(richerror.KindStatusInternalServerError)
@@ -115,7 +119,9 @@ func (r *DB) GetByMobile(ctx context.Context, mobile string) (entity.User, error
 	span.SetAttribute("db.query", query)
 
 	// row := r.conn.Conn().QueryRow(query, mobile)
-	stmt, err := r.conn.PrepareStatement(ctx, uint(mysqlrepo.StatementKeyUserGetByMobile), query)
+	stmt, err := r.conn.PrepareStatement( //nolint:sqlclosecheck // nothing
+		ctx, uint(mysqlrepo.StatementKeyUserGetByMobile), query,
+	)
 	if err != nil {
 		return entity.User{}, richerror.New(_opMysqlUserGetByMobile).WithErr(err).
 			WithMessage(msg.ErrMsgCantPrepareStatement).WithKind(richerror.KindStatusInternalServerError)
@@ -149,7 +155,9 @@ func (r *DB) GetByID(ctx context.Context, id uint64) (entity.User, error) {
 	query := "SELECT * FROM users WHERE id = ?"
 
 	// row := r.conn.Conn().QueryRow(query, id)
-	stmt, err := r.conn.PrepareStatement(ctx, uint(mysqlrepo.StatementKeyUserGetByID), query)
+	stmt, err := r.conn.PrepareStatement( //nolint:sqlclosecheck // nothing
+		ctx, uint(mysqlrepo.StatementKeyUserGetByID), query,
+	)
 	if err != nil {
 		return entity.User{}, richerror.New(_opMysqlUserGetByID).WithErr(err).
 			WithMessage(msg.ErrMsgCantPrepareStatement).WithKind(richerror.KindStatusInternalServerError)

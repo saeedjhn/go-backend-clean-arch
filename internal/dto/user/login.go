@@ -6,7 +6,7 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	UserInfo    UserInfo          `json:"user"`
+	UserInfo    Info              `json:"user"`
 	Tokens      Tokens            `json:"tokens"`
 	FieldErrors map[string]string `json:"field_errors,omitempty"`
 }

@@ -19,7 +19,7 @@ func (o *OpenTelemetry) IntHistogram(
 
 	val, ok := o.counterCache.Load(name)
 	if ok {
-		val.(metric.Int64Histogram).Record(ctx, count64, metric.WithAttributes(otelAttrs...))
+		val.(metric.Int64Histogram).Record(ctx, count64, metric.WithAttributes(otelAttrs...)) //nolint:errcheck // nothing
 
 		return nil
 	}

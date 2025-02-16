@@ -3,6 +3,8 @@ package sanitize_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/sanitize"
 	"github.com/stretchr/testify/assert"
 )
@@ -92,7 +94,7 @@ func TestSanitize_Any_StringInput(t *testing.T) {
 	s := sanitize.New().SetPolicy(sanitize.StrictPolicy)
 	input := `<script>alert("XSS")</script>`
 	output, err := s.Any(input)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, "", output)
 }
 
@@ -102,7 +104,7 @@ func TestSanitize_Any_IntInput(t *testing.T) {
 	s := sanitize.New().SetPolicy(sanitize.StrictPolicy)
 	input := 42
 	output, err := s.Any(input)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, 42, output)
 }
 
@@ -112,7 +114,7 @@ func TestSanitize_Any_SliceInput(t *testing.T) {
 	s := sanitize.New().SetPolicy(sanitize.StrictPolicy)
 	input := []interface{}{`<script>alert("XSS")</script>`, 42}
 	output, err := s.Any(input)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, []interface{}{"", 42}, output)
 }
 
@@ -122,7 +124,7 @@ func TestSanitize_Any_MapInput(t *testing.T) {
 	s := sanitize.New().SetPolicy(sanitize.StrictPolicy)
 	input := map[string]interface{}{"key1": `<script>alert("XSS")</script>`, "key2": 42}
 	output, err := s.Any(input)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, map[string]interface{}{"key1": "", "key2": 42}, output)
 }
 
@@ -136,7 +138,7 @@ func TestSanitize_Any_StructInput(t *testing.T) {
 	}
 	input := TestStruct{Field1: `<script>alert("XSS")</script>`, Field2: 42}
 	output, err := s.Any(input)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, map[string]interface{}{"Field1": "", "Field2": 42}, output)
 }
 
@@ -150,7 +152,7 @@ func TestSanitize_StructToMap_ValidStruct(t *testing.T) {
 	}
 	input := TestStruct{Field1: `<script>alert("XSS")</script>`, Field2: 42}
 	output, err := s.StructToMap(input)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, map[string]interface{}{"Field1": "", "Field2": 42}, output)
 }
 
@@ -164,7 +166,7 @@ func TestSanitize_Struct_ValidPointer(t *testing.T) {
 	}
 	input := &TestStruct{Field1: `<script>alert("XSS")</script>`, Field2: 42}
 	err := s.Struct(input)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, &TestStruct{Field1: "", Field2: 42}, input)
 }
 
@@ -187,7 +189,7 @@ func TestSanitize_Array_ValidArray(t *testing.T) {
 	s := sanitize.New().SetPolicy(sanitize.StrictPolicy)
 	input := []interface{}{`<script>alert("XSS")</script>`, 42}
 	output, err := s.Array(input)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, []interface{}{"", 42}, output)
 }
 
@@ -197,7 +199,7 @@ func TestSanitize_Map_ValidMap(t *testing.T) {
 	s := sanitize.New().SetPolicy(sanitize.StrictPolicy)
 	input := map[string]interface{}{"key1": `<script>alert("XSS")</script>`, "key2": 42}
 	output, err := s.Map(input)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, map[string]interface{}{"key1": "", "key2": 42}, output)
 }
 
@@ -240,6 +242,6 @@ func TestSanitize_IsPointer_InvalidPointer(t *testing.T) {
 // 	}
 // 	input := TestStruct{Field1: `<script>alert("XSS")</script>`, Field2: 42}
 // 	output, err := s.structure(input)
-// 	assert.NoError(t, err)
+// 	require.NoError(t, err)
 // 	assert.Equal(t, map[string]interface{}{"Field1": "", "Field2": 42}, output)
 // }

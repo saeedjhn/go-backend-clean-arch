@@ -1,4 +1,4 @@
-package main
+package main //nolint:cyclop // nothing
 
 import (
 	"context"
@@ -14,7 +14,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 )
 
-func main() {
+func main() { //nolint:funlen // +100 lines
 	var (
 		confPath string
 		fileExt  string

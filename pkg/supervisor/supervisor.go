@@ -35,7 +35,7 @@ type ProcessOption struct {
 // It notifies the supervisor by terminate channel when it terminates.
 type ProcessFunc func(finishSignal context.Context, processName string, terminateChannel chan<- string) error
 
-var noopProcessFunc = func(finishSignal context.Context, processName string, terminateChannel chan<- string) error {
+var noopProcessFunc = func(_ context.Context, _ string, _ chan<- string) error { //nolint:gochecknoglobals // nothing
 	return nil
 }
 
@@ -68,8 +68,7 @@ func New(shutdownTimeout time.Duration, l contract.Logger) *Supervisor {
 		ctxCancel:       cancel,
 		shutdownTimeout: shutdownTimeout,
 		// TODO : how to set terminateChannel buffer?
-		// nolint
-		terminateChannel: make(chan string, 10),
+		terminateChannel: make(chan string, 10), //nolint:mnd // nothing
 	}
 }
 

@@ -1,9 +1,11 @@
-package setuptest
+package setuptest_test
 
 import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	setuptest "github.com/saeedjhn/go-backend-clean-arch/test/setup_test"
 )
 
 const (
@@ -21,7 +23,7 @@ func Test_LoadConfig(t *testing.T) {
 		t.Fatalf("error getting current working directory: %v", err)
 	}
 
-	config, err := LoadConfig[AppConfig](filepath.Join(wd, _configPath))
+	config, err := setuptest.LoadConfig[AppConfig](filepath.Join(wd, _configPath))
 	if err != nil {
 		t.Fatalf("Failed to load config: %v", err)
 	}

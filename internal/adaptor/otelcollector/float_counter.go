@@ -18,7 +18,7 @@ func (o *OpenTelemetry) FloatCounter(
 
 	val, ok := o.counterCache.Load(name)
 	if ok {
-		val.(metric.Float64Counter).Add(ctx, count, metric.WithAttributes(otelAttrs...))
+		val.(metric.Float64Counter).Add(ctx, count, metric.WithAttributes(otelAttrs...)) //nolint:errcheck // nothing
 
 		return nil
 	}
@@ -45,7 +45,7 @@ func (o *OpenTelemetry) FloatUpDownCounter(
 
 	val, ok := o.counterCache.Load(name)
 	if ok {
-		val.(metric.Float64UpDownCounter).Add(ctx, count, metric.WithAttributes(otelAttrs...))
+		val.(metric.Float64UpDownCounter).Add(ctx, count, metric.WithAttributes(otelAttrs...)) //nolint:errcheck // nothing
 
 		return nil
 	}

@@ -48,7 +48,7 @@ func (d *ProductionStrategy) generateLogFilename() string {
 }
 
 func (d *ProductionStrategy) createLogWriter(fileName string) zapcore.WriteSyncer {
-	writer := zapcore.AddSync(&lumberjack.Logger{ //nolint:typecheck // nothing
+	writer := zapcore.AddSync(&lumberjack.Logger{
 		Filename:   fileName,
 		MaxSize:    d.config.MaxSize,    // megabytes
 		MaxBackups: d.config.MaxBackups, // megabytes

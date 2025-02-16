@@ -1,4 +1,4 @@
-package authorization
+package authorization //nolint:cyclop // nothing
 
 import (
 	"context"
@@ -12,7 +12,11 @@ import (
 //go:generate mockery --name RoleResourcePermissionInteractor
 type RoleResourcePermissionInteractor interface {
 	GetByRoleIDAndResourceID(ctx context.Context, roleID, resourceID uint64) (entity.RoleResourcePermission, error)
-	// GetByRoleIDsAndResourceID(ctx context.Context, roleIDs []uint64, resourceID uint64) ([]entity.RoleResourcePermission, error)
+	// GetByRoleIDsAndResourceID(
+	// ctx context.Context,
+	// roleIDs []uint64,
+	// resourceID uint64,
+	// ) ([]entity.RoleResourcePermission, error)
 }
 
 //go:generate mockery --name ResourceInteractor
@@ -51,7 +55,12 @@ func New(
 	}
 }
 
-func (a *Interactor) CheckAccess(ctx context.Context, roleIDs []types.ID, resourceName string, actions ...entity.Action) (bool, error) {
+func (a *Interactor) CheckAccess( //nolint:gocognit // nothing
+	ctx context.Context,
+	roleIDs []types.ID,
+	resourceName string,
+	actions ...entity.Action,
+) (bool, error) {
 	if len(actions) == 0 || len(roleIDs) == 0 {
 		return false, nil
 	}
@@ -62,7 +71,6 @@ func (a *Interactor) CheckAccess(ctx context.Context, roleIDs []types.ID, resour
 	}
 
 	for _, roleID := range roleIDs {
-
 		// TODO: [OPTIMIZATION] Refactor this function to improve performance.
 		// cacheKey := fmt.Sprintf("perm:%d:%d", roleID, resourceID)
 		// cachedPerm, err := a.Cache.Get(ctx, cacheKey)

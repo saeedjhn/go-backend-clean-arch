@@ -7,8 +7,8 @@ import (
 )
 
 func (i *Interactor) DeleteAllPermissionForRole(
-	ctx context.Context,
-	req roleresourcepermissiondto.DeleteAllPermissionForRoleRequest,
+	_ context.Context,
+	_ roleresourcepermissiondto.DeleteAllPermissionForRoleRequest,
 ) (roleresourcepermissiondto.DeleteAllPermissionForRoleResponse, error) {
 	panic("IMPLEMENT ME")
 }

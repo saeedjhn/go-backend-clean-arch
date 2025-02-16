@@ -7,8 +7,8 @@ import (
 )
 
 func (i *Interactor) GetByID(
-	ctx context.Context,
-	req permissiondto.GetByIDRequest,
+	_ context.Context,
+	_ permissiondto.GetByIDRequest,
 ) (permissiondto.GetByIDResponse, error) {
 	panic("IMPLEMENT ME")
 }

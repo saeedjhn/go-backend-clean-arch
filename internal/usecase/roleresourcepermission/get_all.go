@@ -7,8 +7,8 @@ import (
 )
 
 func (i *Interactor) GetAll(
-	ctx context.Context,
-	req roleresourcepermissiondto.GetAllRequest,
+	_ context.Context,
+	_ roleresourcepermissiondto.GetAllRequest,
 ) (roleresourcepermissiondto.GetAllResponse, error) {
 	panic("IMPLEMENT ME")
 }

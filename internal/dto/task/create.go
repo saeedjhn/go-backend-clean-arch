@@ -10,6 +10,6 @@ type CreateRequest struct {
 }
 
 type CreateResponse struct {
-	TaskInfo    TaskInfo          `json:"task"`
+	TaskInfo    Info              `json:"task"`
 	FieldErrors map[string]string `json:"field_errors,omitempty"`
 }

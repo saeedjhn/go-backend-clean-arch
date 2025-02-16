@@ -7,6 +7,6 @@ type ProfileRequest struct {
 }
 
 type ProfileResponse struct {
-	UserInfo    UserInfo          `json:"user"`
+	UserInfo    Info              `json:"user"`
 	FieldErrors map[string]string `json:"field_errors,omitempty"`
 }

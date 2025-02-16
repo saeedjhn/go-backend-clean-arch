@@ -4,6 +4,9 @@ import (
 	"context"
 )
 
-func (i *Interactor) GetRolesIDsByID(ctx context.Context, id uint64) ([]uint64, error) {
+func (i *Interactor) GetRolesIDsByID(
+	_ context.Context,
+	_ uint64,
+) ([]uint64, error) {
 	panic("IMPLEMENT_ME")
 }

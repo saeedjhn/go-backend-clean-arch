@@ -6,7 +6,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
 )
 
-type UserInfo struct {
+type Info struct {
 	ID        types.ID  `json:"id"`
 	Name      string    `json:"name"`
 	Mobile    string    `json:"mobile"`

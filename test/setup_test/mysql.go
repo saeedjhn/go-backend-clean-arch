@@ -14,8 +14,8 @@ const (
 )
 
 var (
-	once     sync.Once
-	instance *mysql.DB
+	once     sync.Once //nolint:gochecknoglobals // nothing
+	instance *mysql.DB //nolint:gochecknoglobals // nothing
 )
 
 type MySQLSeedOptions struct {

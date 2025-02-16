@@ -15,7 +15,7 @@ func Authorization(authorizeIntr *authorization.Interactor,
 	actions ...entity.Action,
 ) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) (err error) {
+		return func(c echo.Context) error {
 			claims := claim.GetClaimsFromEchoContext(c)
 
 			isAllowed, err := authorizeIntr.CheckAccess(

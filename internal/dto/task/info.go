@@ -8,7 +8,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 )
 
-type TaskInfo struct {
+type Info struct {
 	ID          types.ID          `json:"id"`
 	UserID      types.ID          `json:"user_id"`
 	Title       string            `json:"title"`

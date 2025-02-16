@@ -6,6 +6,6 @@ import (
 	resourcedto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/resource"
 )
 
-func (i *Interactor) Update(ctx context.Context, req resourcedto.UpdateRequest) (resourcedto.UpdateResponse, error) {
+func (i *Interactor) Update(_ context.Context, _ resourcedto.UpdateRequest) (resourcedto.UpdateResponse, error) {
 	panic("IMPLEMENT ME")
 }

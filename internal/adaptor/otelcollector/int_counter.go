@@ -19,7 +19,7 @@ func (o *OpenTelemetry) IntCounter(
 
 	val, ok := o.counterCache.Load(name)
 	if ok {
-		val.(metric.Int64Counter).Add(ctx, count64, metric.WithAttributes(otelAttrs...))
+		val.(metric.Int64Counter).Add(ctx, count64, metric.WithAttributes(otelAttrs...)) //nolint:errcheck // nothing
 
 		return nil
 	}
@@ -47,7 +47,7 @@ func (o *OpenTelemetry) IntUpDownCounter(
 
 	val, ok := o.counterCache.Load(name)
 	if ok {
-		val.(metric.Int64UpDownCounter).Add(ctx, count64, metric.WithAttributes(otelAttrs...))
+		val.(metric.Int64UpDownCounter).Add(ctx, count64, metric.WithAttributes(otelAttrs...)) //nolint:errcheck // nothing
 
 		return nil
 	}

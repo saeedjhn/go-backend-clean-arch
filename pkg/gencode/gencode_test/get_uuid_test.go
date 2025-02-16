@@ -1,4 +1,4 @@
-package gencode
+package gencode_test
 
 import (
 	"testing"

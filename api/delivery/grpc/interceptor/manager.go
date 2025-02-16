@@ -89,7 +89,6 @@ func (im *Manager) Metrics(
 			"Total number of gRPC errors, categorized by method and status code",
 			err,
 		)
-
 	}
 
 	err = im.collector.FloatHistogram(

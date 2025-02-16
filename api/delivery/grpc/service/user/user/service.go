@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-type UserInteractor interface {
+type Interactor interface {
 	Register(ctx context.Context, req user.RegisterRequest) (user.RegisterResponse, error)
 	Login(ctx context.Context, req user.LoginRequest) (user.LoginResponse, error)
 	Profile(ctx context.Context, req user.ProfileRequest) (user.ProfileResponse, error)
@@ -22,10 +22,10 @@ var _ gen.UserServiceServer = (*Service)(nil)
 
 type Service struct {
 	gen.UserServiceServer
-	userIntr UserInteractor
+	userIntr Interactor
 }
 
-func New(userInteractor UserInteractor) *Service {
+func New(userInteractor Interactor) *Service {
 	return &Service{userIntr: userInteractor}
 }
 

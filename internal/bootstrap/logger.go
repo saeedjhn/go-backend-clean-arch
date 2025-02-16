@@ -13,12 +13,17 @@ func NewLogger(configApp configs.Application, configLogger jsonfilelogger.Config
 }
 
 func createEnvironmentStrategy(env configs.Env, config jsonfilelogger.Config) jsonfilelogger.EnvironmentStrategy {
-	switch env {
-	case configs.Production:
+	if env == configs.Production {
 		return jsonfilelogger.NewProductionStrategy(config)
-	default:
-		return jsonfilelogger.NewDevelopmentStrategy(config)
 	}
+
+	return jsonfilelogger.NewDevelopmentStrategy(config)
+	// switch env {
+	// case configs.Production:
+	// 	return jsonfilelogger.NewProductionStrategy(config)
+	// default:
+	// 	return jsonfilelogger.NewDevelopmentStrategy(config)
+	// }
 }
 
 // func NewLogger(configApp configs.Application, configLogger jsonfilelogger.Config) contract.Logger {

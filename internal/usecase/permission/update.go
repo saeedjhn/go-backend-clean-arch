@@ -6,6 +6,9 @@ import (
 	permissiondto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/permission"
 )
 
-func (i *Interactor) Update(ctx context.Context, req permissiondto.UpdateRequest) (permissiondto.UpdateResponse, error) {
+func (i *Interactor) Update(
+	_ context.Context,
+	_ permissiondto.UpdateRequest,
+) (permissiondto.UpdateResponse, error) {
 	panic("IMPLEMENT ME")
 }

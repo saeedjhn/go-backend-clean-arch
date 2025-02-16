@@ -4,6 +4,8 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 	"github.com/stretchr/testify/assert"
 )
@@ -94,7 +96,7 @@ func TestRichError(t *testing.T) {
 
 		jsonString, jsonErr := err.ToJSON()
 
-		assert.NoError(t, jsonErr, "Expected no error during JSON serialization")
+		require.NoError(t, jsonErr, "Expected no error during JSON serialization")
 		assert.Contains(t, jsonString, "\"op\":\"test_op\"")
 		assert.Contains(t, jsonString, "\"message\":\"test message\"")
 		// assert.Contains(t, jsonString, "\"key\":\"value\"")

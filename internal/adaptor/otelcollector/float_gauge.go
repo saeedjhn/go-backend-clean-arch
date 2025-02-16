@@ -18,7 +18,7 @@ func (o *OpenTelemetry) FloatGauge(
 
 	val, ok := o.counterCache.Load(name)
 	if ok {
-		val.(metric.Float64Gauge).Record(ctx, count, metric.WithAttributes(otelAttrs...))
+		val.(metric.Float64Gauge).Record(ctx, count, metric.WithAttributes(otelAttrs...)) //nolint:errcheck // nothing
 
 		return nil
 	}
@@ -34,7 +34,7 @@ func (o *OpenTelemetry) FloatGauge(
 	return nil
 }
 
-func (o *OpenTelemetry) AsyncFloatGauge(
+func (o *OpenTelemetry) AsyncFloatGauge( //nolint:dupl // 37-74 lines are duplicate
 	name string,
 	count float64,
 	description string,
@@ -44,7 +44,7 @@ func (o *OpenTelemetry) AsyncFloatGauge(
 
 	val, ok := o.counterCache.Load(name)
 	if ok {
-		counter := val.(metric.Float64ObservableGauge)
+		counter := val.(metric.Float64ObservableGauge) //nolint:errcheck // nothing
 		_, err := o.meter.RegisterCallback(
 			func(_ context.Context, o metric.Observer) error {
 				o.ObserveFloat64(counter, count, metric.WithAttributes(otelAttrs...))

@@ -12,8 +12,8 @@ import (
 )
 
 var (
-	_myDBConfig *configs.Config
-	_configPath = "testdata/config.yml"
+	_myDBConfig *configs.Config         //nolint:gochecknoglobals // nothing
+	_configPath = "testdata/config.yml" //nolint:gochecknoglobals // nothing
 
 	errInvalidInput              = errors.New("invalid input")
 	errUserNotFound              = errors.New("user not found")

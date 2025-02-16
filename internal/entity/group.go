@@ -5,7 +5,8 @@ package entity
 // In contrast to roles groups make business sense and often correlate with company’s organizational structure.
 
 // The group owner (owner) is usually an identifier or name that identifies who manages or controls the group.
-// Typically, this field is used to identify the person or service responsible for creating, editing, or deleting groups.
+// Typically, this field is used to identify the person or service responsible for creating, editing,
+// or deleting groups.
 
 // Group represents a collection of roles for simplifying permission management.
 // type Group struct {

@@ -50,9 +50,9 @@ func (db *DB) PrepareStatement(ctx context.Context, key uint, query string) (*sq
 		return stmt, nil
 	}
 
-	stmt, err := db.db.PrepareContext(ctx, query)
+	stmt, err := db.db.PrepareContext(ctx, query) //nolint:sqlclosecheck //nothing
 	if err != nil {
-		return nil, fmt.Errorf("failed to prepare SQL statement: %v", err)
+		return nil, fmt.Errorf("failed to prepare SQL statement: %w", err)
 	}
 
 	db.statements[key] = stmt
@@ -68,11 +68,17 @@ func (db *DB) CloseStatements() error {
 	db.mu.Lock()
 	defer db.mu.Unlock()
 
-	for _, stmt := range db.statements {
-		err := stmt.Close()
-		if err != nil {
-			return fmt.Errorf("failed to close SQL statement: %v", err)
+	var errs []error
+	for k, stmt := range db.statements {
+		if err := stmt.Close(); err != nil {
+			errs = append(errs, err)
 		}
+
+		delete(db.statements, k)
+	}
+
+	if len(errs) > 0 {
+		return fmt.Errorf("failed to close MySQL statements: %v", errs)
 	}
 
 	return nil

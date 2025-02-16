@@ -35,7 +35,7 @@ func (i *Interactor) Create(ctx context.Context, req taskdto.CreateRequest) (tas
 		return taskdto.CreateResponse{}, err
 	}
 
-	return taskdto.CreateResponse{TaskInfo: taskdto.TaskInfo{
+	return taskdto.CreateResponse{TaskInfo: taskdto.Info{
 		ID:          createdTask.ID,
 		UserID:      createdTask.UserID,
 		Title:       createdTask.Title,

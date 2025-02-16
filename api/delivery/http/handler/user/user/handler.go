@@ -18,7 +18,7 @@ type AuthInteractor interface {
 	ParseToken(secret, requestToken string) (*authusecase.Claims, error)
 }
 
-type UserInteractor interface {
+type Interactor interface {
 	Register(ctx context.Context, req user.RegisterRequest) (user.RegisterResponse, error)
 	Login(ctx context.Context, req user.LoginRequest) (user.LoginResponse, error)
 	Profile(ctx context.Context, req user.ProfileRequest) (user.ProfileResponse, error)

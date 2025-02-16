@@ -90,6 +90,8 @@ func TestGenerateAndCompareHashAndSTR_VariousCosts_ReturnsExpectedResults(t *tes
 
 	for _, cost := range costs {
 		t.Run(fmt.Sprintf("Cost_%d", cost), func(t *testing.T) {
+			t.Parallel()
+
 			hashedStr, err := bcrypt.Generate(str, cost)
 			if err != nil {
 				t.Fatalf("bcrypt.Generate failed with error: %v", err)

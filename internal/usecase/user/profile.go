@@ -19,7 +19,7 @@ func (i *Interactor) Profile(ctx context.Context, req user.ProfileRequest) (user
 		return user.ProfileResponse{}, err
 	}
 
-	return user.ProfileResponse{UserInfo: user.UserInfo{
+	return user.ProfileResponse{UserInfo: user.Info{
 		ID:        u.ID,
 		Name:      u.Name,
 		Mobile:    u.Mobile,
@@ -28,6 +28,6 @@ func (i *Interactor) Profile(ctx context.Context, req user.ProfileRequest) (user
 		UpdatedAt: u.UpdatedAt,
 	}}, nil // Or
 	// return userdto.ProfileResponse{
-	//	UserInfo: user.ToUserInfoDTO(),
+	//	Info: user.ToUserInfoDTO(),
 	// }, nil
 }

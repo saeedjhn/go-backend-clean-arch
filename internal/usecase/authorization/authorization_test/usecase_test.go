@@ -35,7 +35,7 @@ func TestCheckAccess_ResourceNotFound_ReturnsError(t *testing.T) {
 	i := authorization.New(authorization.Config{}, mockResource, mockRoleResource)
 
 	allowed, err := i.CheckAccess(context.Background(), []types.ID{1}, "resource", entity.ReadAction)
-	assert.Error(t, err)
+	require.Error(t, err)
 	assert.False(t, allowed)
 }
 
@@ -81,7 +81,11 @@ func TestCheckAccess_DeniedRead_ReturnsFalse(t *testing.T) {
 	mockRoleResource := new(mocks.MockRoleResourcePermissionInteractor)
 
 	mockResource.On("GetIDByName", mock.Anything, "resource").Return(uint64(10), nil)
-	mockRoleResource.On("GetByRoleIDAndResourceID", mock.Anything, uint64(1), uint64(10)).Return(entity.RoleResourcePermission{
+	mockRoleResource.On(
+		"GetByRoleIDAndResourceID",
+		mock.Anything,
+		uint64(1),
+		uint64(10)).Return(entity.RoleResourcePermission{
 		Permissions: entity.Permission{
 			Allow: entity.RWXD{R: false},
 			Deny:  entity.RWXD{R: true},
@@ -124,7 +128,11 @@ func TestCheckAccess_MultipleActions_OneDenied_ReturnsFalse(t *testing.T) {
 	mockRoleResource := new(mocks.MockRoleResourcePermissionInteractor)
 
 	mockResource.On("GetIDByName", mock.Anything, "resource").Return(uint64(10), nil)
-	mockRoleResource.On("GetByRoleIDAndResourceID", mock.Anything, uint64(1), uint64(10)).Return(entity.RoleResourcePermission{
+	mockRoleResource.On(
+		"GetByRoleIDAndResourceID",
+		mock.Anything,
+		uint64(1),
+		uint64(10)).Return(entity.RoleResourcePermission{
 		Permissions: entity.Permission{
 			Allow: entity.RWXD{R: true, W: true},
 			Deny:  entity.RWXD{R: false, W: true}, // WriteAction explicitly denied
@@ -159,7 +167,13 @@ func TestCheckAccess_MultipleRolesAndActions_OneAllowed_ReturnsTrue(t *testing.T
 
 	i := authorization.New(authorization.Config{}, mockResource, mockRoleResource)
 
-	allowed, err := i.CheckAccess(context.Background(), []types.ID{1, 2}, "resource", entity.ReadAction, entity.WriteAction)
+	allowed, err := i.CheckAccess(
+		context.Background(),
+		[]types.ID{1, 2},
+		"resource",
+		entity.ReadAction,
+		entity.WriteAction,
+	)
 	require.NoError(t, err)
 	assert.True(t, allowed)
 }

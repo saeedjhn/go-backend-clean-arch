@@ -7,9 +7,9 @@ import (
 )
 
 func (i *Interactor) GetByRoleIDAndResourceID(
-	ctx context.Context,
-	roleID,
-	resourceId uint64,
+	_ context.Context,
+	_ uint64,
+	_ uint64,
 ) (entity.RoleResourcePermission, error) {
 	panic("IMPLEMENT ME")
 }

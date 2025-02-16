@@ -6,7 +6,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func attributes(ctx echo.Context, extraAttrs ...map[string]interface{}) map[string]interface{} {
+func attributes(
+	ctx echo.Context,
+	extraAttrs ...map[string]interface{},
+) map[string]interface{} {
 	defaultAttrs := map[string]interface{}{
 		"http.method":     ctx.Request().Method,
 		"http.host":       ctx.Request().Host,

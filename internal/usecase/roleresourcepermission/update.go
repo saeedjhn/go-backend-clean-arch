@@ -7,8 +7,8 @@ import (
 )
 
 func (i *Interactor) Update(
-	ctx context.Context,
-	req roleresourcepermissiondto.UpdateRequest,
+	_ context.Context,
+	_ roleresourcepermissiondto.UpdateRequest,
 ) (roleresourcepermissiondto.UpdateResponse, error) {
 	panic("IMPLEMENT ME")
 }

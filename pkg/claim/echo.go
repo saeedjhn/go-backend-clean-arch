@@ -7,5 +7,5 @@ import (
 )
 
 func GetClaimsFromEchoContext(c echo.Context) *authentication.Claims {
-	return c.Get(configs.AuthMiddlewareContextKey).(*authentication.Claims)
+	return c.Get(configs.AuthMiddlewareContextKey).(*authentication.Claims) //nolint:errcheck // nothing
 }

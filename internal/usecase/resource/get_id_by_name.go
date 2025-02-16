@@ -4,6 +4,6 @@ import (
 	"context"
 )
 
-func (i *Interactor) GetIDByName(ctx context.Context, name string) (uint64, error) {
+func (i *Interactor) GetIDByName(_ context.Context, _ string) (uint64, error) {
 	panic("IMPLEMENT ME")
 }

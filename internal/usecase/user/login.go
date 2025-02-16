@@ -50,7 +50,7 @@ func (i *Interactor) Login(ctx context.Context, req user.LoginRequest) (user.Log
 	}
 
 	return user.LoginResponse{
-		UserInfo: user.UserInfo{
+		UserInfo: user.Info{
 			ID:        u.ID,
 			Name:      u.Name,
 			Mobile:    u.Mobile,

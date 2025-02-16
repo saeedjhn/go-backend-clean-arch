@@ -38,7 +38,7 @@ func GenCode(length int, chars string) (string, error) {
 	rand.NewSource(time.Now().UnixNano())
 	result := make([]byte, length)
 
-	for i := 0; i < length; i++ {
+	for i := range length {
 		// #nosec G404 - Using math/rand for non-cryptographic random generation
 		result[i] = chars[rand.Intn(len(chars))]
 	}

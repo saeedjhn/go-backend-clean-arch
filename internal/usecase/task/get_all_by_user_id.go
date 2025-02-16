@@ -6,15 +6,18 @@ import (
 	taskdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 )
 
-func (i *Interactor) GetAllByUserID(ctx context.Context, req taskdto.GetAllByUserIDRequest) (taskdto.GetByUserIDResponse, error) {
+func (i *Interactor) GetAllByUserID(
+	ctx context.Context,
+	req taskdto.GetAllByUserIDRequest,
+) (taskdto.GetByUserIDResponse, error) {
 	tasksByUserID, err := i.repository.GetAllByUserID(ctx, req.UserID.Uint64())
 	if err != nil {
 		return taskdto.GetByUserIDResponse{}, err
 	}
 
-	var tasks []taskdto.TaskInfo
+	var tasks []taskdto.Info
 	for _, task := range tasksByUserID {
-		tasks = append(tasks, taskdto.TaskInfo{
+		tasks = append(tasks, taskdto.Info{
 			ID:          task.ID,
 			UserID:      task.UserID,
 			Title:       task.Title,

@@ -6,6 +6,6 @@ import (
 	roledto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/role"
 )
 
-func (i *Interactor) GetByID(ctx context.Context, req roledto.GetByIDRequest) (roledto.GetByIDResponse, error) {
+func (i *Interactor) GetByID(_ context.Context, _ roledto.GetByIDRequest) (roledto.GetByIDResponse, error) {
 	panic("IMPLEMENT ME")
 }

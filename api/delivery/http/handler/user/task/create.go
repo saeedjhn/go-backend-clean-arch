@@ -1,4 +1,4 @@
-package task //nolint:dupl // 1-79 lines are duplicate
+package task
 
 import (
 	"net/http"

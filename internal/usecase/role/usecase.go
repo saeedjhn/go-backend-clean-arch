@@ -15,18 +15,18 @@ type Validator interface {
 
 //go:generate mockery --name Repository
 type Repository interface {
-	Create(ctx context.Context, r entity.Role) (entity.Role, error)
-	GetByID(ctx context.Context, id uint64) (entity.Role, error)
+	Create(_ context.Context, r entity.Role) (entity.Role, error)
+	GetByID(_ context.Context, id uint64) (entity.Role, error)
 	GetAll(
-		ctx context.Context,
+		_ context.Context,
 		filter dto.FilterRequest,
 		pagination dto.PaginationRequest,
 		sort dto.SortRequest,
 		searchParams *dto.QuerySearch,
 	) ([]entity.Role, uint, error)
-	Update(ctx context.Context, r entity.Role) error
-	DeleteByID(ctx context.Context, id uint64) error
-	DeleteAll(ctx context.Context) error
+	Update(_ context.Context, r entity.Role) error
+	DeleteByID(_ context.Context, id uint64) error
+	DeleteAll(_ context.Context) error
 }
 
 type Interactor struct {

@@ -18,7 +18,7 @@ func (o *OpenTelemetry) FloatHistogram(
 
 	val, ok := o.counterCache.Load(name)
 	if ok {
-		val.(metric.Float64Histogram).Record(ctx, count, metric.WithAttributes(otelAttrs...))
+		val.(metric.Float64Histogram).Record(ctx, count, metric.WithAttributes(otelAttrs...)) //nolint:errcheck // nothing
 
 		return nil
 	}

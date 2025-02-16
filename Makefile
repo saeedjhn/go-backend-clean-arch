@@ -311,7 +311,8 @@ audit:
 	gosec ./...
 #	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest && golangci-lint run --config .golangci.yml
 	golangci-lint run --config .golangci.yml
-	go test -v -race -buildvcs ./... # -vet=off: Nothing result
+	@ $(MAKE) TEST_PATH=./... tparse
+
 
 # ==================================================================================== #
 # OPERATIONS

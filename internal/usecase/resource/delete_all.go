@@ -7,8 +7,8 @@ import (
 )
 
 func (i *Interactor) DeleteAll(
-	ctx context.Context,
-	req resourcedto.DeleteAllRequest,
+	_ context.Context,
+	_ resourcedto.DeleteAllRequest,
 ) (resourcedto.DeleteAllResponse, error) {
 	panic("IMPLEMENT ME")
 }

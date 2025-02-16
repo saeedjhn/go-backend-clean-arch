@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var m sync.Mutex
+var m sync.Mutex //nolint:gochecknoglobals // nothing
 
 func LoadConfig[T any](path string) (T, error) {
 	m.Lock()

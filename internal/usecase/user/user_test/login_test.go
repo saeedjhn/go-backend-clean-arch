@@ -15,15 +15,15 @@ import (
 )
 
 var (
-	password    = "password123"
-	genPassword = func() string {
+	password    = "password123"   //nolint:gochecknoglobals // nothing
+	genPassword = func() string { //nolint:gochecknoglobals // nothing
 		gp, _ := userusecase.GenerateHash(password)
 
 		return gp
 	}()
-	correctMobile     = "09123456789"
-	incorrectMobile   = "incorrect-mobile"
-	nonExistentMobile = "123456789"
+	correctMobile     = "09123456789"      //nolint:gochecknoglobals // nothing
+	incorrectMobile   = "incorrect-mobile" //nolint:gochecknoglobals // nothing
+	nonExistentMobile = "123456789"        //nolint:gochecknoglobals // nothing
 )
 
 //go:generate go test -v -count=1 -race -run Test_UserInterator_Login
@@ -70,7 +70,7 @@ func Test_UserInterator_Login_ValidationSection(t *testing.T) {
 		fieldsErr:     nil,
 		expectedError: nil,
 		expectedResult: userdto.LoginResponse{
-			UserInfo: userdto.UserInfo{
+			UserInfo: userdto.Info{
 				ID:        1,
 				Name:      "",
 				Mobile:    correctMobile,
@@ -179,7 +179,7 @@ func Test_UserInterator_LoginRepositorySection(t *testing.T) {
 		}, err: nil},
 		expectedError: nil,
 		expectedResult: userdto.LoginResponse{
-			UserInfo: userdto.UserInfo{
+			UserInfo: userdto.Info{
 				ID:        1,
 				Name:      "",
 				Mobile:    correctMobile,
@@ -280,7 +280,7 @@ func Test_UserInterator_LoginCreateTokenSection(t *testing.T) {
 			refreshToken:  "refresh-token",
 			expectedError: nil,
 			expectedResult: userdto.LoginResponse{
-				UserInfo: userdto.UserInfo{
+				UserInfo: userdto.Info{
 					ID:        1,
 					Name:      "",
 					Mobile:    correctMobile,

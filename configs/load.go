@@ -10,8 +10,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-var m sync.Mutex
-
 type Option struct {
 	Prefix      string
 	Delimiter   string
@@ -21,6 +19,8 @@ type Option struct {
 }
 
 func Load(option Option) (*Config, error) {
+	var m sync.Mutex
+
 	m.Lock()
 	defer m.Unlock()
 
@@ -47,7 +47,6 @@ func Load(option Option) (*Config, error) {
 }
 
 func CollectFilesWithExt(dirPath, ext string) ([]string, error) {
-
 	entries, err := os.ReadDir(dirPath)
 	if err != nil {
 		return nil, fmt.Errorf("error reading directory: %w", err)

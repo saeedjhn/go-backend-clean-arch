@@ -7,7 +7,7 @@ import (
 	"go.opentelemetry.io/otel/metric"
 )
 
-func (o *OpenTelemetry) AsyncIntCounter(
+func (o *OpenTelemetry) AsyncIntCounter( //nolint:dupl // 10-48 lines are duplicate
 	name string,
 	count int,
 	description string,
@@ -18,7 +18,7 @@ func (o *OpenTelemetry) AsyncIntCounter(
 
 	val, ok := o.counterCache.Load(name)
 	if ok {
-		counter := val.(metric.Int64ObservableCounter)
+		counter := val.(metric.Int64ObservableCounter) //nolint:errcheck // nothing
 		_, err := o.meter.RegisterCallback(
 			func(_ context.Context, o metric.Observer) error {
 				o.ObserveInt64(counter, count64, metric.WithAttributes(otelAttrs...))
@@ -47,7 +47,7 @@ func (o *OpenTelemetry) AsyncIntCounter(
 	return nil
 }
 
-func (o *OpenTelemetry) AsyncIntUpDownCounter(
+func (o *OpenTelemetry) AsyncIntUpDownCounter( //nolint:dupl // 50-89 lines are duplicate
 	name string,
 	count int,
 	description string,
@@ -58,7 +58,7 @@ func (o *OpenTelemetry) AsyncIntUpDownCounter(
 
 	val, ok := o.counterCache.Load(name)
 	if ok {
-		counter := val.(metric.Int64ObservableUpDownCounter)
+		counter := val.(metric.Int64ObservableUpDownCounter) //nolint:errcheck // nothing
 		_, err := o.meter.RegisterCallback(
 			func(_ context.Context, o metric.Observer) error {
 				o.ObserveInt64(counter, count64, metric.WithAttributes(otelAttrs...))
