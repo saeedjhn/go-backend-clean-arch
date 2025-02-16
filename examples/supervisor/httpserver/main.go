@@ -10,8 +10,23 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/supervisor"
 )
 
+const (
+	_port              = ":8081"
+	_sleepDuration     = 10 * time.Second
+	_readTimeout       = 10 * time.Second
+	_readHeaderTimeout = 5 * time.Second
+	_writeTimeout      = 10 * time.Second
+	_idleTimeout       = 2 * time.Minute
+)
+
 func httpServer(ctx context.Context, processName string, terminateChannel chan<- string) error {
-	srv := &http.Server{Addr: ":8080"}
+	srv := &http.Server{
+		Addr:              _port,
+		ReadTimeout:       _readTimeout,
+		ReadHeaderTimeout: _readHeaderTimeout,
+		WriteTimeout:      _writeTimeout,
+		IdleTimeout:       _idleTimeout,
+	}
 
 	log.Println("server is running on 8080")
 

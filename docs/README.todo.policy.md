@@ -107,3 +107,4 @@ TODO: [TODO] Improve logging mechanism for better debugging.
 TODO: [FIXME] Fix timezone conversion issue for global users.
 ```
 
+### 11. Handle Error ([ERR])

@@ -126,12 +126,12 @@ func (r *DB) GetByMobile(ctx context.Context, mobile string) (entity.User, error
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return entity.User{}, richerror.New(_opMysqlUserGetByMobile).WithErr(err).
-				WithMessage(_errMsgDBRecordNotFound).
+				WithMessage(errMsgDBRecordNotFound).
 				WithKind(richerror.KindStatusNotFound)
 		}
 
 		return entity.User{}, richerror.New(_opMysqlUserGetByMobile).WithErr(err).
-			WithMessage(_errMsgDBCantScanQueryResult).
+			WithMessage(errMsgDBCantScanQueryResult).
 			WithKind(richerror.KindStatusInternalServerError)
 	}
 
@@ -162,12 +162,12 @@ func (r *DB) GetByID(ctx context.Context, id uint64) (entity.User, error) {
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return entity.User{}, richerror.New(_opMysqlUserGetByID).WithErr(err).
-				WithMessage(_errMsgDBRecordNotFound).
+				WithMessage(errMsgDBRecordNotFound).
 				WithKind(richerror.KindStatusNotFound)
 		}
 
 		return entity.User{}, richerror.New(_opMysqlUserGetByID).WithErr(err).
-			WithMessage(_errMsgDBCantScanQueryResult).
+			WithMessage(errMsgDBCantScanQueryResult).
 			WithKind(richerror.KindStatusInternalServerError)
 	}
 

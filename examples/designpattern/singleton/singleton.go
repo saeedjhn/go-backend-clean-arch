@@ -66,5 +66,5 @@ func main() {
 		// }(i)
 	}
 
-	fmt.Scanln()
+	time.Sleep(time.Second)
 }

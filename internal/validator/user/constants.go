@@ -18,5 +18,5 @@ const (
 	_descMinLen   = 10
 	_descMaxLen   = 1024
 
-	_errMsgInvalidInput = "invalid input"
+	errMsgInvalidInput = "invalid input"
 )

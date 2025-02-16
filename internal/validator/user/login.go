@@ -34,7 +34,7 @@ func (v Validator) ValidateLoginRequest(req userdto.LoginRequest) (map[string]st
 		}
 
 		return fieldErrors, richerror.New(_opUserValidatorValidateLoginRequest).WithErr(err).
-			WithMessage(_errMsgInvalidInput).
+			WithMessage(errMsgInvalidInput).
 			WithKind(richerror.KindStatusUnprocessableEntity)
 	}
 

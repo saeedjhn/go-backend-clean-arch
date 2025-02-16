@@ -18,8 +18,8 @@ func (i *Interactor) Create(ctx context.Context, req taskdto.CreateRequest) (tas
 
 	if !isExistsUser {
 		return taskdto.CreateResponse{}, richerror.New(_opTaskServiceCreate).
-			WithErr(errors.New(_errMsgUserNotFound)).
-			WithMessage(_errMsgUserNotFound).
+			WithErr(errors.New(errMsgUserNotFound)).
+			WithMessage(errMsgUserNotFound).
 			WithKind(richerror.KindStatusBadRequest)
 	}
 

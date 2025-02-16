@@ -28,7 +28,7 @@ func (v Validator) ValidateProfileRequest(req userdto.ProfileRequest) (map[strin
 		}
 
 		return fieldErrors, richerror.New(_opUserValidatorValidateProfileRequest).WithErr(err).
-			WithMessage(_errMsgInvalidInput).
+			WithMessage(errMsgInvalidInput).
 			WithKind(richerror.KindStatusUnprocessableEntity)
 	}
 

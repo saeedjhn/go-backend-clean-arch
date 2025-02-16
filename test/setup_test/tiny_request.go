@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-var _errResponseNotInitial = errors.New("response is not initialized")
+var errResponseNotInitial = errors.New("response is not initialized")
 
 type TinyRequest struct {
 	buf     bytes.Buffer
@@ -49,7 +49,7 @@ func (r *TinyRequest) StatusCode() int {
 
 func (r *TinyRequest) Body() ([]byte, error) {
 	if r.resp == nil {
-		return nil, _errResponseNotInitial
+		return nil, errResponseNotInitial
 	}
 
 	var closeErr error
@@ -73,7 +73,7 @@ func (r *TinyRequest) Body() ([]byte, error) {
 
 func (r *TinyRequest) UnmarshallBody(v interface{}) error {
 	if r.resp == nil {
-		return _errResponseNotInitial
+		return errResponseNotInitial
 	}
 
 	var closeErr error

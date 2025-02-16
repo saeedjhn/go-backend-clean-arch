@@ -45,7 +45,7 @@ func (v Validator) ValidateRegisterRequest(req userdto.RegisterRequest) (map[str
 		}
 
 		return fieldErrors, richerror.New(_opUserValidatorValidateRegisterRequest).WithErr(err).
-			WithMessage(_errMsgInvalidInput).
+			WithMessage(errMsgInvalidInput).
 			WithKind(richerror.KindStatusUnprocessableEntity)
 	}
 

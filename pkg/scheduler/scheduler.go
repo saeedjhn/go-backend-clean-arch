@@ -122,7 +122,7 @@ func (s *Scheduler) wrapTaskWithContext(ctx context.Context, fn func()) func() {
 
 func (s *Scheduler) checkInitialized() error {
 	if s.sch == nil {
-		return _errNotInitialized
+		return errNotInitialized
 	}
 
 	return nil

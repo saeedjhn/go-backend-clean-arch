@@ -28,7 +28,7 @@ func (v Validator) ValidateRefreshTokenRequest(req userdto.RefreshTokenRequest) 
 		}
 
 		return fieldErrors, richerror.New(_opUserValidatorValidateRefTokenRequest).WithErr(err).
-			WithMessage(_errMsgInvalidInput).
+			WithMessage(errMsgInvalidInput).
 			WithKind(richerror.KindStatusUnprocessableEntity)
 	}
 

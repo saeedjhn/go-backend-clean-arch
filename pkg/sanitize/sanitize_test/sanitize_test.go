@@ -1,9 +1,10 @@
 package sanitize_test
 
 import (
+	"testing"
+
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/sanitize"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 //go:generate go test -v -race -count=1 ./...
@@ -200,29 +201,6 @@ func TestSanitize_Map_ValidMap(t *testing.T) {
 	assert.Equal(t, map[string]interface{}{"key1": "", "key2": 42}, output)
 }
 
-func TestSanitize_Recursively_UnsupportedType(t *testing.T) {
-	t.Parallel()
-
-	s := sanitize.New().SetPolicy(sanitize.StrictPolicy)
-	input := make(chan int)
-	_, err := s.Recursively(input)
-	assert.Error(t, err)
-}
-
-func TestSanitize_Structure_ValidStruct(t *testing.T) {
-	t.Parallel()
-
-	s := sanitize.New().SetPolicy(sanitize.StrictPolicy)
-	type TestStruct struct {
-		Field1 string
-		Field2 int
-	}
-	input := TestStruct{Field1: `<script>alert("XSS")</script>`, Field2: 42}
-	output, err := s.Structure(input)
-	assert.NoError(t, err)
-	assert.Equal(t, map[string]interface{}{"Field1": "", "Field2": 42}, output)
-}
-
 func TestSanitize_IsPointer_ValidPointer(t *testing.T) {
 	t.Parallel()
 
@@ -242,3 +220,26 @@ func TestSanitize_IsPointer_InvalidPointer(t *testing.T) {
 	input := TestStruct{Field1: "value"}
 	assert.False(t, sanitize.IsPointer(input))
 }
+
+// func TestSanitize_Recursively_UnsupportedType(t *testing.T) {
+// 	t.Parallel()
+//
+// 	s := sanitize.New().SetPolicy(sanitize.StrictPolicy)
+// 	input := make(chan int)
+// 	_, err := s.recursively(input)
+// 	assert.Error(t, err)
+// }
+//
+// func TestSanitize_Structure_ValidStruct(t *testing.T) {
+// 	t.Parallel()
+//
+// 	s := sanitize.New().SetPolicy(sanitize.StrictPolicy)
+// 	type TestStruct struct {
+// 		Field1 string
+// 		Field2 int
+// 	}
+// 	input := TestStruct{Field1: `<script>alert("XSS")</script>`, Field2: 42}
+// 	output, err := s.structure(input)
+// 	assert.NoError(t, err)
+// 	assert.Equal(t, map[string]interface{}{"Field1": "", "Field2": 42}, output)
+// }

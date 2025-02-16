@@ -7,6 +7,6 @@ const (
 	_opMysqlTaskGetAllByUserID = "mysqltask_GetAllByUserID"
 	_opMysqlTaskIsExistsUser   = "mysqltask_IsExistsUser"
 
-	_errMsgDBRecordNotFound      = "record not found"
-	_errMsgDBCantScanQueryResult = "can't scan query result"
+	errMsgDBRecordNotFound      = "record not found"
+	errMsgDBCantScanQueryResult = "can't scan query result"
 )

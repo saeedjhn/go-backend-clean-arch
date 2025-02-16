@@ -77,46 +77,85 @@ func (im *Manager) Metrics(
 
 		attrs["grpc_status"] = status
 
-		im.collector.IntCounter(
+		err = im.collector.IntCounter(
 			ctx,
 			"grpc_errors_total",
 			_count,
 			"Total number of gRPC errors, categorized by method and status code",
 			attrs,
 		)
+		im.logErr(
+			"grpc_errors_total",
+			"Total number of gRPC errors, categorized by method and status code",
+			err,
+		)
+
 	}
 
-	im.collector.FloatHistogram(
+	err = im.collector.FloatHistogram(
 		ctx,
 		"grpc_request_duration_seconds",
 		time.Since(start).Seconds(),
 		"Duration of gRPC requests in seconds, categorized by method and status",
 		attrs,
 	)
+	im.logErr(
+		"grpc_request_duration_seconds",
+		"Duration of gRPC requests in seconds, categorized by method and status",
+		err,
+	)
 
-	im.collector.IntCounter(
+	err = im.collector.IntCounter(
 		ctx,
 		"grpc_requests_total",
 		_count,
 		"Total number of gRPC requests, categorized by method and status code",
 		attrs,
 	)
-
-	im.collector.IntCounter(
-		ctx,
-		fmt.Sprintf("grpc_method_%s_requests_total", info.FullMethod),
-		_count,
-		fmt.Sprintf("Total number of gRPC requests for the method %s", info.FullMethod),
-		attrs,
+	im.logErr(
+		"grpc_requests_total",
+		"Total number of gRPC requests, categorized by method and status code",
+		err,
 	)
 
-	im.collector.IntGauge(
+	nameIntCounter := fmt.Sprintf("grpc_method_%s_requests_total", info.FullMethod)
+	descIntCounter := fmt.Sprintf("Total number of gRPC requests for the method %s", info.FullMethod)
+	err = im.collector.IntCounter(
+		ctx,
+		nameIntCounter,
+		_count,
+		descIntCounter,
+		attrs,
+	)
+	im.logErr(
+		nameIntCounter,
+		descIntCounter,
+		err,
+	)
+
+	err = im.collector.IntGauge(
 		ctx,
 		"grpc_active_connections",
 		_count,
-		"Number of active gRPC connections",
+		"number of active grpc connections",
 		attrs,
+	)
+	im.logErr(
+		"grpc_active_connections",
+		"number of active grpc connections",
+		err,
 	)
 
 	return resp, err
+}
+
+func (im *Manager) logErr(metricName string, description string, err error) {
+	if err != nil {
+		im.logger.Errorf(
+			"GRPC.Interceptor.Collector.[Name: %s].[Description: %s].[Error: %v]",
+			metricName,
+			description,
+			err,
+		)
+	}
 }

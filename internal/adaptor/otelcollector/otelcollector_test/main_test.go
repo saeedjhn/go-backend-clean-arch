@@ -63,7 +63,7 @@ func simulateComputation(n int) {
 	slice := make([]int, n)
 
 	for k, v := range slice {
-		v = k * (2 + v)
+		_ = k * (2 + v)
 		time.Sleep(500 * time.Millisecond)
 	}
 }

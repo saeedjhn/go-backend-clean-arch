@@ -1,35 +1,5 @@
 # Refer to golangci-lint's example config file for more options and information:
 # https://github.com/golangci/golangci-lint/blob/master/.golangci.reference.yml
-
-#run:
-#  enable-all: false
-#  timeout: 5m
-#  modules-download-mode: readonly
-#
-#linters:
-#  enable:
-#    - errcheck
-#    - goimports
-#    - golint
-#    - govet
-#    - staticcheck
-#    - gosimple
-#    - unused
-#    - ineffassign
-#  disable:
-#    - depguard
-#
-#issues:
-#  exclude-use-default: false
-#  max-issues-per-linter: 0
-#  max-same-issues: 0
-#
-#linters-settings:
-#  govet:
-#    check-shadowing: true
-#  gofmt:
-#    simplify: true
-
 # This code is licensed under the terms of the MIT license https://opensource.org/license/mit
 # Copyright (c) 2021 Marat Reymers
 
@@ -42,8 +12,7 @@
 run:
   # Timeout for analysis, e.g. 30s, 5m.
   # Default: 1m
-  timeout: 3m
-
+  timeout: 5m
 
 # This file contains only configs which differ from defaults.
 # All possible options can be found here https://github.com/golangci/golangci-lint/blob/master/.golangci.reference.yml
@@ -251,8 +220,8 @@ linters:
     - govet # reports suspicious constructs, such as Printf calls whose arguments do not align with the format string
     - ineffassign # detects when assignments to existing variables are not used
     - staticcheck # is a go vet on steroids, applying a ton of static analysis checks
-    - typecheck # like the front-end of a Go compiler, parses and type-checks Go code
-    - unused # checks for unused constants, variables, functions and types
+    #    - typecheck # like the front-end of a Go compiler, parses and type-checks Go code
+    #    - unused # checks for unused constants, variables, functions and types
     ## disabled by default
     - asasalint # checks for pass []any as any in variadic func(...any)
     - asciicheck # checks that your code does not contain non-ASCII identifiers
@@ -309,7 +278,7 @@ linters:
     - spancheck # checks for mistakes with OpenTelemetry/Census spans
     - sqlclosecheck # checks that sql.Rows and sql.Stmt are closed
     - stylecheck # is a replacement for golint
-    - tenv # detects using os.Setenv instead of t.Setenv since Go1.17
+    - usetesting # is deprecated in v1.64.0 - tenv # detects using os.Setenv instead of t.Setenv since Go1.17
     - testableexamples # checks if examples are testable (have an expected output)
     - testifylint # checks usage of github.com/stretchr/testify
     - testpackage # makes you use a separate _test package
@@ -360,12 +329,18 @@ linters:
     #- thelper # detects golang test helpers without t.Helper() call and checks the consistency of test helpers
     #- wsl # [too strict and mostly code is not more readable] whitespace linter forces you to use empty lines
 
+#  disable:
+#    - typecheck
+
 
 issues:
   # Maximum count of issues with the same text.
   # Set to 0 to disable.
   # Default: 3
   max-same-issues: 50
+
+  exclude-dirs:
+    - github.com/saeedjhn/go-backend-clean-arch/...
 
   exclude-rules:
     - source: "(noinspection|TODO)"

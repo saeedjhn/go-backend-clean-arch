@@ -74,12 +74,12 @@ func (r *DB) GetByID(ctx context.Context, id uint64) (entity2.Task, error) {
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return entity2.Task{}, richerror.New(_opMysqlTaskGetByID).WithErr(err).
-				WithMessage(_errMsgDBRecordNotFound).
+				WithMessage(errMsgDBRecordNotFound).
 				WithKind(richerror.KindStatusNotFound)
 		}
 
 		return entity2.Task{}, richerror.New(_opMysqlTaskGetByID).WithErr(err).
-			WithMessage(_errMsgDBCantScanQueryResult).
+			WithMessage(errMsgDBCantScanQueryResult).
 			WithKind(richerror.KindStatusInternalServerError)
 	}
 
@@ -104,12 +104,12 @@ func (r *DB) GetAllByUserID(ctx context.Context, userID uint64) ([]entity2.Task,
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return []entity2.Task{}, richerror.New(_opMysqlTaskGetByID).WithErr(err).
-				WithMessage(_errMsgDBRecordNotFound).
+				WithMessage(errMsgDBRecordNotFound).
 				WithKind(richerror.KindStatusNotFound)
 		}
 
 		return nil, richerror.New(_opMysqlTaskGetAllByUserID).WithErr(err).
-			WithMessage(_errMsgDBCantScanQueryResult).
+			WithMessage(errMsgDBCantScanQueryResult).
 			WithKind(richerror.KindStatusInternalServerError)
 	}
 
@@ -132,12 +132,12 @@ func (r *DB) GetAll(ctx context.Context) ([]entity2.Task, error) {
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return []entity2.Task{}, richerror.New(_opMysqlTaskGetByID).WithErr(err).
-				WithMessage(_errMsgDBRecordNotFound).
+				WithMessage(errMsgDBRecordNotFound).
 				WithKind(richerror.KindStatusNotFound)
 		}
 
 		return nil, richerror.New(_opMysqlTaskGetAll).WithErr(err).
-			WithMessage(_errMsgDBCantScanQueryResult).
+			WithMessage(errMsgDBCantScanQueryResult).
 			WithKind(richerror.KindStatusInternalServerError)
 	}
 

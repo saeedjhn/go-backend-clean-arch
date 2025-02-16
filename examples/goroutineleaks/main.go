@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
-	_ "net/http/pprof" //nolint:gosec,typecheck // nothing
+	_ "net/http/pprof" // #nosec G108
 	"runtime"
 	"time"
 )

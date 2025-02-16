@@ -29,7 +29,7 @@ func (i *Interactor) Login(ctx context.Context, req user.LoginRequest) (user.Log
 	err = CompareHash(u.Password, req.Password)
 	if err != nil {
 		return user.LoginResponse{}, richerror.New(_opUserServiceLogin).WithErr(err).
-			WithMessage(_errMsgIncorrectPassword).
+			WithMessage(errMsgIncorrectPassword).
 			WithKind(richerror.KindStatusBadRequest)
 	}
 

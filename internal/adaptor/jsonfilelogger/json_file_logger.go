@@ -27,7 +27,7 @@ func (l *L) Configure() *L {
 	// if err := l.sugar.Sync(); err != nil && !errors.Is(err, os.ErrInvalid) {
 	// 	l.sugar.Error(err)
 	// }
-	l.sugar.Sync()
+	_ = l.sugar.Sync() // #nosec G104
 
 	return l
 }

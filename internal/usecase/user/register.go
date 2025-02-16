@@ -30,8 +30,8 @@ func (i *Interactor) Register(ctx context.Context, req user.RegisterRequest) (us
 	if !isUnique {
 		return user.RegisterResponse{},
 			richerror.New(_opUserServiceRegister).
-				WithErr(errors.New(_errMsgMobileIsNotUnique)).
-				WithMessage(_errMsgMobileIsNotUnique).
+				WithErr(errors.New(errMsgMobileIsNotUnique)).
+				WithMessage(errMsgMobileIsNotUnique).
 				WithKind(richerror.KindStatusBadRequest)
 	}
 

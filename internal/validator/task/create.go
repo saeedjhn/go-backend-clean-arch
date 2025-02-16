@@ -33,7 +33,7 @@ func (v Validator) ValidateCreateRequest(req taskdto.CreateRequest) (map[string]
 		}
 
 		return fieldErrors, richerror.New(_opTaskValidatorValidateCreateRequest).WithErr(err).
-			WithMessage(_errMsgInvalidInput).
+			WithMessage(errMsgInvalidInput).
 			WithKind(richerror.KindStatusUnprocessableEntity)
 	}
 

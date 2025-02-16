@@ -7,6 +7,26 @@ import (
 	"github.com/google/uuid"
 )
 
+// func GenCode(length int, chars string) (string, error) {
+// 	if length <= 0 {
+// 		return "", errMustBeGTZero
+// 	}
+// 	if len(chars) == 0 {
+// 		return "", errCannotEmpty
+// 	}
+//
+// 	result := make([]byte, length)
+// 	for i := 0; i < length; i++ {
+// 		n, err := rand.Int(rand.Reader, big.NewInt(int64(len(chars)))) //nolint:typecheck // nothing
+// 		if err != nil {
+// 			return "", err
+// 		}
+// 		result[i] = chars[n.Int64()]
+// 	}
+//
+// 	return string(result), nil
+// }
+
 func GenCode(length int, chars string) (string, error) {
 	if length <= 0 {
 		return "", errMustBeGTZero
@@ -19,6 +39,7 @@ func GenCode(length int, chars string) (string, error) {
 	result := make([]byte, length)
 
 	for i := 0; i < length; i++ {
+		// #nosec G404 - Using math/rand for non-cryptographic random generation
 		result[i] = chars[rand.Intn(len(chars))]
 	}
 
