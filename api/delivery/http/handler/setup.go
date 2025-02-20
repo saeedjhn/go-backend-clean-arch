@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/labstack/echo/v4"
 	adminhandler "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler/admin"
+	csrfhandler "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler/csrf"
 	healthcheckhandler "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler/healthcheck"
 	prometheushandler "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler/prometheus"
 	taskhandler "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler/user/task"
@@ -15,5 +16,6 @@ func Setup(app *bootstrap.Application, e *echo.Echo) {
 	userhandler.Setup(app, e)
 	taskhandler.Setup(app, e)
 	prometheushandler.Setup(app, e)
+	csrfhandler.Setup(app, e)
 	healthcheckhandler.Setup(app, e)
 }
