@@ -1,10 +1,10 @@
-package sanitize
+package sanitizer
 
 import (
 	"reflect"
 )
 
-// var SanitizerInstance = bluemonday.StrictPolicy()
+// var SanitizerInstance = bluemonday.XSSStrictPolicy()
 //
 //	func sanitizeRecursively(param interface{}) (interface{}, error) {
 //		if param == nil {

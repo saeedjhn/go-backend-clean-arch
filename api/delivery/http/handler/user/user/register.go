@@ -3,12 +3,10 @@ package user //nolint:dupl // 1-79 lines are duplicate
 import (
 	"net/http"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/bind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/sanitize"
-
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
@@ -28,17 +26,6 @@ func (h *Handler) Register(c echo.Context) error {
 		return echo.NewHTTPError(
 			http.StatusBadRequest,
 			entity.NewErrorResponse(msg.ErrMsg400BadRequest, bind.CheckErrorFromBind(err).Error()).
-				WithMeta(map[string]interface{}{"request": req}),
-		)
-	}
-
-	err := sanitize.New().
-		SetPolicy(sanitize.StrictPolicy).
-		Struct(&req)
-	if err != nil {
-		return echo.NewHTTPError(
-			http.StatusBadRequest,
-			entity.NewErrorResponse(msg.ErrMsg400BadRequest, err.Error()).
 				WithMeta(map[string]interface{}{"request": req}),
 		)
 	}

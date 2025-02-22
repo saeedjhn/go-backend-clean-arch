@@ -7,13 +7,11 @@ import (
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
+	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/bind"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/sanitize"
-
-	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
 func (h *Handler) Login(c echo.Context) error {
@@ -33,16 +31,16 @@ func (h *Handler) Login(c echo.Context) error {
 		)
 	}
 
-	err := sanitize.New().
-		SetPolicy(sanitize.StrictPolicy).
-		Struct(&req)
-	if err != nil {
-		return echo.NewHTTPError(
-			http.StatusBadRequest,
-			entity.NewErrorResponse(msg.ErrMsg400BadRequest, err.Error()).
-				WithMeta(map[string]interface{}{"request": req}),
-		)
-	}
+	// err := sanitizer.New().
+	// 	SetPolicy(sanitizer.XSSStrictPolicy).
+	// 	Struct(&req)
+	// if err != nil {
+	// 	return echo.NewHTTPError(
+	// 		http.StatusBadRequest,
+	// 		entity.NewErrorResponse(msg.ErrMsg400BadRequest, err.Error()).
+	// 			WithMeta(map[string]interface{}{"request": req}),
+	// 	)
+	// }
 
 	resp, err := h.userIntr.Login(ctx, req)
 	if err != nil {
