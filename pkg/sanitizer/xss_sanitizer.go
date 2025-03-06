@@ -1,8 +1,9 @@
 package sanitizer
 
 import (
-	"github.com/microcosm-cc/bluemonday"
 	"regexp"
+
+	"github.com/microcosm-cc/bluemonday"
 )
 
 // SanitizeStrictPolicy - bluemonday.XSSStrictPolicy() which can be thought of as equivalent to stripping all HTML
