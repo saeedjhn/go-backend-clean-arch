@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/persistance/db/pq"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
 
 	migrate "github.com/rubenv/sql-migrate"
 )

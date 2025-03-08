@@ -2,7 +2,7 @@ package authentication
 
 import (
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/saeedjhn/go-domain-driven-design/internal/types"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
 )
 
 type Claims struct {

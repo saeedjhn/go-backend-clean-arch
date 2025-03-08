@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/scheduler"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/scheduler"
 	"github.com/stretchr/testify/assert"
 )
 

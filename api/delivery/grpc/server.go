@@ -4,18 +4,18 @@ import (
 	"fmt"
 	"net"
 
-	userservice "github.com/saeedjhn/go-domain-driven-design/api/delivery/grpc/service/user/user"
+	userservice "github.com/saeedjhn/go-backend-clean-arch/api/delivery/grpc/service/user/user"
 
 	grpcctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
-	"github.com/saeedjhn/go-domain-driven-design/api/delivery/grpc/interceptor"
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/grpc/interceptor"
 
 	grpcrecovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpcprometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
-	"github.com/saeedjhn/go-domain-driven-design/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/reflection"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/bootstrap"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"google.golang.org/grpc"
 )
 

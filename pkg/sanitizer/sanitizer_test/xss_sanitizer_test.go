@@ -3,7 +3,7 @@ package sanitizer_test
 import (
 	"testing"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/sanitizer"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/sanitizer"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

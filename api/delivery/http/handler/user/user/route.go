@@ -2,7 +2,7 @@ package user
 
 import (
 	"github.com/labstack/echo/v4"
-	mymiddleware "github.com/saeedjhn/go-domain-driven-design/api/delivery/http/middleware"
+	mymiddleware "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/middleware"
 )
 
 func (h *Handler) SetRoutes(e *echo.Echo) {

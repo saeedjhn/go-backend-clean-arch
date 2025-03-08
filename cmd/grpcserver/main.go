@@ -8,10 +8,10 @@ import (
 	"os/signal"
 	"path/filepath"
 
-	"github.com/saeedjhn/go-domain-driven-design/api/delivery/grpc"
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/grpc"
 
-	"github.com/saeedjhn/go-domain-driven-design/configs"
-	"github.com/saeedjhn/go-domain-driven-design/internal/bootstrap"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 )
 
 func main() {

@@ -5,11 +5,11 @@ import (
 	"errors"
 	"testing"
 
-	setuptest "github.com/saeedjhn/go-domain-driven-design/test/setup_test"
+	setuptest "github.com/saeedjhn/go-backend-clean-arch/test/setup_test"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
-	mysqluser "github.com/saeedjhn/go-domain-driven-design/internal/repository/mysql/user"
-	"github.com/saeedjhn/go-domain-driven-design/internal/repository/mysql/user/user_test/doubles"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	mysqluser "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/user"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/user/user_test/doubles"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

@@ -1,15 +1,15 @@
 package bootstrap
 
 import (
-	"github.com/saeedjhn/go-domain-driven-design/configs"
-	mysqltask "github.com/saeedjhn/go-domain-driven-design/internal/repository/mysql/task"
-	mysqluser "github.com/saeedjhn/go-domain-driven-design/internal/repository/mysql/user"
-	redisuser "github.com/saeedjhn/go-domain-driven-design/internal/repository/redis/user"
-	contract2 "github.com/saeedjhn/go-domain-driven-design/internal/sharedkernel/contract"
-	authusecase "github.com/saeedjhn/go-domain-driven-design/internal/usecase/authentication"
-	taskusecase "github.com/saeedjhn/go-domain-driven-design/internal/usecase/task"
-	userusecase "github.com/saeedjhn/go-domain-driven-design/internal/usecase/user"
-	uservalidator "github.com/saeedjhn/go-domain-driven-design/internal/validator/user"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	mysqltask "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/task"
+	mysqluser "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/user"
+	redisuser "github.com/saeedjhn/go-backend-clean-arch/internal/repository/redis/user"
+	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
+	taskusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/task"
+	userusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user"
+	uservalidator "github.com/saeedjhn/go-backend-clean-arch/internal/validator/user"
 )
 
 type Usecase struct {
@@ -20,8 +20,8 @@ type Usecase struct {
 
 func NewUsecase(
 	config *configs.Config,
-	_ contract2.Logger,
-	trc contract2.Tracer,
+	_ contract.Logger,
+	trc contract.Tracer,
 	cache Cache,
 	db DB,
 ) *Usecase {

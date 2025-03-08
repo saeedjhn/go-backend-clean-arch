@@ -4,12 +4,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/types"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
 
 	"github.com/golang-jwt/jwt/v5"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
-	"github.com/saeedjhn/go-domain-driven-design/internal/usecase/authentication"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

@@ -3,9 +3,9 @@ package task
 import (
 	"time"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/types"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 )
 
 type Info struct {

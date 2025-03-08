@@ -60,7 +60,7 @@ We can run this Go Backend Clean Architecture project with or without Docker. He
 cd your-workspace
 
 # Clone this project into your workspace
-git clone https://github.com/saeedjhn/go-domain-driven-design.git
+git clone https://github.com/saeedjhn/go-backend-clean-arch.git
 
 # Move to the project root directory
 cd go-backend-clean-arch

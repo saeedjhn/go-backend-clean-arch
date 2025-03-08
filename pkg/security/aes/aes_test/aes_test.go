@@ -3,7 +3,7 @@ package aes_test
 import (
 	"testing"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/security/aes"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/security/aes"
 )
 
 //go:generate go test -v -race -count=1 ./...

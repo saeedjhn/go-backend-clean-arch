@@ -3,9 +3,9 @@ package task
 import (
 	"errors"
 
-	taskdto "github.com/saeedjhn/go-domain-driven-design/internal/dto/task"
+	taskdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )

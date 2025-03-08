@@ -1,9 +1,9 @@
 package bootstrap
 
 import (
-	"github.com/saeedjhn/go-domain-driven-design/configs"
-	"github.com/saeedjhn/go-domain-driven-design/internal/adaptor/jsonfilelogger"
-	"github.com/saeedjhn/go-domain-driven-design/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 )
 
 func NewLogger(configApp configs.Application, configLogger jsonfilelogger.Config) contract.Logger {

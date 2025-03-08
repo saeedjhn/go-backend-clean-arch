@@ -8,10 +8,10 @@ import (
 	"os/signal"
 	"path/filepath"
 
-	grpcserver "github.com/saeedjhn/go-domain-driven-design/api/delivery/grpc"
-	httpserver "github.com/saeedjhn/go-domain-driven-design/api/delivery/http"
-	"github.com/saeedjhn/go-domain-driven-design/configs"
-	"github.com/saeedjhn/go-domain-driven-design/internal/bootstrap"
+	grpcserver "github.com/saeedjhn/go-backend-clean-arch/api/delivery/grpc"
+	httpserver "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 )
 
 func main() { //nolint:funlen // +100 lines

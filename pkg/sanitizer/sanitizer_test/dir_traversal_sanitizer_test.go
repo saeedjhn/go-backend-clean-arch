@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/sanitizer"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/sanitizer"
 )
 
 func TestDirTraversalSanitizer_Sanitize(t *testing.T) {

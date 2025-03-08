@@ -5,11 +5,11 @@ import (
 	"testing"
 	"time"
 
-	userdto "github.com/saeedjhn/go-domain-driven-design/internal/dto/user"
-	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
-	userusecase "github.com/saeedjhn/go-domain-driven-design/internal/usecase/user"
-	"github.com/saeedjhn/go-domain-driven-design/internal/usecase/user/user_test/doubles"
-	"github.com/saeedjhn/go-domain-driven-design/internal/usecase/user/user_test/mocks"
+	userdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	userusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user/user_test/doubles"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user/user_test/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

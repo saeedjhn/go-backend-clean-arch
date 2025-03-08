@@ -3,9 +3,9 @@ package task
 import (
 	"context"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
-	taskusecase "github.com/saeedjhn/go-domain-driven-design/internal/usecase/task"
-	"github.com/saeedjhn/go-domain-driven-design/pkg/persistance/db/mysql"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	taskusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/task"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 )
 
 type DB struct {

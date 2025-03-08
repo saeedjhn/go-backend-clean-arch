@@ -3,14 +3,14 @@ package bootstrap
 import (
 	"context"
 
-	contract2 "github.com/saeedjhn/go-domain-driven-design/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/persistance/cache/redis"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 
-	"github.com/saeedjhn/go-domain-driven-design/configs"
-	"github.com/saeedjhn/go-domain-driven-design/pkg/persistance/cache/inmemory"
-	"github.com/saeedjhn/go-domain-driven-design/pkg/persistance/db/mysql"
-	"github.com/saeedjhn/go-domain-driven-design/pkg/persistance/db/pq"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/inmemory"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
 )
 
 type Cache struct {
@@ -25,9 +25,9 @@ type DB struct {
 
 type Application struct {
 	Config    *configs.Config
-	Logger    contract2.Logger
-	Trc       contract2.Tracer
-	Collector contract2.Collector
+	Logger    contract.Logger
+	Trc       contract.Tracer
+	Collector contract.Collector
 	Cache     Cache
 	DB        DB
 	Usecase   *Usecase

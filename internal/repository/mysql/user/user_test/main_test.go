@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/persistance/db/mysql"
-	setuptest "github.com/saeedjhn/go-domain-driven-design/test/setup_test"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
+	setuptest "github.com/saeedjhn/go-backend-clean-arch/test/setup_test"
 )
 
 const (

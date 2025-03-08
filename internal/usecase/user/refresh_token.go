@@ -3,11 +3,11 @@ package user
 import (
 	"context"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/dto/user"
-	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/msg"
-	"github.com/saeedjhn/go-domain-driven-design/pkg/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
 func (i *Interactor) RefreshToken(

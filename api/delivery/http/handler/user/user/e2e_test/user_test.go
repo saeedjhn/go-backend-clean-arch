@@ -8,11 +8,11 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
-	userdto "github.com/saeedjhn/go-domain-driven-design/internal/dto/user"
+	userdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
-	setuptest "github.com/saeedjhn/go-domain-driven-design/test/setup_test"
+	setuptest "github.com/saeedjhn/go-backend-clean-arch/test/setup_test"
 
 	"github.com/stretchr/testify/suite"
 )

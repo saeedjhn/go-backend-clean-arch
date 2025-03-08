@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/persistance/cache/redis"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 )
 
 type DB struct {

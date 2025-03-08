@@ -5,7 +5,7 @@ package mocks
 import (
 	context "context"
 
-	entity "github.com/saeedjhn/go-domain-driven-design/internal/entity"
+	entity "github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	mock "github.com/stretchr/testify/mock"
 )
 

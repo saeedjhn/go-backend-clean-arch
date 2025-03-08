@@ -3,7 +3,7 @@ package admin
 import (
 	"context"
 
-	admindto "github.com/saeedjhn/go-domain-driven-design/internal/dto/admin"
+	admindto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/admin"
 )
 
 func (i *Interactor) GetByID(

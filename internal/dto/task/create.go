@@ -1,6 +1,6 @@
 package task
 
-import "github.com/saeedjhn/go-domain-driven-design/internal/types"
+import "github.com/saeedjhn/go-backend-clean-arch/internal/types"
 
 type CreateRequest struct {
 	UserID      types.ID `json:"user_id"`

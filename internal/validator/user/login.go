@@ -3,9 +3,9 @@ package user
 import (
 	"errors"
 
-	userdto "github.com/saeedjhn/go-domain-driven-design/internal/dto/user"
+	userdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )

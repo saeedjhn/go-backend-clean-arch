@@ -6,12 +6,12 @@ import (
 	"net/http"
 	"time"
 
-	contract2 "github.com/saeedjhn/go-domain-driven-design/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/httpstatus"
-	"github.com/saeedjhn/go-domain-driven-design/pkg/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 
-	"github.com/saeedjhn/go-domain-driven-design/configs"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 )
@@ -20,14 +20,14 @@ const _count = 1
 
 type Manager struct {
 	cfg       *configs.Config
-	logger    contract2.Logger
-	collector contract2.Collector
+	logger    contract.Logger
+	collector contract.Collector
 }
 
 func New(
 	cfg *configs.Config,
-	logger contract2.Logger,
-	collector contract2.Collector,
+	logger contract.Logger,
+	collector contract.Collector,
 ) *Manager {
 	return &Manager{
 		logger:    logger,

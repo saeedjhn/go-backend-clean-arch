@@ -3,13 +3,13 @@ package user
 import (
 	"context"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
+	userusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
-	authusecase "github.com/saeedjhn/go-domain-driven-design/internal/usecase/authentication"
-	userusecase "github.com/saeedjhn/go-domain-driven-design/internal/usecase/user"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/dto/user"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 )
 
 type AuthInteractor interface {

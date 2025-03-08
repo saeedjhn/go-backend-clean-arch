@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/saeedjhn/go-domain-driven-design/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
 )
 
 const testdataPath = "testdata"

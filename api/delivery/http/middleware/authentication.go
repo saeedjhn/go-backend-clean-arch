@@ -3,8 +3,8 @@ package middleware
 import (
 	mw "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
-	"github.com/saeedjhn/go-domain-driven-design/configs"
-	"github.com/saeedjhn/go-domain-driven-design/internal/usecase/authentication"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 )
 
 func Authentication(

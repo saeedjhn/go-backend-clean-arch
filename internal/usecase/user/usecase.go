@@ -4,16 +4,16 @@ import (
 	"context"
 	"time"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/security/bcrypt"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/security/bcrypt"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/dto/user"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 
-	"github.com/saeedjhn/go-domain-driven-design/configs"
-	"github.com/saeedjhn/go-domain-driven-design/internal/usecase/authentication"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 )
 
 //go:generate mockery --name AuthInteractor

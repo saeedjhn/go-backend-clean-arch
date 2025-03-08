@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/richerror"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 	"github.com/stretchr/testify/assert"
 )
 

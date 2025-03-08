@@ -3,12 +3,11 @@ package task
 import (
 	"context"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/sharedkernel/contract"
+	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
+	taskusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/task"
 
-	authusecase "github.com/saeedjhn/go-domain-driven-design/internal/usecase/authentication"
-	taskusecase "github.com/saeedjhn/go-domain-driven-design/internal/usecase/task"
-
-	"github.com/saeedjhn/go-domain-driven-design/internal/dto/task"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
 )
 
 type Interactor interface {

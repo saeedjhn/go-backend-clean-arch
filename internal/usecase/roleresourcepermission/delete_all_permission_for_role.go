@@ -3,7 +3,7 @@ package roleresourcepermission
 import (
 	"context"
 
-	roleresourcepermissiondto "github.com/saeedjhn/go-domain-driven-design/internal/dto/roleresourcepermission"
+	roleresourcepermissiondto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/roleresourcepermission"
 )
 
 func (i *Interactor) DeleteAllPermissionForRole(

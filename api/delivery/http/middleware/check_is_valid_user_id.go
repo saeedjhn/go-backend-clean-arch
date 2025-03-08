@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
-	"github.com/saeedjhn/go-domain-driven-design/pkg/msg"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/claim"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
 
 	"github.com/labstack/echo/v4"
 )

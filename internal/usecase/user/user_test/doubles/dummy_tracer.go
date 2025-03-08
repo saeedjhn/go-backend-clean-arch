@@ -3,7 +3,7 @@ package doubles
 import (
 	"context"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 )
 
 type DummySpan struct {

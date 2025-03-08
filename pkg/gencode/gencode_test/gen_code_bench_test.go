@@ -3,7 +3,7 @@ package gencode_test
 import (
 	"testing"
 
-	"github.com/saeedjhn/go-domain-driven-design/pkg/gencode"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/gencode"
 )
 
 //go:generate go test -v -race -count=1 -bench=. -benchmem -run BenchmarkGenCode

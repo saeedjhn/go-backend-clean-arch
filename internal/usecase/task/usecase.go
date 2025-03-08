@@ -3,9 +3,9 @@ package task
 import (
 	"context"
 
-	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 
-	"github.com/saeedjhn/go-domain-driven-design/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
 )
 
 type Repository interface {
