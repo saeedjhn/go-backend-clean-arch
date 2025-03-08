@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/taskqueue"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/taskqueue"
 )
 
 const _concurrency = 10

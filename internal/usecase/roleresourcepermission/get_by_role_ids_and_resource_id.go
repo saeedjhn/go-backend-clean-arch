@@ -3,7 +3,7 @@ package roleresourcepermission
 import (
 	"context"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
 )
 
 func (i *Interactor) GetByRoleIDsAndResourceID(

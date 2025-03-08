@@ -1,6 +1,6 @@
 package admin
 
-import "github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
+import "github.com/saeedjhn/go-domain-driven-design/pkg/persistance/db/mysql"
 
 type DB struct {
 	conn *mysql.DB

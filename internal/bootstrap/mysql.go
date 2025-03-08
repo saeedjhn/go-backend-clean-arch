@@ -3,7 +3,7 @@ package bootstrap
 import (
 	"fmt"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/persistance/db/mysql"
 )
 
 func NewMysqlConnection(c mysql.Config) (*mysql.DB, error) {

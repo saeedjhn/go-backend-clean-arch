@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-domain-driven-design/internal/sharedkernel/contract"
 )
 
 type Process struct {

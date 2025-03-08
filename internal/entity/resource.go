@@ -3,7 +3,7 @@ package entity
 import (
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+	"github.com/saeedjhn/go-domain-driven-design/internal/types"
 )
 
 // Resource represents a protectable entity within the system.

@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	setuptest "github.com/saeedjhn/go-backend-clean-arch/test/setup_test"
+	setuptest "github.com/saeedjhn/go-domain-driven-design/test/setup_test"
 )
 
 const (

@@ -3,7 +3,7 @@ package user
 import (
 	"context"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
+	"github.com/saeedjhn/go-domain-driven-design/internal/dto/user"
 )
 
 func (i *Interactor) Profile(ctx context.Context, req user.ProfileRequest) (user.ProfileResponse, error) {

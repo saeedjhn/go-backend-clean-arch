@@ -1,4 +1,4 @@
-module github.com/saeedjhn/go-backend-clean-arch
+module github.com/saeedjhn/go-domain-driven-design
 
 go 1.23.2
 

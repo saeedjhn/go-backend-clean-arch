@@ -3,18 +3,18 @@ package configs
 import (
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/otelcollector"
+	"github.com/saeedjhn/go-domain-driven-design/internal/adaptor/otelcollector"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
+	"github.com/saeedjhn/go-domain-driven-design/internal/adaptor/jsonfilelogger"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/oteltracer"
+	"github.com/saeedjhn/go-domain-driven-design/internal/adaptor/oteltracer"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mongo"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/persistance/cache/redis"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/persistance/db/mongo"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/persistance/db/mysql"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/persistance/db/pq"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
+	"github.com/saeedjhn/go-domain-driven-design/internal/usecase/authentication"
 )
 
 type Env string

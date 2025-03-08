@@ -3,7 +3,7 @@ package middleware
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-domain-driven-design/configs"
 )
 
 func CORS(config configs.CORS) echo.MiddlewareFunc {

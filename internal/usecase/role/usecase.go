@@ -3,10 +3,11 @@ package role
 import (
 	"context"
 
-	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-domain-driven-design/internal/sharedkernel/contract"
+
+	"github.com/saeedjhn/go-domain-driven-design/configs"
+	"github.com/saeedjhn/go-domain-driven-design/internal/dto"
+	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
 )
 
 //go:generate mockery --name Validator

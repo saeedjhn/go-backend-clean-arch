@@ -5,11 +5,11 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+	"github.com/saeedjhn/go-domain-driven-design/internal/types"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authorization"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authorization/authorization_test/mocks"
+	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
+	"github.com/saeedjhn/go-domain-driven-design/internal/usecase/authorization"
+	"github.com/saeedjhn/go-domain-driven-design/internal/usecase/authorization/authorization_test/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"

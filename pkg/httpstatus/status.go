@@ -3,7 +3,7 @@ package httpstatus //nolint:cyclop // the average complexity for the package htt
 import (
 	"net/http"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/richerror"
 )
 
 func MapkindToHTTPStatusCode(k richerror.Kind) int {

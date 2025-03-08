@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/supervisor"
+	"github.com/saeedjhn/go-domain-driven-design/internal/adaptor/jsonfilelogger"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/supervisor"
 )
 
 const (

@@ -5,15 +5,15 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/handler"
+	"github.com/saeedjhn/go-domain-driven-design/api/delivery/http/handler"
 
 	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4/middleware"
-	mymiddleware "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/middleware"
-	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	mymiddleware "github.com/saeedjhn/go-domain-driven-design/api/delivery/http/middleware"
+	"github.com/saeedjhn/go-domain-driven-design/configs"
 
 	"github.com/labstack/echo/v4"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
+	"github.com/saeedjhn/go-domain-driven-design/internal/bootstrap"
 )
 
 type Server struct {

@@ -3,7 +3,7 @@ package entity
 import (
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+	"github.com/saeedjhn/go-domain-driven-design/internal/types"
 )
 
 // RoleWildCardPermission defines permissions for a role on a pattern of resources.

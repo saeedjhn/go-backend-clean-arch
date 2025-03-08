@@ -3,7 +3,7 @@ package dto_test
 import (
 	"testing"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto"
+	"github.com/saeedjhn/go-domain-driven-design/internal/dto"
 	"github.com/stretchr/testify/assert"
 )
 

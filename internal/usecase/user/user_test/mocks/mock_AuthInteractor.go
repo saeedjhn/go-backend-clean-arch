@@ -3,8 +3,8 @@
 package mocks
 
 import (
-	entity "github.com/saeedjhn/go-backend-clean-arch/internal/entity"
-	auth "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
+	entity "github.com/saeedjhn/go-domain-driven-design/internal/entity"
+	auth "github.com/saeedjhn/go-domain-driven-design/internal/usecase/authentication"
 
 	mock "github.com/stretchr/testify/mock"
 )

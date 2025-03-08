@@ -3,7 +3,7 @@ package task
 import (
 	"context"
 
-	taskdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
+	taskdto "github.com/saeedjhn/go-domain-driven-design/internal/dto/task"
 )
 
 func (i *Interactor) GetAllByUserID(

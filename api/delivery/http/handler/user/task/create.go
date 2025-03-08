@@ -3,17 +3,17 @@ package task
 import (
 	"net/http"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
+	"github.com/saeedjhn/go-domain-driven-design/internal/dto/task"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/claim"
 
 	"github.com/labstack/echo/v4"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/bind"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/bind"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/httpstatus"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/msg"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/richerror"
 )
 
 func (h *Handler) Create(c echo.Context) error {

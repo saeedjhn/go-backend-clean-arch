@@ -5,18 +5,18 @@ import (
 	"database/sql"
 	"errors"
 
-	mysqlrepo "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql"
+	"github.com/saeedjhn/go-domain-driven-design/internal/sharedkernel/contract"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+	mysqlrepo "github.com/saeedjhn/go-domain-driven-design/internal/repository/mysql"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-domain-driven-design/internal/types"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/persistance/db/mysql"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/richerror"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/msg"
 )
 
 type DB struct {

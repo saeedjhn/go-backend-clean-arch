@@ -3,11 +3,12 @@ package user
 import (
 	"context"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
+	"github.com/saeedjhn/go-domain-driven-design/internal/sharedkernel/contract/proto/user/gen"
+
+	"github.com/saeedjhn/go-domain-driven-design/internal/dto/user"
 
 	"github.com/golang/protobuf/ptypes/empty" //nolint:gomodguard // nothing
-	"github.com/saeedjhn/go-backend-clean-arch/api/proto/user/gen"
-	usermapper "github.com/saeedjhn/go-backend-clean-arch/internal/mapper/user"
+	usermapper "github.com/saeedjhn/go-domain-driven-design/internal/mapper/user"
 	"google.golang.org/grpc"
 )
 

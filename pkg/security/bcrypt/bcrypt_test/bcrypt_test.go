@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/security/bcrypt"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/security/bcrypt"
 )
 
 func Test_Generate_ValidCost_ReturnsHashedString(t *testing.T) {

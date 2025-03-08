@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 
-	taskdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/task"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	taskdto "github.com/saeedjhn/go-domain-driven-design/internal/dto/task"
+	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/richerror"
 )
 
 func (i *Interactor) Create(ctx context.Context, req taskdto.CreateRequest) (taskdto.CreateResponse, error) {

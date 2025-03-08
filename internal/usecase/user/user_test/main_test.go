@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	setuptest "github.com/saeedjhn/go-backend-clean-arch/test/setup_test"
+	"github.com/saeedjhn/go-domain-driven-design/configs"
+	setuptest "github.com/saeedjhn/go-domain-driven-design/test/setup_test"
 )
 
 var (

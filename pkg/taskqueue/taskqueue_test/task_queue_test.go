@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/alicebob/miniredis/v2"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/taskqueue"
+	"github.com/saeedjhn/go-domain-driven-design/pkg/taskqueue"
 )
 
 //go:generate go test -v -race -count=1 ./...

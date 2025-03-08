@@ -3,8 +3,8 @@ package user_test
 import (
 	"testing"
 
-	userdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
-	uservld "github.com/saeedjhn/go-backend-clean-arch/internal/validator/user"
+	userdto "github.com/saeedjhn/go-domain-driven-design/internal/dto/user"
+	uservld "github.com/saeedjhn/go-domain-driven-design/internal/validator/user"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

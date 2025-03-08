@@ -1,6 +1,6 @@
 package setuptest
 
-import "github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
+import "github.com/saeedjhn/go-domain-driven-design/pkg/persistance/cache/redis"
 
 func NewRedisDB(config redis.Config) (*redis.DB, error) {
 	db := redis.New(config)

@@ -3,7 +3,7 @@ package oteltracer
 import (
 	"fmt"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-domain-driven-design/internal/sharedkernel/contract"
 
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"

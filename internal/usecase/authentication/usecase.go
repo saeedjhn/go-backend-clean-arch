@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-domain-driven-design/internal/entity"
 
 	"github.com/golang-jwt/jwt/v5"
 )

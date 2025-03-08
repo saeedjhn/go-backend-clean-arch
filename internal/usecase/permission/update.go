@@ -3,7 +3,7 @@ package permission
 import (
 	"context"
 
-	permissiondto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/permission"
+	permissiondto "github.com/saeedjhn/go-domain-driven-design/internal/dto/permission"
 )
 
 func (i *Interactor) Update(

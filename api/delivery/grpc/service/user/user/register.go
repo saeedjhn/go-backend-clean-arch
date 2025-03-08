@@ -1,13 +1,13 @@
 package user
 
 import (
-	pb "github.com/saeedjhn/go-backend-clean-arch/api/proto/user/gen"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
-	mysqluser "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/user"
-	redisuser "github.com/saeedjhn/go-backend-clean-arch/internal/repository/redis/user"
-	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
-	userusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user"
-	uservalidator "github.com/saeedjhn/go-backend-clean-arch/internal/validator/user"
+	"github.com/saeedjhn/go-domain-driven-design/internal/bootstrap"
+	mysqluser "github.com/saeedjhn/go-domain-driven-design/internal/repository/mysql/user"
+	redisuser "github.com/saeedjhn/go-domain-driven-design/internal/repository/redis/user"
+	pb "github.com/saeedjhn/go-domain-driven-design/internal/sharedkernel/contract/proto/user/gen"
+	authusecase "github.com/saeedjhn/go-domain-driven-design/internal/usecase/authentication"
+	userusecase "github.com/saeedjhn/go-domain-driven-design/internal/usecase/user"
+	uservalidator "github.com/saeedjhn/go-domain-driven-design/internal/validator/user"
 	"google.golang.org/grpc"
 )
 

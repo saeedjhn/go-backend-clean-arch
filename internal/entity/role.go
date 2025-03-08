@@ -3,7 +3,7 @@ package entity
 import (
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+	"github.com/saeedjhn/go-domain-driven-design/internal/types"
 )
 
 // Role represents a stable set of permissions linked to business functions.

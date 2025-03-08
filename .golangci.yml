@@ -340,7 +340,7 @@ issues:
   max-same-issues: 50
 
   exclude-dirs:
-    - github.com/saeedjhn/go-backend-clean-arch/...
+    - github.com/saeedjhn/go-domain-driven-design/...
 
   exclude-rules:
     - source: "(noinspection|TODO)"
