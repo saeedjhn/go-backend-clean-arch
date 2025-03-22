@@ -7,7 +7,6 @@ import (
 
 	"github.com/golang/protobuf/ptypes/empty" //nolint:gomodguard // nothing
 	"github.com/saeedjhn/go-backend-clean-arch/api/proto/user/gen"
-	usermapper "github.com/saeedjhn/go-backend-clean-arch/internal/mapper/user"
 	"google.golang.org/grpc"
 )
 
@@ -40,15 +39,14 @@ func (u Service) Get(_ context.Context, _ *gen.GetRequest) (*gen.User, error) {
 }
 
 func (u Service) Profile(ctx context.Context, req *gen.ProfileRequest) (*gen.ProfileResponse, error) {
-	r := usermapper.MapProfileRequestFromProtobuf(req)
+	r := MapProfileRequestFromProtobuf(req)
 
 	resp, err := u.userIntr.Profile(ctx, r)
 	if err != nil {
 		return &gen.ProfileResponse{}, err
 	}
 
-	// return resp.ToProtobuf(), nil
-	return usermapper.MapProfileResponseToProtobuf(resp), nil
+	return MapProfileResponseToProtobuf(resp), nil
 }
 
 func (u Service) Update(_ context.Context, _ *gen.UpdateRequest) (*gen.User, error) {

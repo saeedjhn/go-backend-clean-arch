@@ -12,12 +12,6 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func MapProfileRequestFromHTTP() {
-
-}
-
-func MapProfileResponseToHTTP() {}
-
 func MapProfileRequestFromProtobuf(req *pb.ProfileRequest) user.ProfileRequest {
 	id, _ := strconv.ParseUint(req.GetId(), 10, 64)
 
