@@ -1,4 +1,4 @@
-CREATE TABLE events
+CREATE TABLE outbox_events
 (
     id              BIGINT PRIMARY KEY AUTO_INCREMENT,
     topic           VARCHAR(255) NOT NULL,
