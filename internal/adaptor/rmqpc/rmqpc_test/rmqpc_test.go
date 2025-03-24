@@ -1,3 +1,6 @@
+//go:build rmqpc
+// +build rmqpc
+
 package rmqpc_test
 
 import (

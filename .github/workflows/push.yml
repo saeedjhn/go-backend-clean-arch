@@ -1,0 +1,181 @@
+name: Go CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  setup:
+    name: Setup Environment
+    runs-on: ubuntu-22.04
+    outputs:
+      go-version: ${{ steps.setup-go.outputs.go-version }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Go
+        id: setup-go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.23.2
+          cache: true
+
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Install Protobuf Compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+
+      - name: Generate Proto Files
+        run: |
+          sudo apt-get install -y make
+          make
+        working-directory: api/proto
+
+      - name: Cache Generated Proto Files
+        uses: actions/cache@v3
+        with:
+          path: api/proto
+          key: ${{ runner.os }}-proto-${{ hashFiles('api/proto/**/*.proto') }}
+          restore-keys: |
+            ${{ runner.os }}-proto-
+
+  #      - name: Upload Proto Artifacts
+  #        uses: actions/upload-artifact@v4
+  #        with:
+  #          name: proto-files
+  #          path: api/proto/**/*.pb.go
+
+  audit:
+    name: Code Audit
+    runs-on: ubuntu-22.04
+    needs: [ setup ]
+    steps:
+      #      - name: Download Proto Artifacts
+      #        uses: actions/download-artifact@v4
+      #        with:
+      #          name: proto-files
+      #          path: api/proto/**/*.pb.go
+      #      - name: Verify Files Exist
+      #        run: |
+      #          ls -la api/proto/**/*.pb.go
+      #          tree api/proto
+
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: |
+          go mod tidy
+          go mod download
+
+      - name: Security Checks
+        run: |
+          go mod verify
+          go vet ./...
+          go fmt ./...
+
+      - name: Code Formatting
+        run: |
+          go install golang.org/x/tools/cmd/goimports@latest
+          goimports -w .
+
+      - name: Static Analysis
+        run: |
+          go install honnef.co/go/tools/cmd/staticcheck@latest
+          staticcheck ./...
+
+      - name: Linting
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.64.5
+          args: --timeout=5m
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-22.04
+    needs: [ setup ]
+    #    services:
+    #      mysql:
+    #        image: mysql:9.1.0
+    #        env:
+    #          MYSQL_ROOT_PASSWORD: root
+    #          MYSQL_USER: admin
+    #          MYSQL_PASSWORD: password123
+    #          MYSQL_DATABASE: test_db
+    #        ports:
+    #          - 3306:3306
+    #        options: >-
+    #          --health-cmd="mysqladmin ping -hlocalhost -P3306 -uroot -ppassword123"
+    #          --health-interval=10s
+    #          --health-timeout=5s
+    #          --health-retries=3
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: |
+          go mod tidy
+          go mod download
+
+      - name: Run Tests
+        run: |
+          go install github.com/mfridman/tparse@latest
+          TEST_PATH=./... make tparse
+#  deploy:
+#    name: Deploy on New Tag
+#    runs-on: ubuntu-22.04
+#    needs: test
+#    if: github.event_name == 'release'
+#
+#    steps:
+#      - name: Checkout Code
+#        uses: actions/checkout@v3
+#
+#      - name: Setup Docker
+#        uses: docker/setup-buildx-action@v3
+#
+#      - name: Login to DockerHub
+#        uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#
+#      - name: Build and Push Docker Image
+#        run: |
+#          docker build -t myapp:${{ github.ref_name }} .
+#          docker tag myapp:${{ github.ref_name }} mydockerhub/myapp:${{ github.ref_name }}
+#          docker push mydockerhub/myapp:${{ github.ref_name }}
+#
+#      - name: Deploy to Server
+#        uses: appleboy/ssh-action@v0.1.10
+#        with:
+#          host: ${{ secrets.SSH_HOST }}
+#          username: ${{ secrets.SSH_USER }}
+#          key: ${{ secrets.SSH_PRIVATE_KEY }}
+#          script: |
+#            docker pull mydockerhub/myapp:${{ github.ref_name }}
+#            docker stop myapp || true
+#            docker rm myapp || true
+#            docker run -d --name myapp -p 80:8080 mydockerhub/myapp:${{ github.ref_name }}

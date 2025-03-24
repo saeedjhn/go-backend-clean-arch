@@ -2,7 +2,7 @@ application:
   name: "go-backend-clean-arch"
   version: "0.1.0"
   debug: true
-  env: "development"
+  env: "test"
   entropy_password: 80
   graceful_shutdown_timeout: "10s"
 
@@ -38,7 +38,7 @@ pprof:
   idle_timeout: "120s"
 
 logger:
-  file_path: "./logs"
+  file_path: "logs"
   max_size: 10
   max_backups: 10
   max_age: 30
@@ -49,27 +49,6 @@ logger:
   enable_caller: true
   enable_stack_trace: true
   level: "debug"
-
-outbox:
-  interval: "5s"
-  batch_size: 100
-  retry_threshold: 3
-  process_timeout: "30s"
-
-rabbitmq:
-  host: "go-backend-clean-arch_rabbitmq"
-  port: 5672
-  username: "admin"
-  password: "password123"
-  ssl_mode: disable
-  max_idle_conns: 15
-  max_open_conns: 100
-  conn_max_life_time: "5s"
-  base_retry_timeout: "2s"
-  multiplier: 2.0
-  max_delay: "30s"
-  max_retry: 5
-  check_connection_time: "30s"
 
 mysql:
   host: "go-backend-clean-arch_mysqldb"
@@ -115,7 +94,8 @@ auth:
 
 tracer:
   endpoint: "go-backend-clean-arch_jaeger:4318"
-
-collector:
-  endpoint: "go-backend-clean-arch_otel-collector:4317"
-  timeout: "30s"
+  app_host: "localhost" # reference http_server.host
+  app_port: 8000 # reference http_server.port
+  app_name: "go-backend-clean-arch" # reference application.name
+  app_version: "0.1.0" # reference application.version
+  app_env: "development" # reference application.env

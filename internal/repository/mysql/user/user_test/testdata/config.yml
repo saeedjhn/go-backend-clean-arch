@@ -1,0 +1,9 @@
+host: "localhost"
+PORT: 3306
+username: "admin"
+password: "password123"
+database: "test_db"
+ssl_mode: disable
+max_idle_conns: 15
+max_open_conns: 100
+conn_max_life_time: "5s"

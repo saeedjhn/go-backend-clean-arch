@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 
@@ -32,6 +33,8 @@ func Load(option Option) (*Config, error) {
 
 	for _, path := range option.FilePath {
 		viper.SetConfigFile(path)
+		viper.SetConfigType(strings.ToLower(filepath.Ext(path))[1:])
+
 		if err := viper.MergeInConfig(); err != nil {
 			return &config, fmt.Errorf("failed to load config file at '%s': %w", path, err)
 		}

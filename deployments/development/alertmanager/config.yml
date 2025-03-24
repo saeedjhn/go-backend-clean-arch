@@ -1,0 +1,33 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: 'slack-notifications'
+  group_by: [ 'alertname' ]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 3h
+
+receivers:
+  - name: 'slack-notifications'
+  #    slack_configs:
+  #      - send_resolved: true
+  #        username: '<username>'
+  #        channel: '#<channel-name>'
+  #        api_url: '<incomming-webhook-url>'
+
+  - name: "email-notifications"
+  #    email_configs:
+  #      - to: yourmail@gmail.com
+  #        from: yourmail@gmail.com
+  #        smarthost: smtp.gmail.com:587
+  #        auth_username: yourmail@gmail.com
+  #        auth_identity: yourmail@gmail.com
+  #        auth_password: xxxxxxxxxxxxxxxxxx
+  #        # create your own auth_password => https://support.google.com/mail/answer/185833?hl=en
+  #        send_resolved: true
+
+  - name: "sms-notifications"
+#    webhook_configs:
+#      - url: http://my-api/api/notify/send
+#        send_resolved: true

@@ -34,7 +34,7 @@ go.work.sum
 
 # Configuration
 deployments/development/config.yml
-config.yml
+#config.yml
 
 ### GoLand ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider

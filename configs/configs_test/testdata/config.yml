@@ -1,0 +1,4 @@
+application:
+  name: "go-backend-clean-arch_test"
+  env: "test"
+  debug: true
