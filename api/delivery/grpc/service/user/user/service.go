@@ -6,7 +6,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
 	"github.com/golang/protobuf/ptypes/empty" //nolint:gomodguard // nothing
-	"github.com/saeedjhn/go-backend-clean-arch/api/proto/user/gen"
+	pb "github.com/saeedjhn/go-backend-clean-arch/api/proto/user/gen"
 	"google.golang.org/grpc"
 )
 
@@ -17,10 +17,10 @@ type Interactor interface {
 	RefreshToken(ctx context.Context, req user.RefreshTokenRequest) (user.RefreshTokenResponse, error)
 }
 
-var _ gen.UserServiceServer = (*Service)(nil)
+var _ pb.UserServiceServer = (*Service)(nil)
 
 type Service struct {
-	gen.UserServiceServer
+	pb.UserServiceServer
 	userIntr Interactor
 }
 
@@ -28,38 +28,38 @@ func New(userInteractor Interactor) *Service {
 	return &Service{userIntr: userInteractor}
 }
 
-func (u Service) Create(_ context.Context, _ *gen.CreateRequest) (*gen.User, error) {
+func (u Service) Create(_ context.Context, _ *pb.CreateRequest) (*pb.User, error) {
 	// TODO implement me
 	panic("implement me")
 }
 
-func (u Service) Get(_ context.Context, _ *gen.GetRequest) (*gen.User, error) {
+func (u Service) Get(_ context.Context, _ *pb.GetRequest) (*pb.User, error) {
 	// TODO implement me
 	panic("implement me")
 }
 
-func (u Service) Profile(ctx context.Context, req *gen.ProfileRequest) (*gen.ProfileResponse, error) {
+func (u Service) Profile(ctx context.Context, req *pb.ProfileRequest) (*pb.ProfileResponse, error) {
 	r := MapProfileRequestFromProtobuf(req)
 
 	resp, err := u.userIntr.Profile(ctx, r)
 	if err != nil {
-		return &gen.ProfileResponse{}, err
+		return &pb.ProfileResponse{}, err
 	}
 
 	return MapProfileResponseToProtobuf(resp), nil
 }
 
-func (u Service) Update(_ context.Context, _ *gen.UpdateRequest) (*gen.User, error) {
+func (u Service) Update(_ context.Context, _ *pb.UpdateRequest) (*pb.User, error) {
 	// TODO implement me
 	panic("implement me")
 }
 
-func (u Service) Delete(_ context.Context, _ *gen.DeleteRequest) (*empty.Empty, error) {
+func (u Service) Delete(_ context.Context, _ *pb.DeleteRequest) (*empty.Empty, error) {
 	// TODO implement me
 	panic("implement me")
 }
 
-func (u Service) List(_ *empty.Empty, _ grpc.ServerStreamingServer[gen.User]) error {
+func (u Service) List(_ *empty.Empty, _ grpc.ServerStreamingServer[pb.User]) error {
 	// TODO implement me
 	panic("implement me")
 }

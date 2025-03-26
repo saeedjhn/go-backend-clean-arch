@@ -38,25 +38,25 @@ export TEST_SUMMARIES_FILE ?= test_summaries.out
 export LDFLAGS := -ldflags "-X main.VERSION=${VERSION} -X main.COMMIT=${COMMIT} -X main.BRANCH=${BRANCH}"
 
 #include ./scripts/help.Makefile
-include ./scripts/tools.Makefile
+#include ./scripts/tools.Makefile
 
 # ~~~ Development Environment ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #install-deps: scripts/bin/migrate scripts/bin/sqlc scripts/bin/air scripts/bin/gotestsum scripts/bin/tparse scripts/bin/mockery ## Install Development Dependencies (localy).
-install-deps:
-	@ $(MAKE) scripts/bin/migrate
-	@ $(MAKE) scripts/bin/sqlc
-	@ $(MAKE) scripts/bin/air
-	@ $(MAKE) scripts/bin/gotestsum
-	@ $(MAKE) scripts/bin/tparse
-	@ $(MAKE) scripts/bin/mockery
-	@ $(MAKE) scripts/bin/golangci-lint
+#install-deps:
+#	@ $(MAKE) scripts/bin/migrate
+#	@ $(MAKE) scripts/bin/sqlc
+#	@ $(MAKE) scripts/bin/air
+#	@ $(MAKE) scripts/bin/gotestsum
+#	@ $(MAKE) scripts/bin/tparse
+#	@ $(MAKE) scripts/bin/mockery
+#	@ $(MAKE) scripts/bin/golangci-lint
 
 # ==================================================================================== #
 # DEVELOPMENT
 # ==================================================================================== #
 ## tparse: CLI tool for summarizing go test output. Pipe friendly. CI/CD friendly
 .PHONY: tparse
-tparse:
+tparse: $(TPARSE)
 	set +e; \
 #    go test ./... -json > $(TEST_SUMMARIES_FILE); \
 # 	 TEST_PATH=relativePathOrAbsolutePath(ex: ./pkg/package) make tparse \
