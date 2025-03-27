@@ -59,6 +59,24 @@ func (c *Connection) Channel() *amqp.Channel {
 	return c.channel
 }
 
+func (c *Connection) ConnectRaw() error {
+	var err error
+
+	uri := fmt.Sprintf("amqp://%s:%s@%s",
+		c.config.Connection.Username,
+		c.config.Connection.Password,
+		net.JoinHostPort(c.config.Connection.Host, c.config.Connection.Port),
+	)
+
+	c.connection, err = amqp.Dial(uri)
+	if err != nil {
+		return fmt.Errorf(
+			"connection error: failed to connect to RabbitMQ server at %s: %w", uri, err)
+	}
+
+	return nil
+}
+
 func (c *Connection) Connect() error {
 	var err error
 
@@ -210,6 +228,10 @@ func (c *Connection) Consume(eventStream chan<- contract.Event) error {
 	}
 
 	return nil
+}
+
+func (c *Connection) Close() error {
+	return c.connection.Close()
 }
 
 func (c *Connection) reconnect() error {

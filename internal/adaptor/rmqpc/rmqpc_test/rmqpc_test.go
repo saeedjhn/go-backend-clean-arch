@@ -1,6 +1,3 @@
-//go:build rmqpc
-// +build rmqpc
-
 package rmqpc_test
 
 import (
@@ -18,16 +15,7 @@ func TestConsumeMessage_WhenMessageIsPublished_ShouldReceiveMessagee(t *testing.
 	urTopic := contract.Topic("user.registered")
 
 	cfg := rmqpc.Config{
-		Connection: rmqpc.ConnectionConfig{
-			Username:         "admin",
-			Password:         "password123",
-			Host:             "localhost",
-			Port:             "5672",
-			BaseRetryTimeout: 2 * time.Second,
-			Multiplier:       2.0,
-			MaxDelay:         10 * time.Second,
-			MaxRetry:         5,
-		},
+		Connection: _myRabbitMQConnectionConfig,
 		MQ: rmqpc.MQConfig{
 			Exchange: rmqpc.ExchangeConfig{
 				Name:       "my-exchange",

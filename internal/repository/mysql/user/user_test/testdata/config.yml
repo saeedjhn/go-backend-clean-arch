@@ -1,5 +1,5 @@
 host: "localhost"
-PORT: 3306
+port: 3306
 username: "admin"
 password: "password123"
 database: "test_db"

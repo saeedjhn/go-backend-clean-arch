@@ -1,0 +1,9 @@
+host: "localhost"
+port: 5672
+username: "admin"
+password: "password123"
+base_retry_timeout: "2s"
+multiplier: 2.0
+max_delay: "30s"
+max_retry: 5
+check_connection_time: "30s"

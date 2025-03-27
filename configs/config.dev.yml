@@ -61,10 +61,6 @@ rabbitmq:
   port: 5672
   username: "admin"
   password: "password123"
-  ssl_mode: disable
-  max_idle_conns: 15
-  max_open_conns: 100
-  conn_max_life_time: "5s"
   base_retry_timeout: "2s"
   multiplier: 2.0
   max_delay: "30s"
