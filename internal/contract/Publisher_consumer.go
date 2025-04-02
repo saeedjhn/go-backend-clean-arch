@@ -1,5 +1,11 @@
 package contract
 
+type DomainEvent interface {
+	EventType() string
+	Marshal() ([]byte, error)
+	Unmarshal(b []byte) error
+}
+
 type Topic string
 
 func (t Topic) String() string {
