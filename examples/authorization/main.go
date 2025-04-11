@@ -88,7 +88,7 @@ func main() {
 		Password:    "securepassword",
 		Roles:       []models.Role{adminRole, managerRole},
 		Gender:      models.MaleGender,
-		Status:      adminmodel.ActiveStatus,
+		Status:      adminmodel.Active,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}

@@ -1,4 +1,4 @@
-package admin
+package sms
 
 type Status string
 
