@@ -3,8 +3,8 @@ package user
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
-	mysqluser "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/user"
-	redisuser "github.com/saeedjhn/go-backend-clean-arch/internal/repository/redis/user"
+	usermysql "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/user"
+	userredis "github.com/saeedjhn/go-backend-clean-arch/internal/repository/redis/user"
 	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 	userusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user"
 	uservalidator "github.com/saeedjhn/go-backend-clean-arch/internal/validator/user"
@@ -12,8 +12,8 @@ import (
 
 func Setup(app *bootstrap.Application, e *echo.Echo) {
 	// Dependencies
-	repo := mysqluser.New(app.Trc, app.DB.MySQL)
-	rdsRepo := redisuser.New(app.Cache.Redis) // Or userInMemRepo := inmemoryuser.New(cache.InMem)
+	repo := usermysql.New(app.Trc, app.DB.MySQL)
+	rdsRepo := userredis.New(app.Cache.Redis) // Or userInMemRepo := inmemoryuser.New(cache.InMem)
 
 	vld := uservalidator.New(app.Config.Application.EntropyPassword)
 

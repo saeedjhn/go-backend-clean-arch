@@ -49,7 +49,7 @@ jobs:
         run: |
           sudo apt-get install -y make
           make
-        working-directory: api/proto
+        working-directory: internal/sharedkernel/proto
 
       - name: Upload Proto Artifacts
         uses: actions/upload-artifact@v4
@@ -132,7 +132,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: proto-files
-          path: api/proto/
+          path: internal/sharedkernel/proto/
+          
+      - name: Verify Files Exist
+        run: |
+          tree .
+          tree internal/sharedkernel/proto
 
       - name: Install Dependencies
         run: |
