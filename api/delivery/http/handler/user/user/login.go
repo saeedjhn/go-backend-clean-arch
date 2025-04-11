@@ -3,7 +3,7 @@ package user //nolint:dupl // 1-79 lines are duplicate
 import (
 	"net/http"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
@@ -26,7 +26,7 @@ func (h *Handler) Login(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(
 			http.StatusBadRequest,
-			entity.NewErrorResponse(msg.ErrMsg400BadRequest, bind.CheckErrorFromBind(err).Error()).
+			models.NewErrorResponse(msg.ErrMsg400BadRequest, bind.CheckErrorFromBind(err).Error()).
 				WithMeta(map[string]interface{}{"request": req}),
 		)
 	}
@@ -37,7 +37,7 @@ func (h *Handler) Login(c echo.Context) error {
 	// if err != nil {
 	// 	return echo.NewHTTPError(
 	// 		http.StatusBadRequest,
-	// 		entity.NewErrorResponse(msg.ErrMsg400BadRequest, err.Error()).
+	// 		models.NewErrorResponse(msg.ErrMsg400BadRequest, err.Error()).
 	// 			WithMeta(map[string]interface{}{"request": req}),
 	// 	)
 	// }
@@ -50,15 +50,15 @@ func (h *Handler) Login(c echo.Context) error {
 		if resp.FieldErrors != nil {
 			return echo.NewHTTPError(
 				code,
-				entity.NewErrorResponse(richErr.Message(), resp.FieldErrors).WithMeta(richErr.Meta()),
+				models.NewErrorResponse(richErr.Message(), resp.FieldErrors).WithMeta(richErr.Meta()),
 			)
 		}
 
 		return echo.NewHTTPError(
 			code,
-			entity.NewErrorResponse(richErr.Message(), richErr.Error()).WithMeta(richErr.Meta()),
+			models.NewErrorResponse(richErr.Message(), richErr.Error()).WithMeta(richErr.Meta()),
 		)
 	}
 
-	return c.JSON(http.StatusOK, entity.NewSuccessResponse(msg.MsgLoggedIn, resp))
+	return c.JSON(http.StatusOK, models.NewSuccessResponse(msg.MsgLoggedIn, resp))
 }

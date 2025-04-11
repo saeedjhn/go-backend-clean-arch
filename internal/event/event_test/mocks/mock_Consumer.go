@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 	mock "github.com/stretchr/testify/mock"
 )
 

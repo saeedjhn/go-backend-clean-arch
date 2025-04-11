@@ -3,9 +3,8 @@ package outbox
 import (
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
-
-	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 )
 
 type Event struct {

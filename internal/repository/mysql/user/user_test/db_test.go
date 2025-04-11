@@ -5,9 +5,10 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/models/user"
+
 	setuptest "github.com/saeedjhn/go-backend-clean-arch/test/setup_test"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	mysqluser "github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/user"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/repository/mysql/user/user_test/doubles"
 	"github.com/stretchr/testify/assert"
@@ -32,25 +33,25 @@ func Test_MysqlUser_GetByMobile(t *testing.T) {
 	testCases := []struct {
 		name         string
 		mobile       string
-		expectedUser entity.User
+		expectedUser user.User
 		expectedErr  error
 	}{
 		{
 			name:         "GetByMobile_MobileNotExists_ReturnError",
 			mobile:       "09120000000",
-			expectedUser: entity.User{},
+			expectedUser: user.User{},
 			expectedErr:  errUserNotFound,
 		},
 		{
 			name:         "GetByMobile_DBUnexpectedError_ReturnError",
 			mobile:       "09130000000",
-			expectedUser: entity.User{},
+			expectedUser: user.User{},
 			expectedErr:  errUnexpected,
 		},
 		{
 			name:   "GetByMobile_MobileExists_ReturnUser",
 			mobile: "09120000001",
-			expectedUser: entity.User{
+			expectedUser: user.User{
 				ID:       1,
 				Name:     "Bob Smith",
 				Mobile:   "09120000001",

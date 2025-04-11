@@ -6,9 +6,10 @@ import (
 	"sync"
 	"time"
 
+	contract2 "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/rmqpc"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/event"
 )
 
@@ -17,8 +18,8 @@ const _eventBufferSize = 1024
 func main() {
 	logger := setupLogger()
 
-	urTopic := contract.Topic("user.registered")
-	opTopic := contract.Topic("order.processing")
+	urTopic := contract2.Topic("user.registered")
+	opTopic := contract2.Topic("order.processing")
 
 	// Definination JOBS
 	router := event.NewRouter()
@@ -48,7 +49,7 @@ func main() {
 			},
 			QueueBind: rmqpc.QueueBindConfig{
 				Queue:            "test-queue",
-				BindingKey:       []contract.Topic{urTopic, opTopic},
+				BindingKey:       []contract2.Topic{urTopic, opTopic},
 				Durable:          true,
 				AutoDelete:       false,
 				Exclusive:        false,
@@ -105,8 +106,8 @@ func main() {
 		contractConsumer.Start(ctx)
 	}()
 
-	evtUserRegistered := contract.Event{Topic: urTopic, Payload: []byte("User123")}
-	evtOrderProcessing := contract.Event{Topic: opTopic, Payload: []byte("Order123456")}
+	evtUserRegistered := contract2.Event{Topic: urTopic, Payload: []byte("User123")}
+	evtOrderProcessing := contract2.Event{Topic: opTopic, Payload: []byte("Order123456")}
 
 	go func() {
 		for i := range 3 {
@@ -146,17 +147,17 @@ func main() {
 	// Wait until graceful shutdown is complete
 }
 
-func handleUserRegistered(contract contract.Event) error {
+func handleUserRegistered(contract contract2.Event) error {
 	log.Printf("[Notification] Sending welcome email for user: %s\n", string(contract.Payload))
 	return nil
 }
 
-func handleOrderPlaced(contract contract.Event) error {
+func handleOrderPlaced(contract contract2.Event) error {
 	log.Printf("[Order] Processing order: %s\n", string(contract.Payload))
 	return nil
 }
 
-func setupLogger() contract.Logger {
+func setupLogger() contract2.Logger {
 	config := jsonfilelogger.Config{
 		LocalTime:        true,
 		Console:          true,

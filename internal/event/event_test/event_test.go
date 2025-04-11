@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
+	contract2 "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/event"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/event/event_test/mocks"
@@ -120,7 +120,7 @@ func TestStart_WithValidEvents_ProcessesSuccessfull(t *testing.T) {
 		Return(nil).Maybe()
 
 	router := event.NewRouter()
-	router.Register(contract.Topic("user.registered"), handleUserRegistered)
+	router.Register(contract2.Topic("user.registered"), handleUserRegistered)
 
 	eventConsumer := event.NewEventConsumer(10, router, mockConsumer)
 	eventConsumer.WithLogger(logger)
@@ -145,12 +145,12 @@ func TestStart_WithValidEvents_ProcessesSuccessfull(t *testing.T) {
 	mockConsumer.AssertExpectations(t)
 }
 
-func handleUserRegistered(event contract.Event) error {
+func handleUserRegistered(event contract2.Event) error {
 	log.Printf("[Notification] Sending welcome email for user: %s\n", string(event.Payload))
 	return nil
 }
 
-func setupLogger() contract.Logger {
+func setupLogger() contract2.Logger {
 	config := jsonfilelogger.Config{
 		LocalTime:        true,
 		Console:          true,

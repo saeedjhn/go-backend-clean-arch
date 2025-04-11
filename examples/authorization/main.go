@@ -4,12 +4,13 @@ import (
 	"log"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	adminmodel "github.com/saeedjhn/go-backend-clean-arch/internal/models/admin"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
 )
 
 func main() {
 	// Example 1: Create a set of roles
-	adminRole := entity.Role{
+	adminRole := models.Role{
 		ID:          1,
 		Name:        "Admin",
 		Description: "Has full access to all resources",
@@ -18,7 +19,7 @@ func main() {
 		UpdatedAt:   time.Now(),
 	}
 
-	managerRole := entity.Role{
+	managerRole := models.Role{
 		ID:          2,
 		Name:        "Manager",
 		Description: "Has access to manage users and content",
@@ -28,7 +29,7 @@ func main() {
 	}
 
 	// Example 2: Create resources
-	userManagementAPI := entity.Resource{
+	userManagementAPI := models.Resource{
 		ID:          1,
 		Name:        "GET /users",
 		Description: "Fetches the list of users",
@@ -38,7 +39,7 @@ func main() {
 		UpdatedAt:   time.Now(),
 	}
 
-	orderProcessingAPI := entity.Resource{
+	orderProcessingAPI := models.Resource{
 		ID:          2,
 		Name:        "POST /orders",
 		Description: "Creates a new order",
@@ -49,18 +50,18 @@ func main() {
 	}
 
 	// Example 3: Define permissions for roles on resources
-	adminPermissions := entity.Permission{
-		Allow: entity.RWXD{R: true, W: true, X: true, D: true}, // Full permissions
-		Deny:  entity.RWXD{},
+	adminPermissions := models.Permission{
+		Allow: models.RWXD{R: true, W: true, X: true, D: true}, // Full permissions
+		Deny:  models.RWXD{},
 	}
 
-	managerPermissions := entity.Permission{
-		Allow: entity.RWXD{R: true, W: true, X: false, D: false}, // Read and Write permissions only
-		Deny:  entity.RWXD{X: true, D: true},                     // Deny Execute and Delete actions
+	managerPermissions := models.Permission{
+		Allow: models.RWXD{R: true, W: true, X: false, D: false}, // Read and Write permissions only
+		Deny:  models.RWXD{X: true, D: true},                     // Deny Execute and Delete actions
 	}
 
 	// Example 4: Assign permissions to roles
-	adminRolePermission := entity.RoleResourcePermission{
+	adminRolePermission := models.RoleResourcePermission{
 		RoleID:      adminRole.ID,
 		ResourceID:  userManagementAPI.ID,
 		Permissions: adminPermissions,
@@ -68,7 +69,7 @@ func main() {
 		UpdatedAt:   time.Now(),
 	}
 
-	managerRolePermission := entity.RoleResourcePermission{
+	managerRolePermission := models.RoleResourcePermission{
 		RoleID:      managerRole.ID,
 		ResourceID:  orderProcessingAPI.ID,
 		Permissions: managerPermissions,
@@ -77,7 +78,7 @@ func main() {
 	}
 
 	// Example 5: Create an admin user and assign roles
-	adminUser := entity.Admin{
+	adminUser := adminmodel.Admin{
 		ID:          1,
 		FirstName:   "John",
 		LastName:    "Doe",
@@ -85,9 +86,9 @@ func main() {
 		Mobile:      "123-456-7890",
 		Description: "Super Admin with full access",
 		Password:    "securepassword",
-		Roles:       []entity.Role{adminRole, managerRole},
-		Gender:      entity.MaleGender,
-		Status:      entity.AdminActiveStatus,
+		Roles:       []models.Role{adminRole, managerRole},
+		Gender:      models.MaleGender,
+		Status:      adminmodel.ActiveStatus,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}

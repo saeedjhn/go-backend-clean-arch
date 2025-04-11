@@ -6,11 +6,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/outbox"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/outbox/outbox_test/mocks"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/scheduler"
 	"github.com/stretchr/testify/mock"
 )

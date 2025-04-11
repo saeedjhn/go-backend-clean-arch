@@ -55,7 +55,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: proto-files
-          path: api/proto/**/*.pb.go
+          path: internal/sharedkernel/proto/**/*.pb.go
 
 
   audit:
@@ -70,12 +70,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: proto-files
-          path: api/proto/
+          path: internal/sharedkernel/proto/
 
       - name: Verify Files Exist
         run: |
           tree .
-          tree api/proto
+          tree internal/sharedkernel/proto
 
       - name: Install Dependencies
         run: |

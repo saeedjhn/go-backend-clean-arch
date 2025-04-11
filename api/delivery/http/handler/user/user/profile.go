@@ -3,7 +3,8 @@ package user
 import (
 	"net/http"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
@@ -33,15 +34,15 @@ func (h *Handler) Profile(c echo.Context) error {
 		if resp.FieldErrors != nil {
 			return echo.NewHTTPError(
 				code,
-				entity.NewErrorResponse(richErr.Message(), resp.FieldErrors).WithMeta(richErr.Meta()),
+				models.NewErrorResponse(richErr.Message(), resp.FieldErrors).WithMeta(richErr.Meta()),
 			)
 		}
 
 		return echo.NewHTTPError(
 			code,
-			entity.NewErrorResponse(richErr.Message(), richErr.Error()).WithMeta(richErr.Meta()),
+			models.NewErrorResponse(richErr.Message(), richErr.Error()).WithMeta(richErr.Meta()),
 		)
 	}
 
-	return c.JSON(http.StatusOK, entity.NewSuccessResponse(msg.MsgProfileSeen, resp))
+	return c.JSON(http.StatusOK, models.NewSuccessResponse(msg.MsgProfileSeen, resp))
 }

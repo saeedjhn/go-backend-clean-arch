@@ -3,10 +3,12 @@ package role
 import (
 	"context"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 )
 
 //go:generate mockery --name Validator
@@ -15,16 +17,16 @@ type Validator interface {
 
 //go:generate mockery --name Repository
 type Repository interface {
-	Create(_ context.Context, r entity.Role) (entity.Role, error)
-	GetByID(_ context.Context, id uint64) (entity.Role, error)
+	Create(_ context.Context, r models.Role) (models.Role, error)
+	GetByID(_ context.Context, id uint64) (models.Role, error)
 	GetAll(
 		_ context.Context,
 		filter dto.FilterRequest,
 		pagination dto.PaginationRequest,
 		sort dto.SortRequest,
 		searchParams *dto.QuerySearch,
-	) ([]entity.Role, uint, error)
-	Update(_ context.Context, r entity.Role) error
+	) ([]models.Role, uint, error)
+	Update(_ context.Context, r models.Role) error
 	DeleteByID(_ context.Context, id uint64) error
 	DeleteAll(_ context.Context) error
 }

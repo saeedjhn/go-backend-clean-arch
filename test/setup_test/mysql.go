@@ -65,7 +65,7 @@ func NewMySQLDBSingleton(config mysql.Config) (*mysql.DB, error) {
 // 	conn, _ := NewMySQLDBSingleton(GetDBConfig())
 // }
 
-// func GetByMobileDB(mobile string) (entity.User, error) {
+// func GetByMobileDB(mobile string) (models.User, error) {
 //
 // }
 

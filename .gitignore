@@ -17,7 +17,7 @@ scripts/bin/
 logs/
 
 # Generate proto(s)
-api/proto/**/gen
+internal/sharedkernel/proto/**/gen
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out

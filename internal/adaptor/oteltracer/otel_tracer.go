@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 

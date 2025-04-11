@@ -3,7 +3,7 @@ package bootstrap
 import (
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 )
 
 func NewLogger(configApp configs.Application, configLogger jsonfilelogger.Config) contract.Logger {

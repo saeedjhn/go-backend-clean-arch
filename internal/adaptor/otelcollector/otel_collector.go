@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"

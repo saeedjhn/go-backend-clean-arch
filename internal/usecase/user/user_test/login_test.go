@@ -5,8 +5,10 @@ import (
 	"testing"
 	"time"
 
+	usermodel "github.com/saeedjhn/go-backend-clean-arch/internal/models/user"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+
 	userdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	userusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user/user_test/doubles"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user/user_test/mocks"
@@ -97,7 +99,7 @@ func Test_UserInterator_Login_ValidationSection(t *testing.T) {
 			if tc.expectedError == nil {
 				generatePassword, _ := userusecase.GenerateHash(tc.req.Password)
 
-				mockRepo.On("GetByMobile", ctx, tc.req.Mobile).Return(entity.User{
+				mockRepo.On("GetByMobile", ctx, tc.req.Mobile).Return(usermodel.User{
 					ID:       1,
 					Mobile:   tc.req.Mobile,
 					Password: generatePassword,
@@ -105,7 +107,7 @@ func Test_UserInterator_Login_ValidationSection(t *testing.T) {
 
 				user, _ := mockRepo.GetByMobile(ctx, tc.req.Mobile)
 
-				authenticable := entity.Authenticable{ID: user.ID}
+				authenticable := models.Authenticable{ID: user.ID}
 
 				mockAuth.On("CreateAccessToken", authenticable).Return("access-token", nil)
 				mockAuth.On("CreateRefreshToken", authenticable).Return("refresh-token", nil)
@@ -139,7 +141,7 @@ func Test_UserInterator_LoginRepositorySection(t *testing.T) {
 		name string
 		req  userdto.LoginRequest
 		repo struct {
-			user entity.User
+			user usermodel.User
 			err  error
 		}
 		expectedError  error
@@ -148,27 +150,27 @@ func Test_UserInterator_LoginRepositorySection(t *testing.T) {
 		name: "Login_WithNonExistentMobile_ReturnsUserNotFoundError",
 		req:  userdto.LoginRequest{Mobile: nonExistentMobile, Password: correctMobile},
 		repo: struct {
-			user entity.User
+			user usermodel.User
 			err  error
-		}{user: entity.User{}, err: errUserNotFound},
+		}{user: usermodel.User{}, err: errUserNotFound},
 		expectedError:  errUserNotFound,
 		expectedResult: userdto.LoginResponse{},
 	}, {
 		name: "Login_WithRepositoryError_ReturnsUnexpectedError",
 		req:  userdto.LoginRequest{Mobile: correctMobile, Password: password},
 		repo: struct {
-			user entity.User
+			user usermodel.User
 			err  error
-		}{user: entity.User{}, err: errUnexpected},
+		}{user: usermodel.User{}, err: errUnexpected},
 		expectedError:  errUnexpected,
 		expectedResult: userdto.LoginResponse{},
 	}, {
 		name: "Login_WithValidMobile_ReturnsTokensAndUserData",
 		req:  userdto.LoginRequest{Mobile: correctMobile, Password: password},
 		repo: struct {
-			user entity.User
+			user usermodel.User
 			err  error
-		}{user: entity.User{
+		}{user: usermodel.User{
 			ID:        1,
 			Name:      "",
 			Mobile:    correctMobile,
@@ -209,7 +211,7 @@ func Test_UserInterator_LoginRepositorySection(t *testing.T) {
 			user, _ := mockRepo.GetByMobile(ctx, tc.req.Mobile)
 
 			if tc.expectedError == nil {
-				authenticable := entity.Authenticable{ID: user.ID}
+				authenticable := models.Authenticable{ID: user.ID}
 
 				mockAuth.On("CreateAccessToken", authenticable).Return("access-token", nil)
 				mockAuth.On("CreateRefreshToken", authenticable).Return("refresh-token", nil)
@@ -240,7 +242,7 @@ func Test_UserInterator_LoginCreateTokenSection(t *testing.T) {
 
 	testCases := []struct {
 		name           string
-		user           entity.User
+		user           usermodel.User
 		req            userdto.LoginRequest
 		accessToken    string
 		refreshToken   string
@@ -249,7 +251,7 @@ func Test_UserInterator_LoginCreateTokenSection(t *testing.T) {
 	}{
 		{
 			name: "Login_WithNotValidRequest_TokenNotGenerated",
-			user: entity.User{
+			user: usermodel.User{
 				ID:        1,
 				Name:      "",
 				Mobile:    correctMobile,
@@ -266,7 +268,7 @@ func Test_UserInterator_LoginCreateTokenSection(t *testing.T) {
 		},
 		{
 			name: "Login_WithValidRequest_TokenGenerated",
-			user: entity.User{
+			user: usermodel.User{
 				ID:        1,
 				Name:      "",
 				Mobile:    "09123456789",
@@ -308,7 +310,7 @@ func Test_UserInterator_LoginCreateTokenSection(t *testing.T) {
 			mockRepo.On("GetByMobile", ctx, tc.req.Mobile).Return(tc.user, nil)
 			user, _ := mockRepo.GetByMobile(ctx, tc.req.Mobile)
 
-			authenticable := entity.Authenticable{ID: user.ID}
+			authenticable := models.Authenticable{ID: user.ID}
 
 			mockAuth.On("CreateAccessToken", authenticable).Return(tc.accessToken, tc.expectedError)
 			if tc.expectedError == nil {

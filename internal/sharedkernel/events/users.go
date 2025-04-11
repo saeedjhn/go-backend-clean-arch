@@ -4,17 +4,17 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 
 	"github.com/google/uuid"
 )
 
 type UserCreatedEvent struct {
-	EvtID            uint32 `json:"event-id"` // A Unique ID
-	EvtType          string `json:"event-type"`
-	UserID           types.ID
-	EscalationReason string `json:"escalation-reason"`
-	EscalationTime   int64  `json:"escalation-time"`
+	EvtID            uint32   `json:"event-id"` // A Unique ID
+	EvtType          string   `json:"event-type"`
+	UserID           types.ID `json:"user-id"`
+	EscalationReason string   `json:"escalation-reason"`
+	EscalationTime   int64    `json:"escalation-time"`
 	// cluster_key: Our BQ clustering key
 }
 

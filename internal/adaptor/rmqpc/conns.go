@@ -6,7 +6,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
 	"github.com/google/uuid"
 	amqp "github.com/rabbitmq/amqp091-go"

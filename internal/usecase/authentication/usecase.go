@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
 
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -29,7 +29,7 @@ func New(config Config) *Interactor {
 }
 
 func (i Interactor) CreateAccessToken(
-	req entity.Authenticable,
+	req models.Authenticable,
 ) (string, error) {
 	claims := Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -50,7 +50,7 @@ func (i Interactor) CreateAccessToken(
 }
 
 func (i Interactor) CreateRefreshToken(
-	req entity.Authenticable,
+	req models.Authenticable,
 ) (string, error) {
 	claims := Claims{
 		RegisteredClaims: jwt.RegisteredClaims{

@@ -4,7 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/claim"
@@ -20,7 +21,7 @@ func CheckIsValidUserID(next echo.HandlerFunc) echo.HandlerFunc {
 		idFromTokenConvertToSTR := strconv.FormatUint(claims.UserID.Uint64(), 10)
 
 		if id != idFromTokenConvertToSTR {
-			return echo.NewHTTPError(http.StatusBadRequest, entity.NewErrorResponse(msg.ErrMsg401UnAuthorized, nil))
+			return echo.NewHTTPError(http.StatusBadRequest, models.NewErrorResponse(msg.ErrMsg401UnAuthorized, nil))
 		}
 
 		return next(c)

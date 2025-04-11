@@ -1,6 +1,8 @@
 package user
 
-import "github.com/saeedjhn/go-backend-clean-arch/internal/types"
+import (
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
+)
 
 type ProfileRequest struct {
 	ID types.ID `json:"id"`

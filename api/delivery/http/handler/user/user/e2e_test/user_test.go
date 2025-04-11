@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
 
 	userdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
@@ -63,7 +63,7 @@ func (s *UserTestSuite) Test_UserLogin() {
 		s.Require().NoError(err)
 		s.Require().Equal(http.StatusOK, req.StatusCode())
 
-		var resp entity.SuccessResponse[userdto.LoginResponse]
+		var resp models.SuccessResponse[userdto.LoginResponse]
 
 		unmarshalErr := req.UnmarshallBody(&resp)
 		s.Require().NoError(unmarshalErr)

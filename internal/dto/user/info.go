@@ -3,7 +3,7 @@ package user
 import (
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 )
 
 type Info struct {

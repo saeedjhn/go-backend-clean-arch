@@ -18,7 +18,7 @@ const (
 	ErrMsg411LengthRequired              = "The \"Content-Length\" is not defined. The server will not accept " +
 		"the request without it"
 	ErrMsg412PreconditionFailed = "The precondition given in the request evaluated to false by the server"
-	ErrMsg413RequestToLarge     = "The server will not accept the request, because the request entity is too large"
+	ErrMsg413RequestToLarge     = "The server will not accept the request, because the request models is too large"
 	ErrMsg414RequestURLToLarge  = "The server will not accept the request, because the URI is too long. " +
 		"Occurs when you convert a POST request to a GET request with a long query information"
 	ErrMsg415UnsupportedMediaType = "The server will not accept the request, " +

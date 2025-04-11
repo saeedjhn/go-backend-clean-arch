@@ -4,11 +4,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 
 	"github.com/golang-jwt/jwt/v5"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -22,7 +22,7 @@ var _config = authentication.Config{ //nolint:gochecknoglobals // nothing
 
 type request struct {
 	Secret     string
-	Data       entity.Authenticable
+	Data       models.Authenticable
 	ExpireTime time.Duration
 }
 
@@ -43,7 +43,7 @@ func Test_AuthInteractor_CreateAccessToken(t *testing.T) {
 			name: "ValidRequest_TokenGenerated",
 			req: request{
 				Secret:     "secret",
-				Data:       entity.Authenticable{ID: 1},
+				Data:       models.Authenticable{ID: 1},
 				ExpireTime: 5 * time.Minute,
 			},
 			expectedError: false,

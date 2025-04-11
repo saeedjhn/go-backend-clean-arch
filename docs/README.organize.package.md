@@ -67,7 +67,7 @@ type Service interface {
 	GetUser(id int64) (User, error)
 }
 
-// User represents the user entity in the system
+// User represents the user models in the system
 type User struct {
 	ID        int64     `json:"id"`         // User ID
 	Name      string    `json:"name"`       // User Name
@@ -111,7 +111,7 @@ func (s *serviceImpl) GetUser(id int64) (User, error) {
 
 // Private Methods (Unexported)
 
-// validateUser checks if a user entity is valid
+// validateUser checks if a user models is valid
 func validateUser(u User) error {
 	if u.Name == "" {
 		return errors.New("name is required")

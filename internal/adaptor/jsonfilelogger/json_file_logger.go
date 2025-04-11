@@ -1,7 +1,7 @@
 package jsonfilelogger
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 	"go.uber.org/zap"
 )
 

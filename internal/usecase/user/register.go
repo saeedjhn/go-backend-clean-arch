@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	user2 "github.com/saeedjhn/go-backend-clean-arch/internal/models/user"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
@@ -35,7 +35,7 @@ func (i *Interactor) Register(ctx context.Context, req user.RegisterRequest) (us
 				WithKind(richerror.KindStatusBadRequest)
 	}
 
-	u := entity.User{
+	u := user2.User{
 		Name:   req.Name,
 		Mobile: req.Mobile,
 		Email:  req.Email,

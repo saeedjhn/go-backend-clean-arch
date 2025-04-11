@@ -3,7 +3,7 @@ package rmqpc
 import (
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 )
 
 type Table map[string]interface{}

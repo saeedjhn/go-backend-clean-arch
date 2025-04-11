@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	entity "github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	entity "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
 	auth "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 
 	mock "github.com/stretchr/testify/mock"
@@ -56,7 +56,7 @@ type MockAuthInteractor_CreateAccessToken_Call struct {
 }
 
 // CreateAccessToken is a helper method to define mock.On call
-//   - req entity.Authenticable
+//   - req models.Authenticable
 func (_e *MockAuthInteractor_Expecter) CreateAccessToken(req interface{}) *MockAuthInteractor_CreateAccessToken_Call {
 	return &MockAuthInteractor_CreateAccessToken_Call{Call: _e.mock.On("CreateAccessToken", req)}
 }
@@ -112,7 +112,7 @@ type MockAuthInteractor_CreateRefreshToken_Call struct {
 }
 
 // CreateRefreshToken is a helper method to define mock.On call
-//   - req entity.Authenticable
+//   - req models.Authenticable
 func (_e *MockAuthInteractor_Expecter) CreateRefreshToken(req interface{}) *MockAuthInteractor_CreateRefreshToken_Call {
 	return &MockAuthInteractor_CreateRefreshToken_Call{Call: _e.mock.On("CreateRefreshToken", req)}
 }

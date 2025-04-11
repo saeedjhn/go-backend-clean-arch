@@ -4,13 +4,14 @@ import (
 	"context"
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/security/bcrypt"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
+	userdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
-
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	usermodel "github.com/saeedjhn/go-backend-clean-arch/internal/models/user"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
@@ -18,17 +19,17 @@ import (
 
 //go:generate mockery --name AuthInteractor
 type AuthInteractor interface {
-	CreateAccessToken(req entity.Authenticable) (string, error)
-	CreateRefreshToken(req entity.Authenticable) (string, error)
+	CreateAccessToken(req models.Authenticable) (string, error)
+	CreateRefreshToken(req models.Authenticable) (string, error)
 	ParseToken(secret, requestToken string) (*authentication.Claims, error)
 }
 
 //go:generate mockery --name Validator
 type Validator interface {
-	ValidateRegisterRequest(req user.RegisterRequest) (map[string]string, error)
-	ValidateLoginRequest(req user.LoginRequest) (map[string]string, error)
-	ValidateProfileRequest(req user.ProfileRequest) (map[string]string, error)
-	ValidateRefreshTokenRequest(req user.RefreshTokenRequest) (map[string]string, error)
+	ValidateRegisterRequest(req userdto.RegisterRequest) (map[string]string, error)
+	ValidateLoginRequest(req userdto.LoginRequest) (map[string]string, error)
+	ValidateProfileRequest(req userdto.ProfileRequest) (map[string]string, error)
+	ValidateRefreshTokenRequest(req userdto.RefreshTokenRequest) (map[string]string, error)
 }
 
 //go:generate mockery --name Cache
@@ -41,10 +42,10 @@ type Cache interface {
 
 //go:generate mockery --name Repository
 type Repository interface {
-	Create(ctx context.Context, u entity.User) (entity.User, error)
+	Create(ctx context.Context, u usermodel.User) (usermodel.User, error)
 	IsExistsByMobile(ctx context.Context, mobile string) (bool, error)
-	GetByMobile(ctx context.Context, mobile string) (entity.User, error)
-	GetByID(ctx context.Context, id uint64) (entity.User, error)
+	GetByMobile(ctx context.Context, mobile string) (usermodel.User, error)
+	GetByID(ctx context.Context, id uint64) (usermodel.User, error)
 }
 
 type Interactor struct {

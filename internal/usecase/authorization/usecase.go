@@ -4,19 +4,19 @@ import (
 	"context"
 	"errors"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 )
 
 //go:generate mockery --name RoleResourcePermissionInteractor
 type RoleResourcePermissionInteractor interface {
-	GetByRoleIDAndResourceID(ctx context.Context, roleID, resourceID uint64) (entity.RoleResourcePermission, error)
+	GetByRoleIDAndResourceID(ctx context.Context, roleID, resourceID uint64) (models.RoleResourcePermission, error)
 	// GetByRoleIDsAndResourceID(
 	// ctx context.Context,
 	// roleIDs []uint64,
 	// resourceID uint64,
-	// ) ([]entity.RoleResourcePermission, error)
+	// ) ([]models.RoleResourcePermission, error)
 }
 
 //go:generate mockery --name ResourceInteractor
@@ -59,7 +59,7 @@ func (a *Interactor) CheckAccess( //nolint:gocognit // nothing
 	ctx context.Context,
 	roleIDs []types.ID,
 	resourceName string,
-	actions ...entity.Action,
+	actions ...models.Action,
 ) (bool, error) {
 	if len(actions) == 0 || len(roleIDs) == 0 {
 		return false, nil
@@ -75,7 +75,7 @@ func (a *Interactor) CheckAccess( //nolint:gocognit // nothing
 		// cacheKey := fmt.Sprintf("perm:%d:%d", roleID, resourceID)
 		// cachedPerm, err := a.Cache.Get(ctx, cacheKey)
 		//
-		// var perm entity.RoleResourcePermission
+		// var perm models.RoleResourcePermission
 		// if err == nil {
 		// 	_ = decodeGob(cachedPerm, &perm)
 		// } else {
@@ -96,19 +96,19 @@ func (a *Interactor) CheckAccess( //nolint:gocognit // nothing
 		allowAccess := true
 		for _, action := range actions {
 			switch action {
-			case entity.ReadAction:
+			case models.ReadAction:
 				if !(perm.Permissions.Allow.R && !perm.Permissions.Deny.R) {
 					allowAccess = false
 				}
-			case entity.WriteAction:
+			case models.WriteAction:
 				if !(perm.Permissions.Allow.W && !perm.Permissions.Deny.W) {
 					allowAccess = false
 				}
-			case entity.ExecuteAction:
+			case models.ExecuteAction:
 				if !(perm.Permissions.Allow.X && !perm.Permissions.Deny.X) {
 					allowAccess = false
 				}
-			case entity.DeleteAction:
+			case models.DeleteAction:
 				if !(perm.Permissions.Allow.D && !perm.Permissions.Deny.D) {
 					allowAccess = false
 				}
@@ -149,7 +149,7 @@ func (a *Interactor) CheckAccess( //nolint:gocognit // nothing
 // ctx context.Context,
 // roleIDs []uint64,
 // resourceName string,
-// actions ...entity.Action,
+// actions ...models.Action,
 // ) (bool, error) {
 // 	if len(roleIDs) == 0 || len(actions) == 0 {
 // 		return false, nil
@@ -170,19 +170,19 @@ func (a *Interactor) CheckAccess( //nolint:gocognit // nothing
 //
 // 		for _, action := range actions {
 // 			switch action {
-// 			case entity.ReadAction:
+// 			case models.ReadAction:
 // 				if !(perm.Permissions.Allow.R && !perm.Permissions.Deny.R) {
 // 					allowAccess = false
 // 				}
-// 			case entity.WriteAction:
+// 			case models.WriteAction:
 // 				if !(perm.Permissions.Allow.W && !perm.Permissions.Deny.W) {
 // 					allowAccess = false
 // 				}
-// 			case entity.ExecuteAction:
+// 			case models.ExecuteAction:
 // 				if !(perm.Permissions.Allow.X && !perm.Permissions.Deny.X) {
 // 					allowAccess = false
 // 				}
-// 			case entity.DeleteAction:
+// 			case models.DeleteAction:
 // 				if !(perm.Permissions.Allow.D && !perm.Permissions.Deny.D) {
 // 					allowAccess = false
 // 				}
@@ -238,8 +238,8 @@ func (a *Interactor) CheckAccess( //nolint:gocognit // nothing
 // func (s *Interactor) CheckAccess(
 // 	ctx context.Context,
 // 	adminID uint,
-// role entity.AdminRole,
-// permissions ...entity.AdminPermission,
+// role models.AdminRole,
+// permissions ...models.AdminPermission,
 // ) (bool, error) {
 
 // AdminPermissions, err := s.repo.GetAdminPermissions(ctx, adminID, role)

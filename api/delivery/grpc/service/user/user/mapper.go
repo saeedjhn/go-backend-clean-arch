@@ -3,11 +3,11 @@ package user
 import (
 	"strconv"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/types"
+	pb "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/proto/user/gen"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
-
-	pb "github.com/saeedjhn/go-backend-clean-arch/api/proto/user/gen"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

@@ -3,18 +3,18 @@ package user
 import (
 	"context"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+
 	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 	userusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
-
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
 )
 
 type AuthInteractor interface {
-	CreateAccessToken(req entity.Authenticable) (string, error)
-	CreateRefreshToken(req entity.Authenticable) (string, error)
+	CreateAccessToken(req models.Authenticable) (string, error)
+	CreateRefreshToken(req models.Authenticable) (string, error)
 	ParseToken(secret, requestToken string) (*authusecase.Claims, error)
 }
 

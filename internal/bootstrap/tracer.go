@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/saeedjhn/go-backend-clean-arch/configs"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/oteltracer"
 )

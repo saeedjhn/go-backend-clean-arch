@@ -4,12 +4,12 @@ import (
 	"context"
 	"sync"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	contract2 "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 )
 
 type C struct {
-	logger         contract.Logger
-	Consumers      []contract.Consumer
+	logger         contract2.Logger
+	Consumers      []contract2.Consumer
 	Router         *Router
 	chanBufferSize uint64
 }
@@ -17,7 +17,7 @@ type C struct {
 func NewEventConsumer(
 	chanBufferSize uint64,
 	router *Router,
-	consumers ...contract.Consumer,
+	consumers ...contract2.Consumer,
 ) *C {
 	return &C{
 		chanBufferSize: chanBufferSize,
@@ -26,14 +26,14 @@ func NewEventConsumer(
 	}
 }
 
-func (c *C) WithLogger(logger contract.Logger) *C {
+func (c *C) WithLogger(logger contract2.Logger) *C {
 	c.logger = logger
 
 	return c
 }
 
 func (c *C) Start(ctx context.Context) { //nolint:gocognit // nothing
-	eventStream := make(chan contract.Event, c.chanBufferSize)
+	eventStream := make(chan contract2.Event, c.chanBufferSize)
 	var once sync.Once // To ensure eventStream is closed only once
 
 	// Start consumers
@@ -84,7 +84,7 @@ func (c *C) Start(ctx context.Context) { //nolint:gocognit // nothing
 }
 
 // func (c *C) Start(ctx context.Context, wg *sync.WaitGroup) {
-// 	eventStream := make(chan entity.Event, c.chanBufferSize)
+// 	eventStream := make(chan models.Event, c.chanBufferSize)
 // 	var once sync.Once // To ensure eventStream is closed only once
 //
 // 	// Start consumers

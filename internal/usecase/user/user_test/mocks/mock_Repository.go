@@ -5,7 +5,8 @@ package mocks
 import (
 	context "context"
 
-	entity "github.com/saeedjhn/go-backend-clean-arch/internal/entity"
+	entity "github.com/saeedjhn/go-backend-clean-arch/internal/models/user"
+
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -57,7 +58,7 @@ type MockRepository_Create_Call struct {
 
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
-//   - u entity.User
+//   - u models.User
 func (_e *MockRepository_Expecter) Create(ctx interface{}, u interface{}) *MockRepository_Create_Call {
 	return &MockRepository_Create_Call{Call: _e.mock.On("Create", ctx, u)}
 }

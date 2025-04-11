@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 )
 
 type RouterHandler func(event contract.Event) error

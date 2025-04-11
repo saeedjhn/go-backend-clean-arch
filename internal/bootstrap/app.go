@@ -3,9 +3,9 @@ package bootstrap
 import (
 	"context"
 
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
+	contract2 "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/inmemory"
@@ -25,9 +25,9 @@ type DB struct {
 
 type Application struct {
 	Config    *configs.Config
-	Logger    contract.Logger
-	Trc       contract.Tracer
-	Collector contract.Collector
+	Logger    contract2.Logger
+	Trc       contract2.Tracer
+	Collector contract2.Collector
 	Cache     Cache
 	DB        DB
 	Usecase   *Usecase

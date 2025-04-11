@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/rmqpc"
 )

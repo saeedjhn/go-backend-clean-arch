@@ -3,8 +3,9 @@ package user
 import (
 	"context"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/entity"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/msg"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
@@ -33,7 +34,7 @@ func (i *Interactor) Login(ctx context.Context, req user.LoginRequest) (user.Log
 			WithKind(richerror.KindStatusBadRequest)
 	}
 
-	authenticable := entity.Authenticable{ID: u.ID}
+	authenticable := models.Authenticable{ID: u.ID}
 
 	accessToken, err := i.authIntr.CreateAccessToken(authenticable)
 	if err != nil {
