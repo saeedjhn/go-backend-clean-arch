@@ -14,6 +14,7 @@ services:
       - ../../:/app # important (- ./:/app)
     networks:
       - go-backend-clean-arch_network
+    restart: always
     depends_on:
       - rabbitmq
       - mysqldb
@@ -62,7 +63,7 @@ services:
   #      - mongo:/data/db
   #    networks:
   #      - go-backend-clean-arch_network
-  #    restart: unless-stopped
+  #    restart: always
 
   ####################### PGADMIN #######################
   #  pgadmin:
@@ -94,6 +95,7 @@ services:
       - "${REDIS_PORT}:${REDIS_PORT}"
     networks:
       - go-backend-clean-arch_network
+    restart: always
   ####################### END SETUP-DB #################################################################################
 
   ####################### RabbitMQ #######################
@@ -129,7 +131,7 @@ services:
       #      - "9411:9411"     # Zipkin compatible endpoint (optional)
     networks:
       - go-backend-clean-arch_network
-    restart: always
+    restart: unless-stopped
 
   ####################### SETUP-ELK ####################################################################################
   #  setup-elk:
@@ -255,6 +257,7 @@ services:
       - "${OTEL_COLLECTOR_PORT}:${OTEL_COLLECTOR_PORT}"
     networks:
       - go-backend-clean-arch_network
+    restart: always
 
   ######################## Grafana ########################
   grafana:
@@ -340,7 +343,7 @@ services:
       - go-backend-clean-arch_network
     depends_on:
       - redis
-    restart: unless-stopped
+    restart: always
 
   ####################### SETUP-API GATEWAY ####################################################################################
   nginx:
@@ -355,8 +358,20 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     networks:
       - go-backend-clean-arch_network
+    restart: always
     depends_on:
       - app
+
+  ####################### Load-Test ####################################################################################
+  k6:
+    image: grafana/k6:0.58.0
+    volumes:
+      - ./k6:/scripts
+    entrypoint: [ "k6", "run", "/scripts/script.js" ]
+    networks:
+      - go-backend-clean-arch_network
+    restart: no
+
 
 volumes:
   mysql:

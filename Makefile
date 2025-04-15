@@ -69,6 +69,12 @@ tparse: $(TPARSE)
 test:
 	go test -v -race -buildvcs ./...
 
+## k6 Load Test Script
+.PHONY: test/k6
+test/k6:
+	@docker-compose -f deployments/development/docker-compose.yaml up k6
+
+
 ## test/cover: run all tests and display coverage
 .PHONY: test/cover
 test/cover:
