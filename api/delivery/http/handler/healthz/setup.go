@@ -1,4 +1,4 @@
-package healthcheck
+package healthz
 
 import (
 	"github.com/labstack/echo/v4"
@@ -8,5 +8,6 @@ import (
 func Setup(_ *bootstrap.Application, e *echo.Echo) {
 	// Dependencies
 
-	New().SetRoutes(e)
+	handler := New()
+	handler.SetRoutes(e)
 }
