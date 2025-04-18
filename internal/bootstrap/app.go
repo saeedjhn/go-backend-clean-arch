@@ -3,6 +3,8 @@ package bootstrap
 import (
 	"context"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/buildinfo"
+
 	contract2 "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
@@ -25,6 +27,7 @@ type DB struct {
 
 type Application struct {
 	Config    *configs.Config
+	BuildInfo buildinfo.Info
 	Logger    contract2.Logger
 	Trc       contract2.Tracer
 	Collector contract2.Collector
@@ -46,21 +49,15 @@ func App(config *configs.Config) (*Application, error) {
 func (a *Application) setup() error {
 	var err error
 
+	a.BuildInfo = NewBuildInfo()
+
 	a.Logger = NewLogger(a.Config.Application, a.Config.Logger)
 
-	if a.Trc, err = NewTracer(
-		a.Config.Tracer,
-		a.Config.Application,
-		a.Config.HTTPServer,
-	); err != nil {
+	if a.Trc, err = NewTracer(a.Config, a.BuildInfo); err != nil {
 		return err
 	}
 
-	if a.Collector, err = NewCollector(
-		a.Config.Collector,
-		a.Config.Application,
-		a.Config.HTTPServer,
-	); err != nil {
+	if a.Collector, err = NewCollector(a.Config, a.BuildInfo); err != nil {
 		return err
 	}
 

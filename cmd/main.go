@@ -62,6 +62,7 @@ func main() { //nolint:funlen // +100 lines
 	}
 
 	app.Logger.Infow("App.Startup.Config", "config", app.Config)
+	app.Logger.Infow("App.Startup.BuildInfo", "buildinfo", app.BuildInfo)
 
 	// Set up signal handling for graceful shutdown (e.g., SIGINT, SIGTERM)
 	// quit := make(chan bool)

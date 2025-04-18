@@ -62,6 +62,7 @@ func main() {
 	}
 
 	app.Logger.Infow("App.Startup.Config", "config", app.Config)
+	app.Logger.Infow("App.Startup.BuildInfo", "buildinfo", app.BuildInfo)
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt) // more SIGX (SIGINT, SIGTERM, etc)

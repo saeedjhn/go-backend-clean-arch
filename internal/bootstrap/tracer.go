@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/buildinfo"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
@@ -11,19 +13,15 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/oteltracer"
 )
 
-func NewTracer(
-	config oteltracer.Config,
-	appInfo configs.Application,
-	serverInfo configs.HTTPServer,
-) (contract.Tracer, error) {
+func NewTracer(config *configs.Config, buildinf buildinfo.Info) (contract.Tracer, error) {
 	client := oteltracer.New(oteltracer.Options{
-		Config: oteltracer.Config{Endpoint: config.Endpoint},
+		Config: oteltracer.Config{Endpoint: config.Tracer.Endpoint},
 		AppInfo: oteltracer.AppInfo{
-			Host:    serverInfo.Host,
-			Port:    serverInfo.Port,
-			Name:    appInfo.Name,
-			Version: appInfo.Version,
-			Env:     appInfo.Env.String(),
+			Host:    config.HTTPServer.Host,
+			Port:    config.HTTPServer.Port,
+			Name:    config.Application.Name,
+			Version: buildinf.Version,
+			Env:     config.Application.Env.String(),
 		},
 	})
 
