@@ -12,7 +12,7 @@ var statusStrings = map[Status]string{ //nolint:gochecknoglobals // nothing
 	Inactive: "inactive",
 }
 
-func (a Status) IsValid() bool {
+func (a Status) IsValidStatus() bool {
 	_, ok := statusStrings[a]
 
 	return ok
