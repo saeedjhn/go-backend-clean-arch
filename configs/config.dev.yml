@@ -101,6 +101,18 @@ redis:
   pool_timeout: "15s"
   idle_check_frequency: "2s"
 
+tracer:
+  endpoint: "go-backend-clean-arch_jaeger:4318"
+
+collector:
+  endpoint: "go-backend-clean-arch_otel-collector:4317"
+  timeout: "30s"
+
+kavenegar_sms_provider:
+  provider: "kavenegar"
+  sender: "2000660110"
+  api_key: "5A4E684A446A5945754E4A39507458357057343166446D417637494E534A5467686F6473655A772F476D633D"
+
 auth:
   access_secret: "MYSECRETKEY"
   refresh_secret: "MYSECRETKEY"
@@ -108,10 +120,3 @@ auth:
   refresh_subject: "rs"
   access_token_expire_duration: "7h"
   refresh_token_expire_duration: "120h"
-
-tracer:
-  endpoint: "go-backend-clean-arch_jaeger:4318"
-
-collector:
-  endpoint: "go-backend-clean-arch_otel-collector:4317"
-  timeout: "30s"

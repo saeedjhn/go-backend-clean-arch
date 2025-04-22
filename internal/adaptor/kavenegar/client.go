@@ -1,118 +1,128 @@
 package kavenegar
 
 import (
+	"errors"
+	"fmt"
+	"strconv"
+	"time"
+
+	"github.com/kavenegar/kavenegar-go"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 )
 
+type Config struct {
+	Provider string `mapstructure:"Provider"`
+	Sender   string `mapstructure:"sender"`
+	APIKey   string `mapstructure:"api_key"`
+}
+
 type Client struct {
+	config   Config
+	Provider *kavenegar.Kavenegar
 }
 
-func New() *Client {
-	return &Client{}
+func New(config Config) *Client {
+	return &Client{config: config, Provider: kavenegar.New(config.APIKey)}
 }
 
-func (c *Client) Name() contract.Name {
-	// TODO implement me
-	panic("implement me")
+func (c *Client) SendSingle(receptor string, message string) (int, error) {
+	// var params *kavenegar.MessageSendParam
+	res, err := c.Provider.Message.Send(c.config.Sender, []string{receptor}, message, nil)
+	if err != nil {
+		return 0, c.errorHandling(err)
+	}
+
+	if len(res) == 0 {
+		return 0, ErrEmptyRecipient
+	}
+
+	return res[0].MessageID, nil
 }
 
-func (c *Client) WithEndpoint(_ string) contract.SMSSender {
-	// TODO implement me
-	panic("implement me")
+func (c *Client) SendSingleAt(receptor string, message string, duration time.Duration) (int, error) {
+	params := &kavenegar.MessageSendParam{
+		Date: time.Now().Add(duration),
+	}
+	res, err := c.Provider.Message.Send(c.config.Sender, []string{receptor}, message, params)
+	if err != nil {
+		return 0, c.errorHandling(err)
+	}
+
+	if len(res) == 0 {
+		return 0, ErrEmptyRecipient
+	}
+
+	return res[0].MessageID, nil
 }
 
-func (c *Client) WithCredentials(_, _ string) contract.SMSSender {
-	// TODO implement me, signature: username, password
-	panic("implement me")
+func (c *Client) SendBulk(receptors []string, message string) ([]int, error) {
+	// var params *kavenegar.MessageSendParam
+	res, err := c.Provider.Message.Send(c.config.Sender, receptors, message, nil)
+	if err != nil {
+		return nil, c.errorHandling(err)
+	}
+
+	if len(res) == 0 {
+		return nil, ErrEmptyRecipient
+	}
+
+	recIDs := c.extractMessageIDs(res)
+
+	return recIDs, nil
 }
 
-func (c *Client) WithAPIKey(_ string) contract.SMSSender {
-	// TODO implement me
-	panic("implement me")
+func (c *Client) GetStatus(recIDs []int) ([]contract.Status, error) {
+	status, err := c.Provider.Message.Status(c.intsToStrings(recIDs))
+	if err != nil {
+		return nil, c.errorHandling(err)
+	}
+
+	es := c.extractStatus(status)
+
+	return es, nil
 }
 
-func (c *Client) CallSendSingleAPI(_, _, _ string, _ bool) error {
-	// TODO implement me, signature: to, from, text, isFlash
-	panic("implement me")
+func (c *Client) extractMessageIDs(res []kavenegar.Message) []int {
+	var recIDs []int
+	for _, re := range res {
+		recIDs = append(recIDs, re.MessageID)
+	}
+
+	return recIDs
 }
 
-func (c *Client) CallSendBulkAPI(_ []string, _, _ string, _ bool) error {
-	// TODO implement me, signature: to, from, text, isFlash
-	panic("implement me")
+func (c *Client) extractStatus(status []kavenegar.MessageStatus) []contract.Status {
+	var s []contract.Status
+	for _, messageStatus := range status {
+		s = append(s, contract.Status{
+			RecID:      messageStatus.MessageId,
+			StatusCode: messageStatus.Status,
+			StatusText: messageStatus.StatusText,
+		})
+	}
+
+	return s
 }
 
-func (c *Client) CallSendByBaseNumber(_, _, _ string) error {
-	// TODO implement me, signature: text, to, bodyID
-	panic("implement me")
+func (c *Client) intsToStrings(nums []int) []string {
+	strs := make([]string, len(nums))
+	for i, num := range nums {
+		strs[i] = strconv.Itoa(num)
+	}
+
+	return strs
 }
 
-// func (c *Client) FetchDeliveryStatus(_ string) (string, error) {
-// 	// TODO implement me, signature: recId
-// 	panic("implement me")
-// }
+func (c *Client) errorHandling(err error) error {
+	var apiErr *kavenegar.APIError
+	var httpErr *kavenegar.HTTPError
 
-// func (c *Client) FetchBatchDeliveryStatuses(recIds []string) ([]string, error) {
-// 	// TODO implement me
-// 	panic("implement me")
-// }
-//
-// func (c *Client) FetchMessages(location, from string, index, count int) ([]contract.Message, error) {
-// 	// TODO implement me
-// 	panic("implement me")
-// }
-//
-// func (c *Client) FetchMessagesByDate(
-// location, from string, index, count int, dateFrom, dateTo time.Time)
-// ([]contract.Message, error) {
-// 	// TODO implement me
-// 	panic("implement me")
-// }
-//
-// func (c *Client) FetchUserMessagesByDate(
-// location, from string, index, count int, dateFrom, dateTo time.Time
-// ) ([]contract.Message, error) {
-// 	// TODO implement me
-// 	panic("implement me")
-// }
-//
-// func (c *Client) GetCredit() (float64, error) {
-// 	// TODO implement me
-// 	panic("implement me")
-// }
-//
-// func (c *Client) GetBasePrice() (float64, error) {
-// 	// TODO implement me
-// 	panic("implement me")
-// }
-//
-// func (c *Client) GetSmsPrice(from, text string, irancellCount, mtnCount int) (float64, error) {
-// 	// TODO implement me
-// 	panic("implement me")
-// }
-//
-// func (c *Client) GetUserNumbers() ([]string, error) {
-// 	// TODO implement me
-// 	panic("implement me")
-// }
-//
-// func (c *Client) GetInboxCount(isRead bool) (int, error) {
-// 	// TODO implement me
-// 	panic("implement me")
-// }
-//
-// func (c *Client) CallSendAdvanced(
-// to []string, from, text string, isFlash bool, udh string, recIds, statuses []string
-// ) error {
-// 	// TODO implement me
-// 	panic("implement me")
-// }
-//
-// func (c *Client) FetchMessageReception(msgId string, fromRows int) (contract.MessageDetail, error) {
-// 	// TODO implement me
-// 	panic("implement me")
-// }
-//
-// func (c *Client) RemoveMessages(location string, msgIds []string) error {
-// 	// TODO implement me
-// 	panic("implement me")
-// }
+	switch {
+	case errors.As(err, &apiErr):
+		return fmt.Errorf("kavenegar API error: %w", apiErr)
+	case errors.As(err, &httpErr):
+		return fmt.Errorf("kavenegar HTTP error: %w", httpErr)
+	default:
+		return fmt.Errorf("unexpected error from kavenegar: %w", err)
+	}
+}
