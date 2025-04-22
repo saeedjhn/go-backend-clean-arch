@@ -1,4 +1,4 @@
-package sms
+package models
 
 type Lang string
 

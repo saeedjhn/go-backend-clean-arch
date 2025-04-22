@@ -1,8 +1,10 @@
 package sms
 
+import "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+
 type Template struct {
-	Content map[Lang]string // {"en": "Hello {{.Name}}", "fa": "سلام {{.Name}}"}
-	lang    Lang            // "en"
+	Content map[models.Lang]string // {"en": "Hello {{.Name}}", "fa": "سلام {{.Name}}"}
+	lang    models.Lang            // "en"
 }
 
 // func NewTemplate(content map[string]string, langCode string) (*Template, error) {
@@ -15,7 +17,7 @@ type Template struct {
 // 	return &Template{Content: content, lang: langCode}, nil
 // }
 
-func (t *Template) GetLocalizedContent(lang Lang) string {
+func (t *Template) GetLocalizedContent(lang models.Lang) string {
 	if content, ok := t.Content[lang]; ok {
 		return content
 	}
