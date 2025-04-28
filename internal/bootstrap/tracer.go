@@ -10,7 +10,7 @@ import (
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/oteltracer"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/oteltracer"
 )
 
 func NewTracer(config *configs.Config, buildinf buildinfo.Info) (contract.Tracer, error) {

@@ -28,7 +28,7 @@ type Manager[T any] struct {
 	statsMutex  sync.RWMutex
 }
 
-func NewManager[T any](
+func New[T any](
 	timeout time.Duration,
 	failureThreshold uint32,
 ) *Manager[T] {

@@ -6,7 +6,7 @@ package kavenegar_test
 import (
 	"testing"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/kavenegar"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/kavenegar"
 )
 
 func TestSendSingle_WithValidMessage_ReturnsMessageID(t *testing.T) {

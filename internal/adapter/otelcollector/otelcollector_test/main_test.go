@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/otelcollector"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/otelcollector"
 )
 
 var (

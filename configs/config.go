@@ -3,15 +3,15 @@ package configs
 import (
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/kavenegar"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/kavenegar"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/outbox"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/otelcollector"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/otelcollector"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/jsonfilelogger"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/oteltracer"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/oteltracer"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mongo"

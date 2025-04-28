@@ -10,7 +10,7 @@ import (
 
 	contract2 "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/jsonfilelogger"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/event"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/event/event_test/mocks"

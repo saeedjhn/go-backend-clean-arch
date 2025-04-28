@@ -14,7 +14,7 @@ import (
 var counter = 1 //nolint:gochecknoglobals // nothing
 
 func TestRun(t *testing.T) {
-	manager := circuitbreaker.NewManager[string](5*time.Second, 3) // timeout=5s, threshold=3 failures
+	manager := circuitbreaker.New[string](5*time.Second, 3) // timeout=5s, threshold=3 failures
 
 	for i := range 10 {
 		t.Logf("Request #%d:\n", i+1)

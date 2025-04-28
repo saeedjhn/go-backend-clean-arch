@@ -9,7 +9,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/otelcollector"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/otelcollector"
 )
 
 func NewCollector(config *configs.Config, buildinf buildinfo.Info) (contract.Collector, error) {

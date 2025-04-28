@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/rmqpc"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/rmqpc"
 
 	setuptest "github.com/saeedjhn/go-backend-clean-arch/test/setup_test"
 )

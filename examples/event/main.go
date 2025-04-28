@@ -8,8 +8,8 @@ import (
 
 	contract2 "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/jsonfilelogger"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/rmqpc"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/jsonfilelogger"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/rmqpc"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/event"
 )
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/adaptor/rmqpc"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/rmqpc"
 )
 
 //go:generate go test -v -race -count=1 ./...

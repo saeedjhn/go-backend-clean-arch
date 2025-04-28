@@ -18,7 +18,7 @@ func TestRetry_ImmediateSuccess_NoRetries(t *testing.T) {
 
 	t.Parallel()
 
-	err := retry.Retry(context.Background(), func() error {
+	err := retry.Do(context.Background(), func() error {
 		return nil
 	})
 
@@ -31,7 +31,7 @@ func TestRetry_ThirdAttemptSuccessWithExponentialBackoff_SucceedsEventually(t *t
 	t.Parallel()
 
 	counter := 0
-	err := retry.Retry(context.Background(), func() error {
+	err := retry.Do(context.Background(), func() error {
 		counter++
 		if counter < 2 {
 			return errors.New("temporary error")
@@ -48,7 +48,7 @@ func TestRetry_AlwaysFails_ReturnsLastError(t *testing.T) {
 
 	t.Parallel()
 
-	err := retry.Retry(context.Background(), func() error {
+	err := retry.Do(context.Background(), func() error {
 		return errors.New("persistent error")
 	}, retry.WithAttempts(3))
 
@@ -62,7 +62,7 @@ func TestRetry_UseConstantBackoff_VerifyRetryDelayType(t *testing.T) {
 	t.Parallel()
 
 	counter := 0
-	err := retry.Retry(context.Background(), func() error {
+	err := retry.Do(context.Background(), func() error {
 		counter++
 		if counter < 2 {
 			return errors.New("fail")
@@ -80,7 +80,7 @@ func TestRetry_ShouldRetryOnlyOnCustomError_ConditionalRetry(t *testing.T) {
 	t.Parallel()
 
 	counter := 0
-	err := retry.Retry(context.Background(), func() error {
+	err := retry.Do(context.Background(), func() error {
 		counter++
 		if counter < 2 {
 			// log.Println("In block counter < x invoked ")
@@ -105,7 +105,7 @@ func TestRetry_WithMaxJitter_RunsSuccessfully(t *testing.T) {
 	t.Parallel()
 
 	counter := 0
-	err := retry.Retry(context.Background(), func() error {
+	err := retry.Do(context.Background(), func() error {
 		counter++
 		if counter < 2 {
 			// log.Println("In block counter < x invoked ")
@@ -120,12 +120,12 @@ func TestRetry_WithMaxJitter_RunsSuccessfully(t *testing.T) {
 }
 
 func TestRetry_WithFixedDelay_UsesGivenDelay(t *testing.T) {
-	// Scenario: Retry with delay explicitly set.
+	// Scenario: Do with delay explicitly set.
 
 	t.Parallel()
 
 	counter := 0
-	err := retry.Retry(context.Background(), func() error {
+	err := retry.Do(context.Background(), func() error {
 		counter++
 		if counter < 2 {
 			// log.Println("In block counter < x invoked ")
@@ -147,7 +147,7 @@ func TestRetry_OnRetryHook_IsCalledEveryAttempt(t *testing.T) {
 	counter := 0
 	retries := 0
 
-	err := retry.Retry(context.Background(), func() error {
+	err := retry.Do(context.Background(), func() error {
 		counter++
 		if counter < 2 {
 			// log.Println("In block counter < x invoked ")
@@ -173,7 +173,7 @@ func TestRetry_OnSuccessHook_IsCalledOnSuccess(t *testing.T) {
 	called := false
 	counter := 0
 
-	err := retry.Retry(context.Background(), func() error {
+	err := retry.Do(context.Background(), func() error {
 		counter++
 		if counter < 2 {
 			// log.Println("In block counter < x invoked ")
@@ -199,7 +199,7 @@ func TestRetry_ContextCancelled_StopsEarly(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 	defer cancel()
 
-	err := retry.Retry(ctx, func() error {
+	err := retry.Do(ctx, func() error {
 		time.Sleep(120 * time.Millisecond)
 		return errors.New("context deadline exceeded")
 	}, retry.WithAttempts(5))

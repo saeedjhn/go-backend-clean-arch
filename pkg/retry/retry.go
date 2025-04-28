@@ -8,7 +8,7 @@ import (
 	"github.com/avast/retry-go/v4"
 )
 
-func Retry(ctx context.Context, op func() error, opts ...Option) error {
+func Do(ctx context.Context, op func() error, opts ...Option) error {
 	config := defaultConfig()
 	for _, opt := range opts {
 		opt(&config)
