@@ -1,21 +1,21 @@
 package article
 
-type CommentStatus string
+type ModerationStatus string
 
 const (
-	CommentPending  = CommentStatus("pending")
-	CommentApproved = CommentStatus("approved")
-	CommentRejected = CommentStatus("rejected")
+	CommentPending  = ModerationStatus("pending")
+	CommentApproved = ModerationStatus("approved")
+	CommentRejected = ModerationStatus("rejected")
 )
 
-var commentStatusStrings = map[CommentStatus]string{ //nolint:gochecknoglobals // nothing
+var moderationStatusStrings = map[ModerationStatus]string{ //nolint:gochecknoglobals // nothing
 	CommentPending:  "pending",
 	CommentApproved: "approved",
 	CommentRejected: "rejected",
 }
 
-func (a CommentStatus) IsValidStatus() bool {
-	_, ok := commentStatusStrings[a]
+func (a ModerationStatus) IsValidStatus() bool {
+	_, ok := moderationStatusStrings[a]
 
 	return ok
 }

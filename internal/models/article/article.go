@@ -2,8 +2,9 @@ package article
 
 import (
 	"errors"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 )
 
 type Article struct {
@@ -11,7 +12,7 @@ type Article struct {
 	Title   string
 	Slug    string
 	Content string
-	Status  ArticleStatus
+	Status  PublicationStatus
 	// Structure Optimization:
 	// Separate Comments from Article:
 	// If the volume of comments is very high, manage them in a separate aggregate (using Event Sourcing or CQRS).
@@ -48,7 +49,7 @@ func (a *Article) Publish() error {
 type Comment struct {
 	ID        types.ID
 	Text      string
-	Status    CommentStatus
+	Status    ModerationStatus
 	AuthorID  types.ID
 	CreatedAt time.Time
 }

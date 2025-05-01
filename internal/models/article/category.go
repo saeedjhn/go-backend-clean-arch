@@ -1,8 +1,9 @@
 package article
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 	"time"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 )
 
 type Category struct {

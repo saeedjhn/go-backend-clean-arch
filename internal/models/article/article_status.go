@@ -1,20 +1,20 @@
 package article
 
-type ArticleStatus string
+type PublicationStatus string
 
 const (
-	ArticleDraft     = ArticleStatus("draft")
-	ArticlePublished = ArticleStatus("published")
-	ArticleArchived  = ArticleStatus("archived")
+	ArticleDraft     = PublicationStatus("draft")
+	ArticlePublished = PublicationStatus("published")
+	ArticleArchived  = PublicationStatus("archived")
 )
 
-var articleStatusStrings = map[ArticleStatus]string{ //nolint:gochecknoglobals // nothing
+var articleStatusStrings = map[PublicationStatus]string{ //nolint:gochecknoglobals // nothing
 	ArticleDraft:     "draft",
 	ArticlePublished: "published",
 	ArticleArchived:  "archived",
 }
 
-func (a ArticleStatus) IsValidStatus() bool {
+func (a PublicationStatus) IsValidStatus() bool {
 	_, ok := articleStatusStrings[a]
 
 	return ok
