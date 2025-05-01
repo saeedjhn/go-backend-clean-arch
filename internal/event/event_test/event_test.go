@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	contract2 "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/jsonfilelogger"
 
@@ -45,8 +45,12 @@ func TestStart_WithContextCancellation_StopsGracefully(t *testing.T) {
 
 	go func() {
 		defer wg.Done()
-		eventConsumer.Start(ctx)
+		eventConsumer.Start()
 	}()
+
+	wg.Wait()
+
+	eventConsumer.Shutdown(ctx) //nolint:errcheck // nothing
 
 	mockConsumer.AssertExpectations(t)
 }
@@ -73,8 +77,12 @@ func TestStart_WithConsumerError_ReturnsError(t *testing.T) {
 
 	go func() {
 		defer wg.Done()
-		eventConsumer.Start(ctx)
+		eventConsumer.Start()
 	}()
+
+	wg.Wait()
+
+	eventConsumer.Shutdown(ctx) //nolint:errcheck // nothing
 
 	mockConsumer.AssertExpectations(t)
 }
@@ -105,8 +113,12 @@ func TestStart_WithNoEvents_ExitsGracefully(t *testing.T) {
 
 	go func() {
 		defer wg.Done()
-		eventConsumer.Start(ctx)
+		eventConsumer.Start()
 	}()
+
+	wg.Wait()
+
+	eventConsumer.Shutdown(ctx) //nolint:errcheck // nothing
 
 	mockConsumer.AssertExpectations(t)
 }
@@ -120,7 +132,7 @@ func TestStart_WithValidEvents_ProcessesSuccessfull(t *testing.T) {
 		Return(nil).Maybe()
 
 	router := event.NewRouter()
-	router.Register(contract2.Topic("user.registered"), handleUserRegistered)
+	router.Register("user.registered", handleUserRegistered)
 
 	eventConsumer := event.NewEventConsumer(10, router, mockConsumer)
 	eventConsumer.WithLogger(logger)
@@ -137,20 +149,22 @@ func TestStart_WithValidEvents_ProcessesSuccessfull(t *testing.T) {
 	// require.NoError(t, err)
 	go func() {
 		defer wg.Done()
-		eventConsumer.Start(ctx)
+		eventConsumer.Start()
 	}()
 
 	wg.Wait()
 
+	eventConsumer.Shutdown(ctx) //nolint:errcheck // nothing
+
 	mockConsumer.AssertExpectations(t)
 }
 
-func handleUserRegistered(event contract2.Event) error {
+func handleUserRegistered(event contract.Event) error {
 	log.Printf("[Notification] Sending welcome email for user: %s\n", string(event.Payload))
 	return nil
 }
 
-func setupLogger() contract2.Logger {
+func setupLogger() contract.Logger {
 	config := jsonfilelogger.Config{
 		LocalTime:        true,
 		Console:          true,

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	contract2 "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/httpstatus"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
@@ -20,14 +20,14 @@ const _count = 1
 
 type Manager struct {
 	cfg       *configs.Config
-	logger    contract2.Logger
-	collector contract2.Collector
+	logger    contract.Logger
+	collector contract.Collector
 }
 
 func New(
 	cfg *configs.Config,
-	logger contract2.Logger,
-	collector contract2.Collector,
+	logger contract.Logger,
+	collector contract.Collector,
 ) *Manager {
 	return &Manager{
 		logger:    logger,

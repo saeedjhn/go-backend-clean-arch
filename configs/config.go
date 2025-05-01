@@ -3,6 +3,8 @@ package configs
 import (
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/rmqpc"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/kavenegar"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/outbox"
@@ -73,19 +75,20 @@ type CORS struct {
 }
 
 type Config struct {
-	Application          Application           `mapstructure:"application"`
-	HTTPServer           HTTPServer            `mapstructure:"http_server"`
-	GRPCServer           GRPCServer            `mapstructure:"grpc_server"`
-	Pprof                Pprof                 `mapstructure:"pprof"`
-	CORS                 CORS                  `mapstructure:"cors"`
-	Tracer               oteltracer.Config     `mapstructure:"tracer"`
-	Collector            otelcollector.Config  `mapstructure:"collector"`
-	Logger               jsonfilelogger.Config `mapstructure:"logger"`
-	Outbox               outbox.Config         `mapstructure:"outbox"`
-	Mysql                mysql.Config          `mapstructure:"mysql"`
-	Postgres             pq.Config             `mapstructure:"postgres"`
-	Redis                redis.Config          `mapstructure:"redis"`
-	Mongo                mongo.Config          `mapstructure:"mongo"`
-	KavenegarSMSProvider kavenegar.Config      `mapstructure:"kavenegar_sms_provider"`
-	Auth                 authentication.Config `mapstructure:"auth"`
+	Application          Application            `mapstructure:"application"`
+	HTTPServer           HTTPServer             `mapstructure:"http_server"`
+	GRPCServer           GRPCServer             `mapstructure:"grpc_server"`
+	Pprof                Pprof                  `mapstructure:"pprof"`
+	CORS                 CORS                   `mapstructure:"cors"`
+	Tracer               oteltracer.Config      `mapstructure:"tracer"`
+	Collector            otelcollector.Config   `mapstructure:"collector"`
+	Logger               jsonfilelogger.Config  `mapstructure:"logger"`
+	Outbox               outbox.Config          `mapstructure:"outbox"`
+	RabbitMQ             rmqpc.ConnectionConfig `mapstructure:"rabbitmq"`
+	Mysql                mysql.Config           `mapstructure:"mysql"`
+	Postgres             pq.Config              `mapstructure:"postgres"`
+	Redis                redis.Config           `mapstructure:"redis"`
+	Mongo                mongo.Config           `mapstructure:"mongo"`
+	KavenegarSMSProvider kavenegar.Config       `mapstructure:"kavenegar_sms_provider"`
+	Auth                 authentication.Config  `mapstructure:"auth"`
 }

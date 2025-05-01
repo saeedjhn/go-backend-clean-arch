@@ -18,8 +18,8 @@ type UserCreatedEvent struct {
 	// cluster_key: Our BQ clustering key
 }
 
-func NewUserCreatedEvent(userID types.ID) *UserCreatedEvent {
-	return &UserCreatedEvent{
+func NewUserCreatedEvent(userID types.ID) UserCreatedEvent {
+	return UserCreatedEvent{
 		EvtID:            uuid.New().ID(),
 		EvtType:          "users.account.created",
 		UserID:           userID,
@@ -28,14 +28,26 @@ func NewUserCreatedEvent(userID types.ID) *UserCreatedEvent {
 	}
 }
 
-func (t *UserCreatedEvent) EventType() string {
-	return t.EvtType
+func (e UserCreatedEvent) GetID() uint32 {
+	return e.EvtID
 }
 
-func (t *UserCreatedEvent) Marshal() ([]byte, error) {
-	return json.Marshal(t)
+func (e UserCreatedEvent) GetType() string {
+	return e.EvtType
 }
 
-func (t *UserCreatedEvent) Unmarshal(b []byte) error {
-	return json.Unmarshal(b, t)
+func (e UserCreatedEvent) GetEscalationReason() string {
+	return e.EscalationReason
+}
+
+func (e UserCreatedEvent) GetEscalationTime() int64 {
+	return e.EscalationTime
+}
+
+func (e UserCreatedEvent) Marshal() ([]byte, error) {
+	return json.Marshal(e)
+}
+
+func (e UserCreatedEvent) Unmarshal(b []byte) error {
+	return json.Unmarshal(b, &e)
 }

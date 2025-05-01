@@ -3,9 +3,10 @@ package bootstrap
 import (
 	"context"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/buildinfo"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/event"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
-	contract2 "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/buildinfo"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 
@@ -26,14 +27,15 @@ type DB struct {
 }
 
 type Application struct {
-	Config    *configs.Config
-	BuildInfo buildinfo.Info
-	Logger    contract2.Logger
-	Trc       contract2.Tracer
-	Collector contract2.Collector
-	Cache     Cache
-	DB        DB
-	Usecase   *Usecase
+	Config        *configs.Config
+	BuildInfo     buildinfo.Info
+	EventRegister map[contract.Topic]event.RouterHandler
+	Logger        contract.Logger
+	Trc           contract.Tracer
+	Collector     contract.Collector
+	Cache         Cache
+	DB            DB
+	Usecase       *Usecase
 }
 
 func App(config *configs.Config) (*Application, error) {
@@ -50,6 +52,8 @@ func (a *Application) setup() error {
 	var err error
 
 	a.BuildInfo = NewBuildInfo()
+
+	a.EventRegister = NewEventRegister()
 
 	a.Logger = NewLogger(a.Config.Application, a.Config.Logger)
 

@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	contract2 "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/jsonfilelogger"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/rmqpc"
@@ -18,8 +18,8 @@ const _eventBufferSize = 1024
 func main() {
 	logger := setupLogger()
 
-	urTopic := contract2.Topic("user.registered")
-	opTopic := contract2.Topic("order.processing")
+	urTopic := contract.Topic("user.registered")
+	opTopic := contract.Topic("order.processing")
 
 	// Definination JOBS
 	router := event.NewRouter()
@@ -49,7 +49,7 @@ func main() {
 			},
 			QueueBind: rmqpc.QueueBindConfig{
 				Queue:            "test-queue",
-				BindingKey:       []contract2.Topic{urTopic, opTopic},
+				BindingKey:       []contract.Topic{urTopic, opTopic},
 				Durable:          true,
 				AutoDelete:       false,
 				Exclusive:        false,
@@ -88,26 +88,25 @@ func main() {
 		log.Fatalf("Failed to setup queue binding: %v", err)
 	}
 
-	contractConsumer := event.NewEventConsumer(
+	eventConsumer := event.NewEventConsumer(
 		_eventBufferSize,
 		router,
 		rMQ,
 	)
-	contractConsumer.WithLogger(logger)
+	eventConsumer.WithLogger(logger)
 
 	// Start the contract consumer
 	var wg sync.WaitGroup
 	wg.Add(1)
-	// Or
 	ctx, cancel := context.WithCancel(context.Background())
 
 	go func() {
 		defer wg.Done()
-		contractConsumer.Start(ctx)
+		eventConsumer.Start()
 	}()
 
-	evtUserRegistered := contract2.Event{Topic: urTopic, Payload: []byte("User123")}
-	evtOrderProcessing := contract2.Event{Topic: opTopic, Payload: []byte("Order123456")}
+	evtUserRegistered := contract.Event{Topic: urTopic, Payload: []byte("User123")}
+	evtOrderProcessing := contract.Event{Topic: opTopic, Payload: []byte("Order123456")}
 
 	go func() {
 		for i := range 3 {
@@ -136,6 +135,8 @@ func main() {
 		quit <- true
 	}()
 
+	_ = eventConsumer.Shutdown(ctx)
+
 	<-quit
 	log.Println("Termination signal received, shutting down...")
 
@@ -147,17 +148,17 @@ func main() {
 	// Wait until graceful shutdown is complete
 }
 
-func handleUserRegistered(contract contract2.Event) error {
-	log.Printf("[Notification] Sending welcome email for user: %s\n", string(contract.Payload))
+func handleUserRegistered(evt contract.Event) error {
+	log.Printf("[Notification] Sending welcome email for user: %s\n", string(evt.Payload))
 	return nil
 }
 
-func handleOrderPlaced(contract contract2.Event) error {
-	log.Printf("[Order] Processing order: %s\n", string(contract.Payload))
+func handleOrderPlaced(evt contract.Event) error {
+	log.Printf("[Order] Processing order: %s\n", string(evt.Payload))
 	return nil
 }
 
-func setupLogger() contract2.Logger {
+func setupLogger() contract.Logger {
 	config := jsonfilelogger.Config{
 		LocalTime:        true,
 		Console:          true,
@@ -181,12 +182,12 @@ func setupLogger() contract2.Logger {
 //
 // 	bus := NewInMemoryBus()
 //
-// 	contractConsumer := contract.NewEventConsumer(
+// 	eventConsumer := contract.NewEventConsumer(
 // 		_eventBufferSize,
 // 		router,
 // 		bus,
 // 	)
-// 	contractConsumer.WithLogger(logger)
+// 	eventConsumer.WithLogger(logger)
 //
 // 	// Start the contract consumer
 // 	var wg sync.WaitGroup
@@ -195,7 +196,7 @@ func setupLogger() contract2.Logger {
 // 	// Or
 // 	ctx, cancel := context.WithCancel(context.Background())
 //
-// 	go contractConsumer.Start(ctx, &wg)
+// 	go eventConsumer.Start(ctx, &wg)
 //
 // 	evtUserRegistered := contract.Event{Topic: urTopic, Payload: []byte("User123")}
 // 	evtOrderProcessing := contract.Event{Topic: opTopic, Payload: []byte("Order123456")}

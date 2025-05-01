@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	contract2 "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 )
 
@@ -25,17 +25,17 @@ type Scheduler interface {
 
 type O struct {
 	config     Config
-	logger     contract2.Logger
+	logger     contract.Logger
 	scheduler  Scheduler
-	publisher  contract2.Publisher
+	publisher  contract.Publisher
 	repository Repository
 }
 
 func New(
 	config Config,
-	logger contract2.Logger,
+	logger contract.Logger,
 	sch Scheduler,
-	pub contract2.Publisher,
+	pub contract.Publisher,
 	repository Repository,
 ) O {
 	return O{
@@ -79,9 +79,9 @@ func (s O) StartProcessing(ctx context.Context) {
 	}
 }
 
-func (s O) InsertEvent(ctx context.Context, topic string, payload []byte, reTriedCount uint) error {
+func (s O) InsertEvent(ctx context.Context, topic contract.Topic, payload []byte, reTriedCount uint) error {
 	e := Event{
-		Topic:        contract2.Topic(topic),
+		Topic:        topic,
 		Payload:      payload,
 		IsPublished:  false,
 		ReTriedCount: reTriedCount,
@@ -109,7 +109,7 @@ func (s O) processOutBoxEvents(ctx context.Context) error {
 	outBoxEventsIDs := make([]types.ID, 0, len(unPublishedOutBoxEvents))
 
 	for _, outBoxEvent := range unPublishedOutBoxEvents {
-		if err = s.publisher.Publish(contract2.Event{
+		if err = s.publisher.Publish(contract.Event{
 			Topic:   outBoxEvent.Topic,
 			Payload: outBoxEvent.Payload,
 		}); err != nil {

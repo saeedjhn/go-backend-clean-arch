@@ -9,8 +9,6 @@ import (
 	"path/filepath"
 
 	eventdriven "github.com/saeedjhn/go-backend-clean-arch/api/delivery/event_driven"
-	grpcserver "github.com/saeedjhn/go-backend-clean-arch/api/delivery/grpc"
-	httpserver "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 )
@@ -78,20 +76,6 @@ func main() { //nolint:funlen // +100 lines
 	// 	quit <- syscall.SIGINT // Sending SIGINT after 20 seconds
 	// }()
 
-	hs := httpserver.New(app)
-	go func() {
-		if err = hs.Run(); err != nil {
-			app.Logger.DPanicf("Server.HTTP.Run: %v", err)
-		}
-	}()
-
-	gs := grpcserver.New(app)
-	go func() {
-		if err = gs.Run(); err != nil {
-			app.Logger.DPanicf("Server.GRPC.Run: %v", err)
-		}
-	}()
-
 	ed := eventdriven.New(app)
 	go func() {
 		if err = ed.Run(); err != nil {
@@ -114,10 +98,6 @@ func main() { //nolint:funlen // +100 lines
 	// 	log.Println("rabbitmq message publish successfull")
 	// }()
 
-	go func() {
-		// Code for Pprof server setup goes here (if necessary)
-	}()
-
 	// Wait for termination signal (e.g., Ctrl+C)
 	<-quit
 
@@ -128,10 +108,6 @@ func main() { //nolint:funlen // +100 lines
 	defer shutdownCancel()
 
 	app.Logger.Info("App.Shutdown.Gracefully - Received interrupt signal, shutting down gracefully")
-
-	if err = hs.Router.Shutdown(shutdownCtx); err != nil {
-		app.Logger.Errorf("Server.HTTP.Shutdown: %v", err)
-	}
 
 	if err = ed.Shutdown(shutdownCtx); err != nil {
 		app.Logger.Errorf("EventDriven.Shutdown: %v", err)
