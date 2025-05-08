@@ -16,7 +16,7 @@ func Register(app *bootstrap.Application, gs grpc.ServiceRegistrar) {
 
 	// Way 2
 	// Dependencies
-	repo := mysqluser.New(app.Trc, app.DB.MySQL)
+	repo := mysqluser.New(app.Trc, app.MySQL)
 	// rdsRepo := redisuser.New(app.Cache.Redis) // Or userInMemRepo := inmemoryuser.New(cache.InMem)
 
 	vld := uservalidator.New(app.Config.Application.EntropyPassword)

@@ -11,3 +11,9 @@ type Consumer interface {
 type Publisher interface {
 	Publish(event models.Event) error
 }
+
+//go:generate mockery --name PublisherConsumer
+type PublisherConsumer interface {
+	Publisher
+	Consumer
+}

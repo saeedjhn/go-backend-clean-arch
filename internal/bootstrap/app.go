@@ -13,20 +13,18 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/inmemory"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
-	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/pq"
 )
 
-type Cache struct {
-	InMem *inmemory.DB
-	Redis *redis.DB
-}
+// type Cache struct {
+// 	InMem *inmemory.DB
+// 	Redis *redis.DB
+// }
 
-type DB struct {
-	MySQL    *mysql.DB
-	Postgres *pq.DB
-}
+// type DB struct {
+// 	MySQL    *mysql.DB
+// 	Postgres *pq.DB
+// }
 
 type Application struct {
 	Config        *configs.Config
@@ -35,8 +33,9 @@ type Application struct {
 	Logger        contract.Logger
 	Trc           contract.Tracer
 	Collector     contract.Collector
-	Cache         Cache
-	DB            DB
+	Rabbitmq      contract.PublisherConsumer
+	Redis         *redis.DB
+	MySQL         *mysql.DB
 	Usecase       *Usecase
 }
 
@@ -67,37 +66,38 @@ func (a *Application) setup() error {
 		return err
 	}
 
-	if a.DB.MySQL, err = NewMysqlConnection(a.Config.Mysql); err != nil {
+	if a.Rabbitmq, err = NewRabbitmq(a.Config.RabbitMQ, a.EventRegister); err != nil {
 		return err
 	}
 
-	if a.DB.Postgres, err = NewPostgresConnection(a.Config.Postgres); err != nil {
+	if a.MySQL, err = NewMysqlConnection(a.Config.Mysql); err != nil {
 		return err
 	}
 
-	if a.Cache.Redis, err = NewRedisClient(a.Config.Redis); err != nil {
+	// if a.DB.Postgres, err = NewPostgresConnection(a.Config.Postgres); err != nil {
+	// 	return err
+	// }
+
+	if a.Redis, err = NewRedisClient(a.Config.Redis); err != nil {
 		return err
 	}
-
-	a.Cache.InMem = NewInMemory()
 
 	a.Usecase = NewUsecase(
 		a.Config,
 		a.Logger,
 		a.Trc,
-		a.Cache,
-		a.DB,
+		a.MySQL,
 	)
 
 	return nil
 }
 
 func (a *Application) CloseMysqlConnection() error {
-	return CloseMysqlConnection(a.DB.MySQL)
+	return CloseMysqlConnection(a.MySQL)
 }
 
 func (a *Application) CloseRedisClientConnection() error {
-	return CloseRedisClient(a.Cache.Redis)
+	return CloseRedisClient(a.Redis)
 }
 
 func (a *Application) ShutdownTracer(ctx context.Context) error {

@@ -7,6 +7,7 @@ import (
 	authusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 	userusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user"
 	uservalidator "github.com/saeedjhn/go-backend-clean-arch/internal/validator/user"
+	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/db/mysql"
 )
 
 type Usecase struct {
@@ -18,11 +19,10 @@ func NewUsecase(
 	config *configs.Config,
 	_ contract.Logger,
 	trc contract.Tracer,
-	_ Cache,
-	db DB,
+	mysqlDB *mysql.DB,
 ) *Usecase {
 	var (
-		userRepo = usermysql.New(trc, db.MySQL)
+		userRepo = usermysql.New(trc, mysqlDB)
 		// userRdsRepo = userredis.New(cache.Redis) // Or userInMemRepo := inmemoryuser.New(cache.InMem)
 	)
 

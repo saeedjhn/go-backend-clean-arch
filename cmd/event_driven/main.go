@@ -87,7 +87,7 @@ func main() { //nolint:funlen // +100 lines
 	// 	Outbox pattern running..
 	// sch := scheduler.New()
 	// mq, _ := eventdriven.SetupRabbitMQ(app.Config.RabbitMQ, app.EventRegister)
-	// repo := outboxevent.New(app.DB.MySQL)
+	// repo := outboxevent.New(app.MySQL)
 	// o := outbox.New(
 	// 	app.Config.Outbox,
 	// 	app.Logger,

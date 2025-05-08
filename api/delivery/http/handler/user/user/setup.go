@@ -11,7 +11,7 @@ import (
 
 func Setup(app *bootstrap.Application, e *echo.Echo) {
 	// Dependencies
-	repo := usermysql.New(app.Trc, app.DB.MySQL)
+	repo := usermysql.New(app.Trc, app.MySQL)
 	// rdsRepo := userredis.New(app.Cache.Redis) // Or userInMemRepo := inmemoryuser.New(cache.InMem)
 
 	vld := uservalidator.New(app.Config.Application.EntropyPassword)

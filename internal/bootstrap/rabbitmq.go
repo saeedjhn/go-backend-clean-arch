@@ -1,4 +1,4 @@
-package eventdriven
+package bootstrap
 
 import (
 	"fmt"
@@ -38,7 +38,7 @@ const (
 	ConsumeNoWait    = false
 )
 
-func SetupRabbitMQ(
+func NewRabbitmq(
 	config rmqpc.ConnectionConfig,
 	eventRouter map[models.EventType]event.RouterHandler,
 ) (*rmqpc.Connection, error) {
@@ -64,7 +64,7 @@ func SetupRabbitMQ(
 			},
 			QueueBind: rmqpc.QueueBindConfig{
 				Queue:          Queue,
-				BindingKey:     ListBindingKeys(eventRouter),
+				BindingKey:     bindingKeys(eventRouter),
 				Durable:        QueueDurable,
 				AutoDelete:     QueueAutoDelete,
 				Exclusive:      QueueExclusive,
@@ -103,12 +103,12 @@ func SetupRabbitMQ(
 	return rMQ, nil
 }
 
-func ListBindingKeys(eventRouter map[models.EventType]event.RouterHandler) []models.EventType {
-	var bindingKeys []models.EventType
+func bindingKeys(eventRouter map[models.EventType]event.RouterHandler) []models.EventType {
+	var bKeys []models.EventType
 
 	for t := range eventRouter {
-		bindingKeys = append(bindingKeys, t)
+		bKeys = append(bKeys, t)
 	}
 
-	return bindingKeys
+	return bKeys
 }
