@@ -6,7 +6,7 @@ import (
 	admindto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/admin"
 )
 
-func (i *Interactor) Login(
+func (i Interactor) Login(
 	_ context.Context,
 	_ admindto.LoginRequest,
 ) (admindto.LoginResponse, error) {

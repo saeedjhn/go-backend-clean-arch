@@ -6,7 +6,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 )
 
-func (i *Interactor) Profile(ctx context.Context, req user.ProfileRequest) (user.ProfileResponse, error) {
+func (i Interactor) Profile(ctx context.Context, req user.ProfileRequest) (user.ProfileResponse, error) {
 	ctx, span := i.trc.Span(ctx, "Profile")
 	span.SetAttributes(map[string]interface{}{
 		"usecase.name":    "Profile",

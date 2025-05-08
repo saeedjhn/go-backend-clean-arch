@@ -12,7 +12,7 @@ import (
 // var tokenLookup = fmt.Sprintf("header:%s", echo.HeaderXCSRFToken)
 // var tokenLookup = fmt.Sprintf("form:%s", formCSRFToken)
 
-func (h *Handler) SetRoutes(e *echo.Echo) {
+func (h Handler) SetRoutes(e *echo.Echo) {
 	group := e.Group("/csrf")
 	{
 		group.GET("", func(c echo.Context) error {

@@ -14,11 +14,11 @@ type Server struct {
 	ed  *event.C
 }
 
-func New(app *bootstrap.Application) *Server {
-	return &Server{app: app}
+func New(app *bootstrap.Application) Server {
+	return Server{app: app}
 }
 
-func (s *Server) Run() error {
+func (s Server) Run() error {
 	router := event.NewRouter()
 
 	for t, h := range s.app.EventRegister {
@@ -36,6 +36,6 @@ func (s *Server) Run() error {
 	return nil
 }
 
-func (s *Server) Shutdown(ctx context.Context) error {
+func (s Server) Shutdown(ctx context.Context) error {
 	return s.ed.Shutdown(ctx)
 }

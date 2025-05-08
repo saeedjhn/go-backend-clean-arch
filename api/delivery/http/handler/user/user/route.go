@@ -5,7 +5,7 @@ import (
 	mymiddleware "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http/middleware"
 )
 
-func (h *Handler) SetRoutes(e *echo.Echo) {
+func (h Handler) SetRoutes(e *echo.Echo) {
 	group := e.Group("/users")
 	{
 		publicG := group.Group("")

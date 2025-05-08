@@ -14,7 +14,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
-func (h *Handler) Register(c echo.Context) error {
+func (h Handler) Register(c echo.Context) error {
 	ctx, span := h.trc.Span(
 		c.Request().Context(), "HTTP POST register",
 	)

@@ -23,8 +23,8 @@ type Server struct {
 
 func New(
 	app *bootstrap.Application,
-) *Server {
-	return &Server{
+) Server {
+	return Server{
 		App:    app,
 		Router: echo.New(),
 	}

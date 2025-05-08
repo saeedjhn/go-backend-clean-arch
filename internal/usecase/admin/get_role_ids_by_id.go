@@ -4,7 +4,7 @@ import (
 	"context"
 )
 
-func (i *Interactor) GetRolesIDsByID(
+func (i Interactor) GetRolesIDsByID(
 	_ context.Context,
 	_ uint64,
 ) ([]uint64, error) {

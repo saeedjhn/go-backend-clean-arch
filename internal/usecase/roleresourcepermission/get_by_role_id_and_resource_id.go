@@ -6,7 +6,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
 )
 
-func (i *Interactor) GetByRoleIDAndResourceID(
+func (i Interactor) GetByRoleIDAndResourceID(
 	_ context.Context,
 	_ uint64,
 	_ uint64,

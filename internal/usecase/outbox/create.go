@@ -9,7 +9,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
 )
 
-func (i *Interactor) Create(ctx context.Context, events []contract.DomainEvent) error {
+func (i Interactor) Create(ctx context.Context, events []contract.DomainEvent) error {
 	ctx, span := i.trc.Span(ctx, "Create")
 	span.SetAttributes(map[string]interface{}{
 		"usecase.name":    "Create",

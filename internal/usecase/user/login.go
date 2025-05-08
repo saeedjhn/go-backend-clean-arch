@@ -10,7 +10,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
-func (i *Interactor) Login(ctx context.Context, req user.LoginRequest) (user.LoginResponse, error) {
+func (i Interactor) Login(ctx context.Context, req user.LoginRequest) (user.LoginResponse, error) {
 	ctx, span := i.trc.Span(ctx, "Login")
 	span.SetAttributes(map[string]interface{}{
 		"usecase.name":    "Login",

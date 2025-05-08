@@ -44,8 +44,8 @@ func New(
 	trc contract.Tracer,
 	vld Validator,
 	repository Repository,
-) *Interactor {
-	return &Interactor{
+) Interactor {
+	return Interactor{
 		cfg:        cfg,
 		trc:        trc,
 		vld:        vld,

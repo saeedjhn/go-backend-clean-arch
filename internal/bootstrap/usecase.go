@@ -11,8 +11,8 @@ import (
 )
 
 type Usecase struct {
-	AuthIntr *authusecase.Interactor
-	UserIntr *userusecase.Interactor
+	AuthIntr authusecase.Interactor
+	UserIntr userusecase.Interactor
 }
 
 func NewUsecase(

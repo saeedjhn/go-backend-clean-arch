@@ -16,7 +16,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
-func (h *Handler) Profile(c echo.Context) error {
+func (h Handler) Profile(c echo.Context) error {
 	ctx, span := h.trc.Span(
 		c.Request().Context(), "HTTP POST profile",
 	)

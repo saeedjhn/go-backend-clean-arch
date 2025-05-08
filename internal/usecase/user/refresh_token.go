@@ -10,7 +10,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
-func (i *Interactor) RefreshToken(
+func (i Interactor) RefreshToken(
 	ctx context.Context,
 	req user.RefreshTokenRequest,
 ) (user.RefreshTokenResponse, error) {

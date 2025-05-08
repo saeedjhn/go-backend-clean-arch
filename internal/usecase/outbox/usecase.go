@@ -6,7 +6,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/repository"
 )
 
-// var _ outboxhandler.Interactor = (*Interactor)(nil) // Commented, because it happens import cycle.
+// var _ outboxhandler.Interactor = (Interactor)(nil) // Commented, because it happens import cycle.
 
 type Interactor struct {
 	cfg        *configs.Config
@@ -18,8 +18,8 @@ func New(
 	cfg *configs.Config,
 	trc contract.Tracer,
 	repository repository.OutboxEvent,
-) *Interactor {
-	return &Interactor{
+) Interactor {
+	return Interactor{
 		cfg:        cfg,
 		trc:        trc,
 		repository: repository,

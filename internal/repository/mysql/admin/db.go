@@ -6,10 +6,10 @@ type DB struct {
 	conn *mysql.DB
 }
 
-// var _ adminusecase.Repository = (*DB)(nil)
+// var _ adminusecase.Repository = (DB)(nil)
 
-func New(conn *mysql.DB) *DB {
-	return &DB{
+func New(conn *mysql.DB) DB {
+	return DB{
 		conn: conn,
 	}
 }

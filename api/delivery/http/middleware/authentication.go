@@ -8,7 +8,7 @@ import (
 )
 
 func Authentication(
-	authIntr *authentication.Interactor,
+	authIntr authentication.Interactor,
 ) echo.MiddlewareFunc {
 	return mw.WithConfig(mw.Config{
 		ContextKey: configs.AuthMiddlewareContextKey,

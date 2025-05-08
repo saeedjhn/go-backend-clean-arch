@@ -13,8 +13,8 @@ type DB struct {
 	conn *mysql.DB
 }
 
-func New(conn *mysql.DB) *DB {
-	return &DB{conn: conn}
+func New(conn *mysql.DB) DB {
+	return DB{conn: conn}
 }
 
 func (d DB) Create(_ context.Context, _ models.OutboxEvent) error {

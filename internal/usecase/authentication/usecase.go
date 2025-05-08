@@ -22,10 +22,10 @@ type Interactor struct {
 	Config Config
 }
 
-// var _ userservice.AuthGenerator = (*Interactor)(nil) // Commented, because it happens import cycle.
+// var _ userservice.AuthGenerator = (Interactor)(nil) // Commented, because it happens import cycle.
 
-func New(config Config) *Interactor {
-	return &Interactor{Config: config}
+func New(config Config) Interactor {
+	return Interactor{Config: config}
 }
 
 func (i Interactor) CreateAccessToken(

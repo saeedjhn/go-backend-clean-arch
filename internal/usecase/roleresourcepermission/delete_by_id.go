@@ -6,7 +6,7 @@ import (
 	roleresourcepermissiondto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/roleresourcepermission"
 )
 
-func (i *Interactor) DeleteByID(
+func (i Interactor) DeleteByID(
 	_ context.Context,
 	_ roleresourcepermissiondto.DeleteByIDRequest,
 ) (roleresourcepermissiondto.DeleteByIDResponse, error) {

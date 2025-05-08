@@ -23,8 +23,8 @@ type Server struct {
 	app *bootstrap.Application
 }
 
-func New(app *bootstrap.Application) *Server {
-	return &Server{app: app}
+func New(app *bootstrap.Application) Server {
+	return Server{app: app}
 }
 
 func (s Server) Run() error {

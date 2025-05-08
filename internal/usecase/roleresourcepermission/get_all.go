@@ -6,7 +6,7 @@ import (
 	roleresourcepermissiondto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/roleresourcepermission"
 )
 
-func (i *Interactor) GetAll(
+func (i Interactor) GetAll(
 	_ context.Context,
 	_ roleresourcepermissiondto.GetAllRequest,
 ) (roleresourcepermissiondto.GetAllResponse, error) {

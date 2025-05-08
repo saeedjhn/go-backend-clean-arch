@@ -46,8 +46,8 @@ func New(
 	resourceIntr ResourceInteractor,
 	roleResourcePermissionIntr RoleResourcePermissionInteractor,
 	// cache Cache,
-) *Interactor {
-	return &Interactor{
+) Interactor {
+	return Interactor{
 		Config:                     config,
 		resourceIntr:               resourceIntr,
 		roleResourcePermissionIntr: roleResourcePermissionIntr,
@@ -55,7 +55,7 @@ func New(
 	}
 }
 
-func (a *Interactor) CheckAccess( //nolint:gocognit // nothing
+func (a Interactor) CheckAccess( //nolint:gocognit // nothing
 	ctx context.Context,
 	roleIDs []types.ID,
 	resourceName string,
@@ -145,7 +145,7 @@ func (a *Interactor) CheckAccess( //nolint:gocognit // nothing
 // 	return dec.Decode(to)
 // }
 
-// func (a *Interactor) CheckAccess(
+// func (a Interactor) CheckAccess(
 // ctx context.Context,
 // roleIDs []uint64,
 // resourceName string,
@@ -199,7 +199,7 @@ func (a *Interactor) CheckAccess( //nolint:gocognit // nothing
 // 	return allowAccess, nil
 // }
 
-// func (a *Interactor) CheckAccess(ctx context.Context, roleID, resourceID uint64, actions ...string) (bool, error) {
+// func (a Interactor) CheckAccess(ctx context.Context, roleID, resourceID uint64, actions ...string) (bool, error) {
 // 	perm, err := a.roleResourcePermissionIntr.GetByRoleIDAndResourceID(ctx, roleID, resourceID)
 // 	if err != nil {
 // 		return false, err
@@ -235,7 +235,7 @@ func (a *Interactor) CheckAccess( //nolint:gocognit // nothing
 // 	return false, nil
 // }
 
-// func (s *Interactor) CheckAccess(
+// func (s Interactor) CheckAccess(
 // 	ctx context.Context,
 // 	adminID uint,
 // role models.AdminRole,

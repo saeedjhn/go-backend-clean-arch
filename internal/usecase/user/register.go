@@ -10,7 +10,7 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
-func (i *Interactor) Register(ctx context.Context, req userdto.RegisterRequest) (userdto.RegisterResponse, error) {
+func (i Interactor) Register(ctx context.Context, req userdto.RegisterRequest) (userdto.RegisterResponse, error) {
 	ctx, span := i.trc.Span(ctx, "Register")
 	span.SetAttributes(map[string]interface{}{
 		"usecase.name":    "Register",

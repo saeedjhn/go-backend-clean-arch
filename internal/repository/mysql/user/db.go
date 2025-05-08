@@ -23,16 +23,16 @@ type DB struct {
 	conn *mysql.DB
 }
 
-// var _ userservice.Repository = (*DB)(nil)
+// var _ userservice.Repository = (DB)(nil)
 
-func New(trc contract.Tracer, conn *mysql.DB) *DB {
-	return &DB{
+func New(trc contract.Tracer, conn *mysql.DB) DB {
+	return DB{
 		trc:  trc,
 		conn: conn,
 	}
 }
 
-func (r *DB) Create(ctx context.Context, u usermodel.User) (usermodel.User, error) {
+func (r DB) Create(ctx context.Context, u usermodel.User) (usermodel.User, error) {
 	_, span := r.trc.Span(ctx, "DB Create")
 	span.SetAttributes(map[string]interface{}{
 		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO
@@ -67,7 +67,7 @@ func (r *DB) Create(ctx context.Context, u usermodel.User) (usermodel.User, erro
 	return u, nil
 }
 
-func (r *DB) IsExistsByMobile(ctx context.Context, mobile string) (bool, error) {
+func (r DB) IsExistsByMobile(ctx context.Context, mobile string) (bool, error) {
 	_, span := r.trc.Span(ctx, "DB IsExistsByMobile")
 	span.SetAttributes(map[string]interface{}{
 		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO
@@ -105,7 +105,7 @@ func (r *DB) IsExistsByMobile(ctx context.Context, mobile string) (bool, error) 
 	return false, nil
 }
 
-func (r *DB) GetByMobile(ctx context.Context, mobile string) (usermodel.User, error) {
+func (r DB) GetByMobile(ctx context.Context, mobile string) (usermodel.User, error) {
 	_, span := r.trc.Span(ctx, "DB GetByMobile")
 	span.SetAttributes(map[string]interface{}{
 		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO
@@ -143,7 +143,7 @@ func (r *DB) GetByMobile(ctx context.Context, mobile string) (usermodel.User, er
 	return user, nil
 }
 
-func (r *DB) GetByID(ctx context.Context, id uint64) (usermodel.User, error) {
+func (r DB) GetByID(ctx context.Context, id uint64) (usermodel.User, error) {
 	_, span := r.trc.Span(ctx, "DB GetByID")
 	span.SetAttributes(map[string]interface{}{
 		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO

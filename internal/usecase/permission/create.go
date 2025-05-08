@@ -6,7 +6,7 @@ import (
 	permissiondto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/permission"
 )
 
-func (i *Interactor) Create(
+func (i Interactor) Create(
 	_ context.Context,
 	_ permissiondto.CreateRequest,
 ) (permissiondto.CreateResponse, error) {

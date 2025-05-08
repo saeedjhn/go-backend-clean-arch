@@ -3,30 +3,30 @@ package user
 import (
 	"context"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/proto/user/gen"
+	userusecase "github.com/saeedjhn/go-backend-clean-arch/internal/usecase/user"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/proto/user/gen"
 
 	"github.com/golang/protobuf/ptypes/empty" //nolint:gomodguard // nothing
 	"google.golang.org/grpc"
 )
 
-type Interactor interface {
-	Register(ctx context.Context, req user.RegisterRequest) (user.RegisterResponse, error)
-	Login(ctx context.Context, req user.LoginRequest) (user.LoginResponse, error)
-	Profile(ctx context.Context, req user.ProfileRequest) (user.ProfileResponse, error)
-	RefreshToken(ctx context.Context, req user.RefreshTokenRequest) (user.RefreshTokenResponse, error)
-}
+// type Interactor interface {
+// 	Register(ctx context.Context, req user.RegisterRequest) (user.RegisterResponse, error)
+// 	Login(ctx context.Context, req user.LoginRequest) (user.LoginResponse, error)
+// 	Profile(ctx context.Context, req user.ProfileRequest) (user.ProfileResponse, error)
+// 	RefreshToken(ctx context.Context, req user.RefreshTokenRequest) (user.RefreshTokenResponse, error)
+// }
 
 var _ gen.UserServiceServer = (*Service)(nil)
 
 type Service struct {
 	gen.UserServiceServer
-	userIntr Interactor
+	userIntr userusecase.Interactor
 }
 
-func New(userInteractor Interactor) *Service {
-	return &Service{userIntr: userInteractor}
+func New(userInteractor userusecase.Interactor) Service {
+	return Service{userIntr: userInteractor}
 }
 
 func (u Service) Create(_ context.Context, _ *gen.CreateRequest) (*gen.User, error) {

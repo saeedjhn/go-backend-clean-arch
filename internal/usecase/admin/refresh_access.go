@@ -6,7 +6,7 @@ import (
 	admindto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/admin"
 )
 
-func (i *Interactor) RefreshToken(
+func (i Interactor) RefreshToken(
 	_ context.Context,
 	_ admindto.RefreshTokenRequest,
 ) (admindto.RefreshTokenResponse, error) {

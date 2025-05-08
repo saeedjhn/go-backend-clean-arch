@@ -40,7 +40,7 @@ type Interactor struct {
 	repository Repository
 }
 
-// var _ userhandler.Interactor = (*Interactor)(nil) // Commented, because it happens import cycle.
+// var _ userhandler.Interactor = (Interactor)(nil) // Commented, because it happens import cycle.
 
 func New(
 	cfg *configs.Config,
@@ -48,8 +48,8 @@ func New(
 	authIntr usecase.AuthInteractor,
 	vld Validator,
 	repository Repository,
-) *Interactor {
-	return &Interactor{
+) Interactor {
+	return Interactor{
 		cfg:        cfg,
 		trc:        trc,
 		vld:        vld,

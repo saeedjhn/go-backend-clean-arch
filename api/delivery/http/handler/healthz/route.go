@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h *Handler) SetRoutes(e *echo.Echo) {
+func (h Handler) SetRoutes(e *echo.Echo) {
 	group := e.Group("/healthz")
 	{
 		// This endpoint checks whether the service is still alive or not.
