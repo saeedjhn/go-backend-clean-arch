@@ -46,17 +46,5 @@ func (i *Interactor) RefreshToken(
 			WithKind(richerror.KindStatusBadRequest)
 	}
 
-	refreshToken, err := i.authIntr.CreateRefreshToken(authenticable)
-	if err != nil {
-		return user.RefreshTokenResponse{}, richerror.New(_opUserServiceRefreshToken).WithErr(err).
-			WithMessage(msg.ErrMsg400BadRequest).
-			WithKind(richerror.KindStatusBadRequest)
-	}
-
-	return user.RefreshTokenResponse{
-		Tokens: user.Tokens{
-			AccessToken:  accessToken,
-			RefreshToken: refreshToken,
-		},
-	}, nil
+	return user.RefreshTokenResponse{AccessToken: accessToken}, nil
 }

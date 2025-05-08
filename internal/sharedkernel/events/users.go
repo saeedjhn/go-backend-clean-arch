@@ -4,50 +4,52 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 
 	"github.com/google/uuid"
 )
 
-type UserCreatedEvent struct {
-	EvtID            uint32   `json:"event-id"` // A Unique ID
-	EvtType          string   `json:"event-type"`
-	UserID           types.ID `json:"user-id"`
-	EscalationReason string   `json:"escalation-reason"`
-	EscalationTime   int64    `json:"escalation-time"`
+type UserRegisteredEvent struct {
+	EvtID            uint32           `json:"event_id"` // A Unique ID
+	EvtType          models.EventType `json:"event_type"`
+	UserID           types.ID         `json:"user_id"`
+	EscalationReason string           `json:"escalation_reason"`
+	EscalationTime   int64            `json:"escalation_time"`
 	// cluster_key: Our BQ clustering key
 }
 
-func NewUserCreatedEvent(userID types.ID) UserCreatedEvent {
-	return UserCreatedEvent{
+func NewUserRegisteredEvent(userID types.ID, reason string) *UserRegisteredEvent {
+	return &UserRegisteredEvent{
 		EvtID:            uuid.New().ID(),
-		EvtType:          "users.account.created",
+		EvtType:          UsersRegistered,
 		UserID:           userID,
-		EscalationReason: "reason",
+		EscalationReason: reason,
 		EscalationTime:   time.Now().Unix(),
 	}
 }
 
-func (e UserCreatedEvent) GetID() uint32 {
+func (e *UserRegisteredEvent) GetID() uint32 {
 	return e.EvtID
 }
 
-func (e UserCreatedEvent) GetType() string {
+func (e *UserRegisteredEvent) GetType() models.EventType {
 	return e.EvtType
 }
 
-func (e UserCreatedEvent) GetEscalationReason() string {
+func (e *UserRegisteredEvent) GetEscalationReason() string {
 	return e.EscalationReason
 }
 
-func (e UserCreatedEvent) GetEscalationTime() int64 {
+func (e *UserRegisteredEvent) GetEscalationTime() int64 {
 	return e.EscalationTime
 }
 
-func (e UserCreatedEvent) Marshal() ([]byte, error) {
+func (e *UserRegisteredEvent) Marshal() ([]byte, error) {
 	return json.Marshal(e)
 }
 
-func (e UserCreatedEvent) Unmarshal(b []byte) error {
-	return json.Unmarshal(b, &e)
+func (e *UserRegisteredEvent) Unmarshal(b []byte) error {
+	return json.Unmarshal(b, e)
 }

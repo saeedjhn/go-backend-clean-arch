@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/rmqpc"
 )
@@ -12,7 +12,7 @@ import (
 //go:generate go test -v -race -count=1 ./...
 
 func TestConsumeMessage_WhenMessageIsPublished_ShouldReceiveMessagee(t *testing.T) {
-	urTopic := contract.Topic("user.registered")
+	urTopic := models.EventType("user.registered")
 
 	cfg := rmqpc.Config{
 		Connection: _myRabbitMQConnectionConfig,
@@ -28,7 +28,7 @@ func TestConsumeMessage_WhenMessageIsPublished_ShouldReceiveMessagee(t *testing.
 			},
 			QueueBind: rmqpc.QueueBindConfig{
 				Queue:            "test-queue",
-				BindingKey:       []contract.Topic{urTopic},
+				BindingKey:       []models.EventType{urTopic},
 				Durable:          true,
 				AutoDelete:       false,
 				Exclusive:        false,
@@ -67,7 +67,7 @@ func TestConsumeMessage_WhenMessageIsPublished_ShouldReceiveMessagee(t *testing.
 		t.Fatalf("Failed to setup queue binding: %v", err)
 	}
 
-	eventStream := make(chan contract.Event)
+	eventStream := make(chan models.Event)
 
 	go func() {
 		err := rMQ.Consume(eventStream)
@@ -78,16 +78,16 @@ func TestConsumeMessage_WhenMessageIsPublished_ShouldReceiveMessagee(t *testing.
 	}()
 
 	time.Sleep(2 * time.Second)
-	_ = rMQ.Publish(contract.Event{Topic: "user.registered", Payload: []byte("New User Registered")})
+	_ = rMQ.Publish(models.Event{Type: "user.registered", Payload: []byte("New User Registered")})
 
 	// 	for evt := range eventStream {
-	// 		t.Logf("Received evt: Topic=%s, Payload=%s", evt.Topic, string(evt.Payload))
+	// 		t.Logf("Received evt: EventType=%s, Payload=%s", evt.EventType, string(evt.Payload))
 	// 	}
 
 	for {
 		select {
 		case evt := <-eventStream:
-			t.Logf("Received evt: Topic=%s, Payload=%s", evt.Topic, string(evt.Payload))
+			t.Logf("Received evt: EventType=%s, Payload=%s", evt.Type, string(evt.Payload))
 			return
 		case <-time.After(5 * time.Second):
 			t.Fatalf("Test timed out waiting for message")

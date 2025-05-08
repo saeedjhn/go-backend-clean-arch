@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -21,7 +21,7 @@ func (_m *MockPublisher) EXPECT() *MockPublisher_Expecter {
 }
 
 // Publish provides a mock function with given fields: event
-func (_m *MockPublisher) Publish(evt contract.Event) error {
+func (_m *MockPublisher) Publish(evt models.Event) error {
 	ret := _m.Called(evt)
 
 	if len(ret) == 0 {
@@ -29,7 +29,7 @@ func (_m *MockPublisher) Publish(evt contract.Event) error {
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(contract.Event) error); ok {
+	if rf, ok := ret.Get(0).(func(models.Event) error); ok {
 		r0 = rf(evt)
 	} else {
 		r0 = ret.Error(0)
@@ -49,9 +49,9 @@ func (_e *MockPublisher_Expecter) Publish(event interface{}) *MockPublisher_Publ
 	return &MockPublisher_Publish_Call{Call: _e.mock.On("Publish", event)}
 }
 
-func (_c *MockPublisher_Publish_Call) Run(run func(event contract.Event)) *MockPublisher_Publish_Call {
+func (_c *MockPublisher_Publish_Call) Run(run func(event models.Event)) *MockPublisher_Publish_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(contract.Event))
+		run(args[0].(models.Event))
 	})
 	return _c
 }
@@ -61,7 +61,7 @@ func (_c *MockPublisher_Publish_Call) Return(_a0 error) *MockPublisher_Publish_C
 	return _c
 }
 
-func (_c *MockPublisher_Publish_Call) RunAndReturn(run func(contract.Event) error) *MockPublisher_Publish_Call {
+func (_c *MockPublisher_Publish_Call) RunAndReturn(run func(models.Event) error) *MockPublisher_Publish_Call {
 	_c.Call.Return(run)
 	return _c
 }

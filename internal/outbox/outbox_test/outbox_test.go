@@ -6,6 +6,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 
@@ -29,7 +31,7 @@ func TestOutbox_ProcessOutBoxEvents_NoUnpublishedEvents_ReturnsNil(t *testing.T)
 		BatchSize:      2,
 		RetryThreshold: 3,
 	}
-	var events []outbox.Event
+	var events []models.OutboxEvent
 
 	logger := setupLogger()
 	sch, err := setupScheduler()
@@ -37,7 +39,7 @@ func TestOutbox_ProcessOutBoxEvents_NoUnpublishedEvents_ReturnsNil(t *testing.T)
 		t.Fatalf("failed to set up scheduler: %v", err)
 	}
 	mockPublisher := mocks.NewMockPublisher(t)
-	mockRepo := mocks.NewMockRepository(t)
+	mockRepo := mocks.NewMockOutboxEvent(t)
 	mockRepo.On("GetUnPublished", mock.Anything, 0, config.BatchSize, config.RetryThreshold).Return(events, nil).Maybe()
 
 	ob := outbox.New(
@@ -64,9 +66,9 @@ func TestOutbox_ProcessOutBoxEvents_FailToPublishEvent_ReturnsError(t *testing.T
 		BatchSize:      1,
 		RetryThreshold: 1,
 	}
-	events := []outbox.Event{{
+	events := []models.OutboxEvent{{
 		ID:            1,
-		Topic:         "user.sign.up",
+		Type:          "user.sign.up",
 		Payload:       []byte("user data"),
 		IsPublished:   false,
 		ReTriedCount:  0,
@@ -82,7 +84,7 @@ func TestOutbox_ProcessOutBoxEvents_FailToPublishEvent_ReturnsError(t *testing.T
 	mockPublisher := mocks.NewMockPublisher(t)
 	mockPublisher.On("Publish", mock.Anything).Return(errors.New("publish error"))
 
-	mockRepo := mocks.NewMockRepository(t)
+	mockRepo := mocks.NewMockOutboxEvent(t)
 	mockRepo.On("GetUnPublished", mock.Anything, 0, config.BatchSize, config.RetryThreshold).Return(events, nil)
 	mockRepo.On("UpdatePublished", mock.Anything, []types.ID{events[0].ID}, mock.Anything).Return(nil).Maybe()
 
@@ -110,9 +112,9 @@ func TestOutbox_ProcessOutBoxEvents_FailToUpdatePublished_ReturnsError(t *testin
 		BatchSize:      2,
 		RetryThreshold: 3,
 	}
-	events := []outbox.Event{{
+	events := []models.OutboxEvent{{
 		ID:            1,
-		Topic:         "user.sign.up",
+		Type:          "user.sign.up",
 		Payload:       []byte("user data"),
 		IsPublished:   false,
 		ReTriedCount:  0,
@@ -127,7 +129,7 @@ func TestOutbox_ProcessOutBoxEvents_FailToUpdatePublished_ReturnsError(t *testin
 	}
 	mockPublisher := mocks.NewMockPublisher(t)
 	mockPublisher.EXPECT().Publish(mock.Anything).Return(nil)
-	mockRepo := mocks.NewMockRepository(t)
+	mockRepo := mocks.NewMockOutboxEvent(t)
 	mockRepo.On("GetUnPublished", mock.Anything, 0, config.BatchSize, config.RetryThreshold).Return(events, nil)
 	// m, _ := mockRepo.GetUnPublished(ctx, 0, config.BatchSize, config.RetryThreshold)
 	mockRepo.On("UpdatePublished", mock.Anything, []types.ID{events[0].ID}, mock.Anything).
@@ -157,9 +159,9 @@ func TestOutbox_ProcessOutBoxEvents_SuccessfullyPublished_ReturnsNil(t *testing.
 		BatchSize:      2,
 		RetryThreshold: 3,
 	}
-	events := []outbox.Event{{
+	events := []models.OutboxEvent{{
 		ID:            1,
-		Topic:         "user.sign.up",
+		Type:          "user.sign.up",
 		Payload:       []byte("user data"),
 		IsPublished:   false,
 		ReTriedCount:  0,
@@ -167,7 +169,7 @@ func TestOutbox_ProcessOutBoxEvents_SuccessfullyPublished_ReturnsNil(t *testing.
 		PublishedAt:   time.Time{},
 	}, {
 		ID:            2,
-		Topic:         "order.created",
+		Type:          "order.created",
 		Payload:       []byte("order details"),
 		IsPublished:   false,
 		ReTriedCount:  0,
@@ -182,7 +184,7 @@ func TestOutbox_ProcessOutBoxEvents_SuccessfullyPublished_ReturnsNil(t *testing.
 	}
 	mockPublisher := mocks.NewMockPublisher(t)
 	mockPublisher.EXPECT().Publish(mock.Anything).Return(nil)
-	mockRepo := mocks.NewMockRepository(t)
+	mockRepo := mocks.NewMockOutboxEvent(t)
 	mockRepo.On("GetUnPublished", mock.Anything, 0, config.BatchSize, config.RetryThreshold).Return(events, nil)
 	mockRepo.On("UpdatePublished", mock.Anything, []types.ID{events[0].ID, events[1].ID}, mock.Anything).Return(nil)
 

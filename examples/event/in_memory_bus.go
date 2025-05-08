@@ -1,25 +1,25 @@
 package main
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
 )
 
 type InMemoryBus struct {
 	// contractStream chan contract.Event
-	contractStream chan contract.Event
+	contractStream chan models.Event
 }
 
 func NewInMemoryBus() *InMemoryBus {
-	return &InMemoryBus{contractStream: make(chan contract.Event, _eventBufferSize)}
+	return &InMemoryBus{contractStream: make(chan models.Event, _eventBufferSize)}
 }
 
-func (b *InMemoryBus) Publish(contract contract.Event) error {
+func (b *InMemoryBus) Publish(contract models.Event) error {
 	b.contractStream <- contract
 
 	return nil
 }
 
-func (b *InMemoryBus) Consume(ch chan<- contract.Event) error {
+func (b *InMemoryBus) Consume(ch chan<- models.Event) error {
 	// go func() {
 	for evt := range b.contractStream {
 		ch <- evt
@@ -50,7 +50,7 @@ func (b *InMemoryBus) Consume(ch chan<- contract.Event) error {
 // 	b.mu.Lock()
 // 	defer b.mu.Unlock()
 //
-// 	b.messageStore.Store(contract.ID, contract)
+// 	b.messageStore.Create(contract.ID, contract)
 // 	b.contractStream <- contract
 //
 // 	return nil

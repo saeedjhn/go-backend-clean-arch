@@ -2,10 +2,9 @@ package user
 
 import (
 	"context"
-	"time"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/usecase"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/security/bcrypt"
 
@@ -14,15 +13,7 @@ import (
 	usermodel "github.com/saeedjhn/go-backend-clean-arch/internal/models/user"
 
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/usecase/authentication"
 )
-
-//go:generate mockery --name AuthInteractor
-type AuthInteractor interface {
-	CreateAccessToken(req models.Authenticable) (string, error)
-	CreateRefreshToken(req models.Authenticable) (string, error)
-	ParseToken(secret, requestToken string) (*authentication.Claims, error)
-}
 
 //go:generate mockery --name Validator
 type Validator interface {
@@ -30,14 +21,6 @@ type Validator interface {
 	ValidateLoginRequest(req userdto.LoginRequest) (map[string]string, error)
 	ValidateProfileRequest(req userdto.ProfileRequest) (map[string]string, error)
 	ValidateRefreshTokenRequest(req userdto.RefreshTokenRequest) (map[string]string, error)
-}
-
-//go:generate mockery --name Cache
-type Cache interface {
-	Exists(ctx context.Context, key string) (bool, error)
-	Set(ctx context.Context, key string, value interface{}, expireTime time.Duration) error
-	Get(ctx context.Context, key string) (string, error)
-	Del(ctx context.Context, key string) (bool, error)
 }
 
 //go:generate mockery --name Repository
@@ -51,9 +34,9 @@ type Repository interface {
 type Interactor struct {
 	cfg        *configs.Config
 	trc        contract.Tracer
-	authIntr   AuthInteractor
+	authIntr   usecase.AuthInteractor
+	outboxIntr usecase.OutboxInteractor
 	vld        Validator
-	cache      Cache
 	repository Repository
 }
 
@@ -62,9 +45,8 @@ type Interactor struct {
 func New(
 	cfg *configs.Config,
 	trc contract.Tracer,
-	authIntr AuthInteractor,
+	authIntr usecase.AuthInteractor,
 	vld Validator,
-	cache Cache,
 	repository Repository,
 ) *Interactor {
 	return &Interactor{
@@ -72,7 +54,6 @@ func New(
 		trc:        trc,
 		vld:        vld,
 		authIntr:   authIntr,
-		cache:      cache,
 		repository: repository,
 	}
 }

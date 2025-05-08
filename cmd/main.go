@@ -104,7 +104,7 @@ func main() { //nolint:funlen // +100 lines
 	// 	time.Sleep(10 * time.Second)
 	// 	mq, _ := eventdriven.SetupRabbitMQ(app.Config.RabbitMQ, app.EventRegister)
 	// 	err = mq.Publish(contract.Event{
-	// 		Topic:   events.UsersAccountCreated,
+	// 		Type:   events.UsersAccountCreated,
 	// 		Payload: []byte("User-123"),
 	// 	})
 	// 	if err != nil {

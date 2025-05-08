@@ -92,7 +92,7 @@ func Test_UserInterator_Login_ValidationSection(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			mockVld, mockRepo, mockAuth, mockCache := setupMock(t)
+			mockVld, mockRepo, mockAuth := setupMock(t)
 
 			mockVld.EXPECT().ValidateLoginRequest(tc.req).Return(tc.fieldsErr, tc.expectedError)
 
@@ -113,7 +113,7 @@ func Test_UserInterator_Login_ValidationSection(t *testing.T) {
 				mockAuth.On("CreateRefreshToken", authenticable).Return("refresh-token", nil)
 			}
 
-			usecase := userusecase.New(_myDBConfig, setupTracer(), mockAuth, mockVld, mockCache, mockRepo)
+			usecase := userusecase.New(_myDBConfig, setupTracer(), mockAuth, mockVld, mockRepo)
 
 			// Call the Login method
 			resp, errL := usecase.Login(ctx, tc.req)
@@ -201,7 +201,7 @@ func Test_UserInterator_LoginRepositorySection(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			mockVld, mockRepo, mockAuth, mockCache := setupMock(t)
+			mockVld, mockRepo, mockAuth := setupMock(t)
 
 			mockVld.EXPECT().ValidateLoginRequest(tc.req).Return(nil, nil)
 
@@ -217,7 +217,7 @@ func Test_UserInterator_LoginRepositorySection(t *testing.T) {
 				mockAuth.On("CreateRefreshToken", authenticable).Return("refresh-token", nil)
 			}
 
-			usecase := userusecase.New(_myDBConfig, setupTracer(), mockAuth, mockVld, mockCache, mockRepo)
+			usecase := userusecase.New(_myDBConfig, setupTracer(), mockAuth, mockVld, mockRepo)
 
 			resp, errL := usecase.Login(ctx, tc.req)
 
@@ -303,7 +303,7 @@ func Test_UserInterator_LoginCreateTokenSection(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			mockVld, mockRepo, mockAuth, mockCache := setupMock(t)
+			mockVld, mockRepo, mockAuth := setupMock(t)
 
 			mockVld.EXPECT().ValidateLoginRequest(tc.req).Return(nil, nil)
 
@@ -317,7 +317,7 @@ func Test_UserInterator_LoginCreateTokenSection(t *testing.T) {
 				mockAuth.On("CreateRefreshToken", authenticable).Return(tc.refreshToken, tc.expectedError)
 			}
 
-			usecase := userusecase.New(_myDBConfig, setupTracer(), mockAuth, mockVld, mockCache, mockRepo)
+			usecase := userusecase.New(_myDBConfig, setupTracer(), mockAuth, mockVld, mockRepo)
 
 			resp, errL := usecase.Login(ctx, tc.req)
 
@@ -342,12 +342,12 @@ func setupMock(t *testing.T) (
 	*mocks.MockValidator,
 	*mocks.MockRepository,
 	*mocks.MockAuthInteractor,
-	*mocks.MockCache,
+	// *mocks.MockCache,
 ) {
 	mockVld := mocks.NewMockValidator(t)
 	mockRepo := mocks.NewMockRepository(t)
 	mockAuth := mocks.NewMockAuthInteractor(t)
-	mockCache := mocks.NewMockCache(t)
+	// mockCache := mocks.NewMockCache(t)
 
-	return mockVld, mockRepo, mockAuth, mockCache
+	return mockVld, mockRepo, mockAuth
 }

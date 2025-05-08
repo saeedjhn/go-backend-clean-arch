@@ -5,6 +5,6 @@ type RefreshTokenRequest struct {
 }
 
 type RefreshTokenResponse struct {
-	Tokens      Tokens            `json:"tokens"`
+	AccessToken string            `json:"access_token"`
 	FieldErrors map[string]string `json:"field_errors,omitempty"`
 }

@@ -1,11 +1,11 @@
 package events
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
 )
 
 const (
-	UsersRegistered = contract.Topic("users.registered")
-	// PurchaseSucceedTopic = contract.Topic("payment.purchase_succeed").
-	// PurchaseFailedTopic  = contract.Topic("payment.purchase_failed").
+	UsersRegistered = models.EventType("users.registered")
+	// PurchaseSucceedTopic = contract.EventType("payment.purchase_succeed").
+	// PurchaseFailedTopic  = contract.EventType("payment.purchase_failed").
 )

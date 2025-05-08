@@ -6,6 +6,11 @@ import (
 	"sync"
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/events"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/jsonfilelogger"
@@ -18,8 +23,8 @@ const _eventBufferSize = 1024
 func main() {
 	logger := setupLogger()
 
-	urTopic := contract.Topic("user.registered")
-	opTopic := contract.Topic("order.processing")
+	urTopic := models.EventType("user.registered")
+	opTopic := models.EventType("order.processing")
 
 	// Definination JOBS
 	router := event.NewRouter()
@@ -49,7 +54,7 @@ func main() {
 			},
 			QueueBind: rmqpc.QueueBindConfig{
 				Queue:            "test-queue",
-				BindingKey:       []contract.Topic{urTopic, opTopic},
+				BindingKey:       []models.EventType{urTopic, opTopic},
 				Durable:          true,
 				AutoDelete:       false,
 				Exclusive:        false,
@@ -105,8 +110,11 @@ func main() {
 		eventConsumer.Start()
 	}()
 
-	evtUserRegistered := contract.Event{Topic: urTopic, Payload: []byte("User123")}
-	evtOrderProcessing := contract.Event{Topic: opTopic, Payload: []byte("Order123456")}
+	e := events.NewUserRegisteredEvent(types.ID(1), "reason")
+	b, _ := e.Marshal()
+
+	evtUserRegistered := models.Event{Type: urTopic, Payload: b}
+	evtOrderProcessing := models.Event{Type: opTopic, Payload: []byte("Order123456")}
 
 	go func() {
 		for i := range 3 {
@@ -135,12 +143,12 @@ func main() {
 		quit <- true
 	}()
 
-	_ = eventConsumer.Shutdown(ctx)
-
 	<-quit
 	log.Println("Termination signal received, shutting down...")
 
 	cancel()
+	_ = eventConsumer.Shutdown(ctx)
+
 	// Gracefully shut down the consumer
 	wg.Wait()
 
@@ -148,13 +156,18 @@ func main() {
 	// Wait until graceful shutdown is complete
 }
 
-func handleUserRegistered(evt contract.Event) error {
-	log.Printf("[Notification] Sending welcome email for user: %s\n", string(evt.Payload))
+func handleUserRegistered(payload []byte) error {
+	log.Printf("[Notification] Sending welcome email for user: %s\n", payload)
+
+	var ur events.UserRegisteredEvent
+	_ = ur.Unmarshal(payload)
+	log.Printf("%#v", ur)
+
 	return nil
 }
 
-func handleOrderPlaced(evt contract.Event) error {
-	log.Printf("[Order] Processing order: %s\n", string(evt.Payload))
+func handleOrderPlaced(payload []byte) error {
+	log.Printf("[Order] Processing order: %s\n", payload)
 	return nil
 }
 
@@ -169,63 +182,3 @@ func setupLogger() contract.Logger {
 
 	return jsonfilelogger.New(jsonfilelogger.NewDevelopmentStrategy(config)).Configure()
 }
-
-// func main() {
-// 	logger := setupLogger()
-//
-// 	urTopic := contract.Topic("user.registered")
-// 	opTopic := contract.Topic("order.processing")
-//
-// 	router := contract.NewRouter()
-// 	router.Register(urTopic, handleUserRegistered)
-// 	router.Register(opTopic, handleOrderPlaced)
-//
-// 	bus := NewInMemoryBus()
-//
-// 	eventConsumer := contract.NewEventConsumer(
-// 		_eventBufferSize,
-// 		router,
-// 		bus,
-// 	)
-// 	eventConsumer.WithLogger(logger)
-//
-// 	// Start the contract consumer
-// 	var wg sync.WaitGroup
-// 	// ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-// 	// defer cancel()
-// 	// Or
-// 	ctx, cancel := context.WithCancel(context.Background())
-//
-// 	go eventConsumer.Start(ctx, &wg)
-//
-// 	evtUserRegistered := contract.Event{Topic: urTopic, Payload: []byte("User123")}
-// 	evtOrderProcessing := contract.Event{Topic: opTopic, Payload: []byte("Order123456")}
-//
-// 	go func() {
-// 		for i := range 3 {
-// 			log.Printf("bus.Publish %d invoked\n", i)
-//
-// 			if err := bus.Publish(evtUserRegistered); err != nil {
-// 				log.Fatalf("Failed to publish contract: %v", err)
-// 			}
-//
-// 			if err := bus.Publish(evtOrderProcessing); err != nil {
-// 				log.Fatalf("Failed to publish contract: %v", err)
-// 			}
-//
-// 			time.Sleep(time.Second)
-// 		}
-// 	}()
-//
-// 	quit := make(chan os.Signal, 1)
-// 	signal.Notify(quit, os.Interrupt)
-//
-// 	log.Println("Waiting for termination signal...")
-// 	<-quit
-// 	log.Println("Termination signal received, shutting down...")
-//
-// 	cancel()
-//
-// 	// Gracefully shut down the consumer
-// 	wg.Wait()
-// }

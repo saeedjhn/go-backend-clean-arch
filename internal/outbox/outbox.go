@@ -5,18 +5,22 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/repository"
+
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 )
 
 //go:generate mockery --name Repository
-type Repository interface {
-	InsertEvent(ctx context.Context, evt Event) error
-	UpdatePublished(ctx context.Context, eventIDs []types.ID, publishedAt time.Time) error
-	UpdateUnpublished(ctx context.Context, eventIDs []types.ID, lastRetriedAt time.Time) error
-	UnpublishedCount(ctx context.Context, retryThreshold int64) (int64, error)
-	GetUnPublished(ctx context.Context, offset, limit, retryThreshold int) ([]Event, error)
-}
+// type Repository interface {
+// 	InsertEvent(ctx context.Context, evt models.OutboxEvent) error
+// 	UpdatePublished(ctx context.Context, eventIDs []types.ID, publishedAt time.Time) error
+// 	UpdateUnpublished(ctx context.Context, eventIDs []types.ID, lastRetriedAt time.Time) error
+// 	UnpublishedCount(ctx context.Context, retryThreshold int64) (int64, error)
+// 	GetUnPublished(ctx context.Context, offset, limit, retryThreshold int) ([]models.OutboxEvent, error)
+// }
 
 //go:generate mockery --name Scheduler
 type Scheduler interface {
@@ -28,7 +32,7 @@ type O struct {
 	logger     contract.Logger
 	scheduler  Scheduler
 	publisher  contract.Publisher
-	repository Repository
+	repository repository.OutboxEvent
 }
 
 func New(
@@ -36,7 +40,7 @@ func New(
 	logger contract.Logger,
 	sch Scheduler,
 	pub contract.Publisher,
-	repository Repository,
+	repository repository.OutboxEvent,
 ) O {
 	return O{
 		config:     config,
@@ -79,20 +83,20 @@ func (s O) StartProcessing(ctx context.Context) {
 	}
 }
 
-func (s O) InsertEvent(ctx context.Context, topic contract.Topic, payload []byte, reTriedCount uint) error {
-	e := Event{
-		Topic:        topic,
-		Payload:      payload,
-		IsPublished:  false,
-		ReTriedCount: reTriedCount,
-	}
-
-	if err := s.repository.InsertEvent(ctx, e); err != nil {
-		return err
-	}
-
-	return nil
-}
+// func (s O) InsertEvent(ctx context.Context, topic models.EventType, payload []byte) error {
+// 	e := models.OutboxEvent{
+// 		EventType:        topic,
+// 		Payload:      payload,
+// 		IsPublished:  false,
+// 		ReTriedCount: s.config.RetryThreshold,
+// 	}
+//
+// 	if err := s.repository.Create(ctx, e); err != nil {
+// 		return err
+// 	}
+//
+// 	return nil
+// }
 
 func (s O) processOutBoxEvents(ctx context.Context) error {
 	unPublishedOutBoxEvents, err := s.repository.GetUnPublished(ctx,
@@ -109,8 +113,8 @@ func (s O) processOutBoxEvents(ctx context.Context) error {
 	outBoxEventsIDs := make([]types.ID, 0, len(unPublishedOutBoxEvents))
 
 	for _, outBoxEvent := range unPublishedOutBoxEvents {
-		if err = s.publisher.Publish(contract.Event{
-			Topic:   outBoxEvent.Topic,
+		if err = s.publisher.Publish(models.Event{
+			Type:    outBoxEvent.Type,
 			Payload: outBoxEvent.Payload,
 		}); err != nil {
 			s.logger.Infof("failed to publish event ID %v: %v", outBoxEvent.ID, err)

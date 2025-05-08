@@ -3,10 +3,11 @@ package eventdriven
 import (
 	"fmt"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/event"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/rmqpc"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 )
 
 const (
@@ -39,7 +40,7 @@ const (
 
 func SetupRabbitMQ(
 	config rmqpc.ConnectionConfig,
-	eventRouter map[contract.Topic]event.RouterHandler,
+	eventRouter map[models.EventType]event.RouterHandler,
 ) (*rmqpc.Connection, error) {
 	cfg := rmqpc.Config{
 		Connection: rmqpc.ConnectionConfig{
@@ -102,8 +103,8 @@ func SetupRabbitMQ(
 	return rMQ, nil
 }
 
-func ListBindingKeys(eventRouter map[contract.Topic]event.RouterHandler) []contract.Topic {
-	var bindingKeys []contract.Topic
+func ListBindingKeys(eventRouter map[models.EventType]event.RouterHandler) []models.EventType {
+	var bindingKeys []models.EventType
 
 	for t := range eventRouter {
 		bindingKeys = append(bindingKeys, t)

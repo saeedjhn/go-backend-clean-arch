@@ -6,7 +6,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
 
 	"github.com/google/uuid"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -166,7 +166,7 @@ func (c *Connection) SetupBindQueue() error {
 	return nil
 }
 
-func (c *Connection) Publish(evt contract.Event) error {
+func (c *Connection) Publish(evt models.Event) error {
 	// non-blocking channel - if there is no error will go to default where we do nothing
 	select {
 	case err := <-c.errChan:
@@ -182,7 +182,7 @@ func (c *Connection) Publish(evt contract.Event) error {
 
 	if err := c.channel.Publish(
 		c.config.MQ.Exchange.Name,
-		string(evt.Topic), // routing key
+		string(evt.Type), // routing key
 		c.config.MQ.Publish.Mandatory,
 		c.config.MQ.Publish.Immediate,
 		amqp.Publishing{
@@ -193,7 +193,7 @@ func (c *Connection) Publish(evt contract.Event) error {
 		return fmt.Errorf(
 			"publish failed: message delivery to exchange '%s' with routing key '%s' unsuccessful: %w",
 			c.config.MQ.Exchange.Name,
-			evt.Topic,
+			evt.Type,
 			err,
 		)
 	}
@@ -201,7 +201,7 @@ func (c *Connection) Publish(evt contract.Event) error {
 	return nil
 }
 
-func (c *Connection) Consume(eventStream chan<- contract.Event) error {
+func (c *Connection) Consume(eventStream chan<- models.Event) error {
 	var (
 		deliveries <-chan amqp.Delivery
 		err        error
@@ -219,7 +219,7 @@ func (c *Connection) Consume(eventStream chan<- contract.Event) error {
 	}
 
 	for delivery := range deliveries {
-		eventStream <- contract.Event{Topic: contract.Topic(delivery.RoutingKey), Payload: delivery.Body}
+		eventStream <- models.Event{Type: models.EventType(delivery.RoutingKey), Payload: delivery.Body}
 		if !c.config.MQ.Consume.AutoAck {
 			if err = delivery.Ack(false); err != nil {
 				return fmt.Errorf("failed to ACK message: %w", err)
