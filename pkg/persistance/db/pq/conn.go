@@ -60,6 +60,10 @@ func (db *DB) PrepareStatement(ctx context.Context, key uint, query string) (*sq
 	return stmt, nil
 }
 
+// func (db *DB) ExecContext(ctx context.Context, query string, args ...interface{}) {
+//
+// }
+
 func (db *DB) Conn() *sql.DB {
 	return db.db
 }

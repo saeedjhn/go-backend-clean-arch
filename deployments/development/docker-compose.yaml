@@ -37,18 +37,18 @@ services:
     restart: always
 
   ####################### POSTGRES #######################
-  #  psqldb:
-  #    image: postgres:latest
-  #    container_name: go-backend-clean-arch_psqldb
-  #    env_file:
-  #      - .env
-  #    ports:
-  #      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
-  #    volumes:
-  #      - psql:/var/lib/psql/data
-  #    networks:
-  #      - go-backend-clean-arch_network
-  #    restart: always
+  psqldb:
+    image: postgres:17.2
+    container_name: go-backend-clean-arch_psqldb
+    env_file:
+      - .env
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - psql:/var/lib/psql/data
+    networks:
+      - go-backend-clean-arch_network
+    restart: always
 
   ####################### MONOGO #######################
   #  mongodb:
@@ -380,7 +380,7 @@ volumes:
   elasticsearch:
   setup-elk:
   grafana:
-  #  psql:
+  psql:
   #  mongo:
   #  pgadmin:
 

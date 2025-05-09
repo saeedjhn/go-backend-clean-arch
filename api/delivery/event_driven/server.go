@@ -3,11 +3,11 @@ package eventdriven
 import (
 	"context"
 
+	"github.com/saeedjhn/go-backend-clean-arch/configs"
+
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/event"
 )
-
-const _bufferSize = 1024
 
 type Server struct {
 	app *bootstrap.Application
@@ -26,7 +26,7 @@ func (s Server) Run() error {
 	}
 
 	s.ed = event.NewEventConsumer(
-		_bufferSize,
+		configs.EventBufferSize,
 		router,
 		s.app.Rabbitmq,
 	).WithLogger(s.app.Logger)

@@ -51,17 +51,6 @@ func New(
 	}
 }
 
-// func (s O) StartProcessing(ctx context.Context) {
-// 	err := s.scheduler.RepeatTaskEvery(ctx, func() {
-// 		if err := s.processOutBoxEvents(ctx); err != nil {
-// 			s.logger.Errorf("error publishing outbox events: %v", err)
-// 		}
-// 	}, s.config.Interval)
-// 	if err != nil {
-// 		s.logger.Errorf("failed to start processing outbox: %v", err)
-// 	}
-// }
-
 func (s O) StartProcessing(ctx context.Context) {
 	err := s.scheduler.RepeatTaskEvery(ctx, func() {
 		processCtx, cancel := context.WithTimeout(ctx, s.config.ProcessTimeout)
@@ -82,21 +71,6 @@ func (s O) StartProcessing(ctx context.Context) {
 		s.logger.Errorf("failed to start processing outbox: %v", err)
 	}
 }
-
-// func (s O) InsertEvent(ctx context.Context, topic models.EventType, payload []byte) error {
-// 	e := models.OutboxEvent{
-// 		EventType:        topic,
-// 		Payload:      payload,
-// 		IsPublished:  false,
-// 		ReTriedCount: s.config.RetryThreshold,
-// 	}
-//
-// 	if err := s.repository.Create(ctx, e); err != nil {
-// 		return err
-// 	}
-//
-// 	return nil
-// }
 
 func (s O) processOutBoxEvents(ctx context.Context) error {
 	unPublishedOutBoxEvents, err := s.repository.GetUnPublished(ctx,
@@ -136,3 +110,29 @@ func (s O) processOutBoxEvents(ctx context.Context) error {
 
 	return nil
 }
+
+// func (s O) InsertEvent(ctx context.Context, topic models.EventType, payload []byte) error {
+// 	e := models.OutboxEvent{
+// 		EventType:        topic,
+// 		Payload:      payload,
+// 		IsPublished:  false,
+// 		ReTriedCount: s.config.RetryThreshold,
+// 	}
+//
+// 	if err := s.repository.Create(ctx, e); err != nil {
+// 		return err
+// 	}
+//
+// 	return nil
+// }
+
+// func (s O) StartProcessing(ctx context.Context) {
+// 	err := s.scheduler.RepeatTaskEvery(ctx, func() {
+// 		if err := s.processOutBoxEvents(ctx); err != nil {
+// 			s.logger.Errorf("error publishing outbox events: %v", err)
+// 		}
+// 	}, s.config.Interval)
+// 	if err != nil {
+// 		s.logger.Errorf("failed to start processing outbox: %v", err)
+// 	}
+// }

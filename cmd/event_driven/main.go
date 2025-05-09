@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"syscall"
 
 	eventdriven "github.com/saeedjhn/go-backend-clean-arch/api/delivery/event_driven"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
@@ -65,8 +66,10 @@ func main() { //nolint:funlen // +100 lines
 
 	// Set up signal handling for graceful shutdown (e.g., SIGINT, SIGTERM)
 	// quit := make(chan bool)
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, os.Interrupt) // more SIGX (SIGINT, SIGTERM, etc)
+	// quit := make(chan os.Signal, 1)
+	// signal.Notify(quit, os.Interrupt) // more SIGX (SIGINT, SIGTERM, etc)
+	quit, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
 
 	// Start a goroutine to send an interrupt after 20 seconds
 	// go func() {
@@ -83,35 +86,36 @@ func main() { //nolint:funlen // +100 lines
 		}
 	}()
 
-	// go func() {
-	// 	Outbox pattern running..
-	// sch := scheduler.New()
-	// mq, _ := eventdriven.SetupRabbitMQ(app.Config.RabbitMQ, app.EventRegister)
-	// repo := outboxevent.New(app.MySQL)
-	// o := outbox.New(
-	// 	app.Config.Outbox,
-	// 	app.Logger,
-	// 	sch,
-	// 	mq,
-	// 	repo,
-	// )
-	// o.StartProcessing(context.Background())
+	go func() {
+		// sch := scheduler.New()
+		// sch.Configure()
+		// sch.Start()
 
-	// 	time.Sleep(10 * time.Second)
-	// 	mq, _ := eventdriven.SetupRabbitMQ(app.Config.RabbitMQ, app.EventRegister)
-	// 	err = mq.Publish(contract.Event{
-	// 		Type:   events.UsersAccountCreated,
-	// 		Payload: []byte("User-123"),
-	// 	})
-	// 	if err != nil {
-	// 		log.Println("rabbitmq error: ", err)
-	// 	}
-	//
-	// 	log.Println("rabbitmq message publish successfull")
-	// }()
+		// oeRepo := outboxeventmysql.New(app.MySQL)
+		// ob := outbox.New(
+		// 	app.Config.Outbox,
+		// 	app.Logger,
+		// 	sch,
+		// 	app.Rabbitmq,
+		// 	oeRepo,
+		// )
+		// ob.StartProcessing(quit)
+
+		// payload, _ := events.NewUserRegisteredEvent(types.ID(123), "reason").Marshal() //nolint:mnd // nothing
+
+		// if err = app.Rabbitmq.Publish(models.Event{
+		// 	Type:    events.UsersRegistered,
+		// 	Payload: payload,
+		// }); err != nil {
+		// 	log.Println("rabbitmq error: ", err)
+		// }
+
+		// log.Println("rabbitmq message publish successfull")
+	}()
 
 	// Wait for termination signal (e.g., Ctrl+C)
-	<-quit
+	// <-quit
+	<-quit.Done()
 
 	shutdownCtx, shutdownCancel := context.WithTimeout(
 		context.Background(),
