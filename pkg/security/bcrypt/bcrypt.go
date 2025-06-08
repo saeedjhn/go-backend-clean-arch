@@ -1,7 +1,7 @@
 package bcrypt
 
 import (
-	"errors"
+	"fmt"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -16,13 +16,13 @@ const (
 
 func Generate(str string, cost Cost) (string, error) {
 	if cost > MaxCost {
-		return "", errors.New("don`t supported cost")
+		return "", fmt.Errorf("bcrypt: unsupported cost value %d (maximum allowed is %d)", cost, MaxCost)
 	}
 
-	encryptedPass, _ := bcrypt.GenerateFromPassword(
-		[]byte(str),
-		int(cost),
-	)
+	encryptedPass, err := bcrypt.GenerateFromPassword([]byte(str), int(cost))
+	if err != nil {
+		return "", fmt.Errorf("bcrypt: failed to generate hash: %w", err)
+	}
 
 	return string(encryptedPass), nil
 }

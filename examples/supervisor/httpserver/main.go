@@ -33,7 +33,7 @@ func httpServer(ctx context.Context, processName string, terminateChannel chan<-
 	for {
 		select {
 		case <-ctx.Done():
-			return srv.Shutdown(context.Background())
+			return srv.Shutdown(ctx)
 		default:
 			return srv.ListenAndServe()
 		}

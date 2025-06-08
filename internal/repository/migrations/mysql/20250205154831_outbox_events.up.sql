@@ -1,7 +1,7 @@
 CREATE TABLE outbox_events
 (
     id              BIGINT PRIMARY KEY AUTO_INCREMENT,
-    type            VARCHAR(255) NOT NULL,
+    type            VARCHAR(191) NOT NULL,
     payload         BLOB         NOT NULL,
     is_published    BOOLEAN  DEFAULT FALSE,
     retried_count   INT UNSIGNED DEFAULT 0,

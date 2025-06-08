@@ -98,7 +98,45 @@ func (r DB) IsExistsByMobile(ctx context.Context, mobile string) (bool, error) {
 				WithKind(richerror.KindStatusInternalServerError)
 	}
 
-	if !exists {
+	if exists {
+		return true, nil
+	}
+
+	return false, nil
+}
+
+func (r DB) IsExistsByEmail(ctx context.Context, email string) (bool, error) {
+	_, span := r.trc.Span(ctx, "DB IsExistsByEmail")
+	span.SetAttributes(map[string]interface{}{
+		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO
+		"db.operation": "SELECT", // SELECT, INSERT, UPDATE, DELETE
+	})
+	defer span.End()
+
+	var exists bool
+
+	query := "select exists(select 1 from users where email = ?)"
+
+	span.SetAttribute("db.query", query)
+
+	stmt, err := r.conn.PrepareStatement( //nolint:sqlclosecheck // nothing
+		ctx, uint(mysqlrepo.StatementKeyUserIsExistsByEmail), query,
+	)
+	if err != nil {
+		return false, richerror.New(_opMysqlUserIsExistsByEmail).WithErr(err).
+			WithMessage(msg.ErrMsgCantPrepareStatement).WithKind(richerror.KindStatusInternalServerError)
+	}
+
+	err = stmt.QueryRowContext(ctx, email).Scan(&exists)
+	// err := r.conn.Conn().QueryRow(query, mobile).Scan(&exists)
+	if err != nil {
+		return false,
+			richerror.New(_opMysqlUserIsExistsByEmail).WithErr(err).
+				WithMessage(msg.ErrorMsg500InternalServerError).
+				WithKind(richerror.KindStatusInternalServerError)
+	}
+
+	if exists {
 		return true, nil
 	}
 

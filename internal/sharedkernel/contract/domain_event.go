@@ -10,3 +10,13 @@ type DomainEvent interface {
 	Marshal() ([]byte, error)
 	Unmarshal(b []byte) error
 }
+
+type DomainBasicEvent[T interface{}] interface {
+	GetID() uint32
+	GetType() models.EventType
+	GetEscalationReason() string
+	GetEscalationTime() int64
+	GetPayload() T
+	Marshal() ([]byte, error)
+	Unmarshal(b []byte) error
+}

@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	userdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/models/user"
+	usermodel "github.com/saeedjhn/go-backend-clean-arch/internal/models/user"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/events"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
@@ -22,26 +22,41 @@ func (i Interactor) Register(ctx context.Context, req userdto.RegisterRequest) (
 		return userdto.RegisterResponse{FieldErrors: fieldsErrs}, err
 	}
 
-	isUnique, err := i.repository.IsExistsByMobile(ctx, req.Mobile)
+	isExistsMobile, err := i.repository.IsExistsByMobile(ctx, req.Mobile)
 	if err != nil {
 		return userdto.RegisterResponse{}, err
 	}
 
-	if !isUnique {
+	if isExistsMobile {
 		return userdto.RegisterResponse{},
-			richerror.New(_opUserServiceRegister).
-				WithErr(errors.New(errMsgMobileIsNotUnique)).
-				WithMessage(errMsgMobileIsNotUnique).
-				WithKind(richerror.KindStatusBadRequest)
+			richerror.New(_opUserServiceRegister).WithErr(errors.New(errMsgMobileIsNotUnique)).
+				WithMessage(errMsgMobileIsNotUnique).WithKind(richerror.KindStatusBadRequest)
 	}
 
-	u := user.User{
+	isExistsEmail, err := i.repository.IsExistsByEmail(ctx, req.Email)
+	if err != nil {
+		return userdto.RegisterResponse{}, err
+	}
+
+	if isExistsEmail {
+		return userdto.RegisterResponse{},
+			richerror.New(_opUserServiceRegister).WithErr(errors.New(errMsgEmailIsNotUnique)).
+				WithMessage(errMsgEmailIsNotUnique).WithKind(richerror.KindStatusBadRequest)
+	}
+
+	u := usermodel.User{
 		Name:   req.Name,
 		Mobile: req.Mobile,
 		Email:  req.Email,
 	}
 
-	encryptedPass, _ := GenerateHash(req.Password) // TODO: usecase>userusecase>register>CheckErrorGenerateHash
+	encryptedPass, err := GenerateHash(req.Password)
+	if err != nil {
+		return userdto.RegisterResponse{},
+			richerror.New(_opUserServiceRegister).WithErr(err).
+				WithMessage(errMsgFailedToGeneratePasswordHash).WithKind(richerror.KindStatusInternalServerError)
+	}
+
 	u.Password = encryptedPass
 
 	createdUser, err := i.repository.Create(ctx, u)

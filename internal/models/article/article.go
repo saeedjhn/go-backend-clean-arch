@@ -18,7 +18,7 @@ type Article struct {
 	// If the volume of comments is very high, manage them in a separate aggregate (using Event Sourcing or CQRS).
 	Comments   []Comment
 	AuthorID   types.ID
-	CategoryID types.ID
+	CategoryID []types.ID
 	TagIDs     []types.ID
 	CreatedAt  time.Time
 	UpdatedAt  time.Time

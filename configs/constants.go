@@ -11,5 +11,5 @@ const (
 	LoggerExcludePath        = "/metrics"
 	BcryptCost               = 10
 
-	EventBufferSize = 1024
+	EventBufferSize = 2048
 )

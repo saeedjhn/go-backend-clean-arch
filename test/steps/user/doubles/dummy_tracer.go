@@ -31,10 +31,11 @@ func (d DummySpan) RecordError(_ error, _ ...map[string]interface{}) {
 }
 
 type DummyTracer struct {
+	Name string
 }
 
 func NewDummyTracer() *DummyTracer {
-	return &DummyTracer{}
+	return &DummyTracer{Name: "DummyTracer"}
 }
 
 func (d DummyTracer) Configure() error {

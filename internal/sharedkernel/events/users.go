@@ -11,6 +11,56 @@ import (
 	"github.com/google/uuid"
 )
 
+type BasicEvent[T interface{}] struct {
+	EvtID            uint32           `json:"event_id"` // A Unique ID
+	EvtType          models.EventType `json:"event_type"`
+	EscalationReason string           `json:"escalation_reason"`
+	EscalationTime   int64            `json:"escalation_time"`
+	Payload          T                `json:"payload"`
+}
+
+func NewBasicEvent[T interface{}](
+	eventType models.EventType,
+	escalationReason string,
+	payload T,
+) *BasicEvent[T] {
+	return &BasicEvent[T]{
+		EvtID:            uuid.New().ID(),
+		EvtType:          eventType,
+		EscalationReason: escalationReason,
+		EscalationTime:   time.Now().Unix(),
+		Payload:          payload,
+	}
+}
+
+func (e *BasicEvent[T]) GetID() uint32 {
+	return e.EvtID
+}
+
+func (e *BasicEvent[T]) GetType() models.EventType {
+	return e.EvtType
+}
+
+func (e *BasicEvent[T]) GetEscalationReason() string {
+	return e.EscalationReason
+}
+
+func (e *BasicEvent[T]) GetEscalationTime() int64 {
+	return e.EscalationTime
+}
+
+func (e *BasicEvent[T]) GetPayload() T {
+	return e.Payload
+}
+
+func (e *BasicEvent[T]) Marshal() ([]byte, error) {
+	return json.Marshal(e)
+}
+
+func (e *BasicEvent[T]) Unmarshal(b []byte) error {
+	return json.Unmarshal(b, e)
+}
+
 type UserRegisteredEvent struct {
 	EvtID            uint32           `json:"event_id"` // A Unique ID
 	EvtType          models.EventType `json:"event_type"`

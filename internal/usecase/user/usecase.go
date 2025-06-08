@@ -27,6 +27,7 @@ type Validator interface {
 type Repository interface {
 	Create(ctx context.Context, u usermodel.User) (usermodel.User, error)
 	IsExistsByMobile(ctx context.Context, mobile string) (bool, error)
+	IsExistsByEmail(ctx context.Context, email string) (bool, error)
 	GetByMobile(ctx context.Context, mobile string) (usermodel.User, error)
 	GetByID(ctx context.Context, id uint64) (usermodel.User, error)
 }
@@ -46,6 +47,7 @@ func New(
 	cfg *configs.Config,
 	trc contract.Tracer,
 	authIntr usecase.AuthInteractor,
+	outboxIntr usecase.OutboxInteractor,
 	vld Validator,
 	repository Repository,
 ) Interactor {
@@ -54,6 +56,7 @@ func New(
 		trc:        trc,
 		vld:        vld,
 		authIntr:   authIntr,
+		outboxIntr: outboxIntr,
 		repository: repository,
 	}
 }
