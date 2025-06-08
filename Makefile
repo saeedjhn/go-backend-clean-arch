@@ -30,7 +30,7 @@ MYSQL_PASSWORD ?= password123
 MYSQL_ADDRESS ?= 127.0.0.1:3306
 MYSQL_DATABASE ?= go-backend-clean-arch_db
 MYSQL_DSN := "mysql://$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_ADDRESS))/$(MYSQL_DATABASE)"
-MYSQL_MIGRATION_PATH := "./internal/repository/migrations/mysql"
+MYSQL_MIGRATION_PATH := "./internal/repository/mysql/migrations"
 
 export TEST_SUMMARIES_FILE ?= test_summaries.out
 
