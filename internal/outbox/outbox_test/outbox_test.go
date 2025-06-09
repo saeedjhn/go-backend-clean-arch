@@ -39,7 +39,7 @@ func TestOutbox_ProcessOutBoxEvents_NoUnpublishedEvents_ReturnsNil(t *testing.T)
 		t.Fatalf("failed to set up scheduler: %v", err)
 	}
 	mockPublisher := mocks.NewMockPublisher(t)
-	mockRepo := mocks.NewMockOutboxEvent(t)
+	mockRepo := mocks.NewMockRepository(t)
 	mockRepo.On("GetUnPublished", mock.Anything, 0, config.BatchSize, config.RetryThreshold).Return(events, nil).Maybe()
 
 	ob := outbox.New(
@@ -84,7 +84,7 @@ func TestOutbox_ProcessOutBoxEvents_FailToPublishEvent_ReturnsError(t *testing.T
 	mockPublisher := mocks.NewMockPublisher(t)
 	mockPublisher.On("Publish", mock.Anything).Return(errors.New("publish error"))
 
-	mockRepo := mocks.NewMockOutboxEvent(t)
+	mockRepo := mocks.NewMockRepository(t)
 	mockRepo.On("GetUnPublished", mock.Anything, 0, config.BatchSize, config.RetryThreshold).Return(events, nil)
 	mockRepo.On("UpdatePublished", mock.Anything, []types.ID{events[0].ID}, mock.Anything).Return(nil).Maybe()
 
@@ -129,7 +129,7 @@ func TestOutbox_ProcessOutBoxEvents_FailToUpdatePublished_ReturnsError(t *testin
 	}
 	mockPublisher := mocks.NewMockPublisher(t)
 	mockPublisher.EXPECT().Publish(mock.Anything).Return(nil)
-	mockRepo := mocks.NewMockOutboxEvent(t)
+	mockRepo := mocks.NewMockRepository(t)
 	mockRepo.On("GetUnPublished", mock.Anything, 0, config.BatchSize, config.RetryThreshold).Return(events, nil)
 	// m, _ := mockRepo.GetUnPublished(ctx, 0, config.BatchSize, config.RetryThreshold)
 	mockRepo.On("UpdatePublished", mock.Anything, []types.ID{events[0].ID}, mock.Anything).
@@ -184,7 +184,7 @@ func TestOutbox_ProcessOutBoxEvents_SuccessfullyPublished_ReturnsNil(t *testing.
 	}
 	mockPublisher := mocks.NewMockPublisher(t)
 	mockPublisher.EXPECT().Publish(mock.Anything).Return(nil)
-	mockRepo := mocks.NewMockOutboxEvent(t)
+	mockRepo := mocks.NewMockRepository(t)
 	mockRepo.On("GetUnPublished", mock.Anything, 0, config.BatchSize, config.RetryThreshold).Return(events, nil)
 	mockRepo.On("UpdatePublished", mock.Anything, []types.ID{events[0].ID, events[1].ID}, mock.Anything).Return(nil)
 

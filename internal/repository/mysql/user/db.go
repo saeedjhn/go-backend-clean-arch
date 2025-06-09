@@ -1,4 +1,4 @@
-package user
+package user //nolint:dupl // nothing
 
 import (
 	"context"

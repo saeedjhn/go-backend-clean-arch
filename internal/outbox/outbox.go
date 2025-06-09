@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/repository"
-
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
@@ -14,13 +12,12 @@ import (
 )
 
 //go:generate mockery --name Repository
-// type Repository interface {
-// 	InsertEvent(ctx context.Context, evt models.OutboxEvent) error
-// 	UpdatePublished(ctx context.Context, eventIDs []types.ID, publishedAt time.Time) error
-// 	UpdateUnpublished(ctx context.Context, eventIDs []types.ID, lastRetriedAt time.Time) error
-// 	UnpublishedCount(ctx context.Context, retryThreshold int64) (int64, error)
-// 	GetUnPublished(ctx context.Context, offset, limit, retryThreshold int) ([]models.OutboxEvent, error)
-// }
+type Repository interface {
+	UpdatePublished(ctx context.Context, eventIDs []types.ID, publishedAt time.Time) error
+	UpdateUnpublished(ctx context.Context, eventIDs []types.ID, lastRetriedAt time.Time) error
+	UnpublishedCount(ctx context.Context, retryThreshold int64) (int64, error)
+	GetUnPublished(ctx context.Context, offset, limit, retryThreshold int) ([]models.OutboxEvent, error)
+}
 
 //go:generate mockery --name Scheduler
 type Scheduler interface {
@@ -32,7 +29,7 @@ type O struct {
 	logger     contract.Logger
 	scheduler  Scheduler
 	publisher  contract.Publisher
-	repository repository.OutboxEvent
+	repository Repository
 }
 
 func New(
@@ -40,7 +37,7 @@ func New(
 	logger contract.Logger,
 	sch Scheduler,
 	pub contract.Publisher,
-	repository repository.OutboxEvent,
+	repository Repository,
 ) O {
 	return O{
 		config:     config,
