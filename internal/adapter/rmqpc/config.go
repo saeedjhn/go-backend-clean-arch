@@ -3,7 +3,7 @@ package rmqpc
 import (
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 )
 
 type Table map[string]interface{}
@@ -46,17 +46,17 @@ type ExchangeConfig struct {
 
 // QueueBindConfig defines the configuration needed to declare and bind a queue in RabbitMQ.
 type QueueBindConfig struct {
-	Queue            string             // queue to declare.
-	BindingKey       []models.EventType // The routing key for binding the queue to an exchange.
-	Durable          bool               // Whether the queue should survive server restarts (true for durable queues).
-	AutoDelete       bool               // Whether the queue should be automatically deleted when no longer in use.
-	Exclusive        bool               // Whether the queue is exclusive to the connection that declared it.
-	NoWait           bool               // Whether the server should wait for a response before declaring the queue.
-	ArgsQueueDeclare Table              // Additional arguments for queue declaration.
-	ArgsQueueBind    Table              // Additional arguments for binding the queue.
-	PrefetchCount    int                // The number of messages to prefetch (limit of unacknowledged messages).
-	PrefetchSize     int                // The size limit for prefetching messages.
-	PrefetchGlobal   bool               // Whether the prefetch settings apply globally across channels.
+	Queue            string        // queue to declare.
+	BindingKey       []types.Event // The routing key for binding the queue to an exchange.
+	Durable          bool          // Whether the queue should survive server restarts (true for durable queues).
+	AutoDelete       bool          // Whether the queue should be automatically deleted when no longer in use.
+	Exclusive        bool          // Whether the queue is exclusive to the connection that declared it.
+	NoWait           bool          // Whether the server should wait for a response before declaring the queue.
+	ArgsQueueDeclare Table         // Additional arguments for queue declaration.
+	ArgsQueueBind    Table         // Additional arguments for binding the queue.
+	PrefetchCount    int           // The number of messages to prefetch (limit of unacknowledged messages).
+	PrefetchSize     int           // The size limit for prefetching messages.
+	PrefetchGlobal   bool          // Whether the prefetch settings apply globally across channels.
 }
 
 // ConsumeConfig defines the configuration for consuming messages from a queue in RabbitMQ.

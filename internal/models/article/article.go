@@ -15,7 +15,7 @@ type Article struct {
 	Status  PublicationStatus
 	// Structure Optimization:
 	// Separate Comments from Article:
-	// If the volume of comments is very high, manage them in a separate aggregate (using Event Sourcing or CQRS).
+	// If the volume of comments is very high, manage them in a separate aggregate (using EventStream Sourcing or CQRS).
 	Comments   []Comment
 	AuthorID   types.ID
 	CategoryID []types.ID

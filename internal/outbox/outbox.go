@@ -84,7 +84,7 @@ func (s O) processOutBoxEvents(ctx context.Context) error {
 	outBoxEventsIDs := make([]types.ID, 0, len(unPublishedOutBoxEvents))
 
 	for _, outBoxEvent := range unPublishedOutBoxEvents {
-		if err = s.publisher.Publish(models.Event{
+		if err = s.publisher.Publish(types.EventStream{
 			Type:    outBoxEvent.Type,
 			Payload: outBoxEvent.Payload,
 		}); err != nil {
@@ -108,9 +108,9 @@ func (s O) processOutBoxEvents(ctx context.Context) error {
 	return nil
 }
 
-// func (s O) InsertEvent(ctx context.Context, topic models.EventType, payload []byte) error {
+// func (s O) InsertEvent(ctx context.Context, topic models.Event, payload []byte) error {
 // 	e := models.OutboxEvent{
-// 		EventType:        topic,
+// 		Event:        topic,
 // 		Payload:      payload,
 // 		IsPublished:  false,
 // 		ReTriedCount: s.config.RetryThreshold,

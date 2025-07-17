@@ -6,7 +6,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 
 	"github.com/google/uuid"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -166,7 +166,7 @@ func (c *Connection) SetupBindQueue() error {
 	return nil
 }
 
-func (c *Connection) Publish(evt models.Event) error {
+func (c *Connection) Publish(evt types.EventStream) error {
 	// non-blocking channel - if there is no error will go to default where we do nothing
 	select {
 	case err := <-c.errChan:
@@ -201,7 +201,7 @@ func (c *Connection) Publish(evt models.Event) error {
 	return nil
 }
 
-func (c *Connection) Consume(eventStream chan<- models.Event) error {
+func (c *Connection) Consume(eventStream chan<- types.EventStream) error {
 	var (
 		deliveries <-chan amqp.Delivery
 		err        error
@@ -219,7 +219,7 @@ func (c *Connection) Consume(eventStream chan<- models.Event) error {
 	}
 
 	for delivery := range deliveries {
-		eventStream <- models.Event{Type: models.EventType(delivery.RoutingKey), Payload: delivery.Body}
+		eventStream <- types.EventStream{Type: types.Event(delivery.RoutingKey), Payload: delivery.Body}
 		if !c.config.MQ.Consume.AutoAck {
 			if err = delivery.Ack(false); err != nil {
 				return fmt.Errorf("failed to ACK message: %w", err)

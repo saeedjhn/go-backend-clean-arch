@@ -3,10 +3,8 @@ package bootstrap
 import (
 	"context"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
-
-	"github.com/saeedjhn/go-backend-clean-arch/internal/event"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/buildinfo"
 
@@ -29,7 +27,7 @@ import (
 type Application struct {
 	Config        *configs.Config
 	BuildInfo     buildinfo.Info
-	EventRegister map[models.EventType]event.RouterHandler
+	EventRegister types.EventRouter
 	Logger        contract.Logger
 	Trc           contract.Tracer
 	Collector     contract.Collector

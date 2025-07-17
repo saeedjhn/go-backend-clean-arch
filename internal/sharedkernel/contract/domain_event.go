@@ -1,10 +1,12 @@
 package contract
 
-import "github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+import (
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
+)
 
 type DomainEvent interface {
 	GetID() uint32
-	GetType() models.EventType
+	GetType() types.Event
 	GetEscalationReason() string
 	GetEscalationTime() int64
 	Marshal() ([]byte, error)
@@ -13,7 +15,7 @@ type DomainEvent interface {
 
 type DomainBasicEvent[T interface{}] interface {
 	GetID() uint32
-	GetType() models.EventType
+	GetType() types.Event
 	GetEscalationReason() string
 	GetEscalationTime() int64
 	GetPayload() T

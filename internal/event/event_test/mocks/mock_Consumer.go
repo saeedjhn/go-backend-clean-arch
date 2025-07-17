@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -21,7 +21,7 @@ func (_m *MockConsumer) EXPECT() *MockConsumer_Expecter {
 }
 
 // Consume provides a mock function with given fields: _a0
-func (_m *MockConsumer) Consume(_a0 chan<- models.Event) error {
+func (_m *MockConsumer) Consume(_a0 chan<- types.EventStream) error {
 	ret := _m.Called(_a0)
 
 	if len(ret) == 0 {
@@ -29,7 +29,7 @@ func (_m *MockConsumer) Consume(_a0 chan<- models.Event) error {
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(chan<- models.Event) error); ok {
+	if rf, ok := ret.Get(0).(func(chan<- types.EventStream) error); ok {
 		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)
@@ -44,14 +44,14 @@ type MockConsumer_Consume_Call struct {
 }
 
 // Consume is a helper method to define mock.On call
-//   - _a0 chan<- Event
+//   - _a0 chan<- EventStream
 func (_e *MockConsumer_Expecter) Consume(_a0 interface{}) *MockConsumer_Consume_Call {
 	return &MockConsumer_Consume_Call{Call: _e.mock.On("Consume", _a0)}
 }
 
-func (_c *MockConsumer_Consume_Call) Run(run func(_a0 chan<- models.Event)) *MockConsumer_Consume_Call {
+func (_c *MockConsumer_Consume_Call) Run(run func(_a0 chan<- types.EventStream)) *MockConsumer_Consume_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(chan<- models.Event))
+		run(args[0].(chan<- types.EventStream))
 	})
 	return _c
 }
@@ -61,7 +61,7 @@ func (_c *MockConsumer_Consume_Call) Return(_a0 error) *MockConsumer_Consume_Cal
 	return _c
 }
 
-func (_c *MockConsumer_Consume_Call) RunAndReturn(run func(chan<- models.Event) error) *MockConsumer_Consume_Call {
+func (_c *MockConsumer_Consume_Call) RunAndReturn(run func(chan<- types.EventStream) error) *MockConsumer_Consume_Call {
 	_c.Call.Return(run)
 	return _c
 }

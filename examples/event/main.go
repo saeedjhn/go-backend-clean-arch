@@ -9,8 +9,6 @@ import (
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/events"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
-
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/adapter/jsonfilelogger"
@@ -23,8 +21,8 @@ const _eventBufferSize = 1024
 func main() {
 	logger := setupLogger()
 
-	urTopic := models.EventType("user.registered")
-	opTopic := models.EventType("order.processing")
+	urTopic := types.Event("user.registered")
+	opTopic := types.Event("order.processing")
 
 	// Definination JOBS
 	router := event.NewRouter()
@@ -54,7 +52,7 @@ func main() {
 			},
 			QueueBind: rmqpc.QueueBindConfig{
 				Queue:            "test-queue",
-				BindingKey:       []models.EventType{urTopic, opTopic},
+				BindingKey:       []types.Event{urTopic, opTopic},
 				Durable:          true,
 				AutoDelete:       false,
 				Exclusive:        false,
@@ -113,8 +111,8 @@ func main() {
 	e := events.NewUserRegisteredEvent(types.ID(1), "reason")
 	b, _ := e.Marshal()
 
-	evtUserRegistered := models.Event{Type: urTopic, Payload: b}
-	evtOrderProcessing := models.Event{Type: opTopic, Payload: []byte("Order123456")}
+	evtUserRegistered := types.EventStream{Type: urTopic, Payload: b}
+	evtOrderProcessing := types.EventStream{Type: opTopic, Payload: []byte("Order123456")}
 
 	go func() {
 		for i := range 3 {

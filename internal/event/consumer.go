@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 )
@@ -15,7 +15,7 @@ type C struct {
 	Router         *Router
 	chanBufferSize uint64
 	shutdownChan   chan struct{}
-	eventStream    chan models.Event
+	eventStream    chan types.EventStream
 }
 
 func NewEventConsumer(
@@ -28,7 +28,7 @@ func NewEventConsumer(
 		Consumers:      consumers,
 		Router:         router,
 		shutdownChan:   make(chan struct{}),
-		eventStream:    make(chan models.Event, chanBufferSize),
+		eventStream:    make(chan types.EventStream, chanBufferSize),
 	}
 }
 
@@ -39,7 +39,7 @@ func (c *C) WithLogger(logger contract.Logger) *C {
 }
 
 func (c *C) Start() { //nolint:gocognit // nothing
-	// c.eventStream = make(chan contract.Event, c.chanBufferSize)
+	// c.eventStream = make(chan contract.EventStream, c.chanBufferSize)
 	// var once sync.Once // To ensure eventStream is closed only once
 
 	// Start consumers
@@ -65,11 +65,11 @@ func (c *C) Start() { //nolint:gocognit // nothing
 		for {
 			select {
 			case <-c.shutdownChan:
-				c.logger.Info("[Start] Event processor shutting down due to context cancellation")
+				c.logger.Info("[Start] EventStream processor shutting down due to context cancellation")
 				return
 			case e, ok := <-c.eventStream:
 				if !ok {
-					c.logger.Info("[Start] Event stream closed, stopping event processing")
+					c.logger.Info("[Start] EventStream stream closed, stopping event processing")
 					return
 				}
 				if err := c.Router.Handle(e); err != nil {
@@ -84,7 +84,7 @@ func (c *C) Start() { //nolint:gocognit // nothing
 	// 	<-ctx.Done()
 	// 	once.Do(func() {
 	// 		close(eventStream)
-	// 		c.logger.Info("[Start] Event stream closed")
+	// 		c.logger.Info("[Start] EventStream stream closed")
 	// 	})
 	// }()
 }
@@ -95,7 +95,7 @@ func (c *C) Shutdown(_ context.Context) error {
 		close(c.shutdownChan)
 		close(c.eventStream)
 
-		c.logger.Info("[Shutdown] Event stream closed")
+		c.logger.Info("[Shutdown] EventStream stream closed")
 	})
 
 	return nil

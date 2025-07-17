@@ -3,6 +3,8 @@ package eventdriven
 import (
 	"context"
 
+	"github.com/saeedjhn/go-backend-clean-arch/api/delivery/eventdriven/handler"
+
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
@@ -21,14 +23,25 @@ func New(app *bootstrap.Application) Server {
 func (s Server) Run() error {
 	router := event.NewRouter()
 
-	for t, h := range s.app.EventRegister {
+	// for t, h := range s.app.EventRegister {
+	// 	router.Register(t, h)
+	// }
+
+	for t, h := range handler.Setup(s.app) {
 		router.Register(t, h)
+	}
+
+	// rmq, err := NewRabbitmq(s.app.Config.RabbitMQ, s.app.EventRegister)
+	rmq, err := NewRabbitmq(s.app.Config.RabbitMQ, handler.Setup(s.app))
+	if err != nil {
+		return err
 	}
 
 	s.ed = event.NewEventConsumer(
 		configs.EventBufferSize,
 		router,
-		s.app.Rabbitmq,
+		rmq,
+		// s.app.Rabbitmq,
 	).WithLogger(s.app.Logger)
 
 	s.ed.Start()

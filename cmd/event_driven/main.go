@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"syscall"
 
-	eventdriven "github.com/saeedjhn/go-backend-clean-arch/api/delivery/event_driven"
+	eventdriven "github.com/saeedjhn/go-backend-clean-arch/api/delivery/eventdriven"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/bootstrap"
 )

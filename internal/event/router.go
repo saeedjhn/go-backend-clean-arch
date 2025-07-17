@@ -4,28 +4,26 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 )
-
-type RouterHandler func(payload []byte) error
 
 type Router struct {
 	mu       sync.RWMutex
-	handlers map[models.EventType]RouterHandler
+	handlers map[types.Event]types.EventRouterHandler
 }
 
 func NewRouter() *Router {
-	return &Router{handlers: make(map[models.EventType]RouterHandler)}
+	return &Router{handlers: make(map[types.Event]types.EventRouterHandler)}
 }
 
-func (r *Router) Register(topic models.EventType, handler RouterHandler) {
+func (r *Router) Register(topic types.Event, handler types.EventRouterHandler) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
 	r.handlers[topic] = handler
 }
 
-func (r *Router) Handle(event models.Event) error {
+func (r *Router) Handle(event types.EventStream) error {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 

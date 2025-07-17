@@ -356,6 +356,9 @@ services:
     #      - "${NGINX_HTTPS_PORT}:${NGINX_HTTPS_PORT}"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    #      - type: bind
+    #        source: ./nginx/nginx.conf
+    #        target: /etc/nginx/nginx.conf
     networks:
       - go-backend-clean-arch_network
     restart: always
