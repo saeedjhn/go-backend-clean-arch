@@ -1,6 +1,7 @@
 package event
 
 import (
+	"context"
 	"fmt"
 	"sync"
 
@@ -23,7 +24,7 @@ func (r *Router) Register(topic types.Event, handler types.EventRouterHandler) {
 	r.handlers[topic] = handler
 }
 
-func (r *Router) Handle(event types.EventStream) error {
+func (r *Router) Handle(ctx context.Context, event types.EventStream) error {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
@@ -32,5 +33,5 @@ func (r *Router) Handle(event types.EventStream) error {
 		return fmt.Errorf("no handler for topic: %s", event.Type)
 	}
 
-	return handler(event.Payload)
+	return handler(ctx, event.Payload)
 }

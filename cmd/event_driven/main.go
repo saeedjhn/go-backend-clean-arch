@@ -79,7 +79,8 @@ func main() { //nolint:funlen // +100 lines
 	// 	quit <- syscall.SIGINT // Sending SIGINT after 20 seconds
 	// }()
 
-	ed := eventdriven.New(app)
+	ed := eventdriven.New(app).
+		WithContextConsumer(context.Background())
 	go func() {
 		if err = ed.Run(); err != nil {
 			app.Logger.DPanicf("EventDriven.Run: %v", err)
@@ -100,17 +101,6 @@ func main() { //nolint:funlen // +100 lines
 		// 	oeRepo,
 		// )
 		// ob.StartProcessing(quit)
-
-		// payload, _ := events.NewUserRegisteredEvent(types.ID(123), "reason").Marshal() //nolint:mnd // nothing
-
-		// if err = app.Rabbitmq.Publish(models.Event{
-		// 	Type:    events.UsersRegistered,
-		// 	Payload: payload,
-		// }); err != nil {
-		// 	log.Println("rabbitmq error: ", err)
-		// }
-
-		// log.Println("rabbitmq message publish successfull")
 	}()
 
 	// Wait for termination signal (e.g., Ctrl+C)

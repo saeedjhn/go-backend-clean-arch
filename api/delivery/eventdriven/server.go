@@ -12,15 +12,22 @@ import (
 )
 
 type Server struct {
+	ctx context.Context
 	app *bootstrap.Application
 	ed  *event.C
 }
 
-func New(app *bootstrap.Application) Server {
-	return Server{app: app}
+func New(app *bootstrap.Application) *Server {
+	return &Server{ctx: context.Background(), app: app}
 }
 
-func (s Server) Run() error {
+func (s *Server) WithContextConsumer(ctx context.Context) *Server {
+	s.ctx = ctx
+
+	return s
+}
+
+func (s *Server) Run() error {
 	router := event.NewRouter()
 
 	// for t, h := range s.app.EventRegister {
@@ -41,14 +48,13 @@ func (s Server) Run() error {
 		configs.EventBufferSize,
 		router,
 		rmq,
-		// s.app.Rabbitmq,
-	).WithLogger(s.app.Logger)
+	).WithLogger(s.app.Logger).WithContext(s.ctx)
 
 	s.ed.Start()
 
 	return nil
 }
 
-func (s Server) Shutdown(ctx context.Context) error {
+func (s *Server) Shutdown(ctx context.Context) error {
 	return s.ed.Shutdown(ctx)
 }

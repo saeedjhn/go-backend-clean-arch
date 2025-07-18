@@ -3,10 +3,8 @@ package bootstrap
 import (
 	"context"
 
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
-
 	"github.com/saeedjhn/go-backend-clean-arch/internal/buildinfo"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/persistance/cache/redis"
 
@@ -25,16 +23,14 @@ import (
 // }
 
 type Application struct {
-	Config        *configs.Config
-	BuildInfo     buildinfo.Info
-	EventRegister types.EventRouter
-	Logger        contract.Logger
-	Trc           contract.Tracer
-	Collector     contract.Collector
-	Rabbitmq      contract.PublisherConsumer
-	Redis         *redis.DB
-	MySQL         *mysql.DB
-	Usecase       *Usecase
+	Config    *configs.Config
+	BuildInfo buildinfo.Info
+	Logger    contract.Logger
+	Trc       contract.Tracer
+	Collector contract.Collector
+	Redis     *redis.DB
+	MySQL     *mysql.DB
+	Usecase   *Usecase
 }
 
 func App(config *configs.Config) (*Application, error) {
@@ -52,8 +48,6 @@ func (a *Application) setup() error {
 
 	a.BuildInfo = NewBuildInfo()
 
-	a.EventRegister = NewEventRegister()
-
 	a.Logger = NewLogger(a.Config.Application, a.Config.Logger)
 
 	if a.Trc, err = NewTracer(a.Config, a.BuildInfo); err != nil {
@@ -61,10 +55,6 @@ func (a *Application) setup() error {
 	}
 
 	if a.Collector, err = NewCollector(a.Config, a.BuildInfo); err != nil {
-		return err
-	}
-
-	if a.Rabbitmq, err = NewRabbitmq(a.Config.RabbitMQ, a.EventRegister); err != nil {
 		return err
 	}
 

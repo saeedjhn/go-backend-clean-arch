@@ -159,7 +159,7 @@ func TestStart_WithValidEvents_ProcessesSuccessfull(t *testing.T) {
 	mockConsumer.AssertExpectations(t)
 }
 
-func handleUserRegistered(payload []byte) error {
+func handleUserRegistered(_ context.Context, payload []byte) error {
 	log.Printf("[Notification] Sending welcome email for user: %s\n", payload)
 
 	return nil

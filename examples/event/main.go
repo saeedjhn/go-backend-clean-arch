@@ -154,7 +154,7 @@ func main() {
 	// Wait until graceful shutdown is complete
 }
 
-func handleUserRegistered(payload []byte) error {
+func handleUserRegistered(_ context.Context, payload []byte) error {
 	log.Printf("[Notification] Sending welcome email for user: %s\n", payload)
 
 	var ur events.UserRegisteredEvent
@@ -164,7 +164,7 @@ func handleUserRegistered(payload []byte) error {
 	return nil
 }
 
-func handleOrderPlaced(payload []byte) error {
+func handleOrderPlaced(_ context.Context, payload []byte) error {
 	log.Printf("[Order] Processing order: %s\n", payload)
 	return nil
 }

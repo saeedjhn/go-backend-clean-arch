@@ -10,6 +10,7 @@ import (
 )
 
 type C struct {
+	ctx            context.Context
 	logger         contract.Logger
 	Consumers      []contract.Consumer
 	Router         *Router
@@ -24,6 +25,7 @@ func NewEventConsumer(
 	consumers ...contract.Consumer,
 ) *C {
 	return &C{
+		ctx:            context.Background(),
 		chanBufferSize: chanBufferSize,
 		Consumers:      consumers,
 		Router:         router,
@@ -34,6 +36,12 @@ func NewEventConsumer(
 
 func (c *C) WithLogger(logger contract.Logger) *C {
 	c.logger = logger
+
+	return c
+}
+
+func (c *C) WithContext(ctx context.Context) *C {
+	c.ctx = ctx
 
 	return c
 }
@@ -72,7 +80,7 @@ func (c *C) Start() { //nolint:gocognit // nothing
 					c.logger.Info("[Start] EventStream stream closed, stopping event processing")
 					return
 				}
-				if err := c.Router.Handle(e); err != nil {
+				if err := c.Router.Handle(c.ctx, e); err != nil {
 					c.logger.Errorf("[Start] Error handling event [%s]: %v", e.Type, err)
 				}
 			}
