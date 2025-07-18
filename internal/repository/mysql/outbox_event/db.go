@@ -56,7 +56,7 @@ func (d DB) Create(ctx context.Context, oe models.OutboxEvent) (types.ID, error)
 			WithKind(richerror.KindStatusInternalServerError)
 	}
 
-	resultID = types.ID(lastID) // #nosec G115: lastID is always positive due to AUTO_INCREMENT
+	resultID = types.ID(lastID) // #nosec G115 // integer overflow conversion int64 -> uint64
 
 	return resultID, nil
 }

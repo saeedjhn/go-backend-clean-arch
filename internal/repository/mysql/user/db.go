@@ -61,13 +61,19 @@ func (r DB) Create(ctx context.Context, u usermodel.User) (usermodel.User, error
 				WithKind(richerror.KindStatusInternalServerError)
 	}
 
-	id, _ := res.LastInsertId()
+	id, err := res.LastInsertId()
+	if err != nil {
+		return usermodel.User{}, richerror.New(_opMysqlUserCreate).WithErr(err).
+			WithMessage(msg.ErrorMsg500InternalServerError).
+			WithKind(richerror.KindStatusInternalServerError)
+	}
+
 	u.ID = types.ID(id) // #nosec G115 // integer overflow conversion int64 -> uint64
 
 	return u, nil
 }
 
-func (r DB) IsExistsByMobile(ctx context.Context, mobile string) (bool, error) {
+func (r DB) IsExistsByMobile(ctx context.Context, mobile string) (bool, error) { //nolint:dupl // nothing
 	_, span := r.trc.Span(ctx, "DB IsExistsByMobile")
 	span.SetAttributes(map[string]interface{}{
 		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO
@@ -105,7 +111,7 @@ func (r DB) IsExistsByMobile(ctx context.Context, mobile string) (bool, error) {
 	return false, nil
 }
 
-func (r DB) IsExistsByEmail(ctx context.Context, email string) (bool, error) {
+func (r DB) IsExistsByEmail(ctx context.Context, email string) (bool, error) { //nolint:dupl // nothing
 	_, span := r.trc.Span(ctx, "DB IsExistsByEmail")
 	span.SetAttributes(map[string]interface{}{
 		"db.system":    "MYSQL",  // MYSQL, MARIA, POSTGRES, MONGO
