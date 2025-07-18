@@ -3,13 +3,15 @@ package outbox
 import (
 	"context"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
+
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/contract"
 	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/models"
 )
 
 type Repository interface {
-	Create(ctx context.Context, evt models.OutboxEvent) error
+	Create(ctx context.Context, evt models.OutboxEvent) (types.ID, error)
 }
 
 // var _ outboxhandler.Interactor = (Interactor)(nil) // Commented, because it happens import cycle.

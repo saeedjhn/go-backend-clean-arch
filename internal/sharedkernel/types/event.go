@@ -1,12 +1,14 @@
 package types
 
+import "context"
+
 type Event string
 
 func (t Event) String() string {
 	return string(t)
 }
 
-type EventRouterHandler func(payload []byte) error
+type EventRouterHandler func(ctx context.Context, payload []byte) error
 
 type EventRouter map[Event]EventRouterHandler
 

@@ -3,6 +3,8 @@ package user
 import (
 	"errors"
 
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
+
 	"github.com/cucumber/godog"
 	usermodel "github.com/saeedjhn/go-backend-clean-arch/internal/models/user"
 	"github.com/stretchr/testify/mock"
@@ -19,7 +21,7 @@ func (c *Context) theOutboxServiceFailsWhenSavingEvents() error {
 	c.repo.EXPECT().Create(c.ctx, mock.Anything).
 		Return(usermodel.User{ID: 1}, nil)
 	c.outboxUc.EXPECT().Create(c.ctx, mock.Anything).
-		Return(errors.New("internal server error"))
+		Return([]types.ID{}, errors.New("internal server error"))
 
 	_, c.err = c.uc.Register(c.ctx, c.req)
 

@@ -8,4 +8,5 @@ const (
 	StatementKeyUserIsExistsByMobile
 	StatementKeyUserIsExistsByEmail
 	StatementKeyUserGetByID
+	StatementKeyOutboxCreate
 )

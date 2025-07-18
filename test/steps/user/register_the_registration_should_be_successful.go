@@ -3,6 +3,7 @@ package user
 import (
 	"github.com/cucumber/godog"
 	usermodel "github.com/saeedjhn/go-backend-clean-arch/internal/models/user"
+	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/types"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -17,7 +18,7 @@ func (c *Context) theRegistrationShouldBeSuccessful() error {
 	c.repo.EXPECT().Create(c.ctx, mock.Anything).
 		Return(usermodel.User{ID: 1}, nil)
 	c.outboxUc.EXPECT().Create(c.ctx, mock.Anything).
-		Return(nil)
+		Return([]types.ID{}, nil)
 
 	_, c.err = c.uc.Register(c.ctx, c.req)
 

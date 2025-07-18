@@ -65,7 +65,8 @@ func (i Interactor) Register(ctx context.Context, req userdto.RegisterRequest) (
 	}
 
 	u.AddEvents(events.NewUserRegisteredEvent(u.ID, "reason"))
-	if err = i.outboxIntr.Create(ctx, u.PullEvents()); err != nil {
+	_, err = i.outboxIntr.Create(ctx, u.PullEvents())
+	if err != nil {
 		return userdto.RegisterResponse{}, err
 	}
 
