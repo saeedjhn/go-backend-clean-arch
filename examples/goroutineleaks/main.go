@@ -1,16 +1,20 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	_ "net/http/pprof" // #nosec G108
+	"os"
+	"os/signal"
 	"runtime"
+	"syscall"
 	"time"
 )
 
 // Identifying Goroutine Leaks
-// Before diving into scenarios and solutions, it’s crucial to know how to identify goroutine leaks.
-// You can use Go’s runtime and pprof packages to monitor and profile goroutines.
+// Before diving into scenarios and solutions, it's crucial to know how to identify goroutine leaks.
+// You can use Go's runtime and pprof packages to monitor and profile goroutines.
 //
 // Monitoring with runtime
 // The runtime the package provides a way to count active goroutines using runtime.NumGoroutine().
@@ -27,9 +31,20 @@ const (
 )
 
 func main() {
+	// Create a context that can be cancelled
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	// Fixed: Add proper shutdown mechanism for the infinite loop goroutine
 	go func() {
 		for {
-			time.Sleep(_sleepDuration)
+			select {
+			case <-ctx.Done():
+				log.Println("Background goroutine shutting down gracefully")
+				return
+			default:
+				time.Sleep(_sleepDuration)
+			}
 		}
 	}()
 
@@ -57,5 +72,15 @@ func main() {
 	time.Sleep(1 * time.Second)
 	log.Println("Number of Goroutines:", runtime.NumGoroutine())
 
-	select {}
+	// Fixed: Add proper signal handling for graceful shutdown
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
+	<-quit
+
+	log.Println("Shutting down gracefully...")
+	cancel() // Cancel the context to stop the background goroutine
+	
+	// Give some time for goroutines to finish
+	time.Sleep(1 * time.Second)
+	log.Println("Final number of Goroutines:", runtime.NumGoroutine())
 }

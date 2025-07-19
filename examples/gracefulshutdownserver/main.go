@@ -37,12 +37,15 @@ func main() {
 	ctxWithTimeout, cancel := context.WithTimeout(ctx, 8*time.Second)
 	defer cancel()
 
+	log.Print("received interrupt signal, shutting down gracefully..")
+	
 	if err := e.Shutdown(ctxWithTimeout); err != nil {
 		log.Print("http server shutdown error", err)
+		// Wait for timeout only if shutdown failed
+		<-ctxWithTimeout.Done()
+	} else {
+		log.Print("server shutdown completed successfully")
 	}
-
-	log.Print("received interrupt signal, shutting down gracefully..")
+	
 	// Close all services, etc
-
-	<-ctxWithTimeout.Done()
 }

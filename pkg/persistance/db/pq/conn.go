@@ -25,7 +25,7 @@ func New(config Config) *DB {
 func (db *DB) ConnectTo() error {
 	var err error
 
-	uri := fmt.Sprintf("host=%s port=%s userentity=%s password=%s dbname=%s sslmode=%s TimeZone=Asia/Tehran",
+	uri := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s TimeZone=Asia/Tehran",
 		db.config.Host, db.config.Port, db.config.Username, db.config.Password,
 		db.config.Database, db.config.SSLMode)
 
