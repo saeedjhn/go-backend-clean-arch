@@ -36,7 +36,6 @@ type Interactor struct {
 	cfg        *configs.Config
 	trc        contract.Tracer
 	authIntr   usecase.AuthInteractor
-	outboxIntr usecase.OutboxInteractor
 	vld        Validator
 	repository Repository
 }
@@ -47,7 +46,6 @@ func New(
 	cfg *configs.Config,
 	trc contract.Tracer,
 	authIntr usecase.AuthInteractor,
-	outboxIntr usecase.OutboxInteractor,
 	vld Validator,
 	repository Repository,
 ) Interactor {
@@ -56,7 +54,6 @@ func New(
 		trc:        trc,
 		vld:        vld,
 		authIntr:   authIntr,
-		outboxIntr: outboxIntr,
 		repository: repository,
 	}
 }

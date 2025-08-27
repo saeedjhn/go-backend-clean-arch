@@ -16,7 +16,6 @@ services:
       - go-backend-clean-arch_network
     restart: always
     depends_on:
-      - rabbitmq
       - mysqldb
       - redis
 
@@ -99,22 +98,22 @@ services:
   ####################### END SETUP-DB #################################################################################
 
   ####################### RabbitMQ #######################
-  rabbitmq:
-    image: rabbitmq:4.0.5-management
-    container_name: go-backend-clean-arch_rabbitmq
-    env_file:
-      - .env
-    ports:
-      - "${RABBIT_PORT}:${RABBIT_PORT}"
-      - "${RABBIT_UI_PORT}:${RABBIT_UI_PORT}"
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 30s
-      timeout: 30s
-      retries: 3
-    networks:
-      - go-backend-clean-arch_network
-    restart: always
+#  rabbitmq:
+  #    image: rabbitmq:4.0.5-management
+  #    container_name: go-backend-clean-arch_rabbitmq
+  #    env_file:
+  #      - .env
+  #    ports:
+  #      - "${RABBIT_PORT}:${RABBIT_PORT}"
+  #      - "${RABBIT_UI_PORT}:${RABBIT_UI_PORT}"
+  #    healthcheck:
+  #      test: rabbitmq-diagnostics -q ping
+  #      interval: 30s
+  #      timeout: 30s
+  #      retries: 3
+  #    networks:
+  #      - go-backend-clean-arch_network
+  #    restart: always
 
   ####################### JAEGER #######################
   jaeger:

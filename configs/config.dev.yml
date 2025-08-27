@@ -50,22 +50,16 @@ logger:
   enable_stack_trace: true
   level: "debug"
 
-outbox:
-  interval: "5s"
-  batch_size: 100
-  retry_threshold: 3
-  process_timeout: "30s"
-
-rabbitmq:
-  host: "go-backend-clean-arch_rabbitmq"
-  port: 5672
-  username: "admin"
-  password: "password123"
-  base_retry_timeout: "2s"
-  multiplier: 2.0
-  max_delay: "30s"
-  max_retry: 5
-  check_connection_time: "30s"
+#rabbitmq:
+#  host: "go-backend-clean-arch_rabbitmq"
+#  port: 5672
+#  username: "admin"
+#  password: "password123"
+#  base_retry_timeout: "2s"
+#  multiplier: 2.0
+#  max_delay: "30s"
+#  max_retry: 5
+#  check_connection_time: "30s"
 
 mysql:
   host: "go-backend-clean-arch_mysqldb"

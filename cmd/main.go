@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"syscall"
 
-	eventdriven "github.com/saeedjhn/go-backend-clean-arch/api/delivery/eventdriven"
 	grpcserver "github.com/saeedjhn/go-backend-clean-arch/api/delivery/grpc"
 	httpserver "github.com/saeedjhn/go-backend-clean-arch/api/delivery/http"
 	"github.com/saeedjhn/go-backend-clean-arch/configs"
@@ -95,30 +94,6 @@ func main() { //nolint:funlen // +100 lines
 		}
 	}()
 
-	ed := eventdriven.New(app).
-		WithContextConsumer(context.Background())
-	go func() {
-		if err = ed.Run(); err != nil {
-			app.Logger.DPanicf("EventDriven.Run: %v", err)
-		}
-	}()
-
-	go func() {
-		// sch := scheduler.New()
-		// sch.Configure()
-		// sch.Start()
-
-		// oeRepo := outboxeventmysql.New(app.MySQL)
-		// ob := outbox.New(
-		// 	app.Config.Outbox,
-		// 	app.Logger,
-		// 	sch,
-		// 	app.Rabbitmq,
-		// 	oeRepo,
-		// )
-		// ob.StartProcessing(quit)
-	}()
-
 	go func() {
 		// Code for Pprof server setup goes here (if necessary)
 	}()
@@ -137,10 +112,6 @@ func main() { //nolint:funlen // +100 lines
 
 	if err = hs.Router.Shutdown(shutdownCtx); err != nil {
 		app.Logger.Errorf("Server.HTTP.Shutdown: %v", err)
-	}
-
-	if err = ed.Shutdown(shutdownCtx); err != nil {
-		app.Logger.Errorf("EventDriven.Shutdown: %v", err)
 	}
 
 	if err = app.CloseRedisClientConnection(); err != nil {

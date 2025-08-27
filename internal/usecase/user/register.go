@@ -6,7 +6,6 @@ import (
 
 	userdto "github.com/saeedjhn/go-backend-clean-arch/internal/dto/user"
 	usermodel "github.com/saeedjhn/go-backend-clean-arch/internal/models/user"
-	"github.com/saeedjhn/go-backend-clean-arch/internal/sharedkernel/events"
 	"github.com/saeedjhn/go-backend-clean-arch/pkg/richerror"
 )
 
@@ -60,12 +59,6 @@ func (i Interactor) Register(ctx context.Context, req userdto.RegisterRequest) (
 	u.Password = encryptedPass
 
 	createdUser, err := i.repository.Create(ctx, u)
-	if err != nil {
-		return userdto.RegisterResponse{}, err
-	}
-
-	u.AddEvents(events.NewUserRegisteredEvent(u.ID, "reason"))
-	_, err = i.outboxIntr.Create(ctx, u.PullEvents())
 	if err != nil {
 		return userdto.RegisterResponse{}, err
 	}

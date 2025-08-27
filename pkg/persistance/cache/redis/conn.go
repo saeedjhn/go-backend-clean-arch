@@ -8,6 +8,7 @@ import (
 )
 
 type DB struct {
+	ctx    context.Context
 	config Config
 	db     *redis.Client
 }
@@ -25,7 +26,7 @@ func (r *DB) ConnectTo() error {
 		DB:       r.config.DB,
 	})
 
-	if err = rdb.Ping(context.Background()).Err(); err != nil {
+	if err = rdb.Ping(r.checkCtx()).Err(); err != nil {
 		return err
 	}
 	r.db = rdb
@@ -33,6 +34,24 @@ func (r *DB) ConnectTo() error {
 	return nil
 }
 
+func (r *DB) SetCtx(ctx context.Context) *DB {
+	r.ctx = ctx
+
+	return r
+}
+
+func (r *DB) Ping() error {
+	return r.db.Ping(r.checkCtx()).Err()
+}
+
 func (r *DB) Client() *redis.Client {
 	return r.db
+}
+
+func (r *DB) checkCtx() context.Context {
+	if r.ctx == nil {
+		r.ctx = context.Background()
+	}
+
+	return r.ctx
 }

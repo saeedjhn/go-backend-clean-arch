@@ -13,18 +13,17 @@ import (
 )
 
 type Context struct {
-	ctx      context.Context
-	req      userdto.RegisterRequest
-	config   *configs.Config
-	model    *usermodel.User
-	trc      contract.Tracer
-	vld      *mocks.MockValidator
-	authUc   *mocks.MockAuthInteractor
-	outboxUc *mocks.MockOutboxInteractor
-	repo     *mocks.MockRepository
-	uc       useruc.Interactor
-	t        *testing.T
-	err      error
+	ctx    context.Context
+	req    userdto.RegisterRequest
+	config *configs.Config
+	model  *usermodel.User
+	trc    contract.Tracer
+	vld    *mocks.MockValidator
+	authUc *mocks.MockAuthInteractor
+	repo   *mocks.MockRepository
+	uc     useruc.Interactor
+	t      *testing.T
+	err    error
 }
 
 func NewContext(t *testing.T, config *configs.Config, trc contract.Tracer) *Context {
@@ -41,9 +40,8 @@ func (c *Context) initializeCommon() {
 	c.vld = &mocks.MockValidator{}
 	c.repo = &mocks.MockRepository{}
 	c.authUc = &mocks.MockAuthInteractor{}
-	c.outboxUc = &mocks.MockOutboxInteractor{}
 
-	c.uc = useruc.New(c.config, c.trc, c.authUc, c.outboxUc, c.vld, c.repo)
+	c.uc = useruc.New(c.config, c.trc, c.authUc, c.vld, c.repo)
 }
 
 func (c *Context) theUserServiceIsRunning() error {
